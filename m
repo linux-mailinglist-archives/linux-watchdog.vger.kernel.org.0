@@ -1,371 +1,104 @@
-Return-Path: <linux-watchdog+bounces-3080-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3081-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78464A5C451
-	for <lists+linux-watchdog@lfdr.de>; Tue, 11 Mar 2025 15:59:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF051A5C76F
+	for <lists+linux-watchdog@lfdr.de>; Tue, 11 Mar 2025 16:34:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0EEE73A65E8
-	for <lists+linux-watchdog@lfdr.de>; Tue, 11 Mar 2025 14:59:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 17229189AF9E
+	for <lists+linux-watchdog@lfdr.de>; Tue, 11 Mar 2025 15:30:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13B0D25DAE5;
-	Tue, 11 Mar 2025 14:59:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79A7825EFA4;
+	Tue, 11 Mar 2025 15:30:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=siemens.com header.i=diogo.ivo@siemens.com header.b="Dqfu1Z7U"
+	dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b="JQ6RhWdd"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mta-65-225.siemens.flowmailer.net (mta-65-225.siemens.flowmailer.net [185.136.65.225])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CA2125DAEE
-	for <linux-watchdog@vger.kernel.org>; Tue, 11 Mar 2025 14:59:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.136.65.225
+Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD6D925EFBF
+	for <linux-watchdog@vger.kernel.org>; Tue, 11 Mar 2025 15:30:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.87.125.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741705188; cv=none; b=rUuh87tU3MiE2xcf6mX+k/leW+xaFQHaA2MNjp1FVkm2ksfbny0u7HVpj9Lc+yLSum/Atie41rm/TN0M7rzGczUqmG7tGgcK/cNwMI0pY/w851p4k89tbYu/5lK9NpXm4zG4bwIOP/xBOZW8I+bf3WIyTnZ5HuxG6dWtGUkbnpk=
+	t=1741707014; cv=none; b=NfS38KM8soLk2CgAqmBUuapgNQfU7gGnfD3VcR81aCtAHE5jBKaGLS4n7fL80K06WPZqX2fdLH5tRfze04dgdU20YlgJ2ff+PpcGi2gT76TyLrJy8njWsCJafCpon9XAsBuhunIfGuVmorPSdAS1ba05y0Mu7yZ+ZPZorduj1uw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741705188; c=relaxed/simple;
-	bh=Yp1Z/Gwbv8eY4ug0JJTiAEgZ4Lj6fi/6L+m/LUPk2lQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=inZKVn437SXjwb4bw2F7T8Xtvtu7ZgRNafol/2nITqZZGhPSCAXNMRocfvpiy5xXLXDWnfXLLECDdve01TdUj2MtZcev6Rl7HcCAFWNNHZFk5CzTmwJ5fn5Je/mankWIUh+QKK4dWvCp3Ce1yD/b+9Opc3+PyUQyXGtkSPG9i5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com; dkim=pass (2048-bit key) header.d=siemens.com header.i=diogo.ivo@siemens.com header.b=Dqfu1Z7U; arc=none smtp.client-ip=185.136.65.225
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
-Received: by mta-65-225.siemens.flowmailer.net with ESMTPSA id 20250311145940b38cc579d8d573cc9b
-        for <linux-watchdog@vger.kernel.org>;
-        Tue, 11 Mar 2025 15:59:40 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
- d=siemens.com; i=diogo.ivo@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=+fym8S2bwboe7czSnu1vwF7z1uIsXJoLAxCTpQ1dfAI=;
- b=Dqfu1Z7Uik9kjSVMIARAubAlJWh2ooGS0D1teBolQA7bjwQDg7AJtDV3fzLJD2G+PU66s2
- MX+Wfm0fpuwkBhKg2W+kvZ26tFqjFu5qUfiVsZHk45sO3we6EGyO0txKhW7vRSX7PeHI8mKn
- fttOesaKf670r9xhg3GPidUBOJS7k3XYaYTxqsUWmcz9tTaFKPeKnXsMtR1F0WKwsXicnNj6
- BtwDbnSvU/6zvZPUUruY7sVHSeEaTnPlZ0AO/XLIuPKcdGvuxzCr0s/hs727rRRoFUA1WClq
- +TRg8CeSl1kFYAP4B3Gc1F4QLbvb26z7R2TFeWkTTL2kMqyYSQGHWDBw==;
-Message-ID: <bc354400-52bf-46ee-8619-479c3fe9b28e@siemens.com>
-Date: Tue, 11 Mar 2025 14:59:39 +0000
+	s=arc-20240116; t=1741707014; c=relaxed/simple;
+	bh=WEnwXyp1KNhuJbFYBVFEdyL08xy1Euqg16M5opr1D6Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GJRijXX9QdkxWZe4RIpTF/v9fweW7u8bzcxo19sm4EA4kMLCe8JvXXg3zqZQKsF8XVA/ZapRM7TBnitilTvrMOIHTcy99fGbmuQ/wya/S9y+zc3GfQ3DPJE/ZuQAN/4qVOfbZR7z0J5mfMWL2cAxBgU7ulxHreAKd1HlRy3Gg84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org; spf=pass smtp.mailfrom=linux-watchdog.org; dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b=JQ6RhWdd; arc=none smtp.client-ip=185.87.125.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux-watchdog.org
+Received: by www.linux-watchdog.org (Postfix, from userid 500)
+	id 2E64840A9F; Tue, 11 Mar 2025 15:55:48 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 2E64840A9F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
+	s=odk20180602; t=1741704948;
+	bh=WEnwXyp1KNhuJbFYBVFEdyL08xy1Euqg16M5opr1D6Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JQ6RhWddaetdh/6tZTBbe4K7i1nuUqz7DhQO49i0kCTnQPEueZwy6LuAFWNOV1Ekn
+	 cXVGe2PRb86N3Z7WtcE5V7LxN98XZ6+Ma4MqBqQMCrOuSMjdx2NCJe1jphKj9paI0V
+	 WFe2X+MNULgwj8rgsFm1HjCDUle9vJlx40L39pA8=
+Date: Tue, 11 Mar 2025 15:55:47 +0100
+From: Wim Van Sebroeck <wim@linux-watchdog.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
+	linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH] watchdog: Convert to use device property
+Message-ID: <20250311145547.GB5107@www.linux-watchdog.org>
+References: <20250311141009.756975-1-linux@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH] watchdog: Add driver for Intel OC WDT
-To: Guenter Roeck <linux@roeck-us.net>, "Rafael J. Wysocki"
- <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
- Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
- linux-watchdog@vger.kernel.org, jan.kiszka@siemens.com,
- benedikt.niedermayr@siemens.com
-References: <20250311-ivo-intel_oc_wdt-v1-1-fd470460d9f5@siemens.com>
- <fea41656-ca80-491f-b84b-d118b35b5f72@roeck-us.net>
-Content-Language: en-US
-From: Diogo Ivo <diogo.ivo@siemens.com>
-In-Reply-To: <fea41656-ca80-491f-b84b-d118b35b5f72@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Flowmailer-Platform: Siemens
-Feedback-ID: 519:519-1328357:519-21489:flowmailer
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250311141009.756975-1-linux@roeck-us.net>
+User-Agent: Mutt/1.5.20 (2009-12-10)
 
-Hi Guenter, thanks for the quick review!
+Hi Guenter,
 
-On 3/11/25 2:10 PM, Guenter Roeck wrote:
-> On 3/11/25 06:18, Diogo Ivo wrote:
->> Add a driver for the Intel Over-Clocking Watchdog found in Intel
->> Platform Controller (PCH) chipsets. This watchdog is controlled
->> via a simple single-register interface and would otherwise be
->> standard except for the presence of a LOCK bit that can only be
->> set once per power cycle, needing extra handling around it.
->>
->> Signed-off-by: Diogo Ivo <diogo.ivo@siemens.com>
->> ---
->>   drivers/acpi/acpi_pnp.c         |   2 +
->>   drivers/watchdog/Kconfig        |  11 ++
->>   drivers/watchdog/Makefile       |   1 +
->>   drivers/watchdog/intel_oc_wdt.c | 235 ++++++++++++++++++++++++++++++ 
->> ++++++++++
->>   4 files changed, 249 insertions(+)
->>
->> diff --git a/drivers/acpi/acpi_pnp.c b/drivers/acpi/acpi_pnp.c
->> index 
->> 01abf26764b00c86f938dea2ed138424f041f880..3f5a1840f573303c71f5d579e32963a5b29d2587 100644
->> --- a/drivers/acpi/acpi_pnp.c
->> +++ b/drivers/acpi/acpi_pnp.c
->> @@ -355,8 +355,10 @@ static bool acpi_pnp_match(const char *idstr, 
->> const struct acpi_device_id **matc
->>    * device represented by it.
->>    */
->>   static const struct acpi_device_id acpi_nonpnp_device_ids[] = {
->> +    {"INT3F0D"},
->>       {"INTC1080"},
->>       {"INTC1081"},
->> +    {"INTC1099"},
->>       {""},
->>   };
+> Use device_property_read_u32() instead of of_property_read_u32() to support
+> reading the timeout from non-devicetree sources.
 > 
-> This needs to be a separate patch.
-
-I will split it for v2.
-
->> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
->> index 
->> f81705f8539aa0b12d156a86aae521aa40b4527d..16e6df441bb344c0f91b40bd76b6322ad3016e72 100644
->> --- a/drivers/watchdog/Kconfig
->> +++ b/drivers/watchdog/Kconfig
->> @@ -1350,6 +1350,17 @@ config INTEL_MID_WATCHDOG
->>         To compile this driver as a module, choose M here.
->> +config INTEL_OC_WATCHDOG
->> +    tristate "Intel OC Watchdog"
->> +    depends on X86 && ACPI
->> +    select WATCHDOG_CORE
->> +    help
->> +      Hardware driver for Intel Over-Clocking watchdog present in
->> +      Platform Controller Hub (PCH) chipsets.
->> +
->> +      To compile this driver as a module, choose M here: the
->> +      module will be called intel_oc_wdt.
->> +
->>   config ITCO_WDT
->>       tristate "Intel TCO Timer/Watchdog"
->>       depends on X86 && PCI
->> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
->> index 
->> 8411626fa162268e8ccd06349f7193b15a9d281a..3a13f3e80a0f460b99b4f1592fcf17cc6428876b 100644
->> --- a/drivers/watchdog/Makefile
->> +++ b/drivers/watchdog/Makefile
->> @@ -149,6 +149,7 @@ obj-$(CONFIG_W83977F_WDT) += w83977f_wdt.o
->>   obj-$(CONFIG_MACHZ_WDT) += machzwd.o
->>   obj-$(CONFIG_SBC_EPX_C3_WATCHDOG) += sbc_epx_c3.o
->>   obj-$(CONFIG_INTEL_MID_WATCHDOG) += intel-mid_wdt.o
->> +obj-$(CONFIG_INTEL_OC_WATCHDOG) += intel_oc_wdt.o
->>   obj-$(CONFIG_INTEL_MEI_WDT) += mei_wdt.o
->>   obj-$(CONFIG_NI903X_WDT) += ni903x_wdt.o
->>   obj-$(CONFIG_NIC7018_WDT) += nic7018_wdt.o
->> diff --git a/drivers/watchdog/intel_oc_wdt.c b/drivers/watchdog/ 
->> intel_oc_wdt.c
->> new file mode 100644
->> index 
->> 0000000000000000000000000000000000000000..0a2df3440024090f7e342fe7da895a7930ac09b2
->> --- /dev/null
->> +++ b/drivers/watchdog/intel_oc_wdt.c
->> @@ -0,0 +1,235 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Intel OC Watchdog driver
->> + *
->> + * Copyright (C) 2025, Siemens SA
->> + * Author: Diogo Ivo <diogo.ivo@siemens.com>
->> + */
->> +
->> +#define DRV_NAME    "intel_oc_wdt"
->> +
->> +#include <linux/acpi.h>
->> +#include <linux/bits.h>
->> +#include <linux/io.h>
->> +#include <linux/module.h>
->> +#include <linux/moduleparam.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/watchdog.h>
->> +
->> +#define INTEL_OC_WDT_TOV        GENMASK(9, 0)
->> +#define INTEL_OC_WDT_MIN_TOV        1
->> +#define INTEL_OC_WDT_MAX_TOV        1024
->> +
->> +/*
->> + * One-time writable lock bit. If set forbids
->> + * modification of itself, _TOV and _EN until
->> + * next reboot.
->> + */
->> +#define INTEL_OC_WDT_CTL_LCK        BIT(12)
->> +
->> +#define INTEL_OC_WDT_EN            BIT(14)
->> +#define INTEL_OC_WDT_NO_ICCSURV_STS    BIT(24)
->> +#define INTEL_OC_WDT_ICCSURV_STS    BIT(25)
->> +#define INTEL_OC_WDT_RLD        BIT(31)
->> +
->> +#define INTEL_OC_WDT_STS_BITS (INTEL_OC_WDT_NO_ICCSURV_STS | \
->> +                   INTEL_OC_WDT_ICCSURV_STS)
->> +
->> +#define INTEL_OC_WDT_CTRL_REG(wdt)    ((wdt)->ctrl_res->start)
->> +
->> +struct intel_oc_wdt {
->> +    struct watchdog_device wdd;
->> +    struct resource *ctrl_res;
->> +    bool locked;
->> +};
->> +
->> +#define WDT_HEARTBEAT            60
->> +static int heartbeat = WDT_HEARTBEAT;
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+>  drivers/watchdog/watchdog_core.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> Normally this is set to 0 and the default timeout is initialized together
-> with min_timeout and max_timeout. This lets the watchdog core override it
-> with devicetree data (if that is available).
-
-Ok, thank you for the insight. I will address this for v2.
-It is unlikely that this driver will have devicetree data but it's
-better to follow best practice.
-
->> +module_param(heartbeat, uint, 0);
->> +MODULE_PARM_DESC(heartbeat, "Watchdog heartbeats in seconds. (default="
->> +         __MODULE_STRING(WDT_HEARTBEAT) ")");
->> +
->> +static bool nowayout = WATCHDOG_NOWAYOUT;
->> +module_param(nowayout, bool, 0);
->> +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started 
->> (default="
->> +         __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
->> +
->> +static int intel_oc_wdt_start(struct watchdog_device *wdd)
->> +{
->> +    struct intel_oc_wdt *oc_wdt = watchdog_get_drvdata(wdd);
->> +
->> +    if (oc_wdt->locked)
->> +        return 0;
->> +
->> +    outl(inl(INTEL_OC_WDT_CTRL_REG(oc_wdt)) | INTEL_OC_WDT_EN,
->> +         INTEL_OC_WDT_CTRL_REG(oc_wdt));
->> +
->> +    return 0;
->> +}
->> +
->> +static int intel_oc_wdt_stop(struct watchdog_device *wdd)
->> +{
->> +    struct intel_oc_wdt *oc_wdt = watchdog_get_drvdata(wdd);
->> +
->> +    outl(inl(INTEL_OC_WDT_CTRL_REG(oc_wdt)) & ~INTEL_OC_WDT_EN,
->> +         INTEL_OC_WDT_CTRL_REG(oc_wdt));
->> +
->> +    return 0;
->> +}
->> +
->> +static int intel_oc_wdt_ping(struct watchdog_device *wdd)
->> +{
->> +    struct intel_oc_wdt *oc_wdt = watchdog_get_drvdata(wdd);
->> +
->> +    outl(inl(INTEL_OC_WDT_CTRL_REG(oc_wdt)) | INTEL_OC_WDT_RLD,
->> +         INTEL_OC_WDT_CTRL_REG(oc_wdt));
->> +
->> +    return 0;
->> +}
->> +
->> +static int intel_oc_wdt_set_timeout(struct watchdog_device *wdd,
->> +                    unsigned int t)
->> +{
->> +    struct intel_oc_wdt *oc_wdt = watchdog_get_drvdata(wdd);
->> +
->> +    outl((inl(INTEL_OC_WDT_CTRL_REG(oc_wdt)) & ~INTEL_OC_WDT_TOV) | 
->> (t - 1),
->> +         INTEL_OC_WDT_CTRL_REG(oc_wdt));
->> +
->> +    wdd->timeout = t;
->> +
->> +    return 0;
->> +}
->> +
->> +static const struct watchdog_info intel_oc_wdt_info = {
->> +    .options = WDIOF_SETTIMEOUT | WDIOF_MAGICCLOSE | 
->> WDIOF_KEEPALIVEPING,
->> +    .identity = DRV_NAME,
->> +};
->> +
->> +static const struct watchdog_ops intel_oc_wdt_ops = {
->> +    .owner = THIS_MODULE,
->> +    .start = intel_oc_wdt_start,
->> +    .stop = intel_oc_wdt_stop,
->> +    .ping = intel_oc_wdt_ping,
->> +    .set_timeout = intel_oc_wdt_set_timeout,
->> +};
->> +
->> +static int intel_oc_wdt_setup(struct intel_oc_wdt *oc_wdt)
->> +{
->> +    struct watchdog_info *info;
->> +    unsigned long val;
->> +
->> +    val = inl(INTEL_OC_WDT_CTRL_REG(oc_wdt));
->> +
->> +    if (val & INTEL_OC_WDT_STS_BITS)
->> +        oc_wdt->wdd.bootstatus |= WDIOF_CARDRESET;
->> +
->> +    oc_wdt->locked = !!(val & INTEL_OC_WDT_CTL_LCK);
->> +
->> +    if (val & INTEL_OC_WDT_EN) {
->> +        /*
->> +         * No need to issue a ping here to "commit" the new timeout
->> +         * value to hardware as the watchdog core schedules one
->> +         * immediately when registering the watchdog.
->> +         */
->> +        set_bit(WDOG_HW_RUNNING, &oc_wdt->wdd.status);
->> +
->> +        if (oc_wdt->locked) {
->> +            info = (struct watchdog_info *)&intel_oc_wdt_info;
->> +            /*
->> +             * Set nowayout unconditionally as we cannot stop
->> +             * the watchdog and read the current timeout.
->> +             */
-> 
-> But the timeout is read below ? Do you mean "change the current timeout" ?
-
-In this case where the BIOS both enabled the watchdog and set the LOCK
-bit we cannot change the timeout anymore, meaning that we have to read
-the value currently in the register and pass it to the watchdog core,
-which is what is done below.
-
->> +            nowayout = true;
->> +
->> +            oc_wdt->wdd.timeout = (val & INTEL_OC_WDT_TOV) + 1;
->> +            info->options &= ~WDIOF_SETTIMEOUT;
->> +
->> +            dev_info(oc_wdt->wdd.parent,
->> +                 "Register access locked, heartbeat fixed at: %u s\n",
->> +                 oc_wdt->wdd.timeout);
->> +        }
->> +    } else if (oc_wdt->locked) {
->> +        /*
->> +         * In case the watchdog is disabled and locked there
->> +         * is nothing we can do with it so just fail probing.
->> +         */
->> +        return -EACCES;
->> +    }
->> +
->> +    val &= ~INTEL_OC_WDT_TOV;
->> +    outl(val | (oc_wdt->wdd.timeout - 1), 
->> INTEL_OC_WDT_CTRL_REG(oc_wdt));
->> +
->> +    return 0;
->> +}
->> +
->> +static int intel_oc_wdt_probe(struct platform_device *pdev)
->> +{
->> +    struct device *dev = &pdev->dev;
->> +    struct intel_oc_wdt *oc_wdt;
->> +    struct watchdog_device *wdd;
->> +    int ret;
->> +
->> +    oc_wdt = devm_kzalloc(&pdev->dev, sizeof(*oc_wdt), GFP_KERNEL);
->> +    if (!oc_wdt)
->> +        return -ENOMEM;
->> +
->> +    oc_wdt->ctrl_res = platform_get_resource(pdev, IORESOURCE_IO, 0);
->> +    if (!oc_wdt->ctrl_res) {
->> +        dev_err(&pdev->dev, "missing I/O resource\n");
->> +        return -ENODEV;
->> +    }
->> +
->> +    if (!devm_request_region(&pdev->dev, oc_wdt->ctrl_res->start,
->> +                 resource_size(oc_wdt->ctrl_res), pdev->name)) {
->> +        dev_err(dev, "I/O address 0x%04llx already in use, device 
->> disabled\n",
->> +               (u64)(oc_wdt->ctrl_res->start));
-> 
-> Use %pa or %pR/%pr, and watch out for multi-line alignment.
-
-I will address this for v2.
-
-> 
-> Guenter
+> diff --git a/drivers/watchdog/watchdog_core.c b/drivers/watchdog/watchdog_core.c
+> index d46d8c8c01f2..6152dba4b52c 100644
+> --- a/drivers/watchdog/watchdog_core.c
+> +++ b/drivers/watchdog/watchdog_core.c
+> @@ -33,7 +33,8 @@
+>  #include <linux/init.h>		/* For __init/__exit/... */
+>  #include <linux/idr.h>		/* For ida_* macros */
+>  #include <linux/err.h>		/* For IS_ERR macros */
+> -#include <linux/of.h>		/* For of_get_timeout_sec */
+> +#include <linux/of.h>		/* For of_alias_get_id */
+> +#include <linux/property.h>	/* For device_property_read_u32 */
+>  #include <linux/suspend.h>
+>  
+>  #include "watchdog_core.h"	/* For watchdog_dev_register/... */
+> @@ -137,8 +138,7 @@ int watchdog_init_timeout(struct watchdog_device *wdd,
+>  	}
+>  
+>  	/* try to get the timeout_sec property */
+> -	if (dev && dev->of_node &&
+> -	    of_property_read_u32(dev->of_node, "timeout-sec", &t) == 0) {
+> +	if (dev && device_property_read_u32(dev, "timeout-sec", &t) == 0) {
+>  		if (t && !watchdog_timeout_invalid(wdd, t)) {
+>  			wdd->timeout = t;
+>  			return 0;
+> -- 
+> 2.45.2
 > 
 
-Best regards,
-Diogo
+Added to linux-watchdog-next.
+
+Kind regards,
+Wim.
+
 
