@@ -1,111 +1,155 @@
-Return-Path: <linux-watchdog+bounces-3091-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3092-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8DB8A5E46C
-	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Mar 2025 20:31:39 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C6A6A5E542
+	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Mar 2025 21:21:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 27D9A16BBA2
-	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Mar 2025 19:31:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9D3D37AF3F5
+	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Mar 2025 20:20:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05EE81E5706;
-	Wed, 12 Mar 2025 19:31:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E1271EB191;
+	Wed, 12 Mar 2025 20:21:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T5SC42jS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hwW7OVW3"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBF2C1CF96;
-	Wed, 12 Mar 2025 19:31:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45CE73D81;
+	Wed, 12 Mar 2025 20:21:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741807895; cv=none; b=mQ4EIj21VX7x9yOfk98BfYd9/a2t3rD02/gPb8R0dSZeE64dVRPvZFKsiWn+YMyq7RFW7gNhrfaSu1hRkRtFTDEIifesX740enaZQmdoWgNYTyCuKGodIrwjnsuvP7v6GJMKWR6+Mqf9OCEXq+BfWMrbZHHu6n7vfZJi6jBAGE8=
+	t=1741810899; cv=none; b=HvsLjZL7W1HqgKwNZgV0PFO5H+7mQ21t7yFlIbqjy/7bI42fTcgwGoCoM3bsKU63Qbagnc/yMRTnbRrgHmpR+Q6unD1r649SYS0w8M1AgmW6Ga7nCl02ie7qIKhbI65v4+hDpvhlykCg9UW1dj5gkUF6ds2cfri5+FOTFCF6CKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741807895; c=relaxed/simple;
-	bh=CaW1UxJeoHSqP4IvGnDB6JVA17m5sPB3095Cb0mMJ14=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MVvyf69FPaKeuGtiPiZQzVktk30gXZ6MMJ763KEET6nE5SX0onFp0YWGN1h09CfbnR8wVKXFCTuaZ/ghKIunExl/hhTvd0AfMTTfUhKKFGLSca4kehUA1XpDOAsn4UFqsjcYeS3PSFnUtmZMoxyrR3cDbMZ6vnzGITuZ5Gd3Xak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T5SC42jS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48034C4CEEC;
-	Wed, 12 Mar 2025 19:31:34 +0000 (UTC)
+	s=arc-20240116; t=1741810899; c=relaxed/simple;
+	bh=eZn3M9mlWfZG7ziWvPoqQ68DoQzsS5rAy2tHFPgSILA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KI5xipinBEKOAnlTtRzAvpMgIiZUDTep/7FuXeZsAOMXf0TVl2GHXwx+FQ9HtzR+7w7Eo+ok6iOZ0+6GqAy3GCBQOQ6/EUKytGdHj7quuRl3n3p5gw9Se6ypdLOTMJS7wBMvCg/qky21RxlZee4Hxn8xK/5JkZp2PCHmLL8Qrc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hwW7OVW3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86521C4CEDD;
+	Wed, 12 Mar 2025 20:21:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741807894;
-	bh=CaW1UxJeoHSqP4IvGnDB6JVA17m5sPB3095Cb0mMJ14=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=T5SC42jSwOSUQOOJtN733Gaad9jXxutkSjOf6jR4w20P0D0w5LVX7+8h5ZlaPOF3g
-	 uAhdu4mtMOXb31o1nAVVVmhtPDjC6ZQNGn+VIwjASuJ5B/ri8ul+Q7cvuqoIRxrML6
-	 ytOqmt00NUHEwubcFLHyidQ/2HjON/pIG/zz/0b+FmkE4VY9RAQXoboEg3eTzUdBUM
-	 SAbH1LgNI0luEHfKC9hGSUDgxKrqGL0fSk007iCOSq8n292wEnlK/jZsJAgTjCB9Wa
-	 BbrWGZPuU2mz+tRENNeDiGoUc0S2qebDyKLfVleRb3KmgeGzqlSJDdFyXuKh+/GB9E
-	 V8XRDrosSDCOw==
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-5fcd61e9bcdso76738eaf.0;
-        Wed, 12 Mar 2025 12:31:34 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU1Wu/Mi1PdcI9cm0CIRTEsDQfjurkbI5DOng1oyRdKbRkPZJiSFUywm5K6Udt1Jz76bIixsRUJjJ5Jt3V1@vger.kernel.org, AJvYcCWd/VKOVspRWvkbOLCGCmOx42oo54wC3N8kjxYXqiMb852wkAl2d3tNQabWBMukauYpHjKmwF9wKaYaUGtW+KU=@vger.kernel.org, AJvYcCWlro4KU4bJH99Pk40YlaJvNz+wCaNYpaV8yDjL7w6yAnHOLo6fpbU79rjwu+Vun6cS11YGn6OU/fOx@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZx/vrVafQsQHPiMeUCWSYv727vsbct4zuoLAQRwWtcftKG4CT
-	fc0sXNmT3CnKdzcBaUFcgaFujkS3gbXHcnsbN9eFuLqK47T8AuhGUhPG1qC6FmE2mX6V/BBChov
-	QwMwO+qHVwDIb4obl3uTLUIWWcLg=
-X-Google-Smtp-Source: AGHT+IF0pW0O/4HHSdM+DXVucPScSwmpd7T5iO006EAES0raj7w7pX7ZxaICM4YXWVZK3dXMFGCE8m1/YDhpPgHYbWo=
-X-Received: by 2002:a05:6871:8a8:b0:2c2:50a5:1248 with SMTP id
- 586e51a60fabf-2c2614d4a3cmr11732507fac.38.1741807893527; Wed, 12 Mar 2025
- 12:31:33 -0700 (PDT)
+	s=k20201202; t=1741810898;
+	bh=eZn3M9mlWfZG7ziWvPoqQ68DoQzsS5rAy2tHFPgSILA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hwW7OVW36sV8XQpcekGwjWUAKZLABPhGuMylzhTZiktBd3awgZ8au4CoUwbL4uSeh
+	 877BnH6qV+pN6RN6/86qYDdHcnDBMWCyNnzejm4Kw3wUmVY/M2BUmxwP8LRzLATHJO
+	 Y+bD5YmoJc6/EdLNIq3s73S3xeGTdKq8ujVFjOUqJ2OIQGHxJC0MfIaxMU6w7w9MqU
+	 1KAMC7c7VCOI23sJ54sOfcYN/iEqOGfFwKFdPkuQHF3cmPWynJzZj7GS3TpWfTvZuF
+	 EnRmUWGp+LZAD1W2d/7xLQramMsP23g4Kqa2CCMqlCSzKCnA25vwN4tjElVTw3/ssh
+	 VFuKlz/yTi6Hg==
+Date: Wed, 12 Mar 2025 21:21:32 +0100
+From: Nathan Chancellor <nathan@kernel.org>
+To: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+Cc: patrick@stwcx.xyz, andrew@codeconstruct.com.au, linux@roeck-us.net,
+	wim@linux-watchdog.org, joel@jms.id.au,
+	linux-watchdog@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org, Peter.Yin@quantatw.com,
+	Patrick_NC_Lin@wiwynn.com, BMC-SW@aspeedtech.com,
+	chnguyen@amperecomputing.com, aaron_lee@aspeedtech.com
+Subject: Re: [PATCH v7 1/1] watchdog: aspeed: Update bootstatus handling
+Message-ID: <20250312202132.GA1072616@ax162>
+References: <20250113093737.845097-1-chin-ting_kuo@aspeedtech.com>
+ <20250113093737.845097-2-chin-ting_kuo@aspeedtech.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250312-ivo-intel_oc_wdt-v2-0-52d09738cd0b@siemens.com> <20250312-ivo-intel_oc_wdt-v2-2-52d09738cd0b@siemens.com>
-In-Reply-To: <20250312-ivo-intel_oc_wdt-v2-2-52d09738cd0b@siemens.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 12 Mar 2025 20:31:22 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0iBcxGcqp88kHN64WddvmC-y6F1XaFeSNHFYuQnayg7dQ@mail.gmail.com>
-X-Gm-Features: AQ5f1Jr44D1Wr5VQ4K2HGOBGF9RVoswaW7uPrnG--zzPI5KGQJHviiTHGkiNH5U
-Message-ID: <CAJZ5v0iBcxGcqp88kHN64WddvmC-y6F1XaFeSNHFYuQnayg7dQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] ACPI: PNP: Add Intel OC Watchdog IDs to non-PNP
- device list
-To: Diogo Ivo <diogo.ivo@siemens.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, 
-	Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
-	linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, jan.kiszka@siemens.com, 
-	benedikt.niedermayr@siemens.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250113093737.845097-2-chin-ting_kuo@aspeedtech.com>
 
-On Wed, Mar 12, 2025 at 4:46=E2=80=AFPM Diogo Ivo <diogo.ivo@siemens.com> w=
-rote:
->
-> With the kernel having an ACPI driver for these watchdog devices add
-> their IDs to the known non-PNP device list. Note that this commit is
-> not a complete list of all the possible watchdog IDs.
->
-> Signed-off-by: Diogo Ivo <diogo.ivo@siemens.com>
+On Mon, Jan 13, 2025 at 05:37:37PM +0800, Chin-Ting Kuo wrote:
+> The boot status in the watchdog device struct is updated during
+> controller probe stage. Application layer can get the boot status
+> through the command, cat /sys/class/watchdog/watchdogX/bootstatus.
+> The bootstatus can be,
+> WDIOF_CARDRESET => System is reset due to WDT timeout occurs.
+> Others          => Other reset events, e.g., power on reset.
+> 
+> On ASPEED platforms, boot status is recorded in the SCU registers.
+> - AST2400: Only a bit is used to represent system reset triggered by
+>            any WDT controller.
+> - AST2500/AST2600: System reset triggered by different WDT controllers
+>                    can be distinguished by different SCU bits.
+> 
+> Besides, on AST2400 and AST2500, since alternating boot event is
+> also triggered by using WDT timeout mechanism, it is classified
+> as WDIOF_CARDRESET.
+> 
+> Signed-off-by: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
 > ---
->  drivers/acpi/acpi_pnp.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/acpi/acpi_pnp.c b/drivers/acpi/acpi_pnp.c
-> index 01abf26764b00c86f938dea2ed138424f041f880..3f5a1840f573303c71f5d579e=
-32963a5b29d2587 100644
-> --- a/drivers/acpi/acpi_pnp.c
-> +++ b/drivers/acpi/acpi_pnp.c
-> @@ -355,8 +355,10 @@ static bool acpi_pnp_match(const char *idstr, const =
-struct acpi_device_id **matc
->   * device represented by it.
->   */
->  static const struct acpi_device_id acpi_nonpnp_device_ids[] =3D {
-> +       {"INT3F0D"},
->         {"INTC1080"},
->         {"INTC1081"},
-> +       {"INTC1099"},
->         {""},
->  };
->
->
-> --
+>  drivers/watchdog/aspeed_wdt.c | 81 ++++++++++++++++++++++++++++++++++-
+>  1 file changed, 79 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/watchdog/aspeed_wdt.c b/drivers/watchdog/aspeed_wdt.c
+...
+> +static void aspeed_wdt_update_bootstatus(struct platform_device *pdev,
+> +					 struct aspeed_wdt *wdt)
+> +{
+> +	const struct resource *res;
+> +	struct aspeed_wdt_scu scu = wdt->cfg->scu;
+> +	struct regmap *scu_base;
+> +	u32 reset_mask_width;
+> +	u32 reset_mask_shift;
+> +	u32 idx = 0;
+> +	u32 status;
+> +	int ret;
+> +
+> +	if (!of_device_is_compatible(pdev->dev.of_node, "aspeed,ast2400-wdt")) {
+> +		res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +		idx = ((intptr_t)wdt->base & 0x00000fff) / resource_size(res);
 
-Is there a particular reason for this patch?
+This division breaks the build when CONFIG_ARM_LPAE is enabled, which
+selects CONFIG_PHYS_ADDR_T_64BIT, turning resource_size_t into a 64-bit
+type.
+
+$ make -skj"$(nproc)" ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- mrproper multi_v7_lpae_defconfig all
+arm-linux-gnueabi-ld: drivers/watchdog/aspeed_wdt.o: in function `aspeed_wdt_update_bootstatus':
+drivers/watchdog/aspeed_wdt.c:257:(.text+0x80c): undefined reference to `__aeabi_uldivmod'
+
+> +	}
+> +
+> +	scu_base = syscon_regmap_lookup_by_compatible(scu.compatible);
+> +	if (IS_ERR(scu_base)) {
+> +		wdt->wdd.bootstatus = WDIOS_UNKNOWN;
+> +		return;
+> +	}
+> +
+> +	ret = regmap_read(scu_base, scu.reset_status_reg, &status);
+> +	if (ret) {
+> +		wdt->wdd.bootstatus = WDIOS_UNKNOWN;
+> +		return;
+> +	}
+> +
+> +	reset_mask_width = hweight32(scu.wdt_reset_mask);
+> +	reset_mask_shift = scu.wdt_reset_mask_shift +
+> +			   reset_mask_width * idx;
+> +
+> +	if (status & (scu.wdt_reset_mask << reset_mask_shift))
+> +		wdt->wdd.bootstatus = WDIOF_CARDRESET;
+> +
+> +	/* clear wdt reset event flag */
+> +	if (of_device_is_compatible(pdev->dev.of_node, "aspeed,ast2400-wdt") ||
+> +	    of_device_is_compatible(pdev->dev.of_node, "aspeed,ast2500-wdt")) {
+> +		ret = regmap_read(scu_base, scu.reset_status_reg, &status);
+> +		if (!ret) {
+> +			status &= ~(scu.wdt_reset_mask << reset_mask_shift);
+> +			regmap_write(scu_base, scu.reset_status_reg, status);
+> +		}
+> +	} else {
+> +		regmap_write(scu_base, scu.reset_status_reg,
+> +			     scu.wdt_reset_mask << reset_mask_shift);
+> +	}
+> +}
+> +
+
+Cheers,
+Nathan
 
