@@ -1,105 +1,111 @@
-Return-Path: <linux-watchdog+bounces-3089-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3091-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9E0CA5E0D5
-	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Mar 2025 16:46:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8DB8A5E46C
+	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Mar 2025 20:31:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1E66A7A7F77
-	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Mar 2025 15:45:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 27D9A16BBA2
+	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Mar 2025 19:31:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7FFE253F31;
-	Wed, 12 Mar 2025 15:46:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05EE81E5706;
+	Wed, 12 Mar 2025 19:31:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=siemens.com header.i=diogo.ivo@siemens.com header.b="EFjXtP9z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T5SC42jS"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mta-64-227.siemens.flowmailer.net (mta-64-227.siemens.flowmailer.net [185.136.64.227])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9D623C8C9
-	for <linux-watchdog@vger.kernel.org>; Wed, 12 Mar 2025 15:46:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.136.64.227
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBF2C1CF96;
+	Wed, 12 Mar 2025 19:31:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741794371; cv=none; b=BAvEIlMp4XY1VgSiiVm/N7EzL27BsaBF4kQQM0bSYjbofvF6LpDtkTD5Q4OIt+fuV3bFMwJA9LYEFxYzMvwCGuTcm28lmc8z7Y1y8iT4gTz3rqbtTMbKoMhaS0CWLX2wRgi8lUCqszxCPzabu8QRX9zWGH2X8EAvpU1wp1gBfLE=
+	t=1741807895; cv=none; b=mQ4EIj21VX7x9yOfk98BfYd9/a2t3rD02/gPb8R0dSZeE64dVRPvZFKsiWn+YMyq7RFW7gNhrfaSu1hRkRtFTDEIifesX740enaZQmdoWgNYTyCuKGodIrwjnsuvP7v6GJMKWR6+Mqf9OCEXq+BfWMrbZHHu6n7vfZJi6jBAGE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741794371; c=relaxed/simple;
-	bh=RMhS2sjhh4e3IfmFUCYCZDan+fpWY2ntAaWVrW8ASgo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=nQjkk1Xlfjm0YCzC+NUQA8wLpEBt00kTIgg8mPKfWBLO31ZpezFYYMjfnZw/EIsi6J8Ibqm2mwkJUNG4c4Qm5j00i1bUsVT02g8Uysm8Z88FQWo89oxQjNb/BFwnPWuOaGC/kqrBVfrOPfYWct9qGzGhnwXwSqch7MC75TM8NUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com; dkim=pass (2048-bit key) header.d=siemens.com header.i=diogo.ivo@siemens.com header.b=EFjXtP9z; arc=none smtp.client-ip=185.136.64.227
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
-Received: by mta-64-227.siemens.flowmailer.net with ESMTPSA id 2025031215460783e192ef45f615744a
-        for <linux-watchdog@vger.kernel.org>;
-        Wed, 12 Mar 2025 16:46:07 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
- d=siemens.com; i=diogo.ivo@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=yZ0hqVu+qoqJ5gOLuAKvUAj9SEf7RKv4cE8IhbeX2lY=;
- b=EFjXtP9zjay7VVnBCX4yNfHUn1XPMi8FQ9DmV08LiwhH5GLmGcSEta9/OqWP9ZjZto1OBf
- 5BxToPgsJ3C2/0M5F6TYbUclakNJR/U+JihDrVfHWZx4iXV6JQzZ+Id+9PjXjSzyvNtr04mI
- wvH0KA8RXs0PeOH3ZGlGruuxh62yzaZon/Ic+r21dzlDum0xW0Ym0TLrbAcwzkp1NGsMQwZL
- aRLnGK2ajG8PuusYQ+fyR6trigTdAKgt2Zy3ozHzL0LWXCGs3jA+bNiZvC9wjy61jsNnZnoA
- ZUhLgu7MR+w2jKWfb6ozLh+MC9gmYsk7XCdQ8pxNoGoYspSe4nczm3sA==;
-From: Diogo Ivo <diogo.ivo@siemens.com>
-Date: Wed, 12 Mar 2025 15:46:02 +0000
-Subject: [PATCH v2 2/2] ACPI: PNP: Add Intel OC Watchdog IDs to non-PNP
- device list
+	s=arc-20240116; t=1741807895; c=relaxed/simple;
+	bh=CaW1UxJeoHSqP4IvGnDB6JVA17m5sPB3095Cb0mMJ14=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MVvyf69FPaKeuGtiPiZQzVktk30gXZ6MMJ763KEET6nE5SX0onFp0YWGN1h09CfbnR8wVKXFCTuaZ/ghKIunExl/hhTvd0AfMTTfUhKKFGLSca4kehUA1XpDOAsn4UFqsjcYeS3PSFnUtmZMoxyrR3cDbMZ6vnzGITuZ5Gd3Xak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T5SC42jS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48034C4CEEC;
+	Wed, 12 Mar 2025 19:31:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741807894;
+	bh=CaW1UxJeoHSqP4IvGnDB6JVA17m5sPB3095Cb0mMJ14=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=T5SC42jSwOSUQOOJtN733Gaad9jXxutkSjOf6jR4w20P0D0w5LVX7+8h5ZlaPOF3g
+	 uAhdu4mtMOXb31o1nAVVVmhtPDjC6ZQNGn+VIwjASuJ5B/ri8ul+Q7cvuqoIRxrML6
+	 ytOqmt00NUHEwubcFLHyidQ/2HjON/pIG/zz/0b+FmkE4VY9RAQXoboEg3eTzUdBUM
+	 SAbH1LgNI0luEHfKC9hGSUDgxKrqGL0fSk007iCOSq8n292wEnlK/jZsJAgTjCB9Wa
+	 BbrWGZPuU2mz+tRENNeDiGoUc0S2qebDyKLfVleRb3KmgeGzqlSJDdFyXuKh+/GB9E
+	 V8XRDrosSDCOw==
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-5fcd61e9bcdso76738eaf.0;
+        Wed, 12 Mar 2025 12:31:34 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU1Wu/Mi1PdcI9cm0CIRTEsDQfjurkbI5DOng1oyRdKbRkPZJiSFUywm5K6Udt1Jz76bIixsRUJjJ5Jt3V1@vger.kernel.org, AJvYcCWd/VKOVspRWvkbOLCGCmOx42oo54wC3N8kjxYXqiMb852wkAl2d3tNQabWBMukauYpHjKmwF9wKaYaUGtW+KU=@vger.kernel.org, AJvYcCWlro4KU4bJH99Pk40YlaJvNz+wCaNYpaV8yDjL7w6yAnHOLo6fpbU79rjwu+Vun6cS11YGn6OU/fOx@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZx/vrVafQsQHPiMeUCWSYv727vsbct4zuoLAQRwWtcftKG4CT
+	fc0sXNmT3CnKdzcBaUFcgaFujkS3gbXHcnsbN9eFuLqK47T8AuhGUhPG1qC6FmE2mX6V/BBChov
+	QwMwO+qHVwDIb4obl3uTLUIWWcLg=
+X-Google-Smtp-Source: AGHT+IF0pW0O/4HHSdM+DXVucPScSwmpd7T5iO006EAES0raj7w7pX7ZxaICM4YXWVZK3dXMFGCE8m1/YDhpPgHYbWo=
+X-Received: by 2002:a05:6871:8a8:b0:2c2:50a5:1248 with SMTP id
+ 586e51a60fabf-2c2614d4a3cmr11732507fac.38.1741807893527; Wed, 12 Mar 2025
+ 12:31:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250312-ivo-intel_oc_wdt-v2-2-52d09738cd0b@siemens.com>
-References: <20250312-ivo-intel_oc_wdt-v2-0-52d09738cd0b@siemens.com>
-In-Reply-To: <20250312-ivo-intel_oc_wdt-v2-0-52d09738cd0b@siemens.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, 
- Wim Van Sebroeck <wim@linux-watchdog.org>, 
- Guenter Roeck <linux@roeck-us.net>
-Cc: linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org, 
- linux-watchdog@vger.kernel.org, jan.kiszka@siemens.com, 
- benedikt.niedermayr@siemens.com, Diogo Ivo <diogo.ivo@siemens.com>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1741794365; l=849;
- i=diogo.ivo@siemens.com; s=20240529; h=from:subject:message-id;
- bh=RMhS2sjhh4e3IfmFUCYCZDan+fpWY2ntAaWVrW8ASgo=;
- b=qLdDiUab6U7IFBbaPKeHTrO0ZnvzKxoH3mtzUlzkY2hpOs9P8vR4w1WhLufP/epXk7nUwGP+k
- 0e2M22UIHDPB2vA0f6OjTzddVQ7VPNtXJVDUJ+zRydhTjx5JWzrSYw/
-X-Developer-Key: i=diogo.ivo@siemens.com; a=ed25519;
- pk=BRGXhMh1q5KDlZ9y2B8SodFFY8FGupal+NMtJPwRpUQ=
-X-Flowmailer-Platform: Siemens
-Feedback-ID: 519:519-1328357:519-21489:flowmailer
+References: <20250312-ivo-intel_oc_wdt-v2-0-52d09738cd0b@siemens.com> <20250312-ivo-intel_oc_wdt-v2-2-52d09738cd0b@siemens.com>
+In-Reply-To: <20250312-ivo-intel_oc_wdt-v2-2-52d09738cd0b@siemens.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 12 Mar 2025 20:31:22 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0iBcxGcqp88kHN64WddvmC-y6F1XaFeSNHFYuQnayg7dQ@mail.gmail.com>
+X-Gm-Features: AQ5f1Jr44D1Wr5VQ4K2HGOBGF9RVoswaW7uPrnG--zzPI5KGQJHviiTHGkiNH5U
+Message-ID: <CAJZ5v0iBcxGcqp88kHN64WddvmC-y6F1XaFeSNHFYuQnayg7dQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] ACPI: PNP: Add Intel OC Watchdog IDs to non-PNP
+ device list
+To: Diogo Ivo <diogo.ivo@siemens.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, 
+	Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
+	linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, jan.kiszka@siemens.com, 
+	benedikt.niedermayr@siemens.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-With the kernel having an ACPI driver for these watchdog devices add
-their IDs to the known non-PNP device list. Note that this commit is
-not a complete list of all the possible watchdog IDs.
+On Wed, Mar 12, 2025 at 4:46=E2=80=AFPM Diogo Ivo <diogo.ivo@siemens.com> w=
+rote:
+>
+> With the kernel having an ACPI driver for these watchdog devices add
+> their IDs to the known non-PNP device list. Note that this commit is
+> not a complete list of all the possible watchdog IDs.
+>
+> Signed-off-by: Diogo Ivo <diogo.ivo@siemens.com>
+> ---
+>  drivers/acpi/acpi_pnp.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/acpi/acpi_pnp.c b/drivers/acpi/acpi_pnp.c
+> index 01abf26764b00c86f938dea2ed138424f041f880..3f5a1840f573303c71f5d579e=
+32963a5b29d2587 100644
+> --- a/drivers/acpi/acpi_pnp.c
+> +++ b/drivers/acpi/acpi_pnp.c
+> @@ -355,8 +355,10 @@ static bool acpi_pnp_match(const char *idstr, const =
+struct acpi_device_id **matc
+>   * device represented by it.
+>   */
+>  static const struct acpi_device_id acpi_nonpnp_device_ids[] =3D {
+> +       {"INT3F0D"},
+>         {"INTC1080"},
+>         {"INTC1081"},
+> +       {"INTC1099"},
+>         {""},
+>  };
+>
+>
+> --
 
-Signed-off-by: Diogo Ivo <diogo.ivo@siemens.com>
----
- drivers/acpi/acpi_pnp.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/acpi/acpi_pnp.c b/drivers/acpi/acpi_pnp.c
-index 01abf26764b00c86f938dea2ed138424f041f880..3f5a1840f573303c71f5d579e32963a5b29d2587 100644
---- a/drivers/acpi/acpi_pnp.c
-+++ b/drivers/acpi/acpi_pnp.c
-@@ -355,8 +355,10 @@ static bool acpi_pnp_match(const char *idstr, const struct acpi_device_id **matc
-  * device represented by it.
-  */
- static const struct acpi_device_id acpi_nonpnp_device_ids[] = {
-+	{"INT3F0D"},
- 	{"INTC1080"},
- 	{"INTC1081"},
-+	{"INTC1099"},
- 	{""},
- };
- 
-
--- 
-2.48.1
-
+Is there a particular reason for this patch?
 
