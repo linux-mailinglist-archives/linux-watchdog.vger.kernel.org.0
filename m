@@ -1,130 +1,127 @@
-Return-Path: <linux-watchdog+bounces-3086-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3087-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1D99A5DD54
-	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Mar 2025 14:06:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C020CA5E09F
+	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Mar 2025 16:39:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F69E16AEB8
-	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Mar 2025 13:06:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 10123189E3B3
+	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Mar 2025 15:39:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 362B02459D4;
-	Wed, 12 Mar 2025 13:05:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA3152512E7;
+	Wed, 12 Mar 2025 15:39:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b="QU6bbSSi"
+	dkim=pass (2048-bit key) header.d=siemens.com header.i=diogo.ivo@siemens.com header.b="AdZLtUYY"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from www.linux-watchdog.org (unknown [185.87.125.42])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 559C024501D
-	for <linux-watchdog@vger.kernel.org>; Wed, 12 Mar 2025 13:03:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.87.125.42
+Received: from mta-64-226.siemens.flowmailer.net (mta-64-226.siemens.flowmailer.net [185.136.64.226])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C668D24419B
+	for <linux-watchdog@vger.kernel.org>; Wed, 12 Mar 2025 15:39:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.136.64.226
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741784703; cv=none; b=XWFRZqA1PkviGjwq9njRimmM0frnVzdwUmg5Xfo4T7Y07i/yCfR1gWYPU3NZfAjlBtTxY+1ir43UJ3fvunDBU0soaoVEeV7SIKjGzdwNH8C/8+8nRHxy/2Qabo9MZ1XNJ+7smrgpFl11yfy85iIeA+xue0S1USNfX1igAzVmeKc=
+	t=1741793949; cv=none; b=bnY3Ed5WhDzPQCtBVrf2k3sMotmbeIst2IFggDvG9kmsngc5HnsY5NCtQ/qKadGRGSAEvuX3lSctdmgsz93Jvf53wvph1U/bsd+i+g1yGkVSHZzG4pAPW9naK+kp6Vv0vnxZia32OpuHm4nppu/6TpqLLd4gUxfBJGU1+bem6sk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741784703; c=relaxed/simple;
-	bh=EkupLqvzW0cgLU4nH3LB/G7ZcQwzLaS+8sNqJWkTuxw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fwvf8iOESOH65NiAFIia6XRfKoaWFqBUHYPXS3AkOX29GSE52DOTI585co27U2IgeKjwhjRjJq9uQmx20JjOr1dIWrN8ey59SI4l7nu9vcv/L9U32wHQwDJXTfh25TAxqXrta/qdgGqsLU+EFFulcUt/K6baKnPUKZdGHs3bYew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org; spf=pass smtp.mailfrom=linux-watchdog.org; dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b=QU6bbSSi; arc=none smtp.client-ip=185.87.125.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux-watchdog.org
-Received: by www.linux-watchdog.org (Postfix, from userid 500)
-	id A8C30409FE; Wed, 12 Mar 2025 13:29:13 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org A8C30409FE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
-	s=odk20180602; t=1741782553;
-	bh=EkupLqvzW0cgLU4nH3LB/G7ZcQwzLaS+8sNqJWkTuxw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QU6bbSSi0kjXT24Fbj+3sY25Ww44u5Hzws/0uCnIDXBWSLl0Z/JiQrbdzEoPpuP0o
-	 nBybLEYkz5mqLNvDlrQmG3uuTJNS32i8Re/BdvOMv2NqsL+ELOGkR74aQ7Eh57MUPq
-	 xwp0Fdsq4xHHdTaAnZ52mzRdlj1PXoP/OojTIvsU=
-Date: Wed, 12 Mar 2025 13:29:13 +0100
-From: Wim Van Sebroeck <wim@linux-watchdog.org>
-To: Biju Das <biju.das.jz@bp.renesas.com>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	"linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	"biju.das.au" <biju.das.au@gmail.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Tommaso Merciai <tommaso.merciai.xr@bp.renesas.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: watchdog: renesas,wdt: Document
- RZ/G3E support
-Message-ID: <20250312122913.GA27338@www.linux-watchdog.org>
-References: <20250126132633.31956-1-biju.das.jz@bp.renesas.com>
- <20250126132633.31956-2-biju.das.jz@bp.renesas.com>
- <TYCPR01MB1133249AA08160DABC40A31CD86D02@TYCPR01MB11332.jpnprd01.prod.outlook.com>
+	s=arc-20240116; t=1741793949; c=relaxed/simple;
+	bh=eSXthJ9gBFUjOBPDiwOsndhzo+g/mmYY7/XUp4vG9cE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CDIO32N86iPkPQT/aio0AgDg+Ssw5ea1B2NE82Bh3DcJjuK65FtjbgYLuKMbIuo3C+WTqBMC5/m/9+/JbiV5pAIJFEnUYVX/XbhMPSmAOCgAkQQixcQ8mAR1k2Vh62jcl+zcciITFplDpE7kTn4l30OT6Skg06u6hgwRw07aNXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com; dkim=pass (2048-bit key) header.d=siemens.com header.i=diogo.ivo@siemens.com header.b=AdZLtUYY; arc=none smtp.client-ip=185.136.64.226
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
+Received: by mta-64-226.siemens.flowmailer.net with ESMTPSA id 202503121538575a8995f7eabadc5fc2
+        for <linux-watchdog@vger.kernel.org>;
+        Wed, 12 Mar 2025 16:38:57 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=diogo.ivo@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
+ bh=9fug/AyD5MGpJaI7QeEK4OFdBV5tMRDjJLZy5ng3g5Y=;
+ b=AdZLtUYYdFWI1geDDdo4UNxBp/f11z90w549zOJxi7+RpFmgVW7VBxAKYvonUsCEHUmizR
+ gCCo9R4T7//++bPUmfD26cCeetSUHKuvXS/NgPVT2qvTQaQuncgWix8Zn3UnHcxSEx4QD/Vf
+ RMfrEp9AaJkr6yPYoQ3ueumLn5fAeq1Kg9qyjA2fsjMEPbbv12kwF6lMt+08PWZmvmd8+ECF
+ UT+51IfIdPQzWlkYoW35j0oID/ZUe04Ox+Kop1Z60mxJisK5AYE19lq6T6yqAyRQHVNDltI6
+ PxB37/+QE8xkKmSNrQPMr1GT7mt/Ut8SwzGR5CcNDpHUVKoi90qq0GkQ==;
+Message-ID: <7bf7b708-9075-4914-82da-f0a510d914a7@siemens.com>
+Date: Wed, 12 Mar 2025 15:38:56 +0000
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <TYCPR01MB1133249AA08160DABC40A31CD86D02@TYCPR01MB11332.jpnprd01.prod.outlook.com>
-User-Agent: Mutt/1.5.20 (2009-12-10)
+Subject: Re: [PATCH] watchdog: Add driver for Intel OC WDT
+To: Krzysztof Kozlowski <krzk@kernel.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>
+Cc: linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+ linux-watchdog@vger.kernel.org, jan.kiszka@siemens.com,
+ benedikt.niedermayr@siemens.com
+References: <20250311-ivo-intel_oc_wdt-v1-1-fd470460d9f5@siemens.com>
+ <bd411390-25bd-417e-9caa-aa4a45ad9161@kernel.org>
+Content-Language: en-US
+From: Diogo Ivo <diogo.ivo@siemens.com>
+In-Reply-To: <bd411390-25bd-417e-9caa-aa4a45ad9161@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-1328357:519-21489:flowmailer
 
-Hi Biju
+Hi Krzysztof, thanks for the review.
 
-> Hi Wim Van Sebroeck,
+On 3/12/25 8:50 AM, Krzysztof Kozlowski wrote:
+> On 11/03/2025 14:18, Diogo Ivo wrote:
+>> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+>> index f81705f8539aa0b12d156a86aae521aa40b4527d..16e6df441bb344c0f91b40bd76b6322ad3016e72 100644
+>> --- a/drivers/watchdog/Kconfig
+>> +++ b/drivers/watchdog/Kconfig
+>> @@ -1350,6 +1350,17 @@ config INTEL_MID_WATCHDOG
+>>   
+>>   	  To compile this driver as a module, choose M here.
+>>   
+>> +config INTEL_OC_WATCHDOG
+>> +	tristate "Intel OC Watchdog"
+>> +	depends on X86 && ACPI
 > 
-> 
-> > -----Original Message-----
-> > From: Biju Das <biju.das.jz@bp.renesas.com>
-> > Sent: 26 January 2025 13:27
-> > Subject: [PATCH v2 1/2] dt-bindings: watchdog: renesas,wdt: Document RZ/G3E support
-> > 
-> > Document the support for the watchdog IP available on RZ/G3E SoC. The watchdog IP available on RZ/G3E
-> > SoC is identical to the one found on RZ/V2H SoC.
-> > 
-> > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > Reviewed-by: Tommaso Merciai <tommaso.merciai.xr@bp.renesas.com>
-> > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> > ---
-> > v1->v2:
-> >  * Collected tags.
-> > ---
-> >  Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
-> > b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
-> > index 29ada89fdcdc..3e0a8747a357 100644
-> > --- a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
-> > +++ b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
-> > @@ -75,6 +75,10 @@ properties:
-> >                - renesas,r8a779h0-wdt     # R-Car V4M
-> >            - const: renesas,rcar-gen4-wdt # R-Car Gen4
-> > 
-> > +      - items:
-> > +          - const: renesas,r9a09g047-wdt # RZ/G3E
-> > +          - const: renesas,r9a09g057-wdt # RZ/V2H(P)
-> > +
-> >        - const: renesas,r9a09g057-wdt       # RZ/V2H(P)
-> > 
-> >    reg:
-> 
-> Looks like you missed this patch from the series as [1]
-> hits in next or you expect it to go through DT tree?
-> 
-> [1] https://web.git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=next-20250311&id=331c8349605c8fa2f9040c39fe8c40afe3fdc3c3
-> 
-> Cheers,
-> Biju
+> Why can't this be compile tested?
 
-Added.
+I'll add it in v2 as well as HAS_IOPORT.
 
-Kind regards,
-Wim.
+>> +static const struct acpi_device_id intel_oc_wdt_match[] = {
+>> +	{ "INT3F0D" },
+>> +	{ "INTC1099" },
+>> +	{ },
+>> +};
+>> +MODULE_DEVICE_TABLE(acpi, intel_oc_wdt_match);
+>> +
+>> +static struct platform_driver intel_oc_wdt_platform_driver = {
+>> +	.driver = {
+>> +		.name = DRV_NAME,
+>> +		.acpi_match_table = ACPI_PTR(intel_oc_wdt_match),
+> 
+> Drop ACPI_PTR, causes warnigns and is not really beneficial.
 
+I'll drop it in v2.
+
+>> +	},
+>> +	.probe = intel_oc_wdt_probe,
+>> +};
+>> +
+>> +module_platform_driver(intel_oc_wdt_platform_driver);
+>> +
+>> +MODULE_AUTHOR("Diogo Ivo <diogo.ivo@siemens.com>");
+>> +MODULE_LICENSE("GPL");
+>> +MODULE_DESCRIPTION("Intel OC Watchdog driver");
+>> +MODULE_ALIAS("platform:" DRV_NAME);
+> 
+> Drop alias, you have match table.
+
+I'll drop it in v2.
+
+> Best regards,
+> Krzysztof
+
+Best regards,
+Diogo
 
