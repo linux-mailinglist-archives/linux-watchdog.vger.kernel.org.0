@@ -1,123 +1,115 @@
-Return-Path: <linux-watchdog+bounces-3094-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3095-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21BD6A5EE45
-	for <lists+linux-watchdog@lfdr.de>; Thu, 13 Mar 2025 09:44:47 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADC94A5F0DC
+	for <lists+linux-watchdog@lfdr.de>; Thu, 13 Mar 2025 11:28:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6C1E317CC9B
-	for <lists+linux-watchdog@lfdr.de>; Thu, 13 Mar 2025 08:44:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F0F26171D96
+	for <lists+linux-watchdog@lfdr.de>; Thu, 13 Mar 2025 10:28:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87D4326157F;
-	Thu, 13 Mar 2025 08:44:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF8DC26563B;
+	Thu, 13 Mar 2025 10:28:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=siemens.com header.i=diogo.ivo@siemens.com header.b="dCzPTFSC"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from mta-65-227.siemens.flowmailer.net (mta-65-227.siemens.flowmailer.net [185.136.65.227])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 912B9261565;
-	Thu, 13 Mar 2025 08:44:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4708264FB8
+	for <linux-watchdog@vger.kernel.org>; Thu, 13 Mar 2025 10:28:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.136.65.227
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741855479; cv=none; b=Ny4lnGPAxz1CdFKNpmP0epvl+DkgSeYxRnHthM52yxf0U5TaeU3h89N7/84peutMA3+6jnTE5IAK45lyYkbcBrIrKWGE11pllEFFZ3yynp/gjvUjVA4qj+XR2A9f0fjarA4qKR4pLhqLKcHeOK0tz8fFLGLYOVhWxLq9xhMvpDU=
+	t=1741861722; cv=none; b=J5TF0I8esek6RnmyHLLoadcVhC6Gx3qTwX7pNpoPgX8w3xHzxR5X4PZu5OjJLady54i/LphlWeKc5l06uLJl8hdnP7UkGgSX6qOuiEPVaA/Y9RzBkbFDUmkxE3ilGZLIWZYhMMAYMAZPQJQ8RNG8OU1ZPLkj669sumyw+HKHUjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741855479; c=relaxed/simple;
-	bh=LPTBbVCgJ3gNYRoorgbuJ2GD+DCqzyI7DNJWUsahgSY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=jQ3TnEf4thFjSVUwCW0SGnRxs6UcNuL6A7wapLcnVnP2BIaNIJi1CtSN2nNjOo+Q7qsHEsul19IeTWHh8q+3oF2aFYk+S+KtrRNNNRjlEqpu7QZpvYkowRCdYBw6BvM2bfgNLIomeW7fZY0quGadXPlXe3/quPjgB1HjkptFnhM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from localhost (unknown [124.16.138.129])
-	by APP-01 (Coremail) with SMTP id qwCowADX32_smtJn3qfUFA--.13198S2;
-	Thu, 13 Mar 2025 16:44:28 +0800 (CST)
-From: Chen Ni <nichen@iscas.ac.cn>
-To: avifishman70@gmail.com,
-	tmaimon77@gmail.com,
-	tali.perry1@gmail.com,
-	venture@google.com,
-	yuenn@google.com,
-	benjaminfair@google.com,
-	wim@linux-watchdog.org,
-	linux@roeck-us.net
-Cc: openbmc@lists.ozlabs.org,
-	linux-watchdog@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Chen Ni <nichen@iscas.ac.cn>
-Subject: [PATCH] watchdog: npcm: Remove unnecessary NULL check before clk_prepare_enable/clk_disable_unprepare
-Date: Thu, 13 Mar 2025 16:44:19 +0800
-Message-Id: <20250313084420.2481763-1-nichen@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1741861722; c=relaxed/simple;
+	bh=wVpYie9sH4ylFdnG9WhvhVA8xQP3Lc5g8a31ToTFzVA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iMN4ijeC4dyMmyrZByVXVlDrPZ58zbQsp6Oo3ONg1zgAhIo6h6fIarcCxlKv1DigzG3LNVUBxXUfdg4Ed4Wm87XUZ95D/E3NQy42fYUX0c+8JVST3XvcJY4ENHbxb3fQU77Zwrp18tIx5uLG9FydB3iRAAMy6QKh+r+fvq9g+1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com; dkim=pass (2048-bit key) header.d=siemens.com header.i=diogo.ivo@siemens.com header.b=dCzPTFSC; arc=none smtp.client-ip=185.136.65.227
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
+Received: by mta-65-227.siemens.flowmailer.net with ESMTPSA id 20250313102836c7b681e71e33c8e2c2
+        for <linux-watchdog@vger.kernel.org>;
+        Thu, 13 Mar 2025 11:28:36 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=diogo.ivo@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
+ bh=x7pn0SmYeby5oYK8B0/TUrJCsIHBByLGAVMLNf5D/aY=;
+ b=dCzPTFSCYSJCqomSq9SnYeYbUAQ8ImFBJx63WDgsz1MGnXnICsT14bT/dzw0PnGnKhPlB0
+ ITPQsyGEZbjKclIzrnVdgF4eVm2wTAdvMJvPfpgS8T6xu0r6FdB9CWZFu2mZ6YtQ+/1kamFG
+ fz97Mb/AX4z6kRtJ2sJHwIg2IncjUviPrzXkQ6UInOrE1IPPV/DTz8fk2C2ZkfM4oz2vz9TZ
+ 0grTOaUqkm9FSzdW9OKWt6RyS0oWGK/nFcngpHkiQnEvOW+Qcm5Ai164UIjsFozww3HrgQfk
+ 49Bt/Nr+PEuWGDIvC1ZSOJKudP/KiHyRwvr6Q3cx/E0Gvn0/nmMFM66A==;
+Message-ID: <63e69331-bb8f-45f6-adb8-872f594fa02e@siemens.com>
+Date: Thu, 13 Mar 2025 10:28:33 +0000
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH v2 2/2] ACPI: PNP: Add Intel OC Watchdog IDs to non-PNP
+ device list
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Len Brown <lenb@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>,
+ Guenter Roeck <linux@roeck-us.net>, linux-kernel@vger.kernel.org,
+ linux-acpi@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ jan.kiszka@siemens.com, benedikt.niedermayr@siemens.com
+References: <20250312-ivo-intel_oc_wdt-v2-0-52d09738cd0b@siemens.com>
+ <20250312-ivo-intel_oc_wdt-v2-2-52d09738cd0b@siemens.com>
+ <CAJZ5v0iBcxGcqp88kHN64WddvmC-y6F1XaFeSNHFYuQnayg7dQ@mail.gmail.com>
+Content-Language: en-US
+From: Diogo Ivo <diogo.ivo@siemens.com>
+In-Reply-To: <CAJZ5v0iBcxGcqp88kHN64WddvmC-y6F1XaFeSNHFYuQnayg7dQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qwCowADX32_smtJn3qfUFA--.13198S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kw15tFWDXr1rCr48Ary7Jrb_yoW8JFWxpF
-	WIyrWSvFW7tFWYqw43Jw4DAr1FkF42yFyfZryUCa4rWwn0yryFvFyFy34j9Fs8ArWfC3WY
-	va1jyrWDC3WjyFJanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUP014x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
-	WxJr0_GcWln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-	64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv67AKxVW8Jr0_Cr
-	1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I
-	648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_GFv_Wrylc2xSY4AK67
-	AK6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAF
-	wI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc4
-	0Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AK
-	xVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr
-	1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7sR_JKItUU
-	UUU==
-X-CM-SenderInfo: xqlfxv3q6l2u1dvotugofq/
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-1328357:519-21489:flowmailer
 
-clk_prepare_enable() and clk_disable_unprepare() already checked
-NULL clock parameter.Remove unneeded NULL check for clk here.
+Hi Rafael,
 
-Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
----
- drivers/watchdog/npcm_wdt.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+On 3/12/25 7:31 PM, Rafael J. Wysocki wrote:
+> On Wed, Mar 12, 2025 at 4:46 PM Diogo Ivo <diogo.ivo@siemens.com> wrote:
+>>
+>> With the kernel having an ACPI driver for these watchdog devices add
+>> their IDs to the known non-PNP device list. Note that this commit is
+>> not a complete list of all the possible watchdog IDs.
+>>
+>> Signed-off-by: Diogo Ivo <diogo.ivo@siemens.com>
+>> ---
+>>   drivers/acpi/acpi_pnp.c | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/acpi/acpi_pnp.c b/drivers/acpi/acpi_pnp.c
+>> index 01abf26764b00c86f938dea2ed138424f041f880..3f5a1840f573303c71f5d579e32963a5b29d2587 100644
+>> --- a/drivers/acpi/acpi_pnp.c
+>> +++ b/drivers/acpi/acpi_pnp.c
+>> @@ -355,8 +355,10 @@ static bool acpi_pnp_match(const char *idstr, const struct acpi_device_id **matc
+>>    * device represented by it.
+>>    */
+>>   static const struct acpi_device_id acpi_nonpnp_device_ids[] = {
+>> +       {"INT3F0D"},
+>>          {"INTC1080"},
+>>          {"INTC1081"},
+>> +       {"INTC1099"},
+>>          {""},
+>>   };
+>>
+>>
+>> --
+> 
+> Is there a particular reason for this patch?
 
-diff --git a/drivers/watchdog/npcm_wdt.c b/drivers/watchdog/npcm_wdt.c
-index a5dd1c230137..e62ea054bc61 100644
---- a/drivers/watchdog/npcm_wdt.c
-+++ b/drivers/watchdog/npcm_wdt.c
-@@ -68,8 +68,7 @@ static int npcm_wdt_start(struct watchdog_device *wdd)
- 	struct npcm_wdt *wdt = to_npcm_wdt(wdd);
- 	u32 val;
- 
--	if (wdt->clk)
--		clk_prepare_enable(wdt->clk);
-+	clk_prepare_enable(wdt->clk);
- 
- 	if (wdd->timeout < 2)
- 		val = 0x800;
-@@ -105,8 +104,7 @@ static int npcm_wdt_stop(struct watchdog_device *wdd)
- 
- 	writel(0, wdt->reg);
- 
--	if (wdt->clk)
--		clk_disable_unprepare(wdt->clk);
-+	clk_disable_unprepare(wdt->clk);
- 
- 	return 0;
- }
-@@ -156,8 +154,7 @@ static int npcm_wdt_restart(struct watchdog_device *wdd,
- 	struct npcm_wdt *wdt = to_npcm_wdt(wdd);
- 
- 	/* For reset, we start the WDT clock and leave it running. */
--	if (wdt->clk)
--		clk_prepare_enable(wdt->clk);
-+	clk_prepare_enable(wdt->clk);
- 
- 	writel(NPCM_WTR | NPCM_WTRE | NPCM_WTE, wdt->reg);
- 	udelay(1000);
--- 
-2.25.1
+Yes, since the ACPI tables for these watchdogs have both a PNP0C02 CID and
+and then an HID (such as INT3F0D or INTC1099) without this patch the driver
+in patch 01 will not bind to the device because PNP will bind to it first.
+My understanding is that this table was added to solve exactly this problem
+so I added these HIDs here, but if this is wrong and I misunderstood
+please let me know.
 
+Best regards,
+Diogo
 
