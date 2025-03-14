@@ -1,97 +1,115 @@
-Return-Path: <linux-watchdog+bounces-3105-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3106-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18E0BA615AB
-	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Mar 2025 17:03:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 800DCA61726
+	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Mar 2025 18:12:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1EB9D1B647DC
-	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Mar 2025 16:03:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B903517DD40
+	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Mar 2025 17:12:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25BD6202963;
-	Fri, 14 Mar 2025 16:02:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NwAIwXPA"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5D0220409D;
+	Fri, 14 Mar 2025 17:12:44 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA1191FF7B8;
-	Fri, 14 Mar 2025 16:02:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC1FB1FDA7A;
+	Fri, 14 Mar 2025 17:12:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741968175; cv=none; b=OjEQXp/vQNUXIgB31G0tiupGImcLIp8AclxU3Rdzj0w2xJqhW4/FvxlYjy0GuhN7OYBvDazeyn5B2OTGzg32mfB6pkHe7aXhOAOSrCEScnZpu7h+yKE7YhajmA+5a9pX01VV3GSyc9QrECEgAU6n4L+rHzXv0aQ7n/WnTwq1nEU=
+	t=1741972364; cv=none; b=JL/b0z8xN1ASncv39sv4dczRPxO14qNb+pCi97fkfMJOerpUFJsqyBx4dgs++PqICKh6j/uAtmUTXZtTM6h9UhkHk3LP9lyrB9VWUCQ80106dijkgdcqNrAJYeINSJcD80yC2Uk1O/UhqQc4bh9+MRdB5hEExv6qPZzV3yEH/n8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741968175; c=relaxed/simple;
-	bh=2xfK40kbAsq1KvSui06/jpf2SUEyYwHkDTzV9ntlS0E=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=WL5dM3U7EPMkep8v7s5rYvbjC1pvvThd+gcZvJNMLK+Uil8wu5xn2d5B1xOULiJS4z7EAJnlPWHzZiA3GUpzqamRop+DhuFHtS3bqu8OIjchhFswkYx8LmcNo6s8eSf2qL3WW85q9RmKSxlDUYc6rsn2cKqTpebNaI65jrSAQqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NwAIwXPA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 803CFC4CEE9;
-	Fri, 14 Mar 2025 16:02:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741968173;
-	bh=2xfK40kbAsq1KvSui06/jpf2SUEyYwHkDTzV9ntlS0E=;
-	h=From:To:Cc:Subject:Date:From;
-	b=NwAIwXPA5LFcIGfs/bRsgeS29k96CBCEM5nbbzJuvRLWiyQYt3rykJ48fbgDzQ4h+
-	 dK5u8r9V4Ee5/y1NQs8aHLSzT00O9fYt03Ryl/fN2Oj3OMa5XNtYYNt9JJ0muwTSdR
-	 /MXZloiB9t3j0LdunViaOvQrids/JmMppD1Q9DdA+L7qM1Mr/lKS63K0FZ294Zgg+e
-	 n5VWtTs9xkuvnxnxouvylTWiPpD++qr7929bLwS4kxC38MLOgLWTRQPorjIPZjTYY1
-	 2dClBdjtIEOBybXRJhhp9zobqDT6wXGMklWdgHYkfaq8adhrbHNM+T+wwGfJIwgk5n
-	 /feX1H8EpT2Mw==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	linux-watchdog@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-aspeed@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] watchdog: aspeed: fix 64-bit division
-Date: Fri, 14 Mar 2025 17:02:44 +0100
-Message-Id: <20250314160248.502324-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.5
+	s=arc-20240116; t=1741972364; c=relaxed/simple;
+	bh=oMRf5D9xED76AloBmylBsBKYgSUDihyoTcfIWxoaKyc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=mOprRF10kA9YpQSy6UxB6FlWPpEf+t8HxDuwatjj99yL6+7HACq+m//Py425lni87jeNilCxRT0HFID1KV//cRYKytj5O7Z2Nn3Q7TCJnrWmZ1ZX5fVvoxwWS6hRM4rDyDvLVBoFvSE0RrpoTk2swRKwdWLvHmd7JTipURqqqtU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3B18E1424;
+	Fri, 14 Mar 2025 10:12:52 -0700 (PDT)
+Received: from donnerap.manchester.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 251433F673;
+	Fri, 14 Mar 2025 10:12:40 -0700 (PDT)
+Date: Fri, 14 Mar 2025 17:12:35 +0000
+From: Andre Przywara <andre.przywara@arm.com>
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>, Jernej
+ Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
+ <linux@roeck-us.net>
+Cc: <devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+ <linux-sunxi@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+ <linux-watchdog@vger.kernel.org>, Conor Dooley <conor.dooley@microchip.com>
+Subject: Re: [PATCH v3 03/15] dt-bindings: watchdog: sunxi: add Allwinner
+ A523 compatible string
+Message-ID: <20250314171235.25db7044@donnerap.manchester.arm.com>
+In-Reply-To: <20250307005712.16828-4-andre.przywara@arm.com>
+References: <20250307005712.16828-1-andre.przywara@arm.com>
+	<20250307005712.16828-4-andre.przywara@arm.com>
+Organization: ARM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Fri, 7 Mar 2025 00:57:00 +0000
+Andre Przywara <andre.przywara@arm.com> wrote:
 
-On 32-bit architectures, the new calculation causes a build failure:
+Hi Wim, Guenter,
 
-ld.lld-21: error: undefined symbol: __aeabi_uldivmod
+> The Allwinner A523 SoC features a watchdog similar to the one used in
+> previous SoCs, but moves some registers around (by just one word), making
+> it incompatible to existing IPs.
+> 
+> Add the new name to the list of compatible string, and also to the list
+> of IP requiring two clock inputs.
+> 
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-Since neither value is ever larger than a register, cast both
-sides into a uintptr_t.
+is there any chance that this DT binding patch (and patch 04/15, touching
+the actual driver) would make it into -next any time soon, and hopefully
+into v6.15? From what I can see it's the only binding left before the
+sunxi maintainers can merge the devicetree patches for this new SoC (most
+others are in, pinctrl and NMI should show up in the next days).
 
-Fixes: 5c03f9f4d362 ("watchdog: aspeed: Update bootstatus handling")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/watchdog/aspeed_wdt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Let me know if I can help with anything or if you need more information!
 
-diff --git a/drivers/watchdog/aspeed_wdt.c b/drivers/watchdog/aspeed_wdt.c
-index 369635b38ca0..837e15701c0e 100644
---- a/drivers/watchdog/aspeed_wdt.c
-+++ b/drivers/watchdog/aspeed_wdt.c
-@@ -254,7 +254,7 @@ static void aspeed_wdt_update_bootstatus(struct platform_device *pdev,
- 
- 	if (!of_device_is_compatible(pdev->dev.of_node, "aspeed,ast2400-wdt")) {
- 		res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--		idx = ((intptr_t)wdt->base & 0x00000fff) / resource_size(res);
-+		idx = ((intptr_t)wdt->base & 0x00000fff) / (uintptr_t)resource_size(res);
- 	}
- 
- 	scu_base = syscon_regmap_lookup_by_compatible(scu.compatible);
--- 
-2.39.5
+Thanks,
+Andre
+
+> ---
+>  .../devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml   | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml b/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml
+> index 64c8f73938099..b35ac03d51727 100644
+> --- a/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml
+> @@ -32,6 +32,7 @@ properties:
+>        - items:
+>            - const: allwinner,sun20i-d1-wdt-reset
+>            - const: allwinner,sun20i-d1-wdt
+> +      - const: allwinner,sun55i-a523-wdt
+>  
+>    reg:
+>      maxItems: 1
+> @@ -60,6 +61,7 @@ if:
+>            - allwinner,sun20i-d1-wdt-reset
+>            - allwinner,sun50i-r329-wdt
+>            - allwinner,sun50i-r329-wdt-reset
+> +          - allwinner,sun55i-a523-wdt
+>  
+>  then:
+>    properties:
 
 
