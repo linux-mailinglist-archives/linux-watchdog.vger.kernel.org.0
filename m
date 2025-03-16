@@ -1,82 +1,82 @@
-Return-Path: <linux-watchdog+bounces-3110-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3111-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19662A618B6
-	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Mar 2025 18:55:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D021A63355
+	for <lists+linux-watchdog@lfdr.de>; Sun, 16 Mar 2025 03:21:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8DD237A5CE0
-	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Mar 2025 17:54:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D09E3AF681
+	for <lists+linux-watchdog@lfdr.de>; Sun, 16 Mar 2025 02:21:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D7B1126BF1;
-	Fri, 14 Mar 2025 17:55:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51E953FF1;
+	Sun, 16 Mar 2025 02:21:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fk2HVToZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j983ouKe"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D089786340;
-	Fri, 14 Mar 2025 17:55:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88E0076035;
+	Sun, 16 Mar 2025 02:21:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741974909; cv=none; b=Mz8ZQM2n6Oc9pClEy9ymMqPPdduCKrmiBeMEvIgmdKfrI8SKYWJRXCC/YgnrI3NAWHn0ViJZvr6Y+4z9a/UHSw8FDNQqmWql3BZvuL57C/DbLSFVjjYYLfKephY29ayxY+j74e8GmXEwEi5mbW6XtMJiD9K/jkBmxQMcxhEirrc=
+	t=1742091709; cv=none; b=CDkxNzvQqUXzWkmMyJlh4RJ6mCCSNA4q4rAoQR2CZ4e39Ece14Hxe5GysPUbuDPzxUZ/DAW+ngLSbwYK8be2i/zoRgK47Wn0l9Uej1TOq5+9h4ySowfT48tSBOctp4PQeOeXCgzUZoZIGa64ccjfqwEQGXrHxUrGczMMp8YhvjE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741974909; c=relaxed/simple;
-	bh=4okzVPUdM9En8c5yooV0gbqCGswcmF1Sld+zafunyC4=;
+	s=arc-20240116; t=1742091709; c=relaxed/simple;
+	bh=DKWbLojXTC9FWzkVFTVpDI4OwAWggqFMDCv97VjYybg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SlMW7FunsW+JQR2nl9au6IyoGTXB6HcUob34+1hauI+mPVGJp90z4DhYcg7FBrpR2UXDiM0o+7zipHogEJBZ513+gcmasls2MMZcKfhfzRAXuJyaZi27loofoyUiGBK6kS09wx7of4vFazUcOuCEupA0PxB1jq7pvkIbmYVPmT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fk2HVToZ; arc=none smtp.client-ip=209.85.214.171
+	 In-Reply-To:Content-Type; b=kxuJbeSPyRYKRst5wi+RTGV6nqK7S/j4pYzQlFHjjvkvqh3k0GCkF7AkWH6S2FPBz82rjqYnvWlaBYGsjRh+spOMBv6cPXeY7Kh34OxQKLYxsnIJDzl5EV5kIpsFkoYH2jqdgRbiLIGwk7su3b15y0BNeoIU1+aBKHPpoubY4OY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j983ouKe; arc=none smtp.client-ip=209.85.216.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2239aa5da08so48904475ad.3;
-        Fri, 14 Mar 2025 10:55:07 -0700 (PDT)
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-2fee4d9c2efso1436195a91.3;
+        Sat, 15 Mar 2025 19:21:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741974907; x=1742579707; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1742091707; x=1742696507; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=GYuaoE2tpXVMoioaikSazmkTcaXhz8QWbIRrJWb/YhI=;
-        b=fk2HVToZGXuc6xvZCwH1cQ8Q2912L/1JmESeLsHz36bISCranFHunLvsS4wHaL5ZJE
-         sr7CQ1OTHU2tqOxH+RUNWIFdm/UNQuNaNgD1q4dBfmXOCspEtc5nZAkYhJ99JQNvK2R5
-         6X9mRSFyEk0+AGjFy/fOJx6VI9KYK2f2O4m5yZoGce/Sc0Qmg3KFqsP4ZkIdaT5s3uDR
-         MUVPPrsaIYJeVoijerQzPayalsQVy71dWs+bCcf7IS+29l72bzcnjYFm7XetlHECaCIP
-         Hii1UrOhyyLDPSJ925WYl4hHhKiTtxpYGl69Wwv+2zxhAzORn74+iAgpToJRJwUxG21u
-         okRA==
+        bh=xXQAPce9+Da2Thb7jFtKZNkgNkWHZYB4UCuGYADpkwQ=;
+        b=j983ouKeVLZUBKKCy5F6HUPNTcMit+3O69viszCkYPmfiLBHP53orhjun5A+O41b6Y
+         NvxKSJGTaHAAAesK1n68CEMrztPptiJgv6QnELS2HeBM0ZjyoqVFrHXc6xIZppKaZou8
+         vMWg0N+F3RcJIlK9Cxch1V43Xbbwstkh0qjKeU3OBw7iXbE+DosMk7LDLYPO4CfoM1Xi
+         DMvJoQ47Hl3yb8j4bmgsk+k3RztUsn8paqShhGtSuKlkdGwv2gC+N+FNUGMaVRvP3DLv
+         8cMwHeE1tcpsBTkvSMD3FEP2aMdI0T3ovf/tu+OqmOddPeEzZhbtP5+z+9YXr28h6WLs
+         NKJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741974907; x=1742579707;
+        d=1e100.net; s=20230601; t=1742091707; x=1742696507;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GYuaoE2tpXVMoioaikSazmkTcaXhz8QWbIRrJWb/YhI=;
-        b=X9iDFOodT6Lojc4/tjfey65C+//qI7b/lSLs0tBx4dI8Oa0V3NC1/k/yLxR5xeAIEJ
-         YS7pZ5/wT59W9xV6nUxHZLdT2Y3R2QBExfdVky5FBTPjvVGu4btRacE70Cn3LYe3Nljm
-         imm+JMap87EFhOKz+LNb7loUx44qxpvCg8yKLc0g3F0eSo8CVwMmRnQ8QKzzsKEcjXl5
-         9f9kTBj2apRmp00LcTY3Dzp7pdTaBPIuvcVsA7Nw0QK8QVs3pJFdqH99gDFy9FOiiUwN
-         h+VtSkhnt6dL3UV3c839z1JriyQiX2HYbJnSX73DaCjK3o1f3ATD2Qpv8E5xlGzkV/kg
-         eJDg==
-X-Forwarded-Encrypted: i=1; AJvYcCUGVYlBRCEO7ce7dyEoYckELqo9jpI3WKkjHhrgpPG3U13mU33UOGLQ42ImXchddFaqO1d0nnUdkSZ8c/juI78=@vger.kernel.org, AJvYcCVKO2V04JWRIqgX8/+h2K9HylmZ9/O34sjlpadj9piIcvyJhe4xB6h/ppdEZFRz2sy6LjJtMqekGZ5tk9Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxoodRJOySaSHuVs3aYcS0+MU+4723HQPyrsRnj8psAV7Y0+5k8
-	RmGejGYIW1mbiGrtcJb0POWFHa+jllLuYlJB8OMK4pq6T6jDyMsV
-X-Gm-Gg: ASbGncu3AiXeY8PLPHBJJ530m4Bsb+FqNCPqCkcGuR2Q+UvmL7L3jmQE2Jk79fFRIuy
-	rYGHErpgA7CNN0Xiqaiarl3/rzx+if1VrpUIElVHcudrZ8hJmH/8DWCY494fHGeWKIF3zl6eWZH
-	pdxBt8ucqFW1lcT/mTIDzoz1MiHUh8obJQ0nwc2SPeM/yb1LgoCjhtxow3eMRA003Mbf46HHkkA
-	hn9SMPxoKDnNCsNj7kVIpUctgElMCKAq7ILx7g7TjtSaM4xzVGXGAMLj11yyTHEClFZy5O1gP5k
-	0+G8352Ct3Ob+xvhJ1tP7k7ofIOzaBkF6A5j7C3W6ELk1MJ3E1cd6svUE2xP/CE7oGABxRrciWf
-	SzuneoVNZMo67uYn8yg==
-X-Google-Smtp-Source: AGHT+IFfzffcjUeInESVFEr7t0qDIWD/oGmdtUB4ui/iRUi+/KiJTJutkbCHfIyZnt3dHb9VK0PZMQ==
-X-Received: by 2002:a05:6a00:3c81:b0:736:3c77:31fd with SMTP id d2e1a72fcca58-737223fe959mr3608574b3a.23.1741974906924;
-        Fri, 14 Mar 2025 10:55:06 -0700 (PDT)
+        bh=xXQAPce9+Da2Thb7jFtKZNkgNkWHZYB4UCuGYADpkwQ=;
+        b=jEoh5HCTU1o6wmb2nM68y1fTOGi0TSMvHHYkrQ7c6JBccKoOx4Cs2HdimxIrJ+WVf8
+         OuoUTpotEwaBiTvl7MrBblbUt+RWZ+vuGF91/p7XyDdhHqnc1FRdbPofjW1TfMjqIuWR
+         1Bx4giiMmPwexslFDunTdpRC6/u6AEVEuJv4Uro9c2wvrGivSSkvtT2ae1bjdMMC4mh0
+         fDu34GB/znSzUIhjQVu9OfDf0qBEjaQXU2A78NzVdUlltXKXDf05shNT4PnHSJkkB81M
+         vNqsU2aWoZJtFsmbACtuTlT1uh+blkuTc5w2dwvpK9YPsACz/vpUWlLjstfX+y2AcdjD
+         ERGg==
+X-Forwarded-Encrypted: i=1; AJvYcCVzG6Euy90sCk4C1lR2BvRHUUXgG9BEA4xCPuPPd98giQtJRBttmwYO1+52X8aM1r6HZzDQ0nea8selGNffEi8=@vger.kernel.org, AJvYcCXoHLD4vSV3kiGVukf9gYbJDVzBZivzefnYY3fv2TmJZvLZs8S/u2fwGrKY5Kd4ofWdrftcC6Y9xWypAzg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyzG2TYnqBdeyIve+OWLZjY3gc8YHMy4JTHVYalVjYGfK+jjo5S
+	GxKolPGaV2Hezk7G+AtACEfMbRp6SvVbOPTQfmqb3va3zVdLhh1A
+X-Gm-Gg: ASbGncuXQp5ipSIZYLSmwyGudDdnNAJ7T/yG/Pn4aNB1LFIYJOHhEDjEbYjvf/KEiCH
+	d9peTuNxd1VZ+3WCFr06vB/0xDMijvK4C7Jm49PXgbGHCDMomkinjto8W0Gs5NgGIzrwD8Qjl73
+	sm3AVRfzMWoevWwQzwMEAnJCz8YBwYRQ5xFrN66gMV/MqHWZYaU42t5+kG4yyUCt4vKohHEEe+0
+	9iLj92wXQG9z11YjoLGVRLll8BQmcZ7AMmpTaVrWITFq4gmvfD72sYTCkbuSpiji5WmdXrFF3+l
+	MIvW/3e5Xzle0FQ3d+IvqpvB0RFlgfoZjqTV8vPm3Ef61l9/Y3SCsham+6jNrB0GqilFUUwcRGy
+	EDTohVvYOy0Z3pP+pgQ==
+X-Google-Smtp-Source: AGHT+IE0mziLQreGnnZV71L6sivPFlpL+qS1/vBuZT4SLTm3FCRnBzyGJK2nVb/xaYlLbDuH4z2uNw==
+X-Received: by 2002:a17:90b:544b:b0:2fe:a336:fe63 with SMTP id 98e67ed59e1d1-30151d56e54mr10094445a91.24.1742091706698;
+        Sat, 15 Mar 2025 19:21:46 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73711559289sm3249490b3a.68.2025.03.14.10.55.05
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-30153385044sm3746653a91.0.2025.03.15.19.21.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Mar 2025 10:55:06 -0700 (PDT)
+        Sat, 15 Mar 2025 19:21:46 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e53b32db-7059-4167-992e-d461a996b122@roeck-us.net>
-Date: Fri, 14 Mar 2025 10:55:05 -0700
+Message-ID: <bd23b8f5-2b9e-4f23-a7ec-3d68b96184b5@roeck-us.net>
+Date: Sat, 15 Mar 2025 19:21:44 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -84,15 +84,14 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] watchdog: aspeed: fix 64-bit division
-To: Arnd Bergmann <arnd@kernel.org>, Wim Van Sebroeck
- <wim@linux-watchdog.org>, Joel Stanley <joel@jms.id.au>,
- Andrew Jeffery <andrew@codeconstruct.com.au>,
- Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, linux-watchdog@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+Subject: Re: [PATCH] watchdog: npcm: Remove unnecessary NULL check before
+ clk_prepare_enable/clk_disable_unprepare
+To: Chen Ni <nichen@iscas.ac.cn>, avifishman70@gmail.com,
+ tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
+ yuenn@google.com, benjaminfair@google.com, wim@linux-watchdog.org
+Cc: openbmc@lists.ozlabs.org, linux-watchdog@vger.kernel.org,
  linux-kernel@vger.kernel.org
-References: <20250314160248.502324-1-arnd@kernel.org>
+References: <20250313084420.2481763-1-nichen@iscas.ac.cn>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -138,41 +137,16 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20250314160248.502324-1-arnd@kernel.org>
+In-Reply-To: <20250313084420.2481763-1-nichen@iscas.ac.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 3/14/25 09:02, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On 3/13/25 01:44, Chen Ni wrote:
+> clk_prepare_enable() and clk_disable_unprepare() already checked
+> NULL clock parameter.Remove unneeded NULL check for clk here.
 > 
-> On 32-bit architectures, the new calculation causes a build failure:
-> 
-> ld.lld-21: error: undefined symbol: __aeabi_uldivmod
-> 
-> Since neither value is ever larger than a register, cast both
-> sides into a uintptr_t.
-> 
-> Fixes: 5c03f9f4d362 ("watchdog: aspeed: Update bootstatus handling")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
->   drivers/watchdog/aspeed_wdt.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/aspeed_wdt.c b/drivers/watchdog/aspeed_wdt.c
-> index 369635b38ca0..837e15701c0e 100644
-> --- a/drivers/watchdog/aspeed_wdt.c
-> +++ b/drivers/watchdog/aspeed_wdt.c
-> @@ -254,7 +254,7 @@ static void aspeed_wdt_update_bootstatus(struct platform_device *pdev,
->   
->   	if (!of_device_is_compatible(pdev->dev.of_node, "aspeed,ast2400-wdt")) {
->   		res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -		idx = ((intptr_t)wdt->base & 0x00000fff) / resource_size(res);
-> +		idx = ((intptr_t)wdt->base & 0x00000fff) / (uintptr_t)resource_size(res);
->   	}
->   
->   	scu_base = syscon_regmap_lookup_by_compatible(scu.compatible);
 
 
