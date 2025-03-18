@@ -1,207 +1,88 @@
-Return-Path: <linux-watchdog+bounces-3120-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3121-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3C51A64DCE
-	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Mar 2025 13:03:47 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F301A663E6
+	for <lists+linux-watchdog@lfdr.de>; Tue, 18 Mar 2025 01:32:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 022A31670BD
-	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Mar 2025 12:03:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 160FF19A0BC9
+	for <lists+linux-watchdog@lfdr.de>; Tue, 18 Mar 2025 00:30:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62CDA23AE96;
-	Mon, 17 Mar 2025 12:02:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0E67DDCD;
+	Tue, 18 Mar 2025 00:30:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="hiwJHTyI"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C799E23A9B8
-	for <linux-watchdog@vger.kernel.org>; Mon, 17 Mar 2025 12:02:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78C2329B0;
+	Tue, 18 Mar 2025 00:30:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742212932; cv=none; b=j/14fWD/R5JBO7uHD/QOlOUu5BChIuMPbntSP40RaA7U4adg2HecC5Mz6LcBQ1t321Gwwg4SAmX0X/5mM6P5MQJMGqH7XGE3nVWv4iQxHT1EgRYk1NroXHVSLhbbQKO11kPG6OFTqUp8fLkAH/6/anXeF4UKzw2UOWAlu+USNw8=
+	t=1742257838; cv=none; b=qRdG4L6p3hQqS5H8V0p1ZJCfIdEHK7Th31d95cB4JfR20vjH63n4rm7Zjtgbko3tgca7wAp/yYXf0e1cMWEcof6gX0Ah5qDFcZ5H+aMoZ4zYF8gcUj3ar1XRdUZzTurWaZRgK/cgVh8V5byuQ5CJQ0unizJcHqY2gXCiiOp6Anw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742212932; c=relaxed/simple;
-	bh=PlMEiEJDam59+aty2oFc2pESN+enaEybP02730+FEq8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WBx7+ZpJOlGGs2eAZWVRn8uOr/xPFqdMfjvqdnhlBZN1LMISsgSf/IkxcW8w/rQ7pktGWMxmlhyTwzeQ5lG3n+1F53wpl0qVxkF+nG4KR5FIIwbQKT/jzUNUO3WcThvs2PvAlAB8P2XQyPV93FwNuamSrJauLi1+XfQlRi3CQd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tu99w-00020y-0U; Mon, 17 Mar 2025 13:01:32 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tu99t-000EuM-0g;
-	Mon, 17 Mar 2025 13:01:29 +0100
-Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id A87EC3DE480;
-	Mon, 17 Mar 2025 10:41:48 +0000 (UTC)
-Date: Mon, 17 Mar 2025 11:41:48 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
-	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
-Message-ID: <20250317-outrageous-helpful-agama-39476f-mkl@pengutronix.de>
-References: <20250225081644.3524915-1-a0282524688@gmail.com>
- <20250225081644.3524915-5-a0282524688@gmail.com>
+	s=arc-20240116; t=1742257838; c=relaxed/simple;
+	bh=qrJOuxJutwKayDAiU7200Ih6LBL1oWuqiTNfvlEeLSg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=dRED1EU0WJd/NM2IKe7DWS3ofXuqc4flcW1B4Sii/JRIrVkA0JkLw5RqlGrR9bOkE9hXzfdC60+Ul6yBENIy9j0BoPaxvBMjDgGWLxLR+OIOKFr5S71pNLqVtJAT0+c6WZ4wMZoYzYHV+U8eccKv2Jjo9wtLkFOHb35vP4xlxJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=hiwJHTyI; arc=none smtp.client-ip=203.29.241.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=codeconstruct.com.au; s=2022a; t=1742257827;
+	bh=qrJOuxJutwKayDAiU7200Ih6LBL1oWuqiTNfvlEeLSg=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=hiwJHTyIEKAeof16Bs2vj34PRfatLyOQG/jqDqNY5IoqgH4o7JRAgU4RVKn9R9lkq
+	 uzsMqS0GQjqPAHjj81SjHn6QGVre4DQY9WH0mWU8cK2uvurZwecbYObQNbhWTHxRVq
+	 Z5HtIZ/pV5uD5ImuWEayi+CnXqofCABoRR9/iBqbuvfcobTRiw6xYmZCMer7GQhP05
+	 7Cu6wSrfZ4Kz83e5bnljLZRcOwL1oN0ePXUaiVPLBfExbYgEuj8Db864ZnSUVeGK3j
+	 q5U01uGiB0r8wYGjpz10hlsbkXRN9LqHlJJ6TREpRy6BUwbM1uAH1ot2DVvKDvZBBy
+	 30nZnWwU5mZzg==
+Received: from [192.168.68.112] (unknown [180.150.112.225])
+	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 0F7D977BB4;
+	Tue, 18 Mar 2025 08:30:21 +0800 (AWST)
+Message-ID: <3c16b98f113fa8918c879a16580811556b0c35c1.camel@codeconstruct.com.au>
+Subject: Re: [PATCH] watchdog: aspeed: fix 64-bit division
+From: Andrew Jeffery <andrew@codeconstruct.com.au>
+To: Arnd Bergmann <arnd@kernel.org>, Wim Van Sebroeck
+ <wim@linux-watchdog.org>,  Guenter Roeck <linux@roeck-us.net>, Joel Stanley
+ <joel@jms.id.au>, Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, linux-watchdog@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org, 
+	linux-kernel@vger.kernel.org
+Date: Tue, 18 Mar 2025 11:00:21 +1030
+In-Reply-To: <20250314160248.502324-1-arnd@kernel.org>
+References: <20250314160248.502324-1-arnd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="vzg54m2aeg5i4qkb"
-Content-Disposition: inline
-In-Reply-To: <20250225081644.3524915-5-a0282524688@gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
 
+On Fri, 2025-03-14 at 17:02 +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>=20
+> On 32-bit architectures, the new calculation causes a build failure:
+>=20
+> ld.lld-21: error: undefined symbol: __aeabi_uldivmod
+>=20
+> Since neither value is ever larger than a register, cast both
+> sides into a uintptr_t.
+>=20
+> Fixes: 5c03f9f4d362 ("watchdog: aspeed: Update bootstatus handling")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
---vzg54m2aeg5i4qkb
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
-MIME-Version: 1.0
+Reviewed-by: Andrew Jeffery <andrew@codeconstruct.com.au>
 
-On 25.02.2025 16:16:41, Ming Yu wrote:
-[...]
+Thanks,
 
-> diff --git a/drivers/net/can/usb/nct6694_canfd.c b/drivers/net/can/usb/nc=
-t6694_canfd.c
-> new file mode 100644
-> index 000000000000..d97fce5cdf32
-> --- /dev/null
-> +++ b/drivers/net/can/usb/nct6694_canfd.c
+Andrew
 
-[...]
-
-> +static const struct can_bittiming_const nct6694_can_bittiming_nominal_co=
-nst =3D {
-> +	.name =3D DRVNAME,
-> +	.tseg1_min =3D 2,
-> +	.tseg1_max =3D 256,
-> +	.tseg2_min =3D 2,
-> +	.tseg2_max =3D 128,
-> +	.sjw_max =3D 128,
-> +	.brp_min =3D 1,
-> +	.brp_max =3D 511,
-> +	.brp_inc =3D 1,
-> +};
-> +
-> +static const struct can_bittiming_const nct6694_can_bittiming_data_const=
- =3D {
-> +	.name =3D DRVNAME,
-> +	.tseg1_min =3D 1,
-> +	.tseg1_max =3D 32,
-> +	.tseg2_min =3D 1,
-> +	.tseg2_max =3D 16,
-> +	.sjw_max =3D 16,
-> +	.brp_min =3D 1,
-> +	.brp_max =3D 31,
-> +	.brp_inc =3D 1,
-> +};
-
-[...]
-
-> +static int nct6694_can_start(struct net_device *ndev)
-> +{
-> +	struct nct6694_can_priv *priv =3D netdev_priv(ndev);
-> +	const struct can_bittiming *d_bt =3D &priv->can.data_bittiming;
-> +	const struct can_bittiming *n_bt =3D &priv->can.bittiming;
-> +	struct nct6694_can_setting *setting __free(kfree) =3D NULL;
-> +	const struct nct6694_cmd_header cmd_hd =3D {
-> +		.mod =3D NCT6694_CAN_MOD,
-> +		.cmd =3D NCT6694_CAN_SETTING,
-> +		.sel =3D ndev->dev_port,
-> +		.len =3D cpu_to_le16(sizeof(*setting))
-> +	};
-> +	int ret;
-> +
-> +	setting =3D kzalloc(sizeof(*setting), GFP_KERNEL);
-> +	if (!setting)
-> +		return -ENOMEM;
-> +
-> +	setting->nbr =3D cpu_to_le32(n_bt->bitrate);
-> +	setting->dbr =3D cpu_to_le32(d_bt->bitrate);
-
-I just noticed one thing that needs clarification/documentation.
-
-You have nct6694_can_bittiming_nominal_const and
-nct6694_can_bittiming_data_const, but only pass the bit rates to your
-device.
-
-Do the bit timing const really reflect the HW limitations of your
-device?
-
-Are you sure your device uses the same algorithm as the kernel and
-calculates the same bit timing parameters as the kernel, so that the
-values given to the user space reflects the bit timing parameter chosen
-by your device?
-
-> +
-> +	if (priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
-> +		setting->ctrl1 |=3D cpu_to_le16(NCT6694_CAN_SETTING_CTRL1_MON);
-> +
-> +	if (priv->can.ctrlmode & CAN_CTRLMODE_FD_NON_ISO)
-> +		setting->ctrl1 |=3D cpu_to_le16(NCT6694_CAN_SETTING_CTRL1_NISO);
-> +
-> +	if (priv->can.ctrlmode & CAN_CTRLMODE_LOOPBACK)
-> +		setting->ctrl1 |=3D cpu_to_le16(NCT6694_CAN_SETTING_CTRL1_LBCK);
-> +
-> +	ret =3D nct6694_write_msg(priv->nct6694, &cmd_hd, setting);
-> +	if (ret)
-> +		return ret;
-> +
-> +	priv->can.state =3D CAN_STATE_ERROR_ACTIVE;
-> +
-> +	return 0;
-> +}
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---vzg54m2aeg5i4qkb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmfX/GkACgkQDHRl3/mQ
-kZzJDgf8DgOIcr0MWwz7wlhWys5Fxw4Vtn5MszTN3NLbf2p+jPRy/TQKbi3A7p+B
-PZFdTyo+sYOdG9csQChfdGGqWEA5cd6vIMYmIbUO1401s5U+bYudq1+h68pyfOhf
-XOKXDxnSWXlzFLw2vu2SsZ3M4svT1cU0S6NRSxPx/o4QuFfsG7KLFqwdMK+MEc8P
-CcqcJKo47KwOEcWuQm/eTq4LQFvmmKz8/6PCcrY2P99PQ9bqTkoiC7R+KMONa1p3
-f2/q875xuTHckepTB7slLcXA9K7ikoT7T865z4jHsZt5ClD3+L/j5pSa82E1kcxN
-nv4xvBHXTSmzW8wtGa6VrUWOif5cYg==
-=GQzc
------END PGP SIGNATURE-----
-
---vzg54m2aeg5i4qkb--
 
