@@ -1,115 +1,128 @@
-Return-Path: <linux-watchdog+bounces-3138-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3139-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6BFDA707E5
-	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Mar 2025 18:19:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61C1EA709EC
+	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Mar 2025 20:06:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ECD913A9138
-	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Mar 2025 17:18:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D32D3B2A7B
+	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Mar 2025 18:59:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EA8013633F;
-	Tue, 25 Mar 2025 17:19:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF0841AB531;
+	Tue, 25 Mar 2025 18:59:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=siemens.com header.i=diogo.ivo@siemens.com header.b="FohdKXo1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Iz9YJ/Eh"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mta-65-226.siemens.flowmailer.net (mta-65-226.siemens.flowmailer.net [185.136.65.226])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB19F19F487
-	for <linux-watchdog@vger.kernel.org>; Tue, 25 Mar 2025 17:19:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.136.65.226
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F82019049A;
+	Tue, 25 Mar 2025 18:59:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742923146; cv=none; b=oYxBwlmqPCmjWjnc0fui88ynW5E3ydme7o4YKbGVGl2w8/VhxjalWcP3+eVC+jxlZs1DaVbrPzZs7AnM4sxlNMUz/18kB7xko8BaNJCR8Gdzs6ae3NZKpohQpF9AG5HxOlqpluc62brpB5GdKwPBbib7EjzAWaxA0NTyXa77ORw=
+	t=1742929168; cv=none; b=IjKU4m1rUVOfNTGO0l0stSTI9oTryKhDKnHlyIBi6CQk8bbCbodCayCeZzhxcIdNnnR26qjeuV0bNC5IVJANGstD09suKRo3AZMAE3cxe1ewriAmwkdIIa2ZuzQMx9n01LbcrNhQihHVc8DGITU4DYpyWOHnpyckEWFEfyNh7bE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742923146; c=relaxed/simple;
-	bh=89snBsB9hv5wlyxcY5446+E9mav+e9ltF9Zpa/H/XPg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aCZda3SjHppbaCFfctr1bmGNPJ/39/lWv7r8okficzLa+1Ly19i5RavilSPAAS5jpw3amtTQ3yZPk+QFBk7qbPlALPHYfPaUdzsJMYw3P7CCCAPkAablEqJodJzcaMTcK4XPwxBy0iNyC/X6WEbk6OaZMsr0+SwCjpJMcOwPPsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com; dkim=pass (2048-bit key) header.d=siemens.com header.i=diogo.ivo@siemens.com header.b=FohdKXo1; arc=none smtp.client-ip=185.136.65.226
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
-Received: by mta-65-226.siemens.flowmailer.net with ESMTPSA id 202503251718552b62f3efd959248127
-        for <linux-watchdog@vger.kernel.org>;
-        Tue, 25 Mar 2025 18:18:55 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm2;
- d=siemens.com; i=diogo.ivo@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=QjB4n1CG5EJajMUvXPSpBjvTs6+Sq6WL3daydtuzFKg=;
- b=FohdKXo1wbpag0EuxImEwOgHoN3ANC9mC3AjpYk3r6eCB3TXgUt1AaNnHSe14b+QINXieV
- Hxj/LOWVtl4PF/1qjNe/wnRF2MS26XvXAzNAv6uP0vr9R/Xiz8CPGKWLGVSNoyIGo6KGNHyI
- DKSJqeIMN55rKf0Kq6jnfbcNTTf56Cx8JPPD6b1TuCniNn0k2NtwdPxBLMQpOhdMNg33Hnzn
- 4SIZ1SuWlwhYxKfQo231Ci+OLxplf4pBgqSlQUr8QgG1HUFBEN18uAqysm3xIE5Ye4oynq/5
- OPMa2Z3hUqrkFS4JgDlNhEUxx82ciCDq1jDWovbxcDhGF8sagia3gJeQ==;
-Message-ID: <1beeb77c-83d6-4634-ba39-2b40efbb8437@siemens.com>
-Date: Tue, 25 Mar 2025 17:18:52 +0000
+	s=arc-20240116; t=1742929168; c=relaxed/simple;
+	bh=9LVQC+aIvaoTYsz1PD07JOGItrLOSYoDZl8VS7cgO18=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=d8JGFsbWokIpMYiq2A2QJNWw9cVKHDzABGtkrc/shCj3l9DznJEt+1R5FKfWl7hpiMeGJqcUOUSvbTHmgezGTgVAZWoPw8koCsTcZTX2hTJhbrO4tqJmAxicOCm3Mu/MyU0qp/71RSeAzW3j3q3UcHD63+bh+hH49XLdqJ59rtc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Iz9YJ/Eh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2945BC4CEE4;
+	Tue, 25 Mar 2025 18:59:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742929168;
+	bh=9LVQC+aIvaoTYsz1PD07JOGItrLOSYoDZl8VS7cgO18=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Iz9YJ/EhQZXeGnQD4IYmnwuPI0GmITr9xbroo1tjRiHIe21N+VYnK0kOhpEyKCGYj
+	 c7Ss4gE2LcryCD8MIkGYoSX2eCv9LFewUf/KSellZb8YumK1pLf8b1+l/Gw+MmizOa
+	 T7oYpcrI7Q8sopsTkRuLJBZsxNNhkpn45Q2YZLgOVYTH0R3Hd6aGLEIYFKZhdxvOLL
+	 equ4yP8y9fz5fhnvYb//YRvpF7m4M3K/TIpuRI3OWRf3ItCj63YaB1GcgFYZGsVc60
+	 7WBB9r3Gi/ZhxaAUUHIccTdYRfySvw82vFqkTKYe8YaGMzmQzVOnnJ54pQmY0kqjD3
+	 RjIlgbeTXpsLw==
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-2c2ada8264aso2608612fac.2;
+        Tue, 25 Mar 2025 11:59:28 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUGjbRlwXJteJHIIOYIZ67zCxA4LUXfhBjAY516Zx1GsY76c7p3bSBFEf2hZgLxO0JplZyz5gtIyM2EU183@vger.kernel.org, AJvYcCVgKzxsgBuFzBDIosHp54F0zmfIefgtlVnKQpioOdCm/qh15GMvlKfvLfwbptT5dmGFanx3NKrZEEpwkljuMPY=@vger.kernel.org, AJvYcCWxz79TAgxawb413mOXicIsjlUn/C35JYiFJez2IF2hd4UkNI1tmlYfuxAgjzgRr+fP9uL261k2hsAB@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5dsY7Sa3wV/igrAetx0EpMJ4ZQpVENCJCqvMcNcbita8cRIEO
+	ud9/+fr00QYan7YOathPaYu4ehDn6FadaqujCxXA9LVuXlTK8qKLVMZimU5nd6SnI2DxSA2Rc8Y
+	cX32HMmHne0XYSDdiUknKVy9K55w=
+X-Google-Smtp-Source: AGHT+IGYFDih76ZCcI4DFKFSbsLWidus3XA5/4LpT4w95waG2KqujFRpK+jyOo/5/j2lGBD6q/ezXcymcHZJHmVrqTs=
+X-Received: by 2002:a05:6870:46a8:b0:2c2:3ae9:5b9c with SMTP id
+ 586e51a60fabf-2c7801fe4d5mr12078147fac.2.1742929167443; Tue, 25 Mar 2025
+ 11:59:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20250317-ivo-intel_oc_wdt-v3-0-32c396f4eefd@siemens.com>
+ <20250317-ivo-intel_oc_wdt-v3-2-32c396f4eefd@siemens.com> <1beeb77c-83d6-4634-ba39-2b40efbb8437@siemens.com>
+In-Reply-To: <1beeb77c-83d6-4634-ba39-2b40efbb8437@siemens.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 25 Mar 2025 19:59:14 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0jh1jJy+YRMtLDnYqAhPrN2Pox+NY0Vqh_uqb7F=NwqEg@mail.gmail.com>
+X-Gm-Features: AQ5f1JpddNTTHybEk3zZj11Lb5Jq8iuktb-1Vetg4y60p60aQiC_Sr6tzkoGS6k
+Message-ID: <CAJZ5v0jh1jJy+YRMtLDnYqAhPrN2Pox+NY0Vqh_uqb7F=NwqEg@mail.gmail.com>
 Subject: Re: [PATCH v3 2/2] ACPI: PNP: Add Intel OC Watchdog IDs to non-PNP
  device list
-To: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>
-Cc: linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
- linux-watchdog@vger.kernel.org, jan.kiszka@siemens.com,
- benedikt.niedermayr@siemens.com
-References: <20250317-ivo-intel_oc_wdt-v3-0-32c396f4eefd@siemens.com>
- <20250317-ivo-intel_oc_wdt-v3-2-32c396f4eefd@siemens.com>
-Content-Language: en-US
-From: Diogo Ivo <diogo.ivo@siemens.com>
-In-Reply-To: <20250317-ivo-intel_oc_wdt-v3-2-32c396f4eefd@siemens.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Flowmailer-Platform: Siemens
-Feedback-ID: 519:519-1328357:519-21489:flowmailer
+To: Diogo Ivo <diogo.ivo@siemens.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, 
+	Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
+	linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, jan.kiszka@siemens.com, 
+	benedikt.niedermayr@siemens.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello,
+On Tue, Mar 25, 2025 at 6:19=E2=80=AFPM Diogo Ivo <diogo.ivo@siemens.com> w=
+rote:
+>
+> Hello,
+>
+> On 3/17/25 10:55 AM, Diogo Ivo wrote:
+> > Intel Over-Clocking Watchdogs are described in ACPI tables by both the
+> > generic PNP0C02 _CID and their ACPI _HID. The presence of the _CID then
+> > causes the PNP scan handler to attach to the watchdog, preventing the
+> > actual watchdog driver from binding. Address this by adding the ACPI
+> > _HIDs to the list of non-PNP devices, so that the PNP scan handler is
+> > bypassed.
+> >
+> > Note that these watchdogs can be described by multiple _HIDs for what
+> > seems to be identical hardware. This commit is not a complete list of
+> > all the possible watchdog ACPI _HIDs.
+> >
+> > Signed-off-by: Diogo Ivo <diogo.ivo@siemens.com>
+> > ---
+> > v2->v3:
+> >   - Reword the commit message to clarify purpose of patch
+> > ---
+> > ---
+> >   drivers/acpi/acpi_pnp.c | 2 ++
+> >   1 file changed, 2 insertions(+)
+> >
+> > diff --git a/drivers/acpi/acpi_pnp.c b/drivers/acpi/acpi_pnp.c
+> > index 01abf26764b00c86f938dea2ed138424f041f880..3f5a1840f573303c71f5d57=
+9e32963a5b29d2587 100644
+> > --- a/drivers/acpi/acpi_pnp.c
+> > +++ b/drivers/acpi/acpi_pnp.c
+> > @@ -355,8 +355,10 @@ static bool acpi_pnp_match(const char *idstr, cons=
+t struct acpi_device_id **matc
+> >    * device represented by it.
+> >    */
+> >   static const struct acpi_device_id acpi_nonpnp_device_ids[] =3D {
+> > +     {"INT3F0D"},
+> >       {"INTC1080"},
+> >       {"INTC1081"},
+> > +     {"INTC1099"},
+> >       {""},
+> >   };
+> >
+> >
+>
+> Gentle ping on this patch.
 
-On 3/17/25 10:55 AM, Diogo Ivo wrote:
-> Intel Over-Clocking Watchdogs are described in ACPI tables by both the
-> generic PNP0C02 _CID and their ACPI _HID. The presence of the _CID then
-> causes the PNP scan handler to attach to the watchdog, preventing the
-> actual watchdog driver from binding. Address this by adding the ACPI
-> _HIDs to the list of non-PNP devices, so that the PNP scan handler is
-> bypassed.
-> 
-> Note that these watchdogs can be described by multiple _HIDs for what
-> seems to be identical hardware. This commit is not a complete list of
-> all the possible watchdog ACPI _HIDs.
-> 
-> Signed-off-by: Diogo Ivo <diogo.ivo@siemens.com>
-> ---
-> v2->v3:
->   - Reword the commit message to clarify purpose of patch
-> ---
-> ---
->   drivers/acpi/acpi_pnp.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/acpi/acpi_pnp.c b/drivers/acpi/acpi_pnp.c
-> index 01abf26764b00c86f938dea2ed138424f041f880..3f5a1840f573303c71f5d579e32963a5b29d2587 100644
-> --- a/drivers/acpi/acpi_pnp.c
-> +++ b/drivers/acpi/acpi_pnp.c
-> @@ -355,8 +355,10 @@ static bool acpi_pnp_match(const char *idstr, const struct acpi_device_id **matc
->    * device represented by it.
->    */
->   static const struct acpi_device_id acpi_nonpnp_device_ids[] = {
-> +	{"INT3F0D"},
->   	{"INTC1080"},
->   	{"INTC1081"},
-> +	{"INTC1099"},
->   	{""},
->   };
->   
-> 
-
-Gentle ping on this patch.
-
-Best regards,
-Diogo
+Do you want me to pick it up or do you want to route it through a
+different tree?
 
