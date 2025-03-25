@@ -1,259 +1,146 @@
-Return-Path: <linux-watchdog+bounces-3128-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3129-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DB99A6A909
-	for <lists+linux-watchdog@lfdr.de>; Thu, 20 Mar 2025 15:50:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3509A6EA74
+	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Mar 2025 08:27:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A56087AC6B4
-	for <lists+linux-watchdog@lfdr.de>; Thu, 20 Mar 2025 14:49:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7CDF91891EE3
+	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Mar 2025 07:27:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B45511E0B9C;
-	Thu, 20 Mar 2025 14:50:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1D4D1FE471;
+	Tue, 25 Mar 2025 07:27:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nRPpkYlD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FqluXcpZ"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69AA01876;
-	Thu, 20 Mar 2025 14:50:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D869A14EC46;
+	Tue, 25 Mar 2025 07:27:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742482250; cv=none; b=up2lDjrIAJCtLBoWZ8e0GjNAfPgFQCQ4m+q4jitmx3YciWFDai+tyqZAlhq2EX2IOG1kLMB9I9JTkjFxV2Ria+gc34VMxfF/QYxvFeOymYsw90T/XJoHdAT1Zcypt8gCRZyyer1MsQkcW/JUi/JWWvRQSgpf8e6G8z5sMISixqM=
+	t=1742887666; cv=none; b=i0SF2pQgpokGcjKDYxf/BcsVZUdjXou6Ip0tWdyg/Dc5s4PpEDtZPSBGOqJ532nXcJb49WEKEKeqefntxj1lGtFOzZ0FIulNkg8l4xPxTLNBR57lKUCJLmzb5AhbY1cPHQlCavORBmW7QRSB+ja8ZshsOQyZjv+Jwo1pyIl0RXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742482250; c=relaxed/simple;
-	bh=VgHP2YZFJFqQDq6X1Enrko29eUy4PpuSIOCuvJw0JKI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JU23vf56yCSeynELKQGf7YpeU/z+eYk3tketxRSKHr/rVPQhhaaOyr5KVUbQpdEzCyu1PJDjdBs2QwpO8pEKOxmRlNvq4F7CffqBwP6Ib8lB3SFVBxktwzv0dQ444X/CS7n+3M00yR4ais1xB5Hm0dBmxLaMNZK0+nc0Ov51FKo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nRPpkYlD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAE15C4CEDD;
-	Thu, 20 Mar 2025 14:50:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742482250;
-	bh=VgHP2YZFJFqQDq6X1Enrko29eUy4PpuSIOCuvJw0JKI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nRPpkYlDUBw1gjGtXjQDSei78Js5SiMhGUtyttvW9CgAqns2tTOPY8/wNVO3igUrp
-	 d9zHAHmBrA+CESjTE8Vd+xoH+NF8JxkVjkUXZY2rGxmW3pfhS8VkKdGG8xyARuj0FL
-	 gQHgAnh715xQCL8AM6m35smLKWm66L881RKbWs2YrcLzTdo+SZBv0gIAnBp529LrWk
-	 2TpFQUzC/HZ9ygyk+1qefsxhF1q9kjA4qEWPS0OL1ov41GqjdVgXiAkgQNedHqDO0I
-	 4AydkziQDb1uW2b3VKIQ3E28ix5DltoIbnT+ryX4BT5beobsVaihxlLPX0QJow5foT
-	 821ydGI3nYYkQ==
-Date: Thu, 20 Mar 2025 14:50:42 +0000
-From: Lee Jones <lee@kernel.org>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl,
-	andi.shyti@kernel.org, mkl@pengutronix.de,
-	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
-	jdelvare@suse.com, alexandre.belloni@bootlin.com,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v8 1/7] mfd: Add core driver for Nuvoton NCT6694
-Message-ID: <20250320145042.GS3890718@google.com>
-References: <20250225081644.3524915-1-a0282524688@gmail.com>
- <20250225081644.3524915-2-a0282524688@gmail.com>
- <20250307011542.GE8350@google.com>
- <CAOoeyxUgiTqtSksfHopEDhZHwNkUq9+d-ojo8ma3PX2dosuwyQ@mail.gmail.com>
+	s=arc-20240116; t=1742887666; c=relaxed/simple;
+	bh=vDZjMDRfpIWiVV0aSXOU+kW1WUREJ8hxHFE4R9JrT6U=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=F4TO4iUw6m8pNwhwIfCKWUxSY9xaCyy2ST1CPd6P7CVsqPpUbB9BygX6SVPkVlFdqqOIEFSf2cf4GuljK0ftiWUyWoXXd7ve5qhg8uIw9Yfr5R6pdcybQy1a7QePhpjP+toc312DSqZ6g7dGNjv5BJtCOqQeyWg6/u3CyoNxjP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FqluXcpZ; arc=none smtp.client-ip=209.85.208.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-30bf5d7d107so44124281fa.2;
+        Tue, 25 Mar 2025 00:27:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742887663; x=1743492463; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=m9tWabLN/oOXbS0p5O3pA+2F9VFFmwTF6H81jPPhkBM=;
+        b=FqluXcpZGIYtq8tfjGnUp2f8diy1UE5iVsNLrLMVgCuBk6bE7DgsM28qOL5DmMjsg8
+         bSksDVotHvFLsX+i2AHQn4mvWTnIvUxexImV84a7poeaxGpj2dyaxBrYKO4yYWjg63Gr
+         hKBuqnEZOT1gqPGCD5+Ds2byprdwu5YdU6UspqUgoQfPakQmmh5tBzhoIaUJ5KA2rie1
+         21bYMrdvLYF1a7rNCHj4sFUe9cl2my+L8r78zOTGFHyl45cDAaTLj+3wE5qDBkR9wpYO
+         im7Cn09rSqXROc6P4ckBbr486FZ486B46oo9kk6o8LmH8LhSo8FXcysJygwCEXDyjhp9
+         GFtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742887663; x=1743492463;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m9tWabLN/oOXbS0p5O3pA+2F9VFFmwTF6H81jPPhkBM=;
+        b=JNGze6HHMR4Z5V6oBVyf3sZQlbkAbfBPPdGRWuSCCXQ79xy+LvPSNljw0QqmjuUN5x
+         OPMOX/+hfScThMNzud9o2nrZUJcwvrAf0Yqb6LwQI+3WTGOTtCGqE0QIvsUWwXEZyccA
+         S2hRqNGMH2FPhVs3TdmWO0jMzxpE9BV/a0XqCA0c6r+kuGSEYH0G1AJZbsgfS4uXpvtG
+         yuYTq8kMlIq8LF34pZ4nf4MiUB9z9JG/FujgTwi1x0619BkJw19dbapBe+EYASvVd0AE
+         +oeuXYlyC6sx2WCmUn/yKLSr4+13PjdqNRntQpWkprluvt+4MtncZulTkKLv5V0mM9/G
+         nJog==
+X-Forwarded-Encrypted: i=1; AJvYcCUKWJraN9NcSS5FIKD84ZO7KCrRnc7T4dRkd+qdPKBIhnoALmIH7cVcwLywwwoJFdWX4UrQ5zKeE0/qKiQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyd3Lc71kjPIzrYe4S133WCXH1HY0puBcUxl4O8Xbg1Zd22nciW
+	edo+tLaNG20foOgCtJo3/jhtfuuF65Ujjuy8oTbbB9Xg5fd96q5S
+X-Gm-Gg: ASbGnctZp6sP+HHIelYBIHB3+F+d3vClHjE7pDyrOSSkr5CGsoNFz6Go6w7FqtoHAA8
+	foztsnfhYArBMCbts6WlOCRHzQyLN17pgxeMN3Vd3+Tw9ZOhUYAFKqu/x1OH+S8UV4CeghvAzzh
+	2o2hnKuxxr/m0FZHJjsBeGE4TAxUafwyHfflRedHOE+SWCmLQGPiWrfyefFCO9iagxWYML0SFZV
+	fPnqOVask2Sv7m4Q2igMgtB98+Gg9UyT0T7fZt72E1BurV2kcSxdaAcwGTz+9sUqZfJtKzq+Hmz
+	MNytYgaWS4xX2qt0zPFvpy2sJ1+tjV+QTbsepbLJaC3Nw7ApYwt98QUaCKbEOUd4bVERRX+ORT/
+	HZBpvvaTGTRrd
+X-Google-Smtp-Source: AGHT+IEFAKLOVvQR99VNsKiRcwaZjRcb2nYfKuYBL2Jc9Gp0J6U0HpqBZOjmwznhx9PC3H6FkDevFw==
+X-Received: by 2002:a2e:b8cc:0:b0:30d:7c85:14f5 with SMTP id 38308e7fff4ca-30d7e28bdeemr72855521fa.25.1742887662390;
+        Tue, 25 Mar 2025 00:27:42 -0700 (PDT)
+Received: from [192.168.1.11] (83-233-6-197.cust.bredband2.com. [83.233.6.197])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-30d89661aa3sm14307621fa.31.2025.03.25.00.27.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Mar 2025 00:27:40 -0700 (PDT)
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
+Subject: [PATCH v2 0/4] Various fixes for the da9052 watchdog
+Date: Tue, 25 Mar 2025 08:27:11 +0100
+Message-Id: <20250325-da9052-fixes-v2-0-bfac3f07b4a4@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOoeyxUgiTqtSksfHopEDhZHwNkUq9+d-ojo8ma3PX2dosuwyQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAM9a4mcC/3WMwQ7CIBAFf6XZsxhgSyme/A/TA1LabmKLAUM0D
+ f8u9u5x3svMDslH8gkuzQ7RZ0oUtgry1IBb7DZ7RmNlkFwqjgLZaA1Xkk309omJvut0e8fWGIS
+ qPKM/jmrchsoLpVeIn6OexW/9E8qCcYbajK7XdjIKr/Nq6XF2YYWhlPIFMBPKyqgAAAA=
+X-Change-ID: 20250313-da9052-fixes-186674b34993
+To: Support Opensource <support.opensource@diasemi.com>, 
+ Wim Van Sebroeck <wim@linux-watchdog.org>, 
+ Guenter Roeck <linux@roeck-us.net>
+Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Marcus Folkesson <marcus.folkesson@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1105;
+ i=marcus.folkesson@gmail.com; h=from:subject:message-id;
+ bh=vDZjMDRfpIWiVV0aSXOU+kW1WUREJ8hxHFE4R9JrT6U=;
+ b=owEBbQKS/ZANAwAIAYiATm9ZXVIyAcsmYgBn4lrQsWZ9RIH88sXC5PBI/Z3nub4lLQPqBPj/Z
+ a2bzf85kq6JAjMEAAEIAB0WIQQFUaLotmy1TWTBLGWIgE5vWV1SMgUCZ+Ja0AAKCRCIgE5vWV1S
+ MozoEAC40QaOnzm18/q+IUCRwO1Ki+kNSbkaSKoqAqO2NWDblKGEy73wErdElHOjrgMPQR1ABLt
+ nJNutMv1C6a48HKRWOG8mPG3cmKPCojTUd8XTPebOENG12GTvdTlUXfx/TTWFNCI+TDxiSX1DHZ
+ JVZZcwd1z66qOEexu/dAAIud5mCmPxe11QG058OqSsIlAk12z+H7XXFX505WF5apJ3UscAovXo+
+ 5sRlJenPz1vBGnnxouhozL3hPMgFTccB4So6ri7sqKObiKFxYqrkXRp2/EcPnSwam5if9JHwFzA
+ F6ORbxaLsVQFPd9rNcovGVsa+T5MUYatzhA+Yzi4kL1bwy4F2YmsMoY3m0MnglYMKfGZpDqzMD7
+ Y+3aqwfvWFqLKIC8yKBrCbe+kNd7EP0dmQpAihA7OAdg4sRQ/4RSWKo3X38dZPDBiBF6VW9jxhz
+ 1gPJHDGPcKv3Wy50RwceRB837qH8+lEGLvX9r68o/Zq5LQAj1/bDZbaOjAxVrbd0BI21XtEM7Vp
+ ztBmDAysx6DD85KVc2RPnt+rap7LEatgw5tyhMC6usJGLyKmANbc4Jm9H52m47On+VF4e96BuYL
+ ZWi+DRZ+Panef7rKhCsRCpC/0dRRqibfGLmCryPK2dj0VDFmTbsTEDzxllG/nuUfbbmUqKusw3D
+ Uc/vNthgDilqBzg==
+X-Developer-Key: i=marcus.folkesson@gmail.com; a=openpgp;
+ fpr=AB91D46C7E0F6E6FB2AB640EC0FE25D598F6C127
 
-On Mon, 17 Mar 2025, Ming Yu wrote:
+Add support for the nowayout and timeout module parameters and treat
+them in a standard way.
 
-> Dear Lee,
-> 
-> Thank you for reviewing,
-> 
-> Lee Jones <lee@kernel.org> 於 2025年3月7日 週五 上午9:15寫道：
-> >
-> > On Tue, 25 Feb 2025, Ming Yu wrote:
-> >
-> > > The Nuvoton NCT6694 is a peripheral expander with 16 GPIO chips,
-> > > 6 I2C controllers, 2 CANfd controllers, 2 Watchdog timers, ADC,
-> > > PWM, and RTC.
-> >
-> > This needs to go into the Kconfig help passage.
-> >
-> 
-> Okay, I will move these to Kconfig in the next patch.
-> 
-> > > This driver implements USB device functionality and shares the
-> > > chip's peripherals as a child device.
-> >
-> > This driver doesn't implement USB functionality.
-> >
-> 
-> Fix it in v9.
-> 
-> > > Each child device can use the USB functions nct6694_read_msg()
-> > > and nct6694_write_msg() to issue a command. They can also request
-> > > interrupt that will be called when the USB device receives its
-> > > interrupt pipe.
-> > >
-> > > Signed-off-by: Ming Yu <a0282524688@gmail.com>
-> >
-> > Why aren't you signing off with your work address?
-> >
-> 
-> Fix it in v9.
-> 
-> > > ---
-> > >  MAINTAINERS                 |   7 +
-> > >  drivers/mfd/Kconfig         |  18 ++
-> > >  drivers/mfd/Makefile        |   2 +
-> > >  drivers/mfd/nct6694.c       | 378 ++++++++++++++++++++++++++++++++++++
-> > >  include/linux/mfd/nct6694.h | 102 ++++++++++
-> > >  5 files changed, 507 insertions(+)
-> > >  create mode 100644 drivers/mfd/nct6694.c
-> > >  create mode 100644 include/linux/mfd/nct6694.h
-> > >
-> > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > index 873aa2cce4d7..c700a0b96960 100644
-> > > --- a/MAINTAINERS
-> > > +++ b/MAINTAINERS
-> > > @@ -16918,6 +16918,13 @@ F:   drivers/nubus/
-> > >  F:   include/linux/nubus.h
-> > >  F:   include/uapi/linux/nubus.h
-> > >
-> > > +NUVOTON NCT6694 MFD DRIVER
-> > > +M:   Ming Yu <tmyu0@nuvoton.com>
-> > > +L:   linux-kernel@vger.kernel.org
-> >
-> > This is the default list.  You shouldn't need to add that here.
-> 
-> Remove it in v9.
+Respect twdmin, without this the watchdog timer will immediately assert
+TWD_ERROR and power down to reset mode.
 
-Please snip everything that you agree with.
+Do not stop the watchdog during probe. If the watchdog is enabled in the
+bootloader, it should propably supposed to stay on.
 
-> > > +S:   Supported
-> > > +F:   drivers/mfd/nct6694.c
-> > > +F:   include/linux/mfd/nct6694.h
-> > > +
-> > >  NVIDIA (rivafb and nvidiafb) FRAMEBUFFER DRIVER
-> > >  M:   Antonino Daplas <adaplas@gmail.com>
-> > >  L:   linux-fbdev@vger.kernel.org
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+---
+Changes in v2:
+- Fix warning found by kernel test robot
+- Link to v1: https://lore.kernel.org/r/20250313-da9052-fixes-v1-0-379dc87af953@gmail.com
 
-[...]
+---
+Marcus Folkesson (4):
+      watchdog: da9052_wdt: add support for nowayout
+      watchdog: da9052_wdt: use timeout value from external inputs
+      watchdog: da9052_wdt: do not disable wdt during probe
+      watchdog: da9052_wdt: respect TWDMIN
 
-> > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x1),
-> >
-> > IDs are usually given in base-10.
-> >
-> 
-> Fix it in v9.
-> 
-> > Why are you manually adding the device IDs?
-> >
-> > PLATFORM_DEVID_AUTO doesn't work for you?
-> >
-> 
-> I need to manage these IDs to ensure that child devices can be
-> properly utilized within their respective modules.
+ drivers/watchdog/da9052_wdt.c | 23 +++++++++++++++--------
+ 1 file changed, 15 insertions(+), 8 deletions(-)
+---
+base-commit: 0fed89a961ea851945d23cc35beb59d6e56c0964
+change-id: 20250313-da9052-fixes-186674b34993
 
-How?  Please explain.
-
-This numbering looks sequential and arbitrary.
-
-What does PLATFORM_DEVID_AUTO do differently such that it is not useful?
-
-> 
-> > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x2),
-> > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x3),
-> > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x4),
-> > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x5),
-> > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x6),
-> > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x7),
-> > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x8),
-> > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x9),
-> > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xA),
-> > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xB),
-> > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xC),
-> > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xD),
-> > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xE),
-> > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xF),
-
-> > > +
-> > > +     MFD_CELL_BASIC("i2c-nct6694", NULL, NULL, 0, 0x0),
-> > > +     MFD_CELL_BASIC("i2c-nct6694", NULL, NULL, 0, 0x1),
-> > > +     MFD_CELL_BASIC("i2c-nct6694", NULL, NULL, 0, 0x2),
-> > > +     MFD_CELL_BASIC("i2c-nct6694", NULL, NULL, 0, 0x3),
-> > > +     MFD_CELL_BASIC("i2c-nct6694", NULL, NULL, 0, 0x4),
-> > > +     MFD_CELL_BASIC("i2c-nct6694", NULL, NULL, 0, 0x5),
-> > > +
-> > > +     MFD_CELL_BASIC("nct6694_canfd", NULL, NULL, 0, 0x0),
-> >
-> > Why has the naming convention changed here?
-> >
-> 
-> I originally expected the child devices name to directly match its
-> driver name. Do you think it would be better to standardize the naming
-> as "nct6694-xxx" ?
-
-Yes, that is the usual procedure.
-
-> > > +     MFD_CELL_BASIC("nct6694_canfd", NULL, NULL, 0, 0x1),
-> > > +
-> > > +     MFD_CELL_BASIC("nct6694_wdt", NULL, NULL, 0, 0x0),
-> > > +     MFD_CELL_BASIC("nct6694_wdt", NULL, NULL, 0, 0x1),
-> > > +
-> > > +     MFD_CELL_NAME("nct6694-hwmon"),
-> > > +     MFD_CELL_NAME("rtc-nct6694"),
-> >
-> > There doesn't seem to be any consistency here.
-> >
-> 
-> Do you think these two should be changed to use MFD_CELL_BASIC()?
-
-No.  I mean with the device nomenclature.
-
-[...]
-
-> > > +static void usb_int_callback(struct urb *urb)
-> > > +{
-> > > +     struct nct6694 *nct6694 = urb->context;
-> > > +     unsigned int *int_status = urb->transfer_buffer;
-> > > +     int ret;
-> > > +
-> > > +     switch (urb->status) {
-> > > +     case 0:
-> > > +             break;
-> > > +     case -ECONNRESET:
-> > > +     case -ENOENT:
-> > > +     case -ESHUTDOWN:
-> > > +             return;
-> > > +     default:
-> > > +             generic_handle_irq_safe(irq_find_mapping(nct6694->domain, irq));
-> > > +             *int_status &= ~BIT(irq);
-> > > +     }
-> > > +
-> > > +resubmit:
-> > > +     ret = usb_submit_urb(urb, GFP_ATOMIC);
-> > > +     if (ret)
-> > > +             dev_dbg(nct6694->dev, "%s: Failed to resubmit urb, status %pe",
-> >
-> > Why debug?
-> >
-> 
-> Excuse me, do you think it should change to dev_err()?
-
-Probably a dev_warn() since you are not propagating the error.
-
-Is this okay by the way?  Is it okay to fail?
-
+Best regards,
 -- 
-Lee Jones [李琼斯]
+Marcus Folkesson <marcus.folkesson@gmail.com>
+
 
