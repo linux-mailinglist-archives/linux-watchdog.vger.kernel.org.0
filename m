@@ -1,82 +1,81 @@
-Return-Path: <linux-watchdog+bounces-3132-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3133-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FB6BA6EA7D
-	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Mar 2025 08:29:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 105DEA6EA7E
+	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Mar 2025 08:30:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 82A983A8CC1
-	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Mar 2025 07:28:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 388323B5AA2
+	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Mar 2025 07:28:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0863D254852;
-	Tue, 25 Mar 2025 07:27:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3861254870;
+	Tue, 25 Mar 2025 07:27:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jIQYXfpd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Uo/iWcXv"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31DD4254843;
-	Tue, 25 Mar 2025 07:27:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA54C254858;
+	Tue, 25 Mar 2025 07:27:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742887674; cv=none; b=PoyT5iIW7deZdDzMxa6usBk3hudKorRA89YfFP9XmuS0GqJErlU0rZb+egckntqC+vkoKSVySLaGamXuTuvgFU7ZM0yavoJmS5wcQnKS15cTKCHMBayBP1ds8+J9f7OkFOfiUO95rfuIosvsIOQburYlYAh8BR2QTTLSrJrWU5Y=
+	t=1742887677; cv=none; b=UTbE0izwhYM2L9wMN19libcX0PkS6V1yKsSFaaBD3UB8nAtRSTl7EYOSJapEUXCXyLODtWiZJihuQTC7NJYpnvIxI+j9ch4/T/AzFmTdioTbkAe/m2ZoID36Tv0URhcrVahH9C4mSnSoQ47zVHCUfs4TzlCKyCT5OBcUaxiaxEk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742887674; c=relaxed/simple;
-	bh=9/EAEv5asPM55GhtBdL4KSWn8n4jP3zQOqSm7mRMI+A=;
+	s=arc-20240116; t=1742887677; c=relaxed/simple;
+	bh=cKLX0CYGXCgbuT+agxT2tRVi4WrqxSVTWlH3Cy35LjM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=iN7YMIPqxdsZCbwwLevvHt+luYARJ1yb1jhEXw56+XtmtKGzLKhFBYb5v7vNi4Ya9u0o/c1tHrMhnL5e3N+M473+bERj6paE4SUKw+YX7wwAP4KZK10jXC2HmzQzYU+yJBhB0K0mwK2sL/ulWxkJ9i9r360U/SgergUXb32D2rA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jIQYXfpd; arc=none smtp.client-ip=209.85.208.172
+	 In-Reply-To:To:Cc; b=daabElaaa9fjvW5wndHKX/JO3gdsRyGGz5VBEFYzPXJZDu3A/+BqoWdvuYyPujFm2odhX9Q63HYnuMwrmdJaoysHPicTow/tOh7bdJ6IaN2+oGcqNZwSja7oNvV78KOrLVvKQrDPLWCrq8r1fEPyl0qBY1Ot8XxUay95XsNZaCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Uo/iWcXv; arc=none smtp.client-ip=209.85.208.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-30bfb6ab47cso51167441fa.3;
-        Tue, 25 Mar 2025 00:27:52 -0700 (PDT)
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-30c05fd126cso46895871fa.3;
+        Tue, 25 Mar 2025 00:27:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742887671; x=1743492471; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1742887674; x=1743492474; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=6TlubddJC7aKC9kbsNOHXDnaBgqxpRfansLyLGsfqUc=;
-        b=jIQYXfpdvlkCJGqv4WsbQS2hZELCKnN0zagXL8N1sjtlEdQqXhVQQ2YqdcpE7A/AAj
-         xKJ7+stAxZVwi+phxAlvFamn+yScp8cXHmW6x6e5A/kaUp2w6+hyAaG6lowxArGi3GFy
-         a9URVHxFNthxZF91iJI3BfXUmC9Xne9d0y8F0Audjf7/WeYuvqLtYmtkRjRwhDrPdjMN
-         pEj2tzPhdaHKBGzJOHNwEhe4OE5ikQAswsxN9Z2GPqX3CFQ6eMwA+YXhinqhX5KyCQdG
-         qh9ZntiB4Z1SJ3FFnnyHSAKTxp3VATcpzqqyvzsHP9OCQAd7Xg+o58hci5O8KZsm59Sb
-         74zg==
+        bh=OoaaHsdPl+I4arazHsglZMZw2PNB+dtojddpnNQGJNc=;
+        b=Uo/iWcXvBcYr5bJAQAD8dFOjiRO2X85FQ4XupKJJL5qDQ85oMOzPCGRNJsTaOlcycf
+         dVcyQLimGJ7uEdU7oRnfjaODwY0Vyt9nvjVp4vS5j6XmFHOjWOU5xyu5xhZMNT/bwU3j
+         JP3uR0JWrPcHHkgemW02ZJFRsJSJEDugIAjwH4MddvN6knRW0wgMMj79GW8It0WVQQgH
+         yLUVCz9Elnl0vRQcGzZR3VhdvS2M6oXt8KMZVO4VIBPkaplePUef6ngfGwbCA2kQVjFK
+         6A5HRboghFm9DTRXWKQGxeUJl8n1DTA1u7SVLIiwYGfOnrMZwTfDc2LKzU7PD5KVRoJF
+         s/4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742887671; x=1743492471;
+        d=1e100.net; s=20230601; t=1742887674; x=1743492474;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6TlubddJC7aKC9kbsNOHXDnaBgqxpRfansLyLGsfqUc=;
-        b=a/NHt6sDMwNnqDobcbuTdoCqigXaOa8adPOmu2oyPxdoBxrjIJbZsXxZxlwr/NbGhl
-         sImuBTnxh1O3JLkd3z9CSXNQTmMNCQCYVtjXpl/abhEPKB47xuPFQ5ssrZkAOnV0QzMC
-         WOYzGDIYjOUcCtzZHdoNUunVlhDuPr1IOqrFqgJly+MmCG0ZZH2f4HB+um/+QBwAeeys
-         y5GagRP9bp6Pxwxu/oUEGAUEpk8Gabq87TMSnMuAQ/8MIxziOm/jrD6lSRzVBw7vyzmb
-         908kf+ZEPTV/dl+w6xION9hA57YTLNf3mKFwITyIm8l52CgIESOuWeHarIvPdz9PWH3Y
-         zHTQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXjLoIz1PfirL2G3KjcFqUEQjEdsi3Y/WqOpVEpmnAkb3Cy2seqKReN6/Ovb2HtUC6fLq1S8PlLheaYzW8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywon00wHNcGd6y9iqS+20BOP02cm0mZwNQLedddKBnUzJBjXa1H
-	UU3AYEnPBy0PdqZiGyM1jcN3ko+fCsky2xTFxiYe5p5o1wRYycDO
-X-Gm-Gg: ASbGncvoPAqmwCxxxBX/2nroyNhnMGZbJUngdEwMd7A8VTrLo+valMPkR0ME7LCsStt
-	CE4Ciou2At2ms00rcq/BJ/Pur7dT2+CUKAYIuNE1AInLYRx9UhQvnQsnLnvTcHXl58llBagabGR
-	/lIq9O6y4OM+p4S6ADU5P0irMhfKWgYmDvPhqM7hdJvJqwtBt/uVGUb7nHYd2kQqWvT0phAyDHo
-	/MbltRHKp4PwOTVEavPG1vnbWMxZ6+DOk5Bp8QSbRy5B6/W1grtkqeidHgvnHYBW/WFZbqBHMZO
-	SfkkWp58b7FZkTiTeJM3IuzE4Xpha15rCi6LIBb3eJ8RKnktqiB4epb4xBNMZDrjNcF7iZEq3qH
-	K6lduOBNRp4bw
-X-Google-Smtp-Source: AGHT+IHBazGgEbs5nPeu5DJAYLFlO5+O6BeSSpspOCZECa2LWhi/sIsTm67Vr8xk509H6r5UPCBk3A==
-X-Received: by 2002:a2e:9087:0:b0:30b:f924:357c with SMTP id 38308e7fff4ca-30d7e223dd1mr51735341fa.15.1742887670928;
-        Tue, 25 Mar 2025 00:27:50 -0700 (PDT)
+        bh=OoaaHsdPl+I4arazHsglZMZw2PNB+dtojddpnNQGJNc=;
+        b=sIycUX8DbPA6rKdl0l1El4PrgH7vdb9kznI4whThEVzPXNEHpLVMR4i9XGBPC67Gsg
+         sOolIptPrewMSSub9Z7+Hi2Evr9UuFWMdUHypVdGkzef6SwlmLmGWSv6c3U+WpTSbZDD
+         t4wI1AtbQKiDIBuzt5dyG9S2HYvrrfiLCbrJXYiM1xhThL2+IWz2hq6T8HzpZmy5cd6s
+         ZrqZH6BN40cRyxtJlcHWhzkH4r5AgP4oCf36Ak+nQ0OkscmsdXL7ATQH6e6nVNhDknGX
+         uzN+VDbS6qfKcH84pZn8NLb0MJoje2fGsknpU6kng8lzIKPh8sD2t5TRpbEuu1pAwETM
+         /Nww==
+X-Forwarded-Encrypted: i=1; AJvYcCUTjjVpBs7Do2oY/rErUK6yeiwat62iVYocnlbIV0nV8jnMFmYVzeVqAAYPfYecC8lJmcRm+mQfA9f51Zc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxwZjiTeix9eGc6tHxyIwpfmyphdXN7ZuZTw65IF+JJTsbNbVMH
+	xp2uaTcbDrXx0r0l0twqTyXWEERcljqccUYDmYsVv2xJdx1M3/Lb
+X-Gm-Gg: ASbGncvEVYphKROcOK/h0GXSlmIC53NQMqDVWRjOoWyuPopBpRYGfLu154x0itziNRF
+	iok1CKebYfl3XGt/N7sK2V3P7ETgXNmgHEWlwgqsHhokE6dhlNC1axk3s3wGPYQPf7Rlljr74Zn
+	Syi8rzZ05NtBA3el6SGBJIoFLNXHRjMM0lJvP2OBVT993I95D1pLNeasHEDtULEx+hhPYJ1ZhHt
+	aQHdWFD8DC0AXCBoMDXf0rHxbUBkIAL8RCFaSmDRuBba+D39Zj9bUPdLMY/4PvEp1IR3CMEJByw
+	ixMZk8ZVesJ1fZVDxZVaBXIm6gxgGZklkZpf87isTZDlHn6ioUjuPCOlt6i5LKgR/5TOEWiBKYz
+	f8gJAzfozxYg+
+X-Google-Smtp-Source: AGHT+IGgr5m8Dk0n55iv1MKqVZzx7TaJS18sRJPfqiAWtlbeZi2/V7bDveGQntwRqXyOlwlFB/yLog==
+X-Received: by 2002:a2e:bc04:0:b0:30b:cc6a:ffd9 with SMTP id 38308e7fff4ca-30d7e0c0a5bmr57914071fa.0.1742887673905;
+        Tue, 25 Mar 2025 00:27:53 -0700 (PDT)
 Received: from [192.168.1.11] (83-233-6-197.cust.bredband2.com. [83.233.6.197])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-30d89661aa3sm14307621fa.31.2025.03.25.00.27.47
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-30d89661aa3sm14307621fa.31.2025.03.25.00.27.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Mar 2025 00:27:49 -0700 (PDT)
+        Tue, 25 Mar 2025 00:27:52 -0700 (PDT)
 From: Marcus Folkesson <marcus.folkesson@gmail.com>
-Date: Tue, 25 Mar 2025 08:27:14 +0100
-Subject: [PATCH v2 3/4] watchdog: da9052_wdt: do not disable wdt during
- probe
+Date: Tue, 25 Mar 2025 08:27:15 +0100
+Subject: [PATCH v2 4/4] watchdog: da9052_wdt: respect TWDMIN
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -85,7 +84,7 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250325-da9052-fixes-v2-3-bfac3f07b4a4@gmail.com>
+Message-Id: <20250325-da9052-fixes-v2-4-bfac3f07b4a4@gmail.com>
 References: <20250325-da9052-fixes-v2-0-bfac3f07b4a4@gmail.com>
 In-Reply-To: <20250325-da9052-fixes-v2-0-bfac3f07b4a4@gmail.com>
 To: Support Opensource <support.opensource@diasemi.com>, 
@@ -94,58 +93,46 @@ To: Support Opensource <support.opensource@diasemi.com>,
 Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Marcus Folkesson <marcus.folkesson@gmail.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1278;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=945;
  i=marcus.folkesson@gmail.com; h=from:subject:message-id;
- bh=9/EAEv5asPM55GhtBdL4KSWn8n4jP3zQOqSm7mRMI+A=;
- b=owEBbQKS/ZANAwAIAYiATm9ZXVIyAcsmYgBn4lrff3yD91KYR28hnH9rV5tLL3ho7A2lBgmoD
- 9dxNNH7mNaJAjMEAAEIAB0WIQQFUaLotmy1TWTBLGWIgE5vWV1SMgUCZ+Ja3wAKCRCIgE5vWV1S
- MldeEADdBLnVAAzhsCbbFyjjV/MOUVwdH1zizw01ypekYaQB3JoEtmMQVlbNIVBF+RhR/KQwsGE
- Mk7x4g+9S/4AnyiM53xbw7RLTPteLQMxuVcnrgyrjSrpWV+edeCCWMLUnMCnehQNPLBnbbvWhui
- ihXcS8G78erg1MU++BE4Tf4T9gpBbLvOqVlJw6jJh7UHizLOr/MqQyXjvA8SNSnxy+uCCjAqvA0
- NQ0ZzEUcSjFa5m8njcQWwS1OAipoLiJLiSadTnOXK4LD36FMUNlPbTUUleIMH8+mSyP8lOP9y5K
- kEtE6tX2cusB/tyTbB/EoLmaKOrvm9+EVkcMWfchdQiRh8TqaPpWW7xSIlEqimtYngyJMVKF4qs
- ZBLFxNGDgDa4ABAE5chtJJ8Inq0GomOO8jYOHc2IuyUlNZuM8QU68GNRMn4SNiqd0rSY035R0kW
- nKaizA6/IFtG2VYLBn1InjsIkl+2P5DbjuzSiLzru4uQul3e6j7BnIR6YdIhBj5hcU6PkYlCExE
- LlDBlKTysGIXHHp6l1Omak1oXFb07FPS6Dl0LUllfoOcu2x3IFJzzjaWo7Ds+sbypspaz87aTxM
- d4/Xd4qIKF54gab2X+xUX4mqR+yns0S7pDIwILB2y6b0shhWQEIYa7UXiVuCENeRdrROqWB9ZbZ
- YTJg8UQ+ObnFZHA==
+ bh=cKLX0CYGXCgbuT+agxT2tRVi4WrqxSVTWlH3Cy35LjM=;
+ b=owEBbQKS/ZANAwAIAYiATm9ZXVIyAcsmYgBn4lrl9g3pMK7L9AF6+oHJEdEExzLMF+t2lM1CU
+ uLwvAzMYP6JAjMEAAEIAB0WIQQFUaLotmy1TWTBLGWIgE5vWV1SMgUCZ+Ja5QAKCRCIgE5vWV1S
+ MnBZEACKaQtv8n0h6VX88DQJggE2vCwJGzV5urJti3dMwh5IaAIlU+FibQq6PthuGez4y/xNCHN
+ tXI2fLYtocamSFb0ldO9KQQUvge9v0XzGkRvvt6dGQRcmigQRcxa8z2seuUP5t6HonNrSK6i2mv
+ QqyxoZbs5cTO7vuEvFjYEUcY4hwfFU/KXRS8vWGLuc5trTSM2UATmk2d4jqj0701zPmB4CNUX92
+ y6hHGgJQ0k0ISekoSBurAV4Kbe+KWT/5iFNGc3bOBKcdWjY+/uUMQkfXCGf4yuKat3XUIikIoa9
+ Tak2fUW3MF9EMcO2TGbKp2IIdAk4Rks2eLP27PtlwG0muEdLjkXNsNV2+RAMR2k8m3m7ID9v0LP
+ 69DdSj36Tq8kUYwlqGkoyEhcs6d6tRnN3Tnis/7qIjFYnZzz0qFAtuYGsn5YtKp7XMwikXzNV+W
+ Domlh4EOz+oKLsP7eXRiRInqZmw8zfTAgu0ZIeS4ifzkF36cD0C4LXcl0ACI1Ip3rj707YfF4pe
+ DDC+C4jZfywVLIo7688cU/evn2ijkV+gmyN38LcHSOrDtUrhYFgApz83Fy/LBebAuNyKQtfN0AA
+ xIDsfBCLwanC+g2HB638qBQmxHfKrKVuGNOPEWdICdzkrp9HsXXZv8uYhBVKjWBMmv+Rb8ogKE/
+ mBorJHeYT3unlNw==
 X-Developer-Key: i=marcus.folkesson@gmail.com; a=openpgp;
  fpr=AB91D46C7E0F6E6FB2AB640EC0FE25D598F6C127
 
-If the watchog is started by the bootloader, we do not want the watchdog
-to be disabled.
+We have to wait at least the minimium time for the watchdog window
+(TWDMIN) before writings to the wdt register after the
+watchdog is activated.
+Otherwise the chip will assert TWD_ERROR and power down to reset mode.
 
 Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 ---
- drivers/watchdog/da9052_wdt.c | 8 --------
- 1 file changed, 8 deletions(-)
+ drivers/watchdog/da9052_wdt.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/watchdog/da9052_wdt.c b/drivers/watchdog/da9052_wdt.c
-index fa9078d4c136a52f1193768fe93dc04189519679..b821006fca70480bf3b23a62bded4e66851a537e 100644
+index b821006fca70480bf3b23a62bded4e66851a537e..1e49cbae7eaec3015264dec891032a56f56e36cc 100644
 --- a/drivers/watchdog/da9052_wdt.c
 +++ b/drivers/watchdog/da9052_wdt.c
-@@ -170,7 +170,6 @@ static int da9052_wdt_probe(struct platform_device *pdev)
- 	struct da9052 *da9052 = dev_get_drvdata(dev->parent);
- 	struct da9052_wdt_data *driver_data;
- 	struct watchdog_device *da9052_wdt;
--	int ret;
+@@ -179,6 +179,7 @@ static int da9052_wdt_probe(struct platform_device *pdev)
+ 	da9052_wdt = &driver_data->wdt;
  
- 	driver_data = devm_kzalloc(dev, sizeof(*driver_data), GFP_KERNEL);
- 	if (!driver_data)
-@@ -194,13 +193,6 @@ static int da9052_wdt_probe(struct platform_device *pdev)
- 	if (da9052->fault_log & DA9052_FAULTLOG_VDDFAULT)
- 		da9052_wdt->bootstatus |= WDIOF_POWERUNDER;
- 
--	ret = da9052_reg_update(da9052, DA9052_CONTROL_D_REG,
--				DA9052_CONTROLD_TWDSCALE, 0);
--	if (ret < 0) {
--		dev_err(dev, "Failed to disable watchdog bits, %d\n", ret);
--		return ret;
--	}
--
- 	return devm_watchdog_register_device(dev, &driver_data->wdt);
- }
- 
+ 	da9052_wdt->timeout = DA9052_DEF_TIMEOUT;
++	da9052_wdt->min_hw_heartbeat_ms = DA9052_TWDMIN;
+ 	da9052_wdt->info = &da9052_wdt_info;
+ 	da9052_wdt->ops = &da9052_wdt_ops;
+ 	da9052_wdt->parent = dev;
 
 -- 
 2.48.1
