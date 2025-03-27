@@ -1,141 +1,148 @@
-Return-Path: <linux-watchdog+bounces-3162-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3163-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AF88A73A2C
-	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Mar 2025 18:12:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60D3DA73EC5
+	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Mar 2025 20:41:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9BA59188A9FC
-	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Mar 2025 17:12:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 36CC4880B4A
+	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Mar 2025 19:39:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A9BE183CA6;
-	Thu, 27 Mar 2025 17:12:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFE5A22FDF3;
+	Thu, 27 Mar 2025 19:36:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XKHy/9tQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Eh8S5WyK"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF8B0DDD3;
-	Thu, 27 Mar 2025 17:12:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 887211C5D6C;
+	Thu, 27 Mar 2025 19:36:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743095535; cv=none; b=asvpxRD5hggTCfKV0a2LCuU1YOiCIHM9Zji4ZVmQx4106K5bmPPX7wJviZO/2e9FOVdaK6AIaOrVGmgS+8QU8NnY1vgtwdplacP5qe74T6sokUEJbOwMVyldrBcM+zoW3wTwsJgNcdVosN2IZDXqK/XG6N9xjiAByEZ58c8YatI=
+	t=1743104194; cv=none; b=K/h2y112H+4iMX1wjmI98daZjyyCrfln1NpEA1cBaksc3zZYmgflmvPZJRJDFbpqO8CrNT8Vbxoi2BoCMO6ur7vJVZIzBOi1b/4Hzhy1hbCqSdAEoX2Ml08iwyolnO/kRLoATYZJ15cfq1Ers56O01MYPAKorWwl4H2AH3mttxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743095535; c=relaxed/simple;
-	bh=z+x6GOiCYUO9WeWlaEnR17peJA+ucADMPc1YaQ7EjVY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=d+Hcw18mdKPPx3Cj+J0pYkY0bAuWsBXjS3RGyO+J6OmNtHlKLnHLCScaLapUPtZL5zI4HPhTu0qPVS80EyPuRmjPBXe7XN/P2prA7z7jV2AVNX1PNQW8UemAK7eBo9VXRSr+8S9tUzIKgSndaLBhiuAxElDoANXqzJnkF+oxBl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XKHy/9tQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D432C4CEDD;
-	Thu, 27 Mar 2025 17:12:13 +0000 (UTC)
+	s=arc-20240116; t=1743104194; c=relaxed/simple;
+	bh=MWCe7oKa9LJV3uUJ0pa/D8DM2BFCRPDwbe55B9EXvSA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aAvrhUlsvMjTKg6nxQm6gUPRKp0BnqS0yHoBktKmctzP99XIrNDytL3D2kEtYp0GCs5rNPHgyYwLka4uFNp2ommEBkvBN4boIYR0xI/levgnpT0z7yPjFoErXkurGdzE2LWlx7UtyvErTvTjFHi+RYZP8Y9fanolgBWSXGEnC3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Eh8S5WyK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E94B4C2BCB4;
+	Thu, 27 Mar 2025 19:36:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743095534;
-	bh=z+x6GOiCYUO9WeWlaEnR17peJA+ucADMPc1YaQ7EjVY=;
-	h=Date:From:To:Cc:Subject:From;
-	b=XKHy/9tQeLQQFL23dUITE8IR/qAnIPAKs7YTUFba9LnnMWoDup2sXsMRAbYIonHhm
-	 4Qst1cY04ukFOXNE3J5a1hf/HetIdXKlvBu2F6APxpGCkk4EcCP+Axz/6ozCkCuDWl
-	 hangwdc9OlJ+JS94JIdpStsBR14H8jnBEg+YXzkcLWPEyVfuk7YItGxloUBkzXOfwf
-	 zVPO6ENWllCwWOakC+9hMdVkp7X+5u0ccQ5M7IfYcZt7tJO14IPzHLW+Vt7fQfOWOt
-	 mXXewwEa3PWx4FJXUESltUtlv3/zzaPlTyD56zhtXsONR7ZTD+CgiHI8elU4F/XtWb
-	 3PwBcg9fj0tlQ==
-Date: Thu, 27 Mar 2025 11:12:11 -0600
-From: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To: Lukasz Majczak <lma@chromium.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Benson Leung <bleung@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>
-Cc: chrome-platform@lists.linux.dev, linux-watchdog@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH v2][next] watchdog: cros-ec: Avoid
- -Wflex-array-member-not-at-end warning
-Message-ID: <Z-WG6_uhWsy_FCq3@kspp>
+	s=k20201202; t=1743104194;
+	bh=MWCe7oKa9LJV3uUJ0pa/D8DM2BFCRPDwbe55B9EXvSA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Eh8S5WyKpuggFjBQ8DgPqkayAr2zB0DrUVNU4SRrV4AcO+oLicYrPndyfOtNej1WS
+	 hpD+wnK5UI7dnqM7YSWATJyX7bhSprxkuqcxBgsLP1f1Vx2Ur35flKpQC+bQ7kbdJZ
+	 h4T8kTnBQHhgorEFzFRcY4JiCziBAI6+OyJAmBn20EHFavUd4/K74HssW7EQFOsoxe
+	 /kntB7dNTQyeXSg/oVis2lLCo02/U80hndpyyJUvd5IKZWpzW8STeh043kRAD34Zbk
+	 tTZ7ThEbeDp0UeAklezXN0oHvKRhnHgk6qbJBzK1PTsVlOm6JHnq4wDosa5awcRYkl
+	 eEtSo+BAHkzdg==
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-72bb97260ceso411485a34.1;
+        Thu, 27 Mar 2025 12:36:33 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU/4cXkp3wPwAm5bFrpnCF6mLlyZQhv+r0PX0Zm696MywlZeMURDr+FDPqYsnsvOj8jCAp7HJCivurN@vger.kernel.org, AJvYcCUF1AlPH/jDAfO41U93uxXpjL0fk7dvsj5S92IM1I8Tge+DAENuzciKrhP9cyqZJ+U4iW3nQ0AEM3oU1wbgJEU=@vger.kernel.org, AJvYcCW+GSIwK8AIRR2Qp9H4qyAMosNZa3O4ZLQ6fzTc29D5cg/3ZXlW+bmPJWHE2Dg4P/oBnn56WAJ2JFZPm8oz@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyb7EGJg6E0EvyuN2eHwNh+7aLh2lEp9MIcbh/B24rPhxHhn24S
+	EK9cMYhC81H0En+WDe9dI7eDF3LCkwtX1SM8XjKOVWrd1TyDz4SNbBycjXMdrOTrbzTNTPu8YDS
+	TexL4IDPajJsq8PswWVekCqAr3X0=
+X-Google-Smtp-Source: AGHT+IFYJEH/GBkCoyxgjCZKobIjKQ32lIwPJmKFN6375XMv5X6Zm5IiBkQa4InpYz4Mrw75lvtlU9/G2jfgDgMlSAQ=
+X-Received: by 2002:a05:6870:e393:b0:29e:5cb1:b148 with SMTP id
+ 586e51a60fabf-2c847f2c9cfmr3051708fac.6.1743104193121; Thu, 27 Mar 2025
+ 12:36:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250317-ivo-intel_oc_wdt-v3-0-32c396f4eefd@siemens.com>
+ <20250317-ivo-intel_oc_wdt-v3-2-32c396f4eefd@siemens.com> <1beeb77c-83d6-4634-ba39-2b40efbb8437@siemens.com>
+ <CAJZ5v0jh1jJy+YRMtLDnYqAhPrN2Pox+NY0Vqh_uqb7F=NwqEg@mail.gmail.com>
+ <54d3c7a8-1392-4870-9bd6-48aebe3881f1@siemens.com> <9f4e560e-35c1-413f-be83-d537abf41183@roeck-us.net>
+In-Reply-To: <9f4e560e-35c1-413f-be83-d537abf41183@roeck-us.net>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 27 Mar 2025 20:36:21 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0j5-5LRPOkBA84Q9KatMh53btKC_jXFwnxgfUQ7H4Q60w@mail.gmail.com>
+X-Gm-Features: AQ5f1JppsboRum-5Qw-Mo5ecnQauw3SkcipMRzy80dwhv2aD3rW6uwWTb6BtnC8
+Message-ID: <CAJZ5v0j5-5LRPOkBA84Q9KatMh53btKC_jXFwnxgfUQ7H4Q60w@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] ACPI: PNP: Add Intel OC Watchdog IDs to non-PNP
+ device list
+To: Guenter Roeck <linux@roeck-us.net>, Diogo Ivo <diogo.ivo@siemens.com>
+Cc: Len Brown <lenb@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>, 
+	linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, jan.kiszka@siemens.com, 
+	benedikt.niedermayr@siemens.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
--Wflex-array-member-not-at-end was introduced in GCC-14, and we are
-getting ready to enable it, globally.
+On Wed, Mar 26, 2025 at 3:02=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
+wrote:
+>
+> On 3/26/25 02:01, Diogo Ivo wrote:
+> > On 3/25/25 6:59 PM, Rafael J. Wysocki wrote:
+> >> On Tue, Mar 25, 2025 at 6:19=E2=80=AFPM Diogo Ivo <diogo.ivo@siemens.c=
+om> wrote:
+> >>>
+> >>> Hello,
+> >>>
+> >>> On 3/17/25 10:55 AM, Diogo Ivo wrote:
+> >>>> Intel Over-Clocking Watchdogs are described in ACPI tables by both t=
+he
+> >>>> generic PNP0C02 _CID and their ACPI _HID. The presence of the _CID t=
+hen
+> >>>> causes the PNP scan handler to attach to the watchdog, preventing th=
+e
+> >>>> actual watchdog driver from binding. Address this by adding the ACPI
+> >>>> _HIDs to the list of non-PNP devices, so that the PNP scan handler i=
+s
+> >>>> bypassed.
+> >>>>
+> >>>> Note that these watchdogs can be described by multiple _HIDs for wha=
+t
+> >>>> seems to be identical hardware. This commit is not a complete list o=
+f
+> >>>> all the possible watchdog ACPI _HIDs.
+> >>>>
+> >>>> Signed-off-by: Diogo Ivo <diogo.ivo@siemens.com>
+> >>>> ---
+> >>>> v2->v3:
+> >>>>    - Reword the commit message to clarify purpose of patch
+> >>>> ---
+> >>>> ---
+> >>>>    drivers/acpi/acpi_pnp.c | 2 ++
+> >>>>    1 file changed, 2 insertions(+)
+> >>>>
+> >>>> diff --git a/drivers/acpi/acpi_pnp.c b/drivers/acpi/acpi_pnp.c
+> >>>> index 01abf26764b00c86f938dea2ed138424f041f880..3f5a1840f573303c71f5=
+d579e32963a5b29d2587 100644
+> >>>> --- a/drivers/acpi/acpi_pnp.c
+> >>>> +++ b/drivers/acpi/acpi_pnp.c
+> >>>> @@ -355,8 +355,10 @@ static bool acpi_pnp_match(const char *idstr, c=
+onst struct acpi_device_id **matc
+> >>>>     * device represented by it.
+> >>>>     */
+> >>>>    static const struct acpi_device_id acpi_nonpnp_device_ids[] =3D {
+> >>>> +     {"INT3F0D"},
+> >>>>        {"INTC1080"},
+> >>>>        {"INTC1081"},
+> >>>> +     {"INTC1099"},
+> >>>>        {""},
+> >>>>    };
+> >>>>
+> >>>>
+> >>>
+> >>> Gentle ping on this patch.
+> >>
+> >> Do you want me to pick it up or do you want to route it through a
+> >> different tree?
+> >
+> > Unless the watchdog maintainers have any objections it's fine if you
+> > pick it up.
+> >
+>
+> Ok with me.
 
-Use the `DEFINE_RAW_FLEX()` helper for on-stack definitions of
-a flexible structure where the size of the flexible-array member
-is known at compile-time, and refactor the rest of the code,
-accordingly.
-
-So, with these changes, fix the following warning:
-
-drivers/watchdog/cros_ec_wdt.c:29:40: warning: structure containing a flexible array member is not at the end of another structure [-Wflex-array-member-not-at-end]
-
-Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
-Changes v2:
- - Fix truncated line in changelog text. (Tzung-Bi)
- - Update variable name: s/buf/msg (Tzung-Bi)
- - Cast to structs instead of union. (Tzung-Bi)
- - Add RB tag.
-
-v1:
- - Link: https://lore.kernel.org/linux-hardening/Z-SBITmMfwjocYwL@kspp/
-
- drivers/watchdog/cros_ec_wdt.c | 30 +++++++++++++-----------------
- 1 file changed, 13 insertions(+), 17 deletions(-)
-
-diff --git a/drivers/watchdog/cros_ec_wdt.c b/drivers/watchdog/cros_ec_wdt.c
-index 716c23f4388c..9ffe7f505645 100644
---- a/drivers/watchdog/cros_ec_wdt.c
-+++ b/drivers/watchdog/cros_ec_wdt.c
-@@ -25,26 +25,22 @@ static int cros_ec_wdt_send_cmd(struct cros_ec_device *cros_ec,
- 				union cros_ec_wdt_data *arg)
- {
- 	int ret;
--	struct {
--		struct cros_ec_command msg;
--		union cros_ec_wdt_data data;
--	} __packed buf = {
--		.msg = {
--			.version = 0,
--			.command = EC_CMD_HANG_DETECT,
--			.insize  = (arg->req.command == EC_HANG_DETECT_CMD_GET_STATUS) ?
--				   sizeof(struct ec_response_hang_detect) :
--				   0,
--			.outsize = sizeof(struct ec_params_hang_detect),
--		},
--		.data.req = arg->req
--	};
--
--	ret = cros_ec_cmd_xfer_status(cros_ec, &buf.msg);
-+	DEFINE_RAW_FLEX(struct cros_ec_command, msg, data,
-+			sizeof(union cros_ec_wdt_data));
-+
-+	msg->version = 0;
-+	msg->command = EC_CMD_HANG_DETECT;
-+	msg->insize  = (arg->req.command == EC_HANG_DETECT_CMD_GET_STATUS) ?
-+		   sizeof(struct ec_response_hang_detect) :
-+		   0;
-+	msg->outsize = sizeof(struct ec_params_hang_detect);
-+	*(struct ec_params_hang_detect *)msg->data = arg->req;
-+
-+	ret = cros_ec_cmd_xfer_status(cros_ec, msg);
- 	if (ret < 0)
- 		return ret;
- 
--	arg->resp = buf.data.resp;
-+	arg->resp = *(struct ec_response_hang_detect *)msg->data;
- 
- 	return 0;
- }
--- 
-2.43.0
-
+Applied as 6.15-rc material, thanks!
 
