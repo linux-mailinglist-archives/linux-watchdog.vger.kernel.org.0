@@ -1,102 +1,169 @@
-Return-Path: <linux-watchdog+bounces-3159-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3160-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99A09A72A26
-	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Mar 2025 07:27:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61E24A72A8D
+	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Mar 2025 08:26:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 87D8118971C8
-	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Mar 2025 06:27:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D88D0177409
+	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Mar 2025 07:26:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A893D78F43;
-	Thu, 27 Mar 2025 06:27:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="URV7Mfnn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ED5D1F417F;
+	Thu, 27 Mar 2025 07:26:05 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67A961C28E;
-	Thu, 27 Mar 2025 06:27:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05A681F4165
+	for <linux-watchdog@vger.kernel.org>; Thu, 27 Mar 2025 07:26:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743056833; cv=none; b=EGz0slOwrwEZGj61/4PGvPpo7C8OYc/eqfR9Pk0wov9qyEoyAP+tlYKgZVRH9aZiQIhagfZ6bnxqKnSYvcy6jJzySB96tjVbn2cISzQq0vAM/JdhOGLYC73Ds3hrUdu7AFX3ZaKswvkJsEbnLmu7on6LKdtrwo3pktWD2mvMyos=
+	t=1743060365; cv=none; b=VhPPLuQG1kzG5q3shQIc1u09z/91s9ad1SBQVcHZUbn0k7u1fEVq+FQ/gTFqM0bR9dPbwjHIgbcKYgRAQv0/kES1ixQfHWMFhKq0MXrNj7u4czpJG8Jkp8EicSEPIntvJb/J3rq+d5+yD9Jd16ApT9HqsZsnSqMbgYyeTRuGzyQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743056833; c=relaxed/simple;
-	bh=4iPqEownfZun9ocmKKi7zJNNMBSkFzM3sXB70zz1tZI=;
+	s=arc-20240116; t=1743060365; c=relaxed/simple;
+	bh=JSSGQS6tGG25ltA0Mvv5MyPkthwco/wCEhroPDJOdFE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J7JNKh2a63k1l5e36qki0B7FB0x/9JIad8MFDo3nfzyCzX5McAwcYLagwX54VE9oe0tB3RaYIlAJ90KlgR6XtIS1Tp34/LBcQXlr8kS84PTzpSW+WuCmQVlEgWDGMUQv1jkKIeBfmcLAvcm3/JLY8bSGosYnCQaA3pz5AmqBRKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=URV7Mfnn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 692B5C4CEDD;
-	Thu, 27 Mar 2025 06:27:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743056832;
-	bh=4iPqEownfZun9ocmKKi7zJNNMBSkFzM3sXB70zz1tZI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=URV7MfnnZzVHzSrp0kSrrCX6GPwXwD0EWstUg5P6qBX6z1XMJaP6lPkc9AWGqlvdp
-	 yOAASaFJGs3LRFmMaXCKfr+81CQ3lmMBwW2TBHoRIG0+jotmQdRzSiVCA58JiXEsuQ
-	 opGVa2V6euM0QxifGfbPVU7VZK7atR01mQ3xoZvNfhZvqoBYcewTF4NIGKTE4Cnu+P
-	 4Mt59FbxeKy3PAUS1eRuNx5Orgj7jzqXkrkEOoOztljzfV0r6xoWowhNKaPViMCifT
-	 YzL89HG4cOJMmkUKca5ZXTOkX4MrCtZ+pPtz6Sb7C5ruYd+swgLAGmCP08FV5U3u89
-	 kYBq0g8iH2VkQ==
-Date: Thu, 27 Mar 2025 06:27:09 +0000
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: Lukasz Majczak <lma@chromium.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Benson Leung <bleung@chromium.org>, chrome-platform@lists.linux.dev,
-	linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] watchdog: cros-ec: Avoid
- -Wflex-array-member-not-at-end warning
-Message-ID: <Z-TvvUsB0eK2p8YJ@google.com>
-References: <Z-SBITmMfwjocYwL@kspp>
+	 Content-Type:Content-Disposition:In-Reply-To; b=aejvlKzSdLCU/NUcD6NQ4e7fwfMpje4JfSYfNnIPD/uVWjy2tLuQHeasF1+BmFtpU9yUhlPoaTPlD8f+uPBxI89dmK9J9XkozXLDrJbvfcpACRrOl6PrCaWkFVp+qGkUNR/5HlbYc3NIp0oRLGGfy7vsNB/h79fIgO20VEvGHVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1txhcD-0004yL-Vr; Thu, 27 Mar 2025 08:25:26 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1txhc9-001t0o-2e;
+	Thu, 27 Mar 2025 08:25:21 +0100
+Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id E00643E7BAF;
+	Thu, 27 Mar 2025 07:06:19 +0000 (UTC)
+Date: Thu, 27 Mar 2025 08:06:13 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
+	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
+Message-ID: <20250327-awesome-mutant-cuscus-0f0314-mkl@pengutronix.de>
+References: <20250225081644.3524915-1-a0282524688@gmail.com>
+ <20250225081644.3524915-5-a0282524688@gmail.com>
+ <20250227-spicy-grebe-of-dignity-68c847-mkl@pengutronix.de>
+ <CAOoeyxWSsy0Q0Y7iJE8-DZM5Yvcdto8mncFkM8X4BvVMEgfUiQ@mail.gmail.com>
+ <20250317-cuttlefish-of-simple-champagne-ee666c-mkl@pengutronix.de>
+ <CAOoeyxXSC3rjeB0g5BtHKvKy-Y9Dszd5X9WuHeBeH1bk39d_Eg@mail.gmail.com>
+ <20250326-inventive-lavender-carp-1efca5-mkl@pengutronix.de>
+ <CAOoeyxXw1x2HVXQYzxc1OuGimn7XPfCjj-aB=jAAfw733b_9OQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="c65ffbddv2wxsgu3"
 Content-Disposition: inline
-In-Reply-To: <Z-SBITmMfwjocYwL@kspp>
+In-Reply-To: <CAOoeyxXw1x2HVXQYzxc1OuGimn7XPfCjj-aB=jAAfw733b_9OQ@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
 
-On Wed, Mar 26, 2025 at 04:35:13PM -0600, Gustavo A. R. Silva wrote:
-> -Wflex-array-member-not-at-end was introduced in GCC-14, and we are
-> getting ready to enable it, globally.
-> 
-> Use the `DEFINE_RAW_FLEX()` helper for an on-stack definition of
-> a flexible structure where the size of the flexible-array member
-> is known at compile-time, and refactor the rest of the code,
-> accordingly.
-> 
-> So, with these changes, fix the following warning:
-> 
-> rivers/watchdog/cros_ec_wdt.c:29:40: warning: structure containing a flexible array member is not at the end of another structure [-Wflex-array-member-not-at-end]
- ^
- d truncated.
 
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+--c65ffbddv2wxsgu3
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
+MIME-Version: 1.0
 
-With minor comments,
-Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
+On 27.03.2025 13:38:22, Ming Yu wrote:
+> Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2025=E5=B9=B43=E6=9C=882=
+7=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=881:41=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+> >
+> > > > > > > +     priv->can.clock.freq =3D can_clk;
+> > > > > > > +     priv->can.bittiming_const =3D &nct6694_can_bittiming_no=
+minal_const;
+> > > > > > > +     priv->can.data_bittiming_const =3D &nct6694_can_bittimi=
+ng_data_const;
+> > > > > > > +     priv->can.do_set_mode =3D nct6694_can_set_mode;
+> > > > > > > +     priv->can.do_get_berr_counter =3D nct6694_can_get_berr_=
+counter;
+> > > > > > > +     priv->can.ctrlmode_supported =3D CAN_CTRLMODE_LOOPBACK |
+> > > > > > > +             CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_BERR_REP=
+ORTING |
+> > > > > > > +             CAN_CTRLMODE_FD | CAN_CTRLMODE_FD_NON_ISO;
+> > > > > >
+> > > > > > Does your device run in CAN-FD mode all the time? If so, please=
+ use
+> > > > > > can_set_static_ctrlmode() to set it after priv->can.ctrlmode_su=
+pported
+> > > > > > and remove CAN_CTRLMODE_FD from ctrlmode_supported.
+> > > > > >
+> > > > >
+> > > > > Our device is designed to allow users to dynamically switch betwe=
+en
+> > > > > Classical CAN and CAN-FD mode via ip link set ... fd on/off.
+> > > > > Therefore, CAN_CTRLMODE_FD needs to remain in ctrlmode_supported,=
+ and
+> > > > > can_set_static_ctrlmode() is not suitable in this case.
+> > > > > Please let me know if you have any concerns about this approach.
+> > > >
+> > > > Where do you evaluate if the user has configured CAN_CTRLMODE_FD or=
+ not?
+> > > >
+> > >
+> > > Sorry, I was previously confused about our device's control mode. I
+> > > will use can_set_static_ctrlmode() to set CAN_FD mode in the next
+> > > patch.
+> >
+> > Does your device support CAN-CC only mode? Does your device support to
+> > switch between CAN-CC only and CAN-FD mode?
+> >
+>=20
+> Our device supports both CAN-CC and CAN-FD mode.
 
-> +	DEFINE_RAW_FLEX(struct cros_ec_command, buf, data,
-> +			sizeof(union cros_ec_wdt_data));
+This doesn't answer my question:
 
-s/buf/msg/g makes much sense.
+Does your device support CAN-CC only mode?
 
-> +	((union cros_ec_wdt_data *)buf->data)->req = arg->req;
+Marc
 
-Or,
-*(struct ec_params_hang_detect *)buf->data = arg->req;
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
-> -	arg->resp = buf.data.resp;
-> +	arg->resp = ((union cros_ec_wdt_data *)buf->data)->resp;
+--c65ffbddv2wxsgu3
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Or,
-arg->resp = *(struct ec_response_hang_detect *)buf->data;
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmfk+OIACgkQDHRl3/mQ
+kZyShwf/SEuLYWxNwEXPQAFmu0xkYcX51A4Mbmaf6/13N46iS6PA0obpQq4+AO3C
+b9PQ/S6ksgL4cA7wqXcakT/lI4Q8EAhieKHkpCD63j3S82fGjVACaE+USZLhDdWV
+Dv3+2yePBKFkyBQuI0LPTq0isnXsbZ2UPF/mA9amECwxoyUTFTGYLyjN5KfyLppD
+UNPdQWoRXLadDDSKKQGLVD58oUO1QYaWoY/ZdTZg3EnLFLJEccmkG1+gxCuhOenM
+GwjIagbJVdODncOGVoFPLa5diYu68IVwaKWPEomFwIzxi53uQKLHtGvtLTfa2pwf
+5SH3X1oM60OqPxr+EKluuxWTRgN9kg==
+=ctjr
+-----END PGP SIGNATURE-----
+
+--c65ffbddv2wxsgu3--
 
