@@ -1,137 +1,163 @@
-Return-Path: <linux-watchdog+bounces-3168-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3169-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05F13A74616
-	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Mar 2025 10:12:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD685A74D91
+	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Mar 2025 16:16:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 07D52171E17
-	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Mar 2025 09:12:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 87EAD189D1AE
+	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Mar 2025 15:16:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D98652135CE;
-	Fri, 28 Mar 2025 09:11:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DACD11CC89D;
+	Fri, 28 Mar 2025 15:15:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MaCBo4c5"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CD062135A5
-	for <linux-watchdog@vger.kernel.org>; Fri, 28 Mar 2025 09:11:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01E1C14D70E
+	for <linux-watchdog@vger.kernel.org>; Fri, 28 Mar 2025 15:15:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743153119; cv=none; b=CS7m3CXtjA5lQqpbOGl2Ufka+8PPdv2uTTMUa1RtcTjxlMI0qyVcE6zm8VbuQHk+YOFDF80Ix8OyJnKd6Om/ZblUkD7cdRVtIzZ/wjcJydlHQEmHq8IQP42nAO9+PaPWhMHVkqd0YVMVFwGIAIlp+uXrT8dodTIq1zSbP1Wht5w=
+	t=1743174955; cv=none; b=elI0A0kRLnmgtdI3TQMi49esUnhgHe0Qo49HosXSdF0FEJeID2Ukef+TIKpUpXNJLTmQUApLZcDFFV3EyuLia0xll5ntb1BhLUFps+cljLyAlvIU1Wwp4lUEBUwp/xk1z5vhJ/ws4N52BS24ZlHCt48dNxlfflkwbQGVXU/h5N8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743153119; c=relaxed/simple;
-	bh=pbIVsVcuNi+0DDbMVyNw26SOB82vpubAP8F0r7NBXg8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I9UrCMF+45OSqUjo6wGlbyxiwIIUvMOTpzzIJSK8Or/JLex2djWvruKMdibBKW5yc4uglaZoJ4gbz6C9i5XD8+a7ck1kSzp9qM8K9enfTP+1p1/uzhiDcmoiEjEz51J4frjA9eZmLtCM7DB6FjsA3u+bnYkl/a5eFou/WX42JuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1ty5kJ-0005uZ-G0; Fri, 28 Mar 2025 10:11:23 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1ty5kG-0024gm-2N;
-	Fri, 28 Mar 2025 10:11:20 +0100
-Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 5804A3E86D3;
-	Fri, 28 Mar 2025 09:11:20 +0000 (UTC)
-Date: Fri, 28 Mar 2025 10:11:19 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
-	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
-Message-ID: <20250328-gentle-dangerous-raptor-2b66fa-mkl@pengutronix.de>
-References: <20250227-spicy-grebe-of-dignity-68c847-mkl@pengutronix.de>
- <CAOoeyxWSsy0Q0Y7iJE8-DZM5Yvcdto8mncFkM8X4BvVMEgfUiQ@mail.gmail.com>
- <20250317-cuttlefish-of-simple-champagne-ee666c-mkl@pengutronix.de>
- <CAOoeyxXSC3rjeB0g5BtHKvKy-Y9Dszd5X9WuHeBeH1bk39d_Eg@mail.gmail.com>
- <20250326-inventive-lavender-carp-1efca5-mkl@pengutronix.de>
- <CAOoeyxXw1x2HVXQYzxc1OuGimn7XPfCjj-aB=jAAfw733b_9OQ@mail.gmail.com>
- <20250327-awesome-mutant-cuscus-0f0314-mkl@pengutronix.de>
- <CAOoeyxWa5sB+YS6W=oG7xUeizXxigkdw3b=7w9aGftCWzWsw2A@mail.gmail.com>
- <20250328-smart-thundering-asp-2536b0-mkl@pengutronix.de>
- <CAOoeyxWy7n32iD03sr+8jPwf5OpHaCe_itkRnzOQK8GC32A9+A@mail.gmail.com>
+	s=arc-20240116; t=1743174955; c=relaxed/simple;
+	bh=UTt732wJ9n8PLRvrT1PCargeNlx14cqXwsCi/u96O9I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gBxlbA9ERg5ebHxc/Vp/JrZ+lCRpxA7crTsqEvPaiTZSbwueyk8ax9aCTyiaIIUXQWFucWySKxNCsbP2iSzAGCGfUjJgu5/10/j35Wyv2PotKsayIXBQDqtl3tClOTxAYl5W7+WCZ8FvF2+BH59fDGoUdcWGnWRsHqDqTqTElzg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MaCBo4c5; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-43948021a45so22828935e9.1
+        for <linux-watchdog@vger.kernel.org>; Fri, 28 Mar 2025 08:15:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1743174952; x=1743779752; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7iMl7ipkwOPC7e3j6qlBN0GX/yfrn6BNcMk907xgyr8=;
+        b=MaCBo4c5bpLNWOhHg33JD5CmlPvocBrCHyHxaXQ+UFz4WUfg/D+tAWB2MZA3RiV1RG
+         CZw/KaKhdJS3gd1XrD/y3ndUGqn8TfRQ7W/ufqf4++m68XqztpsS9ez7d+f4BQZOJDXj
+         z7kMnKwxHcQchlMuwfilcn+Yr3ENGFjPGsC9BbX8y1ACJGAxcNpBBTJkQLHRNmaUlwet
+         23Wrwt1B8mdlM8ZO9NkgWUNuRfnr47b6tP8Rr+5Won1xfZggQDAFJ4M7N487GNCnkIEC
+         IoC17ZLukahqT2OHqMEITw1WSk+jHwLXN8YoRa3q/7/DLM/8OPthJltJ+lVW2akY8Hhl
+         Hj6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743174952; x=1743779752;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7iMl7ipkwOPC7e3j6qlBN0GX/yfrn6BNcMk907xgyr8=;
+        b=wE99JbwIWNzMYAZ1RhANKVoNUM4mf55SWJZjsM1pKLg4Hi8JdYykLu+z+wUceZqNIe
+         b2jr3uVObhH5O1bhu0VMTsIKuiJp+G4Lf8uWVRA0G5YRPpo5atjRVESnEazM7qY5Rquj
+         fbPxVxdUPe4Fvn4FR16pukGICilx0S3LfuI0Y1PWvgME8Nng+jeltp1J2jCuh7JA+HmY
+         NOkb808fphAcCFzvxL/P9BsrgZ5Mtr01GL76GNuUk72p1ndeYuFbaA6bmWYqweWFmvGR
+         RXwzS3xCYOkmvGAgvE5It9BgXNdYfwUzI6WhLFZSI1ZkUvWmy2WGEZRFBbGzaxV6ohD1
+         OJdA==
+X-Forwarded-Encrypted: i=1; AJvYcCUVzGavw3Xb6ISZP6Z0oAAOezzhmWYOkTeWXhlqWMD4b/JWcCMKaetd1P2dqr/KMeh0pXvWF11yd6aj0jutWw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHPnthpv9zKF9R0CLMEvtAWfeE1EE/ODPVjVCWcKmrz+lNl5qw
+	ELmznXgSOjR1knIxHZPrW7dCyR1HB9VcmVR7WiobZxOZmoE8oYB7K4sQtb0qasw=
+X-Gm-Gg: ASbGncvwe/Z6514SexMPFlys/G2b3DQFLwlklUOVakRnWm6NAZYSNzyBsr4wz4Enh8E
+	0DyQhMNL4KF9Ot3AYTRMUF3eN+YmYXTCBhr1rvTo55hSnWelnGpkyBxrXES2fE2bILIHiOZK+qQ
+	AaMRvnbJGkuZUFt2apE5KUHpzIHme89Vp9CZbMYD1tVSiLKHNSg64pU2EVIctPiHY0ahbqbQ1hB
+	V4sUs/NC2wsY0E9XwCph/Sx7CqDL9p2hhV2FQ8ZjojO0XGW9qyzkom0aX0mZvT4PnCNmwQy+3pu
+	w+PC/2RosC9mHMvSuWWjemnzR3fqejvWSrxZZfjzjQGYtNioWUA8O47wZo8eRfK55EiWkpc=
+X-Google-Smtp-Source: AGHT+IGrvdqns/KyfFdg9NaFSTKqJeDUYv3jAEEnoDUOD84kdMdf7zIggJoC/R5v670HU7RhL5LOHw==
+X-Received: by 2002:a7b:cbd8:0:b0:43c:f5fe:5c26 with SMTP id 5b1f17b1804b1-43d866d3e2dmr60639945e9.4.1743174952199;
+        Fri, 28 Mar 2025 08:15:52 -0700 (PDT)
+Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d830f5b41sm75979335e9.27.2025.03.28.08.15.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Mar 2025 08:15:51 -0700 (PDT)
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+To: wim@linux-watchdog.org
+Cc: linux@roeck-us.net,
+	linux-watchdog@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	daniel.lezcano@linaro.org,
+	S32@nxp.com,
+	Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>,
+	Thomas Fossati <thomas.fossati@linaro.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
+Subject: [PATCH 1/2] dt-bindings: watchdog: Add NXP Software Watchdog Timer
+Date: Fri, 28 Mar 2025 16:15:13 +0100
+Message-ID: <20250328151516.2219971-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="tzr33nw7euhn5lwq"
-Content-Disposition: inline
-In-Reply-To: <CAOoeyxWy7n32iD03sr+8jPwf5OpHaCe_itkRnzOQK8GC32A9+A@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 
+Describe the Software Watchdog Timer available on the S32G platforms.
 
---tzr33nw7euhn5lwq
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
-MIME-Version: 1.0
+Cc: Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>
+Cc: Thomas Fossati <thomas.fossati@linaro.org>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ .../bindings/watchdog/nxp,s32g-wdt.yaml       | 46 +++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/nxp,s32g-wdt.yaml
 
-On 28.03.2025 16:57:46, Ming Yu wrote:
-> > > > Does your device support CAN-CC only mode?
-> > >
-> > > It can dynamically switch between CAN-CC and CAN-FD mode when
-> > > trasmitting or receiving, depending on whether the nct6694_can_frame
-> > > passs the flag with NCT6694_CAN_FRAME_FLAG_FD.
-> >
-> > Ok, but what about the receive path? Does the device support CAN-CC only
-> > mode? Will it throw an error, if it receives a CAN-FD frame?
->=20
-> No, it can receive both CAN-CC and CAN-FD frames, if the hardware
-> receives a CAN-FD frame, the firmware will set the
-> NCT6694_CAN_FRAME_FLAG_FD flag.
+diff --git a/Documentation/devicetree/bindings/watchdog/nxp,s32g-wdt.yaml b/Documentation/devicetree/bindings/watchdog/nxp,s32g-wdt.yaml
+new file mode 100644
+index 000000000000..06ead743d5c1
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/nxp,s32g-wdt.yaml
+@@ -0,0 +1,46 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/nxp,s32g-wdt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: NXP Software Watchdog Timer
++
++maintainers:
++  - Daniel Lezcano <daniel.lezcano@kernel.org>
++
++description:
++  The System Timer Module supports commonly required system and
++  application software timing functions. STM includes a 32-bit
++  count-up timer and four 32-bit compare channels with a separate
++  interrupt source for each channel. The timer is driven by the STM
++
++allOf:
++  - $ref: watchdog.yaml#
++
++properties:
++  compatible:
++    enum:
++      - nxp,s32g-wdt
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - clocks
++
++additionalProperties: false
++
++examples:
++  - |
++    watchdog@0x40100000 {
++        compatible = "nxp,s32g-wdt";
++        reg = <0x40100000 0x1000>;
++        clocks = <&clks 0x3a>;
++        timeout-sec = <10>;
++    };
+-- 
+2.43.0
 
-Ok, then set the CAN-FD ctrl mode static.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---tzr33nw7euhn5lwq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmfmZ7UACgkQDHRl3/mQ
-kZwYtQf/c7cT0KfIOS3YnlbxRmDPcKbxtcH25rhCTmL7CvrAnktrR9i0DzB+7vkt
-BwE/PZmyu3XSHeCbvfd/Di0Zddu9NxXyFTe32yXpA3s7uV0UFwWEyi7y20ZT19aL
-r5PeInCTNFIQG88kHekGt/bAO+afweWxvb+iphZpcLZj3PGQlE24S0SSgUqo0tHZ
-oqTgFKC4v/YvEV2qmLQ5966R+L/7cKSRf5QlJfQl/v0pfk+IJ+QuhQhcG4YjQOVQ
-NFBM2ncTGmQWGFeKqJiB5IuvhInT2DukqwaChLbEaqhPFS9PmRvb+YXGxTnd4b4H
-Iob/zMnIE/RmFXwHANoSF/2Sely55Q==
-=2tPP
------END PGP SIGNATURE-----
-
---tzr33nw7euhn5lwq--
 
