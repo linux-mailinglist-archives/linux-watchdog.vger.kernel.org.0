@@ -1,80 +1,48 @@
-Return-Path: <linux-watchdog+bounces-3185-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3186-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1AF1A776BF
-	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Apr 2025 10:46:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82A80A77EB2
+	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Apr 2025 17:16:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8BE34169DB1
-	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Apr 2025 08:46:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC34C3A5F13
+	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Apr 2025 15:16:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 293531E9B35;
-	Tue,  1 Apr 2025 08:46:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE5FB20ADF0;
+	Tue,  1 Apr 2025 15:16:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kQeWFFMi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qEHxD/jE"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D23F1D5176
-	for <linux-watchdog@vger.kernel.org>; Tue,  1 Apr 2025 08:46:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D5951EB9F3;
+	Tue,  1 Apr 2025 15:16:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743497184; cv=none; b=Ny3jkGRWU/yAVjSK/ZPvQ5QOVCnaXsJM1OTdqKQFUKbUW+irUkvgQYBJhOhJLrx+Jy+4jMzlTlEr/3OXVsrAM9aGwQazJdGvkfmm2bUQouYv5yFqc+AeE3hBnnk9J1uQpNE/x/djhqCz/lCkhATgM/1QBmE3yGfMuawVM9A+Du4=
+	t=1743520580; cv=none; b=t3uzOw6EA1nhjqxlz7BYem8hO/Sn7j9Gk1jlufS/515BdJvpeOPSKNv/jCznw065CvglT5nqYdQiNSmxz8M5DQ/KczMp6e6OHO/RcK7wboBnVVgBsY7jGo/clwCgMBc/+Lzfm/AL85+LnFIgCDIvs6aN7arkPYEFioSQo3jE+Z0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743497184; c=relaxed/simple;
-	bh=Eceui0TVVx2rDkmcA8Cj1isv6eadBCZ/Qq9koYryIFs=;
+	s=arc-20240116; t=1743520580; c=relaxed/simple;
+	bh=jfC3tqKIz3LeHJC4ONTwz3P1JxkbCPRmxXY3x7/hqMY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZZESjKmZ4qP1H6rXrhNyG/OBJqak0O2gvoSKq4WKBKJlohdngYXllOT2TliBtQoFzRjfYH2+i7HnPgo2KZLHvV/dwyMM+CD2RTloZN8CwzldXTnuY7FNR17QiMOYMiR9ave6JwJufELXVt24uKhZhaTMWIWvcvb6jJfliUvfq+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kQeWFFMi; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-39c266c1389so143261f8f.1
-        for <linux-watchdog@vger.kernel.org>; Tue, 01 Apr 2025 01:46:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1743497180; x=1744101980; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=h1OcP8KDLM4UIUl5mqjKNbP+KOXXApDs25FTbj9zEoI=;
-        b=kQeWFFMiMQ0Sph6Tj7CQ5FpWvtPDqT3E1OOLjVm7vsvT2rLSaZM+0+1nx85xofWRp8
-         5yTyDvPOLB1d97fRMrscO+0XhuD4+C9O1DIkayRE+phyujPEbmAW2dmMdo3RY+Azz6zE
-         U51kZo8ngmtjLwWf+5g67+HLD9zoCFeIOm8DXjXj0QwE9oIppzVBJT5x+3iFg+IV/c1T
-         deeVYZnPaKSOqj/eWbQevfEDn4CLqUndPw7OE8yhm/KZIOloFQnlRAJotRacSuLtyU1n
-         ctzMbniHNtiDuSEzFBzI52YO/k6O7Szneo0VNIWiP9box/ktD72MKVQ9QgbA2OZ65Ibc
-         rNlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743497180; x=1744101980;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=h1OcP8KDLM4UIUl5mqjKNbP+KOXXApDs25FTbj9zEoI=;
-        b=T0zqFab6DsN5e53uL181uhSBRY0KTd+YEpT79lIgDpT154PdPiObZA6cZpOJaLnLR0
-         YlN2P8nxR16OEiGTxEPtyqw4LIxqKDzZbGHadfqBx7kTP0cw88Vp4vOz562FZx+dZpdx
-         zqumn2ku57Cm6hca88+WOTjyZQ4wNO7XkYIWucA80bjda+uWsWqSA+HAzX8ibg2JjtpU
-         ZGoFoAihQHh0aRjdAE9h3YssfV9S1tIFpuBcsiWyr3OPjy+mUKAahesTkqLCE6GTwg5m
-         J7JFV0jIv9OHLXF6BWWa8x0yC3QHQO3RIfjsTlMx4OY5hw9BdaMw6JNZIYRFAfSTQbHD
-         un3g==
-X-Forwarded-Encrypted: i=1; AJvYcCXvRxy6N6IE7jqEYFrF31RTiMYoOaPIP6iG6NR8tefv1pE7PLv2bK4f/MGIj7v7/udqM1kJvFjAULhDLM492w==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz93jbHXBzDoUlPEpQdoHgJfknhuD819inaZDbqEyvHOenbPx0g
-	I92Peu90inhPA4hkvFjtG6Iw1FOj7yhtpBTyigMJaRyurfm9wFXvdb8KjhcTYwY=
-X-Gm-Gg: ASbGncuXeZKK2+LUNLzauc1zRuh9LEEHNQdQFgXpymcXg7ucldWPJxLQnT+RtbP4OCc
-	6/dJO/4v7UDGuoiXMphpWIk0vmgqhgGBiA8Hx2l3SoiVBU51MbQcE3oovgAPGuT2HOpqkjsuNEs
-	ld1Su0YGD12dN5urDiDLrM89hlcRQxluhZbNQzFjLnuvnSrj4AxNrj/9LGoogS+aFuQlVxWBHq6
-	UdzY2srjUUnQCu5vrE7adyDYnMFnnILmFDJaAF5nnS7EqfVLO+3Al+NZa4llSTfz3Hbun8Z8me+
-	KyKwzLRZUg+ZIUG71Kilkf6nFSO166dag0PO2C0QamX4UwcJB3WErXI6kQRiEyitN0OQtNLHX9R
-	frELtjGhsC5jVLXW13Ng=
-X-Google-Smtp-Source: AGHT+IG6UQfLzzABD8iS83hdAejooKKRJG1thikhxbGDPDbzft10tjn9XKnzJSrWol6GxnExTBubfQ==
-X-Received: by 2002:a05:6000:4282:b0:390:f738:246b with SMTP id ffacd0b85a97d-39c120dc8bamr9918539f8f.15.1743497180629;
-        Tue, 01 Apr 2025 01:46:20 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-43d900013afsm149321615e9.36.2025.04.01.01.46.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Apr 2025 01:46:20 -0700 (PDT)
-Message-ID: <16a0832a-7645-44ee-867f-fde8822f219c@linaro.org>
-Date: Tue, 1 Apr 2025 10:46:19 +0200
+	 In-Reply-To:Content-Type; b=MAixSYMU1I6msTrF1UJmVb+Kqwp8LOKM1VHZ68wHxbUWQIsOg3L/1MptGp9AhnMoe6yL/emc1cdOu/chbqz81Ykd/+A9PkSxhS6jJzUVF14iPRQ7RL74u9DITAkbrz+vEPfXxZWQJM46A8B9H4yowKNp8x2ZCRyjGFWWFxq8ae0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qEHxD/jE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2C41C4CEE5;
+	Tue,  1 Apr 2025 15:16:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743520576;
+	bh=jfC3tqKIz3LeHJC4ONTwz3P1JxkbCPRmxXY3x7/hqMY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=qEHxD/jEeI8uxbbiZqRBSFKNqvIkf/9WuEFV09uMnhpDWKLnDf0cuT9oshVUSGsFR
+	 tsH03ck1ODmCdDR8nmuDU2bSJrjlAO75udgAQy002tCe2jIaxldFS07H/l2pDRgKDY
+	 QlYht3hJW34lzDxSpCD7uoQgt8nHKyazijkZ7bboSBvOFuJ3HrIq9Ans2bKJsysH79
+	 7ipOFZSp0Xq51vgJGkJn60OduYkce5zT62FNoSZ7zJ3UwELUKB1XfGnQ4tRxga6O95
+	 d0ogsUMkr67HxvBebots2DTRN0gBrvdcHyySPT7GHDglyW2MLP7HhP8GbrsVh8xk+E
+	 KmQ1mkXjUSMYg==
+Message-ID: <bd2acf53-de9f-42d9-a671-a67930c7be64@kernel.org>
+Date: Tue, 1 Apr 2025 17:16:10 +0200
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -84,7 +52,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 1/2] dt-bindings: watchdog: Add NXP Software Watchdog
  Timer
-To: Krzysztof Kozlowski <krzk@kernel.org>, wim@linux-watchdog.org
+To: Daniel Lezcano <daniel.lezcano@linaro.org>, wim@linux-watchdog.org
 Cc: linux@roeck-us.net, linux-watchdog@vger.kernel.org,
  linux-kernel@vger.kernel.org, S32@nxp.com,
  Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>,
@@ -97,80 +65,86 @@ References: <20250328151516.2219971-1-daniel.lezcano@linaro.org>
  <c433c28d-c88d-4647-b472-7bc81b332d8c@kernel.org>
  <0638eb8c-d87f-44aa-9f1c-eee529b1e1a1@linaro.org>
  <b14718f2-add3-436d-95a5-908eb9217120@kernel.org>
+ <16a0832a-7645-44ee-867f-fde8822f219c@linaro.org>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <b14718f2-add3-436d-95a5-908eb9217120@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <16a0832a-7645-44ee-867f-fde8822f219c@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 31/03/2025 13:42, Krzysztof Kozlowski wrote:
-> On 31/03/2025 09:57, Daniel Lezcano wrote:
->> On 29/03/2025 06:04, Krzysztof Kozlowski wrote:
->>> On 28/03/2025 16:15, Daniel Lezcano wrote:
->>>> +description:
->>>> +  The System Timer Module supports commonly required system and
->>>> +  application software timing functions. STM includes a 32-bit
->>>> +  count-up timer and four 32-bit compare channels with a separate
->>>> +  interrupt source for each channel. The timer is driven by the STM
->>>> +
->>>> +allOf:
->>>> +  - $ref: watchdog.yaml#
->>>> +
->>>> +properties:
->>>> +  compatible:
->>>> +    enum:
->>>> +      - nxp,s32g-wdt
->>> This wasn't tested, so limited review - this also has wrong compatible,
->>> There is no such soc as s32g in the kernel. If that's a new soc, come
->>> with proper top-level bindings and some explanation, because I am sure
->>> previously we talked with NXP that this is not s32g but something else.
->>
->> If I refer to Documentation/devicetree/bindings/arm/fsl.yaml
->>
->> We found the entries:
->>
->>         - description: S32G2 based Boards
->>           items:
->>             - enum:
->>                 - nxp,s32g274a-evb
->>                 - nxp,s32g274a-rdb2
->>             - const: nxp,s32g2
->>
->>         - description: S32G3 based Boards
->>           items:
->>             - enum:
->>                 - nxp,s32g399a-rdb3
->>             - const: nxp,s32g3
->>
->> I guess it should nxp,s32g2-wdt and nxp,s32g3-wdt
->>
-> Yes, with one being the fallback.
+On 01/04/2025 10:46, Daniel Lezcano wrote:
+>> Yes, with one being the fallback.
+> 
+> Like that ?
+> 
+> properties:
+>    compatible:
+>      oneOf:
+>        - const: nxp,s32g2-wdt
+>        - items:
+>            - const: nxp,s32g3-wdt
+>            - const: nxp,s32g2-wdt
 
-Like that ?
+Yes
 
-properties:
-   compatible:
-     oneOf:
-       - const: nxp,s32g2-wdt
-       - items:
-           - const: nxp,s32g3-wdt
-           - const: nxp,s32g2-wdt
+> 
+> Why a fallback is needed for this case ? It is exactly the same hardware 
+> for s32g2 and s32g3. Could it be:
 
-Why a fallback is needed for this case ? It is exactly the same hardware 
-for s32g2 and s32g3. Could it be:
+Fallback is needed because it is exactly the same hardware.
 
-properties:
-   compatible:
-     oneOf:
-       - const: nxp,s32g2-wdt
-       - const: nxp,s32g3-wdt
+> 
+> properties:
+>    compatible:
+>      oneOf:
+>        - const: nxp,s32g2-wdt
+>        - const: nxp,s32g3-wdt
 
-?
+This tells hardware is different.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Best regards,
+Krzysztof
 
