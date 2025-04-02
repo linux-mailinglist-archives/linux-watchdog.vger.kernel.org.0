@@ -1,150 +1,79 @@
-Return-Path: <linux-watchdog+bounces-3186-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3187-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82A80A77EB2
-	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Apr 2025 17:16:24 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B33AEA785F6
+	for <lists+linux-watchdog@lfdr.de>; Wed,  2 Apr 2025 03:01:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC34C3A5F13
-	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Apr 2025 15:16:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5F95C7A2819
+	for <lists+linux-watchdog@lfdr.de>; Wed,  2 Apr 2025 01:00:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE5FB20ADF0;
-	Tue,  1 Apr 2025 15:16:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0711517D2;
+	Wed,  2 Apr 2025 01:01:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qEHxD/jE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YjRx6Kwh"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D5951EB9F3;
-	Tue,  1 Apr 2025 15:16:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4C5A1401C;
+	Wed,  2 Apr 2025 01:01:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743520580; cv=none; b=t3uzOw6EA1nhjqxlz7BYem8hO/Sn7j9Gk1jlufS/515BdJvpeOPSKNv/jCznw065CvglT5nqYdQiNSmxz8M5DQ/KczMp6e6OHO/RcK7wboBnVVgBsY7jGo/clwCgMBc/+Lzfm/AL85+LnFIgCDIvs6aN7arkPYEFioSQo3jE+Z0=
+	t=1743555705; cv=none; b=lZ3PV7WveEQdphwpVPdCgMsAu1Lu7EuDSi1qfgy4olM4GiNR7yDjWdhnQqFyTV+DI3zv1EAeT+FbhiZpXoI1D3UKdxzqkvQd1O3e03hdnvv4Cgx6x4JUtRuhRQtf+vrD23jfaKQAFvGMGSd+fUqesnYds1M/mSdxE25wZQmeJP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743520580; c=relaxed/simple;
-	bh=jfC3tqKIz3LeHJC4ONTwz3P1JxkbCPRmxXY3x7/hqMY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MAixSYMU1I6msTrF1UJmVb+Kqwp8LOKM1VHZ68wHxbUWQIsOg3L/1MptGp9AhnMoe6yL/emc1cdOu/chbqz81Ykd/+A9PkSxhS6jJzUVF14iPRQ7RL74u9DITAkbrz+vEPfXxZWQJM46A8B9H4yowKNp8x2ZCRyjGFWWFxq8ae0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qEHxD/jE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2C41C4CEE5;
-	Tue,  1 Apr 2025 15:16:12 +0000 (UTC)
+	s=arc-20240116; t=1743555705; c=relaxed/simple;
+	bh=wDCZw1/rEUjbtEQ/buyMxMxErOO0Q0YsJqCv0Ge5jYM=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=By8dyUd/90Uy4LC9FOd4JQpzK8RKD0yyuoq46vE/sINrOdNbbzmTafjbTKtovFn5+J5/0sIwUPC0LqwwDZrYrZP/d2SU/kvFVwPlzpNxxV2IBEDFF48KEK/rktPbLbgXLat6tZaAIFo+CBCRjkf8WUKBLUWoAhuChjPjldbF1ig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YjRx6Kwh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34880C4CEE4;
+	Wed,  2 Apr 2025 01:01:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743520576;
-	bh=jfC3tqKIz3LeHJC4ONTwz3P1JxkbCPRmxXY3x7/hqMY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=qEHxD/jEeI8uxbbiZqRBSFKNqvIkf/9WuEFV09uMnhpDWKLnDf0cuT9oshVUSGsFR
-	 tsH03ck1ODmCdDR8nmuDU2bSJrjlAO75udgAQy002tCe2jIaxldFS07H/l2pDRgKDY
-	 QlYht3hJW34lzDxSpCD7uoQgt8nHKyazijkZ7bboSBvOFuJ3HrIq9Ans2bKJsysH79
-	 7ipOFZSp0Xq51vgJGkJn60OduYkce5zT62FNoSZ7zJ3UwELUKB1XfGnQ4tRxga6O95
-	 d0ogsUMkr67HxvBebots2DTRN0gBrvdcHyySPT7GHDglyW2MLP7HhP8GbrsVh8xk+E
-	 KmQ1mkXjUSMYg==
-Message-ID: <bd2acf53-de9f-42d9-a671-a67930c7be64@kernel.org>
-Date: Tue, 1 Apr 2025 17:16:10 +0200
+	s=k20201202; t=1743555705;
+	bh=wDCZw1/rEUjbtEQ/buyMxMxErOO0Q0YsJqCv0Ge5jYM=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=YjRx6KwhMq0WvIk47ELpWjpyOF1k/WF0Z1g//3elteg0GhYK4m2QI8B0v4GxKojlY
+	 Y5InPKdI+J5H2bLHcmJYutQPMFIJQZsW3FHrpuux9fh5QYi1dupxUaL74Yd1h1RoqW
+	 BWJNomE3ZsVNUrm0WU5jKXlvXQO9vspR6liQ9yVpujOi04gkQ4c+dy8ivDkgsoBiEK
+	 cosX+T09MI2AyVeysrnf8O1mHhhcnmwjcW3LEftDgSnus5CjpQqNhDbm0Iwt0voCJF
+	 tZMCfcecUjDiJYLF1pWbBFKXWxe0m3qUB0ZqJmAbsMEOcAtj+GWfCE6Brjdi7aKHyC
+	 qWvABy6+yx85w==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33E09380AAFA;
+	Wed,  2 Apr 2025 01:02:23 +0000 (UTC)
+Subject: Re: [GIT PULL REQUEST] watchdog - v6.15 release cycle.
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20250330101333.GA18497@www.linux-watchdog.org>
+References: <20250330101333.GA18497@www.linux-watchdog.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20250330101333.GA18497@www.linux-watchdog.org>
+X-PR-Tracked-Remote: git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.15-rc1
+X-PR-Tracked-Commit-Id: 9bc64d338b0b4b2061049df8b701f9786857690e
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 696c45bcc3c35486578fd741d8551865aee42915
+Message-Id: <174355574186.978371.6976728017778504251.pr-tracker-bot@kernel.org>
+Date: Wed, 02 Apr 2025 01:02:21 +0000
+To: Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>, LKML <linux-kernel@vger.kernel.org>, Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>, Guenter Roeck <linux@roeck-us.net>, Andre Przywara <andre.przywara@arm.com>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Arnd Bergmann <arnd@arndb.de>, Biju Das <biju.das.jz@bp.renesas.com>, Chen Ni <nichen@iscas.ac.cn>, Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>, Frank Li <Frank.Li@nxp.com>, Kyunghwan Seo <khwan.seo@samsung.com>, Mark Pearson <mpearson-lenovo@squebb.ca>, Stephen Boyd <swboyd@chromium.org>, Stephen Rothwell <sfr@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: watchdog: Add NXP Software Watchdog
- Timer
-To: Daniel Lezcano <daniel.lezcano@linaro.org>, wim@linux-watchdog.org
-Cc: linux@roeck-us.net, linux-watchdog@vger.kernel.org,
- linux-kernel@vger.kernel.org, S32@nxp.com,
- Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>,
- Thomas Fossati <thomas.fossati@linaro.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>,
- "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
- <devicetree@vger.kernel.org>
-References: <20250328151516.2219971-1-daniel.lezcano@linaro.org>
- <c433c28d-c88d-4647-b472-7bc81b332d8c@kernel.org>
- <0638eb8c-d87f-44aa-9f1c-eee529b1e1a1@linaro.org>
- <b14718f2-add3-436d-95a5-908eb9217120@kernel.org>
- <16a0832a-7645-44ee-867f-fde8822f219c@linaro.org>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <16a0832a-7645-44ee-867f-fde8822f219c@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 01/04/2025 10:46, Daniel Lezcano wrote:
->> Yes, with one being the fallback.
-> 
-> Like that ?
-> 
-> properties:
->    compatible:
->      oneOf:
->        - const: nxp,s32g2-wdt
->        - items:
->            - const: nxp,s32g3-wdt
->            - const: nxp,s32g2-wdt
+The pull request you sent on Sun, 30 Mar 2025 12:13:33 +0200:
 
-Yes
+> git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.15-rc1
 
-> 
-> Why a fallback is needed for this case ? It is exactly the same hardware 
-> for s32g2 and s32g3. Could it be:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/696c45bcc3c35486578fd741d8551865aee42915
 
-Fallback is needed because it is exactly the same hardware.
+Thank you!
 
-> 
-> properties:
->    compatible:
->      oneOf:
->        - const: nxp,s32g2-wdt
->        - const: nxp,s32g3-wdt
-
-This tells hardware is different.
-
-Best regards,
-Krzysztof
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
