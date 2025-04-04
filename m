@@ -1,82 +1,79 @@
-Return-Path: <linux-watchdog+bounces-3202-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3203-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1513BA7BCF1
-	for <lists+linux-watchdog@lfdr.de>; Fri,  4 Apr 2025 14:50:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6119A7BD10
+	for <lists+linux-watchdog@lfdr.de>; Fri,  4 Apr 2025 14:57:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79AD13B6EE1
-	for <lists+linux-watchdog@lfdr.de>; Fri,  4 Apr 2025 12:49:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 24B3F1887796
+	for <lists+linux-watchdog@lfdr.de>; Fri,  4 Apr 2025 12:58:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 960151DF993;
-	Fri,  4 Apr 2025 12:49:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F23AF1E5B74;
+	Fri,  4 Apr 2025 12:57:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bp3xg1ls"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yAfx2nMM"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB94319CCFC;
-	Fri,  4 Apr 2025 12:49:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1693D1E1DF7
+	for <linux-watchdog@vger.kernel.org>; Fri,  4 Apr 2025 12:57:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743770996; cv=none; b=Tp46gaVhXL4JuPNayjQGo7TagWfbz7QGR4oV/6MfUeutg+bGQD/ny0tM5ydvAVD8waDVoBnEqumtNB5UhrEUCdNHmCvoT4ftgqA0FrxhB1AKpzFyLxK3snQdSgtNC0pBD5C90Mgy7MSZUYUX0EjHEih3vfkP7eUH85nT24BRoqo=
+	t=1743771470; cv=none; b=S6xIzKxcI+ZZaeVuVX9zu9EhCqfHH9TQr7zGBkS7YSGqUrHndNtFQdAPErKATFZn7NGc4pIA0PuEJMacvuV0bt3QKN7kzuKBekeGMPO+5bOWhoTF2LeBW1EWLGEL/Q+LQZN97kpcV0cnm4nZ7QnHBtUKS2zPTdcRiuDDCMXGrL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743770996; c=relaxed/simple;
-	bh=U4sU0OfCwuPLDopYA4CBD9cOeGPYVZFQOcuGXNOAwj0=;
+	s=arc-20240116; t=1743771470; c=relaxed/simple;
+	bh=8d80S9evksG67Dfqh6qMD9RM1vPLOK9S9RAuXVlxw3s=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=uCUrt36k/GgscGROGIa7qI9+o8vml7SOFWw9DNSYS0j9tiO5WXrJ7tZVw6G9edOEyPomJK0tTFDISJHGVcslhQWe56C1GA9GXaWgaoWMUJfqNKGRTMKZs5w8suBhhckmcNuYaEXNXmmmz2qtT6F7DhEt2DbECaemyN80UOM/ifI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bp3xg1ls; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-225df540edcso35064045ad.0;
-        Fri, 04 Apr 2025 05:49:53 -0700 (PDT)
+	 In-Reply-To:Content-Type; b=Kj7YWxFrBrqOXb4Cszi+yx9zV53wyqUCC4bituBL4cv9yUi8cdDPok6Y8amAKZfjYJB8g549sr6/KSFPZpvBCQuO1zYeJ37oa8AVnbbaGykmR3fZnXwSirnGTwf64asdcFmy0yDZfsqDU77GI6yEBLIM/LJxqZ9fEPi1G3+cz20=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yAfx2nMM; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43d0953d3e1so1713385e9.2
+        for <linux-watchdog@vger.kernel.org>; Fri, 04 Apr 2025 05:57:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743770993; x=1744375793; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=cTWRSZfYwp28ZApkbGn5bu5uVaaW7j6ekfDrYEF68Is=;
-        b=Bp3xg1lsAale8EkmEiUTLezfI/obnVPHDx2NwmC1yOKO/eOl6whh/MHTd/9Gf16yW5
-         YT6D+eNSdcch+EPgLZ0m4n4++FBFllOxCtXj3wsoh6bUq2o5Cpvdb2uq4OnWfvCXBwcI
-         KkJxfchHH/hsHl7aGcAv7Tgtex+6bK8ECzTA+xhmuXtDMPuo5QhbfrPgll4RgIg7zyc7
-         GXbsnZEwTKUsONCafsFyAa7zdhuOimKm0pqCXV+WNltgCBS7YeCXsf5twHH/bB98TDf4
-         dKy9Nau8bYsI4T9FVuffby4IJ9B46n71VZWNGONWpP0TqXY656F4tWsSYcVhhz27h6NH
-         yp4A==
+        d=linaro.org; s=google; t=1743771467; x=1744376267; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AP9s0rZpAv3GmSnbWi7Q2FkIgLBgF7bZd+YrGo3Mnq8=;
+        b=yAfx2nMMRJofEWeqHdKM5IQ8QHOQNjqBvtZtaUvKxQa53lP/N9BNMO+TT77IEb8mZB
+         89btRc6uR+fgzq224aApy0ZAorsdXH/jZV6he1dIWY8SIJfs3mob3RX0iA6VmFCvmTgX
+         rfPVKuLyqv+M+Ro1YkBi7D9OYkdT6HXoKXz2tFjde/mkv34jRYVD0+EjMDdcWGQlGeLj
+         BKvsuf3wflTNT0mwXJSW1Fo5L6eZ8ARq+OFMXH9lfRRusBoV4sQOiOFtjSpuxL1n2yFp
+         1TrAj4Ox2M8LGzOHItmH5nEbPqMkXZ6rszChAiczJqVZf0/OHly9u2vp9GjgcLuxvv4c
+         eQNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743770993; x=1744375793;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cTWRSZfYwp28ZApkbGn5bu5uVaaW7j6ekfDrYEF68Is=;
-        b=aiSwWsNpgs7L7O1a7by05kBexjyYrw73vNCnLroiKUmTVbsPBN9e337c68EOTewGcS
-         7951d/jP9p7H2O7qQqF/kqOmxCEOLv2SLC0jkExLdegJIb7nW6sA1hYEh1ylu9ZxPMbW
-         20tA7DEosvz004oTlzqFnelDsoA8nR9rqjfj2AwQsJxlehuSsLnHT2pRjAbmHe2RLObh
-         cvctCvEEwVZjGQ0TGUZLkOZ9/XlmgWH7+Z+mOfqW8+QVNe0V/w+HFdQVtVgORNeIgz3C
-         o88xA38ExpS2L+BDwmyhF+onRrONkJs+2+WEK72MnLVd5D+jrLsPJ9Mxn8LnLl4NQh4D
-         C1MA==
-X-Forwarded-Encrypted: i=1; AJvYcCVYnMaywHLLkY4jL5lQH7HYZJHtgYkKOolHyR5ZyTh2WNLjbvluO2hEQn6JyIp9pOCRKqOoQjkPrukGql4=@vger.kernel.org, AJvYcCVceZmHkzSnzofgTv32AXN/KG478R+rDVYSGdL8ULSW1ILX/PGgU9G8VTMlId352hbEcmmWkM4E0JiH4C55O4I=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyohi0P/mlc+CsT8+ncMVEEeUf6jPidVKxEEiF4OwgXShj6iYgg
-	N/Wy5nL1GfwYj/V9VdbfUy86pDp4tGsvDTtQoaKsfGqZI9hkVNytyi6TVQ==
-X-Gm-Gg: ASbGnctzNc3sCO+NfTOREiDz2ggMMWCg6rA9O8TFpZRtvT+dBbQ3cB1KkTJ8dobfWgU
-	ja9KO17UCzRDnDY3t8ICOvh2hAEF4kKCT7jxkILNnKZ27RwSJcoQs0WR9AQzY+5yZDRLMRxd0cy
-	pnjLGW8DgEKJHyDnPKYWo8LCubVMU1uAnFOMhYAoUCfd6dHpFVzxnXhmYCj0IQN2Lu7Tappazu7
-	7i/Ly8mZGdCQmg9qyQybdbsRAWNTaldOFIuBH8vUpr0lLRdCpj4bdGbZlZGokZO+xsrXop6nAcQ
-	3kJDV7UgglRBzI68DxYWl6DgP6Djkr8Eea5hxThFmv82tP9gnGXB6cneHOtqdtw8PHsMN7fecmQ
-	6fB2h5gsuBs5Avp/X4nzVM90tM2k6
-X-Google-Smtp-Source: AGHT+IEIvADKCPSHP5xmmR4+nmjxNuWZCLtL0MDHH7w8lvYb3VYm9gcbSL4/AHj4wdR0RvGXr3fOvQ==
-X-Received: by 2002:a17:903:1aa6:b0:221:1356:10c5 with SMTP id d9443c01a7336-229765bc866mr99356775ad.9.1743770992875;
-        Fri, 04 Apr 2025 05:49:52 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-739d97d1bfbsm3261314b3a.4.2025.04.04.05.49.51
+        d=1e100.net; s=20230601; t=1743771467; x=1744376267;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AP9s0rZpAv3GmSnbWi7Q2FkIgLBgF7bZd+YrGo3Mnq8=;
+        b=ALSlFEPWwSbff7pWYOTdr3IG2AcCWdfMQpymEsbRE3SMsSurRKHt0HvrtLfcz7I374
+         SNsOtxbmU+8VhUz2nGNKK9CnQWLjahtgGQ6oz/au71X1nIj7a3b7v9fftxd4zuW3ixWH
+         TVvpDCYDjwV2rSgPCVQzXukASSnX9knom9Dz9ovYLvvtStHGz3a6qm5A5754PkI83DeL
+         4rCd3lSynATiXH+6FGgUGn+Iq5TXM8m0SocIHxJGBTNlqU+VzjkPZy7CZHp5ky3Ll0ht
+         uwOndE43ng3ljaGGEUO2tMoljO2RwoIJbVudKwznL0980UsumsWebqAtrNMPDvRAUi6w
+         g+uw==
+X-Forwarded-Encrypted: i=1; AJvYcCWwbzEdq4b85ZxabhZR+BFba4/2S2E/iUKjY8Pxb6prlc31ee8jFVyPUgwTpcZi5EJhLlLtjFvE+rgja5sPlg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwlvSWnQG1vuk+qipCotA7R56mx/3JERnOzJRwlTh4XHYV8Ld0s
+	mUVOMqbMkX+zFHF4yShEVxOhZUrPgCx9ChFl97Hqy8lyYeyo0KBDV+qTZ7VxYF4=
+X-Gm-Gg: ASbGncu/vMzH8WA120wJwRR115l2rhvAvjj7c6jWh1aMxL3tGR1ivmWIlAm5CjtmEQJ
+	qIlFNz2m4QLskO5v6IiwNDw8N7Cd4pS1tG1SoAgGzXGM7aknOH/9VS9g43DUjVIupADtXHk3Syn
+	NWTgkskogvj1bNq/yo6QK+KvP0beFkBog/Lyv/4xDBJ0HZlodpjJusZWoFJ81td+llTnDGmphe9
+	fwrDOc/igxRCQTLMWoo2WxwNE/4o6D9CU/Mmn7VLfYt4FAwcAT10gRsJgzoiba0OrcSYBPRLaKT
+	q4g2uEVEgfzMGS3ym9EqJzE9adjyww+wsorf4s/xXUf7DBtry3ZGkUNsUbjQuaa6
+X-Google-Smtp-Source: AGHT+IEGvAJ8IDkmHjyNctnZpmcOgg3Hg98h2KB/LoYx9eflP5cjgD19BLtwKDgGETac5jcnMEP/PQ==
+X-Received: by 2002:a05:600c:5107:b0:43b:c844:a4ba with SMTP id 5b1f17b1804b1-43ecf85f893mr7864555e9.3.1743771467349;
+        Fri, 04 Apr 2025 05:57:47 -0700 (PDT)
+Received: from [192.168.1.106] ([178.197.198.86])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39c30226b17sm4345840f8f.92.2025.04.04.05.57.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Apr 2025 05:49:52 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8b6ede05-281a-4fb1-bcdc-457e6f2610ff@roeck-us.net>
-Date: Fri, 4 Apr 2025 05:49:50 -0700
+        Fri, 04 Apr 2025 05:57:46 -0700 (PDT)
+Message-ID: <4f69f618-bb9f-4269-9467-40c0eb3bc1b9@linaro.org>
+Date: Fri, 4 Apr 2025 14:57:45 +0200
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -85,105 +82,79 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] watchdog: Do not enable by default during compile testing
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+To: Guenter Roeck <linux@roeck-us.net>,
  Wim Van Sebroeck <wim@linux-watchdog.org>, linux-watchdog@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20250404123941.362620-1-krzysztof.kozlowski@linaro.org>
+ <8b6ede05-281a-4fb1-bcdc-457e6f2610ff@roeck-us.net>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20250404123941.362620-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <8b6ede05-281a-4fb1-bcdc-457e6f2610ff@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 4/4/25 05:39, Krzysztof Kozlowski wrote:
-> Enabling the compile test should not cause automatic enabling of all
-> drivers.
+On 04/04/2025 14:49, Guenter Roeck wrote:
+> On 4/4/25 05:39, Krzysztof Kozlowski wrote:
+>> Enabling the compile test should not cause automatic enabling of all
+>> drivers.
+>>
 > 
-
-Sorry, I seem to be missing something.
-
-Isn't that what COMPILE_TEST is all about, that it enables everything ?
-
-Guenter
-
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->   drivers/watchdog/Kconfig | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
+> Sorry, I seem to be missing something.
 > 
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index 0d8d37f712e8..1d29e5f4f40c 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -1001,7 +1001,7 @@ config STM32_WATCHDOG
->   	tristate "STM32 Independent WatchDoG (IWDG) support"
->   	depends on ARCH_STM32 || COMPILE_TEST
->   	select WATCHDOG_CORE
-> -	default y
-> +	default ARCH_STM32
->   	help
->   	  Say Y here to include support for the watchdog timer
->   	  in stm32 SoCs.
-> @@ -1869,7 +1869,7 @@ config OCTEON_WDT
->   config MARVELL_GTI_WDT
->   	tristate "Marvell GTI Watchdog driver"
->   	depends on ARCH_THUNDER || (COMPILE_TEST && 64BIT)
-> -	default y
-> +	default ARCH_THUNDER
->   	select WATCHDOG_CORE
->   	help
->   	  Marvell GTI hardware supports watchdog timer. First timeout
-> @@ -2035,7 +2035,7 @@ config 8xxx_WDT
->   config PIKA_WDT
->   	tristate "PIKA FPGA Watchdog"
->   	depends on WARP || (PPC64 && COMPILE_TEST)
-> -	default y
-> +	default WARP
->   	help
->   	  This enables the watchdog in the PIKA FPGA. Currently used on
->   	  the Warp platform.
+> Isn't that what COMPILE_TEST is all about, that it enables everything ?
 
+No. Compile test *allows* to compile test, but it does not mean you want
+immediately compile everything. allyesconfig is for everything. Maybe
+you want to compile some subset of drivers.
+
+BTW, I am aligning with the most frequent pattern (quickly judging), so
+of course I also accept argument that we should revert that other
+pattern and use "default y" everywhere.
+
+Best regards,
+Krzysztof
 
