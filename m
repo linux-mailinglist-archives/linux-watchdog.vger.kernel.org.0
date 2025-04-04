@@ -1,79 +1,80 @@
-Return-Path: <linux-watchdog+bounces-3203-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3204-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6119A7BD10
-	for <lists+linux-watchdog@lfdr.de>; Fri,  4 Apr 2025 14:57:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D318A7BD17
+	for <lists+linux-watchdog@lfdr.de>; Fri,  4 Apr 2025 15:00:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 24B3F1887796
-	for <lists+linux-watchdog@lfdr.de>; Fri,  4 Apr 2025 12:58:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C179179505
+	for <lists+linux-watchdog@lfdr.de>; Fri,  4 Apr 2025 12:59:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F23AF1E5B74;
-	Fri,  4 Apr 2025 12:57:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E95171DC1A7;
+	Fri,  4 Apr 2025 12:59:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yAfx2nMM"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BlGqni+A"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1693D1E1DF7
-	for <linux-watchdog@vger.kernel.org>; Fri,  4 Apr 2025 12:57:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 053ED1E7640
+	for <linux-watchdog@vger.kernel.org>; Fri,  4 Apr 2025 12:59:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743771470; cv=none; b=S6xIzKxcI+ZZaeVuVX9zu9EhCqfHH9TQr7zGBkS7YSGqUrHndNtFQdAPErKATFZn7NGc4pIA0PuEJMacvuV0bt3QKN7kzuKBekeGMPO+5bOWhoTF2LeBW1EWLGEL/Q+LQZN97kpcV0cnm4nZ7QnHBtUKS2zPTdcRiuDDCMXGrL0=
+	t=1743771571; cv=none; b=DMWDzgLJzUdq/LMpgMMzogj9tn4N80v3QLcM4x5p/ez66WIPnN6qN3XzdEu/PtLUgDJeYoT8JzR8+S4yipmfBBd1Sv81F7ItAhYC6/F9XNjWRUgSrO7zeyO6Xq157ZudRRXRQRQKWnNWfB42mN8b+YBppv9bk6XIHEkb9iL65mI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743771470; c=relaxed/simple;
-	bh=8d80S9evksG67Dfqh6qMD9RM1vPLOK9S9RAuXVlxw3s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=Kj7YWxFrBrqOXb4Cszi+yx9zV53wyqUCC4bituBL4cv9yUi8cdDPok6Y8amAKZfjYJB8g549sr6/KSFPZpvBCQuO1zYeJ37oa8AVnbbaGykmR3fZnXwSirnGTwf64asdcFmy0yDZfsqDU77GI6yEBLIM/LJxqZ9fEPi1G3+cz20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yAfx2nMM; arc=none smtp.client-ip=209.85.128.42
+	s=arc-20240116; t=1743771571; c=relaxed/simple;
+	bh=kE3NpLXcAhKDrouxuIdErti4eFQEij/aA0GPYtPCqXE=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:References:Cc:
+	 In-Reply-To:Content-Type; b=X0rNYTe5X4YMYIxVZ3ypAD8mtb+E6FzDDwKL7Peod0qccEdnpcE3V+QQSpCweUEwNmexi2PYopemHMBnmWQYiQFCSUcxU8YhbL0aAFuOQHftUNRJ98b6hM2BnYBtBCqlp4h/5jsidxbI721UNs1r8Wzs8bpGpt/GFkGNmsdL3TY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BlGqni+A; arc=none smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43d0953d3e1so1713385e9.2
-        for <linux-watchdog@vger.kernel.org>; Fri, 04 Apr 2025 05:57:48 -0700 (PDT)
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-43d16a01deaso1668415e9.2
+        for <linux-watchdog@vger.kernel.org>; Fri, 04 Apr 2025 05:59:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1743771467; x=1744376267; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AP9s0rZpAv3GmSnbWi7Q2FkIgLBgF7bZd+YrGo3Mnq8=;
-        b=yAfx2nMMRJofEWeqHdKM5IQ8QHOQNjqBvtZtaUvKxQa53lP/N9BNMO+TT77IEb8mZB
-         89btRc6uR+fgzq224aApy0ZAorsdXH/jZV6he1dIWY8SIJfs3mob3RX0iA6VmFCvmTgX
-         rfPVKuLyqv+M+Ro1YkBi7D9OYkdT6HXoKXz2tFjde/mkv34jRYVD0+EjMDdcWGQlGeLj
-         BKvsuf3wflTNT0mwXJSW1Fo5L6eZ8ARq+OFMXH9lfRRusBoV4sQOiOFtjSpuxL1n2yFp
-         1TrAj4Ox2M8LGzOHItmH5nEbPqMkXZ6rszChAiczJqVZf0/OHly9u2vp9GjgcLuxvv4c
-         eQNg==
+        d=linaro.org; s=google; t=1743771568; x=1744376368; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:cc:references:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=peai6JkVMYY7lakrEi3u+WbVvVIrypT8y/AorA5z5gY=;
+        b=BlGqni+ABKLxqad68cbFVELRRwBl/tdTPewxwDfBk8qWV5jm6zKZzbnL5RHJQeh1Ku
+         tDQYK2tDBOMNXvJOqPxO7TyFuHn1kxkBdwLBADIXzwBbTIlGdvKfZOE/FktdP2EU86Cn
+         ZPehG1v5DrzQ71KGy1LZmdTNu2jzHJfmp0hOXueXFAlaVeiD2gFiQ280ylXU2Vigiq3w
+         8sqjAIfXC/OzVPSf9H0Qzsg2oon5oLCShF3Hm5zd7c9w8G9x+DmxaGa+vAXOtGGwNnoI
+         kMl/vTylvi0Md48Qo4cOdaKr32SMSk3kSyhBeMykq9PskRG/vUD4OPpxTci6Ave23w8p
+         jwYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743771467; x=1744376267;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AP9s0rZpAv3GmSnbWi7Q2FkIgLBgF7bZd+YrGo3Mnq8=;
-        b=ALSlFEPWwSbff7pWYOTdr3IG2AcCWdfMQpymEsbRE3SMsSurRKHt0HvrtLfcz7I374
-         SNsOtxbmU+8VhUz2nGNKK9CnQWLjahtgGQ6oz/au71X1nIj7a3b7v9fftxd4zuW3ixWH
-         TVvpDCYDjwV2rSgPCVQzXukASSnX9knom9Dz9ovYLvvtStHGz3a6qm5A5754PkI83DeL
-         4rCd3lSynATiXH+6FGgUGn+Iq5TXM8m0SocIHxJGBTNlqU+VzjkPZy7CZHp5ky3Ll0ht
-         uwOndE43ng3ljaGGEUO2tMoljO2RwoIJbVudKwznL0980UsumsWebqAtrNMPDvRAUi6w
-         g+uw==
-X-Forwarded-Encrypted: i=1; AJvYcCWwbzEdq4b85ZxabhZR+BFba4/2S2E/iUKjY8Pxb6prlc31ee8jFVyPUgwTpcZi5EJhLlLtjFvE+rgja5sPlg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwlvSWnQG1vuk+qipCotA7R56mx/3JERnOzJRwlTh4XHYV8Ld0s
-	mUVOMqbMkX+zFHF4yShEVxOhZUrPgCx9ChFl97Hqy8lyYeyo0KBDV+qTZ7VxYF4=
-X-Gm-Gg: ASbGncu/vMzH8WA120wJwRR115l2rhvAvjj7c6jWh1aMxL3tGR1ivmWIlAm5CjtmEQJ
-	qIlFNz2m4QLskO5v6IiwNDw8N7Cd4pS1tG1SoAgGzXGM7aknOH/9VS9g43DUjVIupADtXHk3Syn
-	NWTgkskogvj1bNq/yo6QK+KvP0beFkBog/Lyv/4xDBJ0HZlodpjJusZWoFJ81td+llTnDGmphe9
-	fwrDOc/igxRCQTLMWoo2WxwNE/4o6D9CU/Mmn7VLfYt4FAwcAT10gRsJgzoiba0OrcSYBPRLaKT
-	q4g2uEVEgfzMGS3ym9EqJzE9adjyww+wsorf4s/xXUf7DBtry3ZGkUNsUbjQuaa6
-X-Google-Smtp-Source: AGHT+IEGvAJ8IDkmHjyNctnZpmcOgg3Hg98h2KB/LoYx9eflP5cjgD19BLtwKDgGETac5jcnMEP/PQ==
-X-Received: by 2002:a05:600c:5107:b0:43b:c844:a4ba with SMTP id 5b1f17b1804b1-43ecf85f893mr7864555e9.3.1743771467349;
-        Fri, 04 Apr 2025 05:57:47 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1743771568; x=1744376368;
+        h=content-transfer-encoding:in-reply-to:autocrypt:cc:references:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=peai6JkVMYY7lakrEi3u+WbVvVIrypT8y/AorA5z5gY=;
+        b=NUMnsycqgIQ90nKyAc3BhPLNjwz4tH33Bn2HCioGOjzn3p82vtv4Q2/iwkrtrjBNQl
+         Xj4gOvQFTaA+tkq0VWBlXLdPV3uWksiedGNyDS7Xlemq6sjjb78HOiNjiiJ0EoBeTqoj
+         fPGxMxIHWBsZPUC4hNwvBRkstQ0WLo4TARNYvUsmXG2l3FGGC4+zRqdQ2W5gT8ayjmn+
+         XJ69+E0s3sqEJfIRFVG8MdviYal9XEnOxtXYkU+F5yspGod/C/pUJwX9Jvb1YyF4bxAz
+         EcwqSwOMk61BfV0BJZPwrbRWBT1FCZC/MFqhpNz3RmDb0+nlnITJKyzx1QW3C3pV8XnD
+         y6/A==
+X-Forwarded-Encrypted: i=1; AJvYcCXe+kM56lKs0TdMMt/7hAcVxGCHZuZgcDuyQh86SUrWGYMr0YMF/VtLvUivqxUHhBUIVaqK1/zoToUAvKYx9g==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzw9Fzo1NrugqIAn++9EkwVGaLhcj4p1qEbG8pjP7AdRtoVdtoA
+	ZlpOMCt5u+8eAIX1lemKXOvU6M4lVdoSos4xDtTzBdz/69TMlwUTmKaF9CyM5UE=
+X-Gm-Gg: ASbGncvpnbgu3Eep950084FT0MyHGafVYzAN96xNIOFgaRW5o6XcJ2P0Ugl5S1cnp2F
+	fuVr0QlB7+wPzAiEsybKtfV8WI2DPIkn8OzG6zV77+O5ksdS9MjXDHHxo6+lBgNtJf2hiGkQcmH
+	koU5AK6Dea0A6phsgb23J+ctHkeOkxuJEpe7HrFZOLFRQX3YXeZHLXZ0wjZ08DNlavEyqwrZ8bL
+	NhZv9MiHZzT65EDikXyiIVfz51Lbr+hQy1V2tY6PiONSrf4zn/+6A/aMBI1oWmjX0vGJFivjXSR
+	G4BaNRSjcPzkfM/r4IaHciomLPV+h3ig/o0fLNsEOgS7gkCcW7q5D7CaNVAyHRVk
+X-Google-Smtp-Source: AGHT+IFf0uNr8Eq9ADXBjwgbRjZ/26sTKnwO661Ft4qDLwqkO93kLd+WI49vCdH3eGbScEIxGEd/BQ==
+X-Received: by 2002:a05:600c:3b17:b0:43d:745a:5a49 with SMTP id 5b1f17b1804b1-43ecf9c6102mr10187705e9.4.1743771568235;
+        Fri, 04 Apr 2025 05:59:28 -0700 (PDT)
 Received: from [192.168.1.106] ([178.197.198.86])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39c30226b17sm4345840f8f.92.2025.04.04.05.57.46
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43ec366aa29sm45466885e9.39.2025.04.04.05.59.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Apr 2025 05:57:46 -0700 (PDT)
-Message-ID: <4f69f618-bb9f-4269-9467-40c0eb3bc1b9@linaro.org>
-Date: Fri, 4 Apr 2025 14:57:45 +0200
+        Fri, 04 Apr 2025 05:59:27 -0700 (PDT)
+Message-ID: <05d96c93-f9a8-42ea-9c11-2d38a7dffff7@linaro.org>
+Date: Fri, 4 Apr 2025 14:59:26 +0200
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -82,13 +83,15 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] watchdog: Do not enable by default during compile testing
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: Guenter Roeck <linux@roeck-us.net>,
  Wim Van Sebroeck <wim@linux-watchdog.org>, linux-watchdog@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20250404123941.362620-1-krzysztof.kozlowski@linaro.org>
  <8b6ede05-281a-4fb1-bcdc-457e6f2610ff@roeck-us.net>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Language: en-US
+ <4f69f618-bb9f-4269-9467-40c0eb3bc1b9@linaro.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -133,27 +136,35 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <8b6ede05-281a-4fb1-bcdc-457e6f2610ff@roeck-us.net>
+In-Reply-To: <4f69f618-bb9f-4269-9467-40c0eb3bc1b9@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 04/04/2025 14:49, Guenter Roeck wrote:
-> On 4/4/25 05:39, Krzysztof Kozlowski wrote:
->> Enabling the compile test should not cause automatic enabling of all
->> drivers.
+On 04/04/2025 14:57, Krzysztof Kozlowski wrote:
+> On 04/04/2025 14:49, Guenter Roeck wrote:
+>> On 4/4/25 05:39, Krzysztof Kozlowski wrote:
+>>> Enabling the compile test should not cause automatic enabling of all
+>>> drivers.
+>>>
 >>
+>> Sorry, I seem to be missing something.
+>>
+>> Isn't that what COMPILE_TEST is all about, that it enables everything ?
 > 
-> Sorry, I seem to be missing something.
+> No. Compile test *allows* to compile test, but it does not mean you want
+> immediately compile everything. allyesconfig is for everything. Maybe
+> you want to compile some subset of drivers.
 > 
-> Isn't that what COMPILE_TEST is all about, that it enables everything ?
+> BTW, I am aligning with the most frequent pattern (quickly judging), so
+> of course I also accept argument that we should revert that other
+> pattern and use "default y" everywhere.
 
-No. Compile test *allows* to compile test, but it does not mean you want
-immediately compile everything. allyesconfig is for everything. Maybe
-you want to compile some subset of drivers.
++Cc Arnd,
 
-BTW, I am aligning with the most frequent pattern (quickly judging), so
-of course I also accept argument that we should revert that other
-pattern and use "default y" everywhere.
+I also dug out old recommendation from Arnd (so I am not making this
+stuff up):
+
+https://lore.kernel.org/lkml/CAK8P3a1TY+XT1vF=wAh0XA5BXU5Z6Ab1d4DekXbVsN9aj3aL5w@mail.gmail.com/
 
 Best regards,
 Krzysztof
