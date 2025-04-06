@@ -1,185 +1,156 @@
-Return-Path: <linux-watchdog+bounces-3211-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3212-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B46BA7D05B
-	for <lists+linux-watchdog@lfdr.de>; Sun,  6 Apr 2025 22:35:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46C06A7D0A0
+	for <lists+linux-watchdog@lfdr.de>; Sun,  6 Apr 2025 23:15:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 14D7F7A2B9C
-	for <lists+linux-watchdog@lfdr.de>; Sun,  6 Apr 2025 20:34:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 12BC8188CB22
+	for <lists+linux-watchdog@lfdr.de>; Sun,  6 Apr 2025 21:15:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E1741B3934;
-	Sun,  6 Apr 2025 20:35:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07F3D19F495;
+	Sun,  6 Apr 2025 21:15:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LmdZc6YK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="msLWya21"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96BE21AAE28
-	for <linux-watchdog@vger.kernel.org>; Sun,  6 Apr 2025 20:35:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BD39197A8E;
+	Sun,  6 Apr 2025 21:15:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743971741; cv=none; b=cbuA612q3560eYXvQ84+rTunuKb1t45v7cdN7s/IK3kp+OWe41fBZrcbqjJZZsUh/PXuyy00xqfumzqlhe62JkQhbY4izKqGof2cRqO6rs9xjkXYi6E2L6aHd5WAHExzdr/JAPEZhmQI6DJV/zLm1Qz9Nayps7H1Fph/4ZVwnak=
+	t=1743974108; cv=none; b=O47INyMKfM591W6bVRF6JTXYsWpDt9ELpoTsteipbDKs3PJ9np5hWCUcsddPnpxwOAq71KGWlRFrgKlZgQSnc5u/STIK22bhYvQ7inumMQf23mKOZtDrcsNv9fG/z127epVtM02DrbgN+70mtCJhegpIKOPOLdjYuHwdf7OrryA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743971741; c=relaxed/simple;
-	bh=uxBiam5DW4fuTxINZdCznl0HQyCEFQQbzh0ALsr6FA0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=a0C9QzxI80gbWZbw7ClTf891l5Sg+31MtVIwakpPPDohFOTSQVLNzgR/GUuu+52Aq8wXGTx1pxeQx79/xzlE38OmC0iZT4TvLmVVn16r66W02lH6aUVEbXZUsc44gljHjJfsCLwf1gFQjh4O6AW1eJlCk+1XSnNuh0rjZxs2buo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LmdZc6YK; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-39d73b97500so60917f8f.3
-        for <linux-watchdog@vger.kernel.org>; Sun, 06 Apr 2025 13:35:39 -0700 (PDT)
+	s=arc-20240116; t=1743974108; c=relaxed/simple;
+	bh=iKZJ9Fx4Q3W3fJUQFkOjj/0jyOHoWZGFXH1xtLgmQD4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=OU2TpQ7maAHBfUCDjuRCbsUTnGcUyUgUaVdSAZE3M8PQi6KYpRsf/yhNX/pvfMXsnaPLRe0r7ZarRKk2ccD4Tweh8nq5rTRrEdOgyLcRbTINaDxQNqpPti623LdKm6CzYXxMBe8ZeGvT8avhtSX0H2npUritbPuW7YEm05jVZtA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=msLWya21; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-736ee709c11so2956366b3a.1;
+        Sun, 06 Apr 2025 14:15:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1743971738; x=1744576538; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/Oni6Z/lHvJDm4dC2qfnAqvwTkcCLV7N0fQ4hIhJQyc=;
-        b=LmdZc6YKLWjjGvfDJFbbHiKFN6qSAL3CYaF0k3vCxV0eJfPzGfjoL+ytqWNzUyXaZi
-         DZ/l8woh48oBPO79bC/1faGiI81LCsDND2Hj589/Ce7EpFSFlBADVBguzJxUJV/hZe9j
-         cP4j+Zzfu7VaTuUc3OTYHZDxIXEr4hA9QFZyyPftW2YouTuJKmcJ+6XR89jgbxjKDS24
-         dxPYQ876x2W02KHb1Td6BK5axG15wbV1d2sTBlr8cLNHjzPTvlAWt3vKltgwh5RVd6RW
-         bhPN0xbaDpeA4LL4d8noujrsErmhqkvaBblm3a44uGRLxxW3j+0rCtBN9GwdawBNz9YB
-         GWQw==
+        d=gmail.com; s=20230601; t=1743974106; x=1744578906; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=zDleBR0jwFGhTNeC9UeCz4wwAyXYlgAVasnWCtF6ZzQ=;
+        b=msLWya218uN7LjWO2M829dz6z20gaNAeJ8L1RdWEXkkDK0t/5HDR3p+9cv2x/NTmLq
+         8bTxmt8BqdKWRJHGZAYnZspaHN/UHGVmP/oH9WTkAgC55uAvI8yzrY+/hcgWXep0co5R
+         FuDJBuV36LV93KPwX20Jq7MaIQBdULTAK1WuITXWpE0zCWNavYEHDl7rJPDiKCX4IUxS
+         z0F5PL429d7dWcVlrjyabr+WoLOKNCXd+J4DOyT65NlRCA13MrCwaZca+xq4RlgTiYiA
+         Ac3SzV8E0xf3cCuq1Vn1sep1kVWqUNETdJnr4+rH1hBlVqRsbcRaXlx9zgsavMU60t7J
+         DZKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743971738; x=1744576538;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/Oni6Z/lHvJDm4dC2qfnAqvwTkcCLV7N0fQ4hIhJQyc=;
-        b=vRLzsrFFmgpppLWkMIPWZCotu/C7VpKnBDxK8z+XzEdS7CULrRARY7dwFNWNyppqwj
-         kf/NxIoZD5YLAaSSwV8UhvrBkcfLl5PU1y1IWPacf039IVeD/NvYr2SyL707jqcQTfJO
-         6jh2ZinCT5v5a3u5q5L2GefsH5ADPRuxAabCMWzz+k2AGzwo7B+TqaVb6MRB3R4seZ0L
-         fY7kjyg7YrU4mQDuk9lahki9wCYLH4ksvb+iHXpb5wDjfZF2vxESwb+c2vRh33hGT5/G
-         aK16759uTcRFizL/fTqI+/xWlVeX215LJTiYD7bBbwpO+Y3BsHOkp1zfQy6p22GWn5ny
-         YGKQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUS9qFRRmHUQDm+tQo93AgpyN4pW+Iss77hFmV4mHNRMngGaEo0Uy05vpSt4aOh7ZT2nCdofQnvxAcaLxbhjA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHF4UzyfcxBi2kumVTBxjkfrONGuv6g35VUOp9dgGuZK0dnFQn
-	1E+fuIZmQ/GT2mVTFSSwdNkfklVdxPHIkrqZIqogxZbidu5R2+KHOHeUBFgok1A=
-X-Gm-Gg: ASbGncsqhwezR9zyTT/O8rkWy7HlIPZNIxUOoM2ZMc6S3AWSWmgxH2LfpDIhUB0VYJ0
-	Bg1PViJ3YwqlBuJU20ycUW0ax5ghd14Nw1KCJ6LDSuT2pdIQMEEL6i3l6e8iKsGP2V8J6pUx+Ab
-	VugD29N0ingo49TKG4SY5NhPXpRAjRqfQhNds5t3PqSDFGNcubeV0wIvUOgSGIsseyz2YF0nXHd
-	+FuxeeQrLnnylPiBi9B+JtfIMvytwHZwF2QhvK7DuCQSdmz4i07MdZOSUNonFTNeB49CWVcn7lB
-	ikFsd2hwAZ0Vn3XiBP3yYw5P4Y7i5yDwGa1kY/wAz550Rhpz/AN/Hw==
-X-Google-Smtp-Source: AGHT+IFdkV0qo7M6MnBRCoiFVbhYiS1XD9xft1NUY735rauYmXbOkSn8HVSEp3wFfmum1Z3fJ/qIqQ==
-X-Received: by 2002:a5d:59ac:0:b0:391:2a9a:47a6 with SMTP id ffacd0b85a97d-39cb3595265mr3095383f8f.4.1743971737746;
-        Sun, 06 Apr 2025 13:35:37 -0700 (PDT)
-Received: from shite.. ([178.197.198.86])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39d7c6d838bsm38022f8f.69.2025.04.06.13.35.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Apr 2025 13:35:36 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	linux-watchdog@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/2] watchdog: Correct kerneldoc warnings
-Date: Sun,  6 Apr 2025 22:35:31 +0200
-Message-ID: <20250406203531.61322-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20250406203531.61322-1-krzysztof.kozlowski@linaro.org>
-References: <20250406203531.61322-1-krzysztof.kozlowski@linaro.org>
+        d=1e100.net; s=20230601; t=1743974106; x=1744578906;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zDleBR0jwFGhTNeC9UeCz4wwAyXYlgAVasnWCtF6ZzQ=;
+        b=WlCr61WaA9zwX4mc93HR34Kns47ADe10/njbKlCns4IBnV68Mmg3sf2f7XJE8RYVnw
+         JxDGBDG28cIHEZH43pZpPyxb7uFI15lGv4o21XPAXb+v7lkVLWGZuiolEUe43JeCy0rY
+         tZa1ufJ0W2QCvpmcE6Nk/PUs+vLlYI/PuUCINzlFj+KvIKp1hwDBeUIv6gWWW8FbAqs6
+         LqI7U2/G/hEpZtv9ESpHZUzt8jKSb6AmNSie3zbY0Sxoff3h/1/3/XzbkkYlJcP3zcrl
+         PqRLcB1WUaL0zRVwueVyrlOmiZVqyJ5WRy7ZR/7e//ZJDOBJy99bI/2Oq7uvptAUqmx8
+         8VcA==
+X-Forwarded-Encrypted: i=1; AJvYcCU/C0OC8GOoB8+lfAxCcVK38Vlz3lm1CKtpxVBHE30QW/E6r+FeMT8OmZn6kGAnTQX8o6IAq1cCb8Yl65ZkBrs=@vger.kernel.org, AJvYcCVNUlrxVqXnn+AIBhqvJPk7XvxyxzLRartbUQT8ElXzUVA1x0Guf9gCOne70vrh0tg6EnmPDqXo0PjZezA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwR7l9GyBLndTmIFgNPBrfMMofrcsFJ7kbQp6b7BOWChGyJ0VpP
+	B4veePjLYwDGZoeEqeWneMrMmNEi59Ilfydm5ZA1C97Eo+EeH4u2
+X-Gm-Gg: ASbGncvewrtg5Fy5pFXQyFIGxgxrh5vZrWMDEsc1YetCdxSMWHNZpLPsBMTi3QjFJR0
+	1Bn94GFFPk3ZhNgNxQyqMUZizLjQM/p48PXvFxnJSqXKof35Tko+//yK8S4j/ty3qGfkfLU5J6l
+	d55Nowx/YBmv2wdTv86fFSlhj8/i+M7fOXNao3N3WhQ+Gt70d3MlLx32KT4FhSTI37WtN5zyAvB
+	DCFX8lQRLWRn6uFCj/OUxsS5Zh4bqOU9eVTVVuZyCBgpfDwPEAXzMUf6cz44WQ6YZjI6xxcJ9/+
+	rqfsMHPqLgOege3v+ar3e4QmHx2b8wWIiI1mKQR3/XhLnE5e5fsRZ2SqeZP21zd02AFq4Y6pDOQ
+	nxmf5fb8MvsXo1oRZfw==
+X-Google-Smtp-Source: AGHT+IFQ8QWvvd1ZviCya2MeIjl1ablt6V+jxnurJmhA/g3jhsv/TE0Na/5We5Jj9KIVyelIFaeiUA==
+X-Received: by 2002:a05:6a21:9211:b0:1f5:7873:3053 with SMTP id adf61e73a8af0-20108187d17mr15484006637.29.1743974106291;
+        Sun, 06 Apr 2025 14:15:06 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-739d9ea080esm7286630b3a.108.2025.04.06.14.15.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 06 Apr 2025 14:15:05 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <c3c22904-d684-4294-99d6-a83f53545934@roeck-us.net>
+Date: Sun, 6 Apr 2025 14:15:04 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] watchdog: Correct kerneldoc warnings
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org
+References: <20250406203531.61322-1-krzysztof.kozlowski@linaro.org>
+ <20250406203531.61322-2-krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20250406203531.61322-2-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Correct kerneldoc syntax or drop kerneldoc entirely for function
-comments not being kerneldoc to fix warnings like:
+On 4/6/25 13:35, Krzysztof Kozlowski wrote:
+> Correct kerneldoc syntax or drop kerneldoc entirely for function
+> comments not being kerneldoc to fix warnings like:
+> 
+>    pretimeout_noop.c:19: warning: Function parameter or struct member 'wdd' not described in 'pretimeout_noop'
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-  pretimeout_noop.c:19: warning: Function parameter or struct member 'wdd' not described in 'pretimeout_noop'
-
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/watchdog/pcwd_usb.c         | 6 +++---
- drivers/watchdog/pretimeout_noop.c  | 2 +-
- drivers/watchdog/pretimeout_panic.c | 2 +-
- drivers/watchdog/wdt_pci.c          | 2 +-
- 4 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/watchdog/pcwd_usb.c b/drivers/watchdog/pcwd_usb.c
-index 132699e2f247..b636650b714b 100644
---- a/drivers/watchdog/pcwd_usb.c
-+++ b/drivers/watchdog/pcwd_usb.c
-@@ -579,7 +579,7 @@ static struct notifier_block usb_pcwd_notifier = {
- 	.notifier_call =	usb_pcwd_notify_sys,
- };
- 
--/**
-+/*
-  *	usb_pcwd_delete
-  */
- static inline void usb_pcwd_delete(struct usb_pcwd_private *usb_pcwd)
-@@ -590,7 +590,7 @@ static inline void usb_pcwd_delete(struct usb_pcwd_private *usb_pcwd)
- 	kfree(usb_pcwd);
- }
- 
--/**
-+/*
-  *	usb_pcwd_probe
-  *
-  *	Called by the usb core when a new device is connected that it thinks
-@@ -758,7 +758,7 @@ static int usb_pcwd_probe(struct usb_interface *interface,
- }
- 
- 
--/**
-+/*
-  *	usb_pcwd_disconnect
-  *
-  *	Called by the usb core when the device is removed from the system.
-diff --git a/drivers/watchdog/pretimeout_noop.c b/drivers/watchdog/pretimeout_noop.c
-index 4799551dd784..74ec02b9ffca 100644
---- a/drivers/watchdog/pretimeout_noop.c
-+++ b/drivers/watchdog/pretimeout_noop.c
-@@ -11,7 +11,7 @@
- 
- /**
-  * pretimeout_noop - No operation on watchdog pretimeout event
-- * @wdd - watchdog_device
-+ * @wdd: watchdog_device
-  *
-  * This function prints a message about pretimeout to kernel log.
-  */
-diff --git a/drivers/watchdog/pretimeout_panic.c b/drivers/watchdog/pretimeout_panic.c
-index 2cc3c41d2be5..8c3ac674dc45 100644
---- a/drivers/watchdog/pretimeout_panic.c
-+++ b/drivers/watchdog/pretimeout_panic.c
-@@ -11,7 +11,7 @@
- 
- /**
-  * pretimeout_panic - Panic on watchdog pretimeout event
-- * @wdd - watchdog_device
-+ * @wdd: watchdog_device
-  *
-  * Panic, watchdog has not been fed till pretimeout event.
-  */
-diff --git a/drivers/watchdog/wdt_pci.c b/drivers/watchdog/wdt_pci.c
-index dc5f29560e9b..3918a600f2a0 100644
---- a/drivers/watchdog/wdt_pci.c
-+++ b/drivers/watchdog/wdt_pci.c
-@@ -264,7 +264,7 @@ static int wdtpci_get_status(int *status)
- 	return 0;
- }
- 
--/**
-+/*
-  *	wdtpci_get_temperature:
-  *
-  *	Reports the temperature in degrees Fahrenheit. The API is in
--- 
-2.45.2
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 
