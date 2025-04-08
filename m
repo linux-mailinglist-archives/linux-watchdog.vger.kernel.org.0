@@ -1,241 +1,438 @@
-Return-Path: <linux-watchdog+bounces-3242-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3243-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9854DA80929
-	for <lists+linux-watchdog@lfdr.de>; Tue,  8 Apr 2025 14:51:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BD7CA80BEF
+	for <lists+linux-watchdog@lfdr.de>; Tue,  8 Apr 2025 15:23:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E4B008C0B29
-	for <lists+linux-watchdog@lfdr.de>; Tue,  8 Apr 2025 12:35:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 50AAE8C747C
+	for <lists+linux-watchdog@lfdr.de>; Tue,  8 Apr 2025 13:06:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D46126A1D8;
-	Tue,  8 Apr 2025 12:33:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4585B279343;
+	Tue,  8 Apr 2025 12:55:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MsF2bOyM"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ZBWIuaTx"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACA3A1AAA32;
-	Tue,  8 Apr 2025 12:33:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 977BB26E17E;
+	Tue,  8 Apr 2025 12:55:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744115597; cv=none; b=qXFOyh1rD8qCED9YH7dkjzUDuOenO3Icw4Tu9PR1Bk9OifHwZre3vu4BEm3Cqr8FlIB3zjf8qANTOhmgeGfEl6eft4f9CL+oVtp+hvBrPp4rIIEqz29VFbuk+a7DsHZIlNbsQ90DEkliKcgbZFXO8vom357cfPny4JEI7N91wqo=
+	t=1744116905; cv=none; b=q1aqeeEulPEJEZDvCuGW8B2De2REf075kmGFI/b+tt0OPZgUb8nagsOdODjYvZxQEvzGgRpdWBvI+kz02Egwul9zbLYvrUuS3cHPX1iz0q66UHea/sHaiHUPrkyoCWE0pIeD+lB9jrzOzemxvA050AVuYCvze7J4JeMh6pAd3pk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744115597; c=relaxed/simple;
-	bh=wUf1I3G91DtSOH9aKzGyhBVYA1gBjDZ6llSyIbkY0WM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NY13HZkgREab1RB8BvE/upT95E44XvtFKxB41uDEdhu6//DUvHqz3ypbbEGxRES8Uzb0bt7AxtO7XPBzXP/XgE23SQk9Tm3xFNcHvO9kx5/+HxpxV5fUbnHiXoUHWdORdmzSKEIXiwxxaFBXHjLRhgvZG1df7QZ0b3ZslQ5vUxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MsF2bOyM; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-225477548e1so50773905ad.0;
-        Tue, 08 Apr 2025 05:33:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744115595; x=1744720395; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=/nF9UHsTjavBiIQDEA/vItUfmoGpLwv3vVUwf7BNWYQ=;
-        b=MsF2bOyMVnryeZ8VMGVewJpYt4OOEgE+OCWaL166Y9V5NkZMUnT+vHk/tr09z10maV
-         y5jyuYKY+amOw1HZZISq5bvJi0KrPIFKgk1F+7tPIvhPvp36+O3cr/dOi5XD4/IPHBOl
-         Itm96wjtxUkGcnUmct/6kT/F5nmDGYd04A9LxM57IGBEcs3/50JHtP+8p00euVomXg6m
-         R+tgJiNhiAKulX6sH7sEG3jdY8sQkqc4xT8uJJnLocJ1VC7DKvhel+cJvrm1/+zxoxPG
-         Mzq9p2/9NHXacl54IU7uURRZiutrylbD7QKaaUw3LJqRl8yUP4B5QKpzjLg1TYq7v8zl
-         HpCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744115595; x=1744720395;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/nF9UHsTjavBiIQDEA/vItUfmoGpLwv3vVUwf7BNWYQ=;
-        b=Yhnq4mHVIul4TDxxIEgANu9JoGJ1v3n+ODFMi8HNUEnjozBCkDOQqIAhensJ93wMd7
-         /LVbAKG3psqSHS+DyAJ0FA55p/M9OBnzoSQbCEfyHeYkVuyTyT4k0fZOuMpesSjHLX1Z
-         E8YexVCQ1Th1RUaOiBa657HM0Q9Zcl8X9GOjb2zJzMogipO8fGUXQtRj+/pthh4t+mYL
-         uxgP7mF9nLk2YQr/Mk3yRFbkiBtHYxdZcTI69tjGsIEdEW0Zt2mJ+B0kti0Kl1GTpnbv
-         b4LL+COw0rxkTbakNpR0lKzpN3TYukAVH6cb3sqIJZ3OIht2P+17Nx2CaBAVBWjF3wey
-         9Xxw==
-X-Forwarded-Encrypted: i=1; AJvYcCUecZJkfWhyO2EDp4iPPwNnd81RQ0w4+8snCQ7ghVtr93k/tSOiCPY5QIMlTkpDpUyGlXDuoKh57Xcd@vger.kernel.org, AJvYcCV5Y/5w16DEBYT2WdZUghmwDU8+2MzQkNcITCdpA/czS9e+Dky7zb6X3O5E8yF3m3bLI9PdC1mmXZ5v5DdR@vger.kernel.org, AJvYcCVxN2iHtLBX1TheRZFoaKWvW4fiLAKU470YWGW9RsFI/2VgAK+hNHij4Wm9QldB90hoKkRi0abIK/sKw/JQN0Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZX0qRMJQIcXMwbsMm+Xw6qvfvnCk3ZZBBOZmuLA+FCtTFQdSz
-	76E1uIhffgcZRGm8nK1GtnF8Eg9C/OBgYxex6IRjiu9aYpKv0oFe
-X-Gm-Gg: ASbGncv16I0q91+PAJo2XOJ/qBMqoIXoyK0XdULOboaUArSvu9lq3EXb1cTE5wMzBcH
-	qqkaQPOJWmKLPZJ0vpbkN5MZGr5c8PJy0EYGl+S1uzF80uim404x9kGMMXDF6LgP+4JKa1Jj8zQ
-	TwahZuhGla5EVETosI2tY3QMchAr71S2v6XnAYGsRjyWIsENJnzDxUDTPBK+o+ocaadkHireDKp
-	gnvdwYN5MjUBkBRPw9ZPfzocs1E3YRRbeeIyKJFi+odh0GHMexRmMXW/5kVNa0cs5z+XctjxQqP
-	s6d12XxA7lIAdIEaTJpCygzplgtJJgQwM+WY/DGWQrRvtg9UFJLrEi+KOK9qquLMV7eodtlii8A
-	e6c6xfLs6JFIBx2G+jA==
-X-Google-Smtp-Source: AGHT+IFPKxw0kQu5TDkKvHbyIFUGFcpYxBGmNw870k+hopqQQs5wQGQiZg50KgRRxbLhvgP+K93CBw==
-X-Received: by 2002:a17:903:1a10:b0:224:216e:3342 with SMTP id d9443c01a7336-22a8a8e3d97mr225074215ad.43.1744115594771;
-        Tue, 08 Apr 2025 05:33:14 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22978771c07sm98918465ad.212.2025.04.08.05.33.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Apr 2025 05:33:14 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e02e7431-2e30-4e65-b04b-15fbb0bcd8d0@roeck-us.net>
-Date: Tue, 8 Apr 2025 05:33:12 -0700
+	s=arc-20240116; t=1744116905; c=relaxed/simple;
+	bh=/84ukSlCVaOyj+Jg4UCVZk1Hls0iBIuUxNCWa0HsDQI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bJ6WFS5NBmusucHCAEWt1pc5sYACQE8vLoWKV5Hix0LNJlQqt3UvGXAPaCorPkE3V/6kRXJ3Wmxwe1CTy4KYcQrhfdu5hyG1oz48AomrLuerVqbmvoBtn56VP1Gc3f5TibfUSaAQ2kNCX8cE0ipJ8tmKnLF/Arwl+s3YhsuYODs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ZBWIuaTx; arc=none smtp.client-ip=217.70.183.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DCFC120485;
+	Tue,  8 Apr 2025 12:54:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1744116899;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=K0LjqMnTVjmlsCDb+4rrav94UGGwyJeS3mNIumqCmLs=;
+	b=ZBWIuaTxNHYAlnYPBN/QSnNOE/ucCKdlNJuNyuU4LD0xh1Dhv9Ur53+gyshzttYupvmBdy
+	+XJU0tpDVJThn5trNuwjOE2ysO+kAHWSMkKkLxIVd+FWI1zwMkPepeGFB99aM0yGFwwCi1
+	1INIpfHmsLiukhi/uFsE/CEtuXHa8PZqRHqruhyU8AjL/c9JN8WUw/ZYA8iYUBthXtCodJ
+	Y8DEz4jAg3RwTmjtNiMp0StWnIfW56h3a6AHyF6u2XyzrO2jhg9WdeFWHTwaDUGFbIQbHd
+	0T1YLHRZ7+UT2B4Aw8Xs+b3RCROvmWPRR/MnZ7S5vzNUiKXRPzcRpfuFOAF3Ig==
+Date: Tue, 8 Apr 2025 14:54:56 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org,
+	brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
+	jdelvare@suse.com, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org, netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v7 7/7] rtc: Add Nuvoton NCT6694 RTC support
+Message-ID: <202504081254567e7facbc@mail.local>
+References: <20250207074502.1055111-1-a0282524688@gmail.com>
+ <20250207074502.1055111-8-a0282524688@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 5/6] watchdog: qcom-wdt: add support to read the
- restart reason from IMEM
-To: Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>,
- Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
-References: <20250408-wdt_reset_reason-v1-0-e6ec30c2c926@oss.qualcomm.com>
- <20250408-wdt_reset_reason-v1-5-e6ec30c2c926@oss.qualcomm.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20250408-wdt_reset_reason-v1-5-e6ec30c2c926@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250207074502.1055111-8-a0282524688@gmail.com>
+X-GND-State: clean
+X-GND-Score: 0
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtdefudefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecunecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehlvgigrghnughrvgcuuegvlhhlohhnihcuoegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeegieduueethefhkeegjeevfefhiedujeeuhffgleejgfejgeekueejuefgheeggfenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgdugeemheehieemjegrtddtmegrugdtfeemgehflegtmeeffeejfhemfheffegunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdugeemheehieemjegrtddtmegrugdtfeemgehflegtmeeffeejfhemfheffegupdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvhedprhgtphhtthhopegrtddvkedvhedvgeeikeeksehgmhgrihhlrdgtohhmpdhrtghpthhtohepthhmhihutdesnhhuvhhothhonhdrtghomhdprhgtphhtthhopehlvggvsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnu
+ hhsrdifrghllhgvihhjsehlihhnrghrohdrohhrghdprhgtphhtthhopegsrhhglhessghguggvvhdrphhlpdhrtghpthhtoheprghnughirdhshhihthhisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmkhhlsehpvghnghhuthhrohhnihigrdguvgdprhgtphhtthhopehmrghilhhhohhlrdhvihhntggvnhhtseifrghnrgguohhordhfrh
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On 4/8/25 01:49, Kathiravan Thirumoorthy wrote:
-> When the system boots up after a watchdog reset, the EXPIRED_STATUS bit
-> in the WDT_STS register is cleared. To identify if the system was restarted
-> due to WDT expiry, bootloaders update the information in the IMEM region.
-> Update the driver to read the restart reason from IMEM and populate the
-> bootstatus accordingly.
+On 07/02/2025 15:45:02+0800, Ming Yu wrote:
+> This driver supports RTC functionality for NCT6694 MFD device
+> based on USB interface.
 > 
-> For backward compatibility, keep the EXPIRED_STATUS bit check. Add a new
-> function qcom_wdt_get_restart_reason() to read the restart reason from
-> IMEM.
-> 
-> Signed-off-by: Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>
+> Signed-off-by: Ming Yu <a0282524688@gmail.com>
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 > ---
->   drivers/watchdog/qcom-wdt.c | 40 +++++++++++++++++++++++++++++++++++++++-
->   1 file changed, 39 insertions(+), 1 deletion(-)
+>  MAINTAINERS               |   1 +
+>  drivers/rtc/Kconfig       |  10 ++
+>  drivers/rtc/Makefile      |   1 +
+>  drivers/rtc/rtc-nct6694.c | 286 ++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 298 insertions(+)
+>  create mode 100644 drivers/rtc/rtc-nct6694.c
 > 
-> diff --git a/drivers/watchdog/qcom-wdt.c b/drivers/watchdog/qcom-wdt.c
-> index 006f9c61aa64fd2b4ee9db493aeb54c8fafac818..54d6eaa132ab9f63e1312a69ad51b7a14f78fe2d 100644
-> --- a/drivers/watchdog/qcom-wdt.c
-> +++ b/drivers/watchdog/qcom-wdt.c
-> @@ -9,6 +9,7 @@
->   #include <linux/kernel.h>
->   #include <linux/module.h>
->   #include <linux/of.h>
-> +#include <linux/of_address.h>
->   #include <linux/platform_device.h>
->   #include <linux/watchdog.h>
->   
-> @@ -22,6 +23,8 @@ enum wdt_reg {
->   
->   #define QCOM_WDT_ENABLE		BIT(0)
->   
-> +#define NON_SECURE_WDT_RESET	0x5
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index a9eda4530b07..7eba4ffdc877 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -16927,6 +16927,7 @@ F:	drivers/hwmon/nct6694-hwmon.c
+>  F:	drivers/i2c/busses/i2c-nct6694.c
+>  F:	drivers/mfd/nct6694.c
+>  F:	drivers/net/can/usb/nct6694_canfd.c
+> +F:	drivers/rtc/rtc-nct6694.c
+>  F:	drivers/watchdog/nct6694_wdt.c
+>  F:	include/linux/mfd/nct6694.h
+>  
+> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+> index 0bbbf778ecfa..248425bf26f3 100644
+> --- a/drivers/rtc/Kconfig
+> +++ b/drivers/rtc/Kconfig
+> @@ -416,6 +416,16 @@ config RTC_DRV_NCT3018Y
+>  	   This driver can also be built as a module, if so, the module will be
+>  	   called "rtc-nct3018y".
+>  
+> +config RTC_DRV_NCT6694
+> +	tristate "Nuvoton NCT6694 RTC support"
+> +	depends on MFD_NCT6694
+> +	help
+> +	  If you say yes to this option, support will be included for Nuvoton
+> +	  NCT6694, a USB device to RTC.
 > +
->   static const u32 reg_offset_data_apcs_tmr[] = {
->   	[WDT_RST] = 0x38,
->   	[WDT_EN] = 0x40,
-> @@ -187,6 +190,39 @@ static const struct qcom_wdt_match_data match_data_kpss = {
->   	.max_tick_count = 0xFFFFFU,
->   };
->   
-> +static int  qcom_wdt_get_restart_reason(struct qcom_wdt *wdt)
+> +	  This driver can also be built as a module. If so, the module will
+> +	  be called rtc-nct6694.
+> +
+>  config RTC_DRV_RK808
+>  	tristate "Rockchip RK805/RK808/RK809/RK817/RK818 RTC"
+>  	depends on MFD_RK8XX
+> diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
+> index 489b4ab07068..d0d6f4a4972e 100644
+> --- a/drivers/rtc/Makefile
+> +++ b/drivers/rtc/Makefile
+> @@ -118,6 +118,7 @@ obj-$(CONFIG_RTC_DRV_MXC)	+= rtc-mxc.o
+>  obj-$(CONFIG_RTC_DRV_MXC_V2)	+= rtc-mxc_v2.o
+>  obj-$(CONFIG_RTC_DRV_GAMECUBE)	+= rtc-gamecube.o
+>  obj-$(CONFIG_RTC_DRV_NCT3018Y)	+= rtc-nct3018y.o
+> +obj-$(CONFIG_RTC_DRV_NCT6694)	+= rtc-nct6694.o
+>  obj-$(CONFIG_RTC_DRV_NTXEC)	+= rtc-ntxec.o
+>  obj-$(CONFIG_RTC_DRV_OMAP)	+= rtc-omap.o
+>  obj-$(CONFIG_RTC_DRV_OPAL)	+= rtc-opal.o
+> diff --git a/drivers/rtc/rtc-nct6694.c b/drivers/rtc/rtc-nct6694.c
+> new file mode 100644
+> index 000000000000..892674d453d1
+> --- /dev/null
+> +++ b/drivers/rtc/rtc-nct6694.c
+> @@ -0,0 +1,286 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Nuvoton NCT6694 RTC driver based on USB interface.
+> + *
+> + * Copyright (C) 2024 Nuvoton Technology Corp.
+> + */
+> +
+> +#include <linux/bcd.h>
+> +#include <linux/irqdomain.h>
+> +#include <linux/kernel.h>
+> +#include <linux/mfd/core.h>
+> +#include <linux/mfd/nct6694.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/rtc.h>
+> +#include <linux/slab.h>
+> +
+> +/*
+> + * USB command module type for NCT6694 RTC controller.
+> + * This defines the module type used for communication with the NCT6694
+> + * RTC controller over the USB interface.
+> + */
+> +#define NCT6694_RTC_MOD		0x08
+> +
+> +/* Command 00h - RTC Time */
+> +#define NCT6694_RTC_TIME	0x0000
+> +#define NCT6694_RTC_TIME_SEL	0x00
+> +
+> +/* Command 01h - RTC Alarm */
+> +#define NCT6694_RTC_ALARM	0x01
+> +#define NCT6694_RTC_ALARM_SEL	0x00
+> +
+> +/* Command 02h - RTC Status */
+> +#define NCT6694_RTC_STATUS	0x02
+> +#define NCT6694_RTC_STATUS_SEL	0x00
+> +
+> +#define NCT6694_RTC_IRQ_INT_EN	BIT(0)	/* Transmit a USB INT-in when RTC alarm */
+> +#define NCT6694_RTC_IRQ_GPO_EN	BIT(5)	/* Trigger a GPO Low Pulse when RTC alarm */
+> +
+> +#define NCT6694_RTC_IRQ_EN	(NCT6694_RTC_IRQ_INT_EN | NCT6694_RTC_IRQ_GPO_EN)
+> +#define NCT6694_RTC_IRQ_STS	BIT(0)	/* Write 1 clear IRQ status */
+> +
+> +struct __packed nct6694_rtc_time {
+> +	u8 sec;
+> +	u8 min;
+> +	u8 hour;
+> +	u8 week;
+> +	u8 day;
+> +	u8 month;
+> +	u8 year;
+> +};
+> +
+> +struct __packed nct6694_rtc_alarm {
+> +	u8 sec;
+> +	u8 min;
+> +	u8 hour;
+> +	u8 alarm_en;
+> +	u8 alarm_pend;
+> +};
+> +
+> +struct __packed nct6694_rtc_status {
+> +	u8 irq_en;
+> +	u8 irq_pend;
+> +};
+> +
+> +union __packed nct6694_rtc_msg {
+> +	struct nct6694_rtc_time time;
+> +	struct nct6694_rtc_alarm alarm;
+> +	struct nct6694_rtc_status sts;
+> +};
+> +
+> +struct nct6694_rtc_data {
+> +	struct nct6694 *nct6694;
+> +	struct rtc_device *rtc;
+> +	union nct6694_rtc_msg *msg;
+> +};
+> +
+> +static int nct6694_rtc_read_time(struct device *dev, struct rtc_time *tm)
 > +{
-> +	struct device_node *np;
-> +	struct resource imem;
-> +	void __iomem *base;
+> +	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
+> +	struct nct6694_rtc_time *time = &data->msg->time;
+> +	static const struct nct6694_cmd_header cmd_hd = {
+> +		.mod = NCT6694_RTC_MOD,
+> +		.cmd = NCT6694_RTC_TIME,
+> +		.sel = NCT6694_RTC_TIME_SEL,
+> +		.len = cpu_to_le16(sizeof(*time))
+> +	};
 > +	int ret;
 > +
-> +	np = of_find_compatible_node(NULL, NULL, "qcom,restart-reason-info");
-> +	if (!np)
-> +		return -ENOENT;
-> +
-> +	ret = of_address_to_resource(np, 0, &imem);
-> +	of_node_put(np);
-> +	if (ret < 0) {
-> +		dev_err(wdt->wdd.parent, "can't translate OF node address\n");
+> +	ret = nct6694_read_msg(data->nct6694, &cmd_hd, time);
+> +	if (ret)
 > +		return ret;
+> +
+> +	tm->tm_sec = bcd2bin(time->sec);		/* tm_sec expect 0 ~ 59 */
+> +	tm->tm_min = bcd2bin(time->min);		/* tm_min expect 0 ~ 59 */
+> +	tm->tm_hour = bcd2bin(time->hour);		/* tm_hour expect 0 ~ 23 */
+> +	tm->tm_wday = bcd2bin(time->week) - 1;		/* tm_wday expect 0 ~ 6 */
+> +	tm->tm_mday = bcd2bin(time->day);		/* tm_mday expect 1 ~ 31 */
+> +	tm->tm_mon = bcd2bin(time->month) - 1;		/* tm_month expect 0 ~ 11 */
+> +	tm->tm_year = bcd2bin(time->year) + 100;	/* tm_year expect since 1900 */
+> +
+> +	return ret;
+> +}
+> +
+> +static int nct6694_rtc_set_time(struct device *dev, struct rtc_time *tm)
+> +{
+> +	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
+> +	struct nct6694_rtc_time *time = &data->msg->time;
+> +	static const struct nct6694_cmd_header cmd_hd = {
+> +		.mod = NCT6694_RTC_MOD,
+> +		.cmd = NCT6694_RTC_TIME,
+> +		.sel = NCT6694_RTC_TIME_SEL,
+> +		.len = cpu_to_le16(sizeof(*time))
+> +	};
+> +
+> +	time->sec = bin2bcd(tm->tm_sec);
+> +	time->min = bin2bcd(tm->tm_min);
+> +	time->hour = bin2bcd(tm->tm_hour);
+> +	time->week = bin2bcd(tm->tm_wday + 1);
+> +	time->day = bin2bcd(tm->tm_mday);
+> +	time->month = bin2bcd(tm->tm_mon + 1);
+> +	time->year = bin2bcd(tm->tm_year - 100);
+> +
+> +	return nct6694_write_msg(data->nct6694, &cmd_hd, time);
+> +}
+> +
+> +static int nct6694_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+> +{
+> +	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
+> +	struct nct6694_rtc_alarm *alarm = &data->msg->alarm;
+> +	static const struct nct6694_cmd_header cmd_hd = {
+> +		.mod = NCT6694_RTC_MOD,
+> +		.cmd = NCT6694_RTC_ALARM,
+> +		.sel = NCT6694_RTC_ALARM_SEL,
+> +		.len = cpu_to_le16(sizeof(*alarm))
+> +	};
+> +	int ret;
+> +
+> +	ret = nct6694_read_msg(data->nct6694, &cmd_hd, alarm);
+> +	if (ret)
+> +		return ret;
+> +
+> +	alrm->time.tm_sec = bcd2bin(alarm->sec);
+> +	alrm->time.tm_min = bcd2bin(alarm->min);
+> +	alrm->time.tm_hour = bcd2bin(alarm->hour);
+> +	alrm->enabled = alarm->alarm_en;
+> +	alrm->pending = alarm->alarm_pend;
+> +
+> +	return ret;
+> +}
+> +
+> +static int nct6694_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+> +{
+> +	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
+> +	struct nct6694_rtc_alarm *alarm = &data->msg->alarm;
+> +	static const struct nct6694_cmd_header cmd_hd = {
+> +		.mod = NCT6694_RTC_MOD,
+> +		.cmd = NCT6694_RTC_ALARM,
+> +		.sel = NCT6694_RTC_ALARM_SEL,
+> +		.len = cpu_to_le16(sizeof(*alarm))
+> +	};
+> +
+> +	alarm->sec = bin2bcd(alrm->time.tm_sec);
+> +	alarm->min = bin2bcd(alrm->time.tm_min);
+> +	alarm->hour = bin2bcd(alrm->time.tm_hour);
+> +	alarm->alarm_en = alrm->enabled ? NCT6694_RTC_IRQ_EN : 0;
+> +	alarm->alarm_pend = 0;
+> +
+> +	return nct6694_write_msg(data->nct6694, &cmd_hd, alarm);
+> +}
+> +
+> +static int nct6694_rtc_alarm_irq_enable(struct device *dev, unsigned int enabled)
+> +{
+> +	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
+> +	struct nct6694_rtc_status *sts = &data->msg->sts;
+> +	static const struct nct6694_cmd_header cmd_hd = {
+> +		.mod = NCT6694_RTC_MOD,
+> +		.cmd = NCT6694_RTC_STATUS,
+> +		.sel = NCT6694_RTC_STATUS_SEL,
+> +		.len = cpu_to_le16(sizeof(*sts))
+> +	};
+> +
+> +	if (enabled)
+> +		sts->irq_en |= NCT6694_RTC_IRQ_EN;
+> +	else
+> +		sts->irq_en &= ~NCT6694_RTC_IRQ_EN;
+> +
+> +	sts->irq_pend = 0;
+> +
+> +	return nct6694_write_msg(data->nct6694, &cmd_hd, sts);
+> +}
+> +
+> +static const struct rtc_class_ops nct6694_rtc_ops = {
+> +	.read_time = nct6694_rtc_read_time,
+> +	.set_time = nct6694_rtc_set_time,
+> +	.read_alarm = nct6694_rtc_read_alarm,
+> +	.set_alarm = nct6694_rtc_set_alarm,
+> +	.alarm_irq_enable = nct6694_rtc_alarm_irq_enable,
+> +};
+> +
+> +static irqreturn_t nct6694_irq(int irq, void *dev_id)
+> +{
+> +	struct nct6694_rtc_data *data = dev_id;
+> +	struct nct6694_rtc_status *sts = &data->msg->sts;
+> +	static const struct nct6694_cmd_header cmd_hd = {
+> +		.mod = NCT6694_RTC_MOD,
+> +		.cmd = NCT6694_RTC_STATUS,
+> +		.sel = NCT6694_RTC_STATUS_SEL,
+> +		.len = cpu_to_le16(sizeof(*sts))
+> +	};
+> +	int ret;
+> +
+> +	rtc_lock(data->rtc);
+> +
+> +	sts->irq_en = NCT6694_RTC_IRQ_EN;
+> +	sts->irq_pend = NCT6694_RTC_IRQ_STS;
+> +	ret = nct6694_write_msg(data->nct6694, &cmd_hd, sts);
+> +	if (ret) {
+> +		rtc_unlock(data->rtc);
+> +		return IRQ_NONE;
 > +	}
 > +
-> +	base = ioremap(imem.start, resource_size(&imem));
-> +	if (!base) {
-> +		dev_err(wdt->wdd.parent, "failed to map restart reason info region\n");
+> +	rtc_update_irq(data->rtc, 1, RTC_IRQF | RTC_AF);
+> +
+> +	rtc_unlock(data->rtc);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int nct6694_rtc_probe(struct platform_device *pdev)
+> +{
+> +	struct nct6694_rtc_data *data;
+> +	struct nct6694 *nct6694 = dev_get_drvdata(pdev->dev.parent);
+> +	int ret, irq;
+> +
+> +	irq = irq_create_mapping(nct6694->domain, NCT6694_IRQ_RTC);
+> +	if (!irq)
+> +		return -EINVAL;
+> +
+> +	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
+> +	if (!data)
 > +		return -ENOMEM;
-> +	}
 > +
-> +	memcpy_fromio(&ret, base, sizeof(ret));
-> +	iounmap(base);
+> +	data->msg = devm_kzalloc(&pdev->dev, sizeof(union nct6694_rtc_msg),
+> +				 GFP_KERNEL);
+> +	if (!data->msg)
+> +		return -ENOMEM;
 > +
-> +	if (ret == NON_SECURE_WDT_RESET)
-> +		wdt->wdd.bootstatus = WDIOF_CARDRESET;
+> +	data->rtc = devm_rtc_allocate_device(&pdev->dev);
+> +	if (IS_ERR(data->rtc))
+> +		return PTR_ERR(data->rtc);
 > +
+> +	data->nct6694 = nct6694;
+> +	data->rtc->ops = &nct6694_rtc_ops;
+> +	data->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
+> +	data->rtc->range_max = RTC_TIMESTAMP_END_2099;
+> +
+> +	platform_set_drvdata(pdev, data);
+> +
+> +	ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
+> +					nct6694_irq, IRQF_ONESHOT,
+> +					"rtc-nct6694", data);
+> +	if (ret < 0)
+> +		return dev_err_probe(&pdev->dev, ret, "Failed to request irq\n");
+> +
+> +	ret = devm_rtc_register_device(data->rtc);
+> +	if (ret)
+> +		return ret;
+> +
+> +	device_init_wakeup(&pdev->dev, true);
 > +	return 0;
 > +}
 > +
->   static int qcom_wdt_probe(struct platform_device *pdev)
->   {
->   	struct device *dev = &pdev->dev;
-> @@ -267,7 +303,9 @@ static int qcom_wdt_probe(struct platform_device *pdev)
->   	wdt->wdd.parent = dev;
->   	wdt->layout = data->offset;
->   
-> -	if (readl(wdt_addr(wdt, WDT_STS)) & 1)
-> +	ret = qcom_wdt_get_restart_reason(wdt);
-> +	if (ret == -ENOENT &&
-> +	    readl(wdt_addr(wdt, WDT_STS)) & 1)
->   		wdt->wdd.bootstatus = WDIOF_CARDRESET;
+> +static struct platform_driver nct6694_rtc_driver = {
+> +	.driver = {
+> +		.name	= "rtc-nct6694",
+> +	},
+> +	.probe		= nct6694_rtc_probe,
+> +};
+> +
+> +module_platform_driver(nct6694_rtc_driver);
+> +
+> +MODULE_DESCRIPTION("USB-RTC driver for NCT6694");
+> +MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
+> +MODULE_LICENSE("GPL");
+> +MODULE_ALIAS("platform:nct6694-rtc");
+> -- 
+> 2.34.1
+> 
 
-This ignores all other error returns from qcom_wdt_get_restart_reason(),
-but in that function it generates several dev_err(). Either make those
-messages less than an error, or treat them as error and drop out here.
-
-Thanks,
-Guenter
-
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
