@@ -1,48 +1,48 @@
-Return-Path: <linux-watchdog+bounces-3249-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3250-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3888A81DC8
-	for <lists+linux-watchdog@lfdr.de>; Wed,  9 Apr 2025 09:03:33 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18C34A81DDB
+	for <lists+linux-watchdog@lfdr.de>; Wed,  9 Apr 2025 09:05:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BFD1F17C386
-	for <lists+linux-watchdog@lfdr.de>; Wed,  9 Apr 2025 07:03:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8668C7ACD62
+	for <lists+linux-watchdog@lfdr.de>; Wed,  9 Apr 2025 07:03:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF25D22A80D;
-	Wed,  9 Apr 2025 07:03:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 593F3230BFF;
+	Wed,  9 Apr 2025 07:03:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nP9Cjtod"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ley9sddd"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BD3622256A;
-	Wed,  9 Apr 2025 07:03:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2798822D4F2;
+	Wed,  9 Apr 2025 07:03:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744182181; cv=none; b=tYwo8qlWhWmrvn/RIfwk9W/dYhkOM11bYgGbMvrNi5KY84pe3x6aff4ml+oUs9mmgQuzAzxh//9Beuocfou/MiiedqTH8YZXYVVeueJhqv3JES6+Eyx/mzst60NeabMTBBB3839eLiGvFBCURcBdqkxON/Cf6kOzfv6MMDpXCBE=
+	t=1744182226; cv=none; b=qS8ikDp9tPd+rGOf1O5yGeIhbhChuE1P6aYwdxYZwqQr55QpK09cBjgGj3XznIsyGgcL3Y8nRE9/Vlv+baryE84rm/KDSQc2u6X10R2Eo/AIZWUPtk7LIq7JpK7V8bkbCcrU+5/nQrsbakGX5wXBu9XAhhnUdGShr/rlHuuPg14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744182181; c=relaxed/simple;
-	bh=/zXLRlNetdM5beYCdN56tEr28h9lBwxR74ZrDR9Z648=;
+	s=arc-20240116; t=1744182226; c=relaxed/simple;
+	bh=H9OzLV//uUbwQZ3s+mZv5Am9nBll8C7v7aDLd7+2hfo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oWqOUSKpjKCQkfupLuO5wm/wvGeQk+EA9F9nAnIVxzr+1d+EMQG3+vtaL5jZcTgasewMdYEhs3iWLh3igqPNe5MZE82unEvijUBN8DekxtkHRrV1Ehi7lg2/onsemTrD5CpoFi7w+l6DitckyDyN+Z2PXhjhlo9aOmvLHgovtek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nP9Cjtod; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17A10C4CEE3;
-	Wed,  9 Apr 2025 07:02:57 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=f+Fv5WbCnK1K2Rm5TTguyXOg/E4lCmfX1yTRFGmp+GpTU3WjISEMQXoXZUI/ptQnLMq/kmB87hlpJP8pYajx/KgmktNk06xNuv0JL/kmmvdRK2ZpO7hxWHiY0dj1POflA0KUo1S2bECwBQMSleAWk1vIBYKU2ZNiC+hXhIkeBN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ley9sddd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C47C9C4CEE3;
+	Wed,  9 Apr 2025 07:03:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744182181;
-	bh=/zXLRlNetdM5beYCdN56tEr28h9lBwxR74ZrDR9Z648=;
+	s=k20201202; t=1744182225;
+	bh=H9OzLV//uUbwQZ3s+mZv5Am9nBll8C7v7aDLd7+2hfo=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=nP9CjtodF+OjmT7JNOL4gKNo/FcBE6XaeK5s+ExymX/AJbCfFvouvKoBbEt7cCLAk
-	 Ea07GKDcmBkPrCKa6RfwvxZ2wP7wyDT2mAHQwdbZEmvC5GDuUzkf4DCb/d+Fled27E
-	 f7+NH0HUjVTdbkjaLqgUM/3mDkm4YRnvi+N9o9p3gvX7rHSQk7ncXVYkl4lAqUadRw
-	 C75j/r+58H2QWU49x1RGvrpt+o3/TRQ/n9CMojz7DMOXhi60tozk8j/WP4LeStHDWO
-	 Ir2lnlvQKTkKjSuRWFERmL5+Ba83e5FbNecQIaevwNTwB84LCNHd81r4K0GFaFayD9
-	 N319l2ZL11zpQ==
-Message-ID: <fdf2d127-a4a6-4a4f-89ac-9f9dbe136ff8@kernel.org>
-Date: Wed, 9 Apr 2025 09:02:56 +0200
+	b=ley9sdddm50yavrGv+Cb6uR5na7pXIEY+CLY7V6uzZSaP7Qi4zo5j3AmM68TyQpaP
+	 pQcqDNOQctO7j87wC4QDX1x4tY/MR6U5LmBmOfKFozOSALs/rOfCxhxFBB4pc9LWT8
+	 oPMPyt3W1sENqzaD4Ti/KDuNDky6E434naAw/imOm/BsuAWt+leu9g1dXMDCv30i/V
+	 PrOmNDH/tJZEm2seyNO+vH+OwM11bZN+gsbW3IHmLHyyyC0kbJl0HhiO8BeYetsgAx
+	 Olz258nShfC3nVbGIxYlTcyfhyI0TMmIRxS9ILfT6hiXJ4bup9TrZPLUgd9yRRcuI4
+	 XnYqMsLQlkkzQ==
+Message-ID: <d075946b-44f4-42a4-a0b2-90ddeeb15960@kernel.org>
+Date: Wed, 9 Apr 2025 09:03:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 4/6] dt-bindings: sram: qcom,imem: add the support for
- restart reason
+Subject: Re: [PATCH RFC 5/6] watchdog: qcom-wdt: add support to read the
+ restart reason from IMEM
 To: Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
@@ -60,7 +60,7 @@ To: Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>,
 Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
 References: <20250408-wdt_reset_reason-v1-0-e6ec30c2c926@oss.qualcomm.com>
- <20250408-wdt_reset_reason-v1-4-e6ec30c2c926@oss.qualcomm.com>
+ <20250408-wdt_reset_reason-v1-5-e6ec30c2c926@oss.qualcomm.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -106,36 +106,83 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250408-wdt_reset_reason-v1-4-e6ec30c2c926@oss.qualcomm.com>
+In-Reply-To: <20250408-wdt_reset_reason-v1-5-e6ec30c2c926@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 08/04/2025 10:49, Kathiravan Thirumoorthy wrote:
-> In the Qualcomm IPQ SoCs, system restart reason is captured in the IMEM
-> location by bootloaders and Linux populates this information to the
-> userspace. Add a child node for the restart reason in the IMEM region.
+> When the system boots up after a watchdog reset, the EXPIRED_STATUS bit
+> in the WDT_STS register is cleared. To identify if the system was restarted
+> due to WDT expiry, bootloaders update the information in the IMEM region.
+> Update the driver to read the restart reason from IMEM and populate the
+> bootstatus accordingly.
+> 
+> For backward compatibility, keep the EXPIRED_STATUS bit check. Add a new
+> function qcom_wdt_get_restart_reason() to read the restart reason from
+> IMEM.
 > 
 > Signed-off-by: Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>
 > ---
->  .../devicetree/bindings/sram/qcom,imem.yaml        | 24 ++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
+>  drivers/watchdog/qcom-wdt.c | 40 +++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 39 insertions(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/sram/qcom,imem.yaml b/Documentation/devicetree/bindings/sram/qcom,imem.yaml
-> index dec1b1ee924cf1386f559eb262ea864f2788c165..c3dab5fbc88c1515bfb3585f18aed9e01ae36fe4 100644
-> --- a/Documentation/devicetree/bindings/sram/qcom,imem.yaml
-> +++ b/Documentation/devicetree/bindings/sram/qcom,imem.yaml
-> @@ -56,6 +56,10 @@ patternProperties:
->      $ref: /schemas/remoteproc/qcom,pil-info.yaml#
->      description: Peripheral image loader relocation region
+> diff --git a/drivers/watchdog/qcom-wdt.c b/drivers/watchdog/qcom-wdt.c
+> index 006f9c61aa64fd2b4ee9db493aeb54c8fafac818..54d6eaa132ab9f63e1312a69ad51b7a14f78fe2d 100644
+> --- a/drivers/watchdog/qcom-wdt.c
+> +++ b/drivers/watchdog/qcom-wdt.c
+> @@ -9,6 +9,7 @@
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+> +#include <linux/of_address.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/watchdog.h>
 >  
-> +  "^restart-reason@[0-9a-f]+$":
-> +    $ref: /schemas/watchdog/qcom,restart-reason.yaml#
+> @@ -22,6 +23,8 @@ enum wdt_reg {
+>  
+>  #define QCOM_WDT_ENABLE		BIT(0)
+>  
+> +#define NON_SECURE_WDT_RESET	0x5
+> +
+>  static const u32 reg_offset_data_apcs_tmr[] = {
+>  	[WDT_RST] = 0x38,
+>  	[WDT_EN] = 0x40,
+> @@ -187,6 +190,39 @@ static const struct qcom_wdt_match_data match_data_kpss = {
+>  	.max_tick_count = 0xFFFFFU,
+>  };
+>  
+> +static int  qcom_wdt_get_restart_reason(struct qcom_wdt *wdt)
+> +{
+> +	struct device_node *np;
+> +	struct resource imem;
+> +	void __iomem *base;
+> +	int ret;
+> +
+> +	np = of_find_compatible_node(NULL, NULL, "qcom,restart-reason-info");
+> +	if (!np)
 
-Just fold it here... but really, there is little point in describing
-memory layout of syscon block register by register. What will be next?
-Another entry for one more register? And then another? And another? And
-every time you will claim "just this one", because you decide not to
-provide complete picture when sending bindings for the first time?
+That's not how you express dependencies between devices.
+
+> +		return -ENOENT;
+> +
+> +	ret = of_address_to_resource(np, 0, &imem);
+> +	of_node_put(np);
+> +	if (ret < 0) {
+> +		dev_err(wdt->wdd.parent, "can't translate OF node address\n");
+> +		return ret;
+> +	}
+> +
+> +	base = ioremap(imem.start, resource_size(&imem));
+> +	if (!base) {
+> +		dev_err(wdt->wdd.parent, "failed to map restart reason info region\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	memcpy_fromio(&ret, base, sizeof(ret));
+> +	iounmap(base);
+
+All this is wrong usage of syscon API, missing devlinks, messing up with
+other device's address space.
 
 
 Best regards,
