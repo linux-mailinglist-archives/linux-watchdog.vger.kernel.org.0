@@ -1,48 +1,48 @@
-Return-Path: <linux-watchdog+bounces-3247-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3248-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 333E7A81DB8
-	for <lists+linux-watchdog@lfdr.de>; Wed,  9 Apr 2025 09:01:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD210A81DAE
+	for <lists+linux-watchdog@lfdr.de>; Wed,  9 Apr 2025 09:00:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 46C1D8A2CA1
-	for <lists+linux-watchdog@lfdr.de>; Wed,  9 Apr 2025 06:59:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 722411BA569D
+	for <lists+linux-watchdog@lfdr.de>; Wed,  9 Apr 2025 07:00:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A9B021506D;
-	Wed,  9 Apr 2025 06:58:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 014242192E6;
+	Wed,  9 Apr 2025 07:00:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nmyw/bgF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KqZ+m/K3"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8C732144DB;
-	Wed,  9 Apr 2025 06:58:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0950215F48;
+	Wed,  9 Apr 2025 07:00:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744181937; cv=none; b=MH0gEb73StgwdfxgCAOGCbe+Ltz7f0816b/8iLgV9Sx07ICFS6RMy/NmKXod84pp2O4iJ61pnlhVzGP450xg0id9frEDZC9+sUqnQ5AeZPq2SiXedLrb7nwBXuafi5Hq+Xl5ergLCkSPm2gImwARZyBOfO/qmEZjc8SfCRwKweQ=
+	t=1744182020; cv=none; b=iozIhDj9M2ShOipHb0p5ubXkGTtzQFoJO7B1QD7iQs7keoUu57D8ELtv+ISTbuftrOqCPhBZnR6RJDVNxst02/efo8967ztIj/Ra9ygbAeKS3CqGIuPtPEONVGmpUzZm6Ja269bYeqHs2Dz2lx0Xmu4XrMXSs5a9iiOb0ZuIZbs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744181937; c=relaxed/simple;
-	bh=Nt84t6m6mhPkjjvZ7EsC4vTJVqfWi3j4nIQ3mgOiw6A=;
+	s=arc-20240116; t=1744182020; c=relaxed/simple;
+	bh=TdOOOBHCsmehyp8mWelVi40UMNZCvIW9e4mU/iC/Y6c=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dv33lUd9vtMV9Xwj1KP6Lwla/JmIRXANnKo8MR5JDFJtYcASuC03AiaMij8a6W/6JjRTqNd1FV1vDVgFRV3yZ19b+3leLdAMU5OW8b7ZfrgHlM+77zltkK8xEtHMJJKZU3SW8rT5O7GoSqesTx7DIA4pmyc5MGKcvf36czDtEbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nmyw/bgF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9537DC4CEE3;
-	Wed,  9 Apr 2025 06:58:53 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=qgbFpYc2KrthteTqF4AoG5gcpjRQV0xfSvBOLTXnTbdF/ALCEUbFlq8VfiHnxRWo9X8VY6/9dkn5PgsgwyGAp5z5cqh5aBBOuKcndcckvq9h1fDMa9efT0iHt8knxuz48PRSCvVYhwFLtKLJBDJkqgLH5bW8kPYWVyREG1GBMio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KqZ+m/K3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66A9DC4CEE3;
+	Wed,  9 Apr 2025 07:00:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744181936;
-	bh=Nt84t6m6mhPkjjvZ7EsC4vTJVqfWi3j4nIQ3mgOiw6A=;
+	s=k20201202; t=1744182020;
+	bh=TdOOOBHCsmehyp8mWelVi40UMNZCvIW9e4mU/iC/Y6c=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Nmyw/bgF7jM8ApGX0fKPQRw/4Er05KUaPn17pghbctKVJZS2ooTUt1LKZKRZJZ0Vq
-	 SH6uzOk/VPZCU9rAlBq17ZIm4n4lIm5+dnf+bKwyoT/CjcTfbFdHESaXQjNLdkY0xy
-	 QT5CBeyVE4tLL0l2cDE4lYHZBVpE6KjR3HZlKuE7WKrPM/XrfPI4GpLnzRsWqJhMbq
-	 ACjfstOtJa25HbOwTK2AIXg2GlZsJOnBZNMz1DqCXegh5DE8gz1TUYqXDCa50JHReo
-	 0Nuv1YSvebLQsFt2XMiEztF7gjKoL8uGpVp8uiRoM37lxCSWGRaFlfK6VTG2/EaMTS
-	 1EUkZMTwNpi2g==
-Message-ID: <43dd7191-c797-4d8c-af58-03fc0eaaa95b@kernel.org>
-Date: Wed, 9 Apr 2025 08:58:51 +0200
+	b=KqZ+m/K3xb4JnzIpPBGmEwaV5HUSgJgGW/pF/RR7AJAewOomNcSQoafsxwFrXyfoQ
+	 +CM6yUnw1xH9cIgNXlzUaS7ki/TwxTDiV0opSwzkjjni7dXDSFShXjc9VOoJO2KQ9U
+	 QucEpiCJ0A9agjsoh844krAl6yvt7QrjRvC53DTdtjZvsvvjxZQWwFnIDoUc73I96q
+	 Uv1jR2Cy80JzdYNv0RMx6t/ye/PWG0xt1fcu9SmlbVIpbUHcOL/mPJyplCx74Dpaqe
+	 h1cLFa8y9EA3jiWhmrqDyPN/ulBzdMm/X7f8U/MbkxB0IKmsSePjueMqAL+xStMruL
+	 EmeEtVWTWm3bw==
+Message-ID: <2dabc542-33b8-4878-a586-f9aac7e035bc@kernel.org>
+Date: Wed, 9 Apr 2025 09:00:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 1/6] dt-bindings: sram: qcom,imem: Document IPQ5424
- compatible
+Subject: Re: [PATCH RFC 3/6] dt-bindings: watchdog: Add Qualcomm restart
+ reason binding
 To: Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
@@ -60,7 +60,7 @@ To: Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>,
 Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
 References: <20250408-wdt_reset_reason-v1-0-e6ec30c2c926@oss.qualcomm.com>
- <20250408-wdt_reset_reason-v1-1-e6ec30c2c926@oss.qualcomm.com>
+ <20250408-wdt_reset_reason-v1-3-e6ec30c2c926@oss.qualcomm.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -106,20 +106,82 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250408-wdt_reset_reason-v1-1-e6ec30c2c926@oss.qualcomm.com>
+In-Reply-To: <20250408-wdt_reset_reason-v1-3-e6ec30c2c926@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 08/04/2025 10:49, Kathiravan Thirumoorthy wrote:
-> Add compatible for Qualcomm's IPQ5424 IMEM.
+> Add a devicetree binding for the Qualcomm IPQ SOCs restart reason
+> information region found in the IMEM, allowing the system to identify
+> the cause of a restart.
 > 
 > Signed-off-by: Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>
 > ---
->  Documentation/devicetree/bindings/sram/qcom,imem.yaml | 1 +
->  1 file changed, 1 insertion(+)
+>  .../bindings/watchdog/qcom,restart-reason.yaml     | 46 ++++++++++++++++++++++
+>  1 file changed, 46 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/qcom,restart-reason.yaml b/Documentation/devicetree/bindings/watchdog/qcom,restart-reason.yaml
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..babbaa70b114f9691018ed6cb10bfa78e18fad64
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/qcom,restart-reason.yaml
+> @@ -0,0 +1,46 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/watchdog/qcom,restart-reason.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm IPQ SoC restart reason location
+> +
+> +maintainers:
+> +  - Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>
+> +
+> +description:
+> +  The Qualcomm IPQ SoC restart reason memory region, in IMEM, is used to
+> +  identify the cause of the system restart. This will be helpful to identify
+> +  the cause when the RAM dump collection is disabled.
+> +
+> +properties:
+> +  compatible:
+> +    const: qcom,restart-reason-info
 
-Why is this RFC? What is not finished here? I could not find explanation
-in cover letter.
+No generic compatibles.
+
+OTOH, I don't see much of a value of this being a separate node.
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    imem@8600000 {
+> +      compatible = "qcom,ipq5424-imem", "syscon", "simple-mfd";
+> +      reg = <0x08600000 0x1000>;
+> +
+> +      #address-cells = <1>;
+> +      #size-cells = <1>;
+> +
+> +      ranges = <0 0x08600000 0x1000>;
+
+Drop all above.
+
+> +
+> +      restart-reason@7b0 {
+> +        compatible = "qcom,restart-reason-info";
+> +        reg = <0x7b0 0x4>;
+> +      };
+> +    };
+> +...
+> 
+
 
 Best regards,
 Krzysztof
