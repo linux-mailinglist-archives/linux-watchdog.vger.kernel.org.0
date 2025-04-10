@@ -1,151 +1,161 @@
-Return-Path: <linux-watchdog+bounces-3272-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3273-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31D3BA83CBF
-	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Apr 2025 10:25:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6337A83CE8
+	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Apr 2025 10:29:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 50DA416BAA3
-	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Apr 2025 08:23:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 736717B5F70
+	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Apr 2025 08:25:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE32620B80B;
-	Thu, 10 Apr 2025 08:21:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59F2320B1FD;
+	Thu, 10 Apr 2025 08:26:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CHqX2mW9"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JHbPptnu"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C2591F03F8;
-	Thu, 10 Apr 2025 08:21:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63E281F1306
+	for <linux-watchdog@vger.kernel.org>; Thu, 10 Apr 2025 08:26:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744273301; cv=none; b=Me5k3mf7j6UjOFKwb45FB0FSEaiYEo0gJwWAlbRLsQzqlxlFYu4sbZn9rJh1oWtrkskbcXGaJqEsB6rkVXS0zPoPDYkAfd23dOU5I7DFA/DpkCTDQ4gSyV0p+RL0FSgP5FGTsNmsh2d4pNgKBJiwLAdKy6OYThrTmobRExA9ywk=
+	t=1744273609; cv=none; b=aQodixBDkclTeS9bU2h06qP2rGfsDBhqQZEFmdqasqsBvHZl6ZozkBfR7LEWYtB0A6Mv7ew6VkQLcacREF3PKdI8Y7JFey8hK8AUyPK9WQCgdPqB1i4CD4yn+0KsQKOI8tlufKn/J28i9+7bEqCr+a8QNRZL+cvCbNDDPihM0z0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744273301; c=relaxed/simple;
-	bh=oE27GsIInnvywdfxX0MmCMRtS+md3d+J5Fr+8BysSMQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E05KcU0ClR4Rp3XZkTldFE7FhkEP2zLeXhUusgQe4IO6UaN+ys90uyQGG/z+sk1xxa/7zC0ljRhYmsiz4IjHJZDGsfnkAeq3Tro0AhEPrKQh/IoTXXO267T79U00+doSZ2WsYOMR4tSbbDnS+Vdmy8EBNyC69/9/cInYg0fp2MU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CHqX2mW9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64388C4CEDD;
-	Thu, 10 Apr 2025 08:21:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744273299;
-	bh=oE27GsIInnvywdfxX0MmCMRtS+md3d+J5Fr+8BysSMQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CHqX2mW9Zjwnt70+e0Tz0XPrkqHOtRGF/P69tBC+UmJYQMsTed3SOZ6EedJfZQjJf
-	 w5WM/9bt71oA38jm3o63EOmToJHx3UbTjhrYeefhAbILWJAiS4q2QYJCpHJKwlNh/k
-	 9vLO59VSIZvsqYux6o1BoYYbkm+yBbt0SRVK1BiBAJNOmgZqDhlqn5ZETEFunMsnt/
-	 hy8+o0EY1K8T63ZQA9+4sGRhftCcM4NfBud/wrw7vfKy1IL/gwad2OjFwt/ot38+uO
-	 bkvkWMHcrxxDykCGGY9OBhCTC4GGOUT1ZZpem2HTqfbnsdf3mdhSFb8qkstBZH9WhH
-	 JvucG4tU7jseg==
-Date: Thu, 10 Apr 2025 09:21:32 +0100
-From: Lee Jones <lee@kernel.org>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl,
-	andi.shyti@kernel.org, mkl@pengutronix.de,
-	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
-	jdelvare@suse.com, alexandre.belloni@bootlin.com,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v8 1/7] mfd: Add core driver for Nuvoton NCT6694
-Message-ID: <20250410082132.GP372032@google.com>
-References: <20250225081644.3524915-1-a0282524688@gmail.com>
- <20250225081644.3524915-2-a0282524688@gmail.com>
- <20250307011542.GE8350@google.com>
- <CAOoeyxUgiTqtSksfHopEDhZHwNkUq9+d-ojo8ma3PX2dosuwyQ@mail.gmail.com>
- <20250320145042.GS3890718@google.com>
- <CAOoeyxXZmrzBSNRdRx9vK84m5Z5y8T_A+wY98vVrPUZ7f4w4iw@mail.gmail.com>
- <20250404142115.GC278642@google.com>
- <CAOoeyxVVgHGkH5ajQT0NGNPv7FmVPLzuZtGjCiF7mRRto70aAg@mail.gmail.com>
+	s=arc-20240116; t=1744273609; c=relaxed/simple;
+	bh=1MwayweBMCGI1FLlKVhQxmnVp9c11rxMnbmLOw/VEXY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=O6MXPBNnsMNjoHPS4OyHyd/F1jev9o6Rys8f5bH+3KC2v4V00bvqmu6GtLh/mvulGEQ65Tp8VvCOMDme/b+grp6Bpq2GyzQ6KSzQviI5KCnn/04uudlPvTKaIFwSm9YrHAAmdZd9/YyBrplFFBcKj9wn7xtkCrrK95hRoCSYZdc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JHbPptnu; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-43cf3192f3bso5485055e9.1
+        for <linux-watchdog@vger.kernel.org>; Thu, 10 Apr 2025 01:26:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1744273605; x=1744878405; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=by0C3qcBJWPP2R5Tts84nwTn6pqrbnhx93UsShQdVNQ=;
+        b=JHbPptnuJMFxceSbvazDapKu5L+m0xCVYqqxx4PJC/hk4QM7H6uujswVXqWcG4x4qX
+         WJEDDP+7rsQDWT6w13Q26NjzQKEwZ2mjdTLkYdsBiitSvaiPUuLker7d0TWtTjpyhJJm
+         mHpxeAcqtHi7wcYEqYmAQEimg1ZaIz4RZM434lWv4H2BkHFZT1GQJjoL1U3td04deZRg
+         8CLfk+F9JMOkL+UBIX1ua9Z8MgbUeviEgpXzja4PnkHjxtrVINPbPdm2+BUt3TXEUg/m
+         FGdX1vNLss27fT71mVz+sY1G/2yW9TcCj93rNnTuaCD7kr4DRXmw6K5dzzXKHo7GXN4C
+         EwLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744273605; x=1744878405;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=by0C3qcBJWPP2R5Tts84nwTn6pqrbnhx93UsShQdVNQ=;
+        b=aXbdTLkaRJzNamI/bYSI/amxniteSntAiiqjdIa4LmAvWl3WGYOUmI1swHWymYn8hQ
+         NzkxO1QH+nQfZ7QbNraDGLDqqPp5Nbbr863LJujEknZ0LGJUpmEU+xH04bRlyDTRWAU9
+         P5idns2SYJ0zkeyeWyb5mPmOenlgoMu2gGvK7frQ2JsaMU/2PFANxFfYQyMspXk4Y9sA
+         YYYXung39A+Eqn/njExJTxGeUM7bJ3Qqvx2fYjH0dOHT44i7WwUQipnFsI0uAU+I9C2Q
+         /sGXNevvUX2iXj3MoMt1aD6FF/r0y2miTkhb1OS0N5Kcym0nz2Wa+ZJ9XlIQoyj5cXfi
+         3u7w==
+X-Forwarded-Encrypted: i=1; AJvYcCXrMCPSKn4SkY9AHF7S9HnX2pu90N7SmbNIMS0S9lw/AgYGi59xsffpa9opLEw+6hjeDCrbScLjWT628aNS6Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyeO+I7fhdM0wGNu3T6fJq/pYqT0/YTYE1/iYewhNnhB51IgW2c
+	8RbzXQqkL3f3Ym5LgcgvKF7dZjP5s3rdHSKy2peqbsz8jdi9x349lBCDRyUOB2o=
+X-Gm-Gg: ASbGncsCNOluZuW8pOYdG0LykxT5JwravBrm95iDTr2qQeni6+zUbO68tEPsFyIuoXL
+	DNWHs+CwazUNWkZ4RtLFdQd+tuJ60VWPZnpogvjTNxmnCpNIjbgTxsG93L1MMkuHGl0GWWd8pB9
+	zEekBeHG1rjdEpsMcqtut0SnfGW4kIW8Lh8R+TdwGoPsS+glhg0xfVMmji17MNyX+J7QCfUdBeU
+	+cWj70seCC0/3mrx67Q9ngzG12Uz3rOF1+n322coT98W7QM94Qt8LRotAPiauPJK1NR+4HnXZzJ
+	Ug5d3DqrFJU4gMLyTYpsnsuWnmX1RfIFp0ykCWkhC/WhGFuTg7LZpScH5eULVd3D/gk=
+X-Google-Smtp-Source: AGHT+IFY9hRZTvaafYq2hL5p30TOnetIisE6/GIMeJNcOc0jS1+hW0A56uPnzu4Ixw/+IUcYhD8Lxg==
+X-Received: by 2002:a05:600c:1da4:b0:43c:f44c:72a6 with SMTP id 5b1f17b1804b1-43f2fdced9cmr13942095e9.2.1744273604558;
+        Thu, 10 Apr 2025 01:26:44 -0700 (PDT)
+Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43f233a2c84sm42884645e9.11.2025.04.10.01.26.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Apr 2025 01:26:44 -0700 (PDT)
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+To: wim@linux-watchdog.org
+Cc: linux@roeck-us.net,
+	linux-watchdog@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	S32@nxp.com,
+	ghennadi.procopciuc@nxp.com,
+	thomas.fossati@linaro.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	devicetree@vger.kernel.org,
+	alexandru-catalin.ionita@nxp.com
+Subject: [PATCH v4 0/2] Add the NXP S32 Watchdog
+Date: Thu, 10 Apr 2025 10:26:12 +0200
+Message-ID: <20250410082616.1855860-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOoeyxVVgHGkH5ajQT0NGNPv7FmVPLzuZtGjCiF7mRRto70aAg@mail.gmail.com>
 
-On Mon, 07 Apr 2025, Ming Yu wrote:
+The NXP S32 watchdog, referenced in the documentation as the Software
+Watchdog Timer is actually a hardware watchdog. The system has one
+watchdog per core but an assertation does not directly reset the
+system as this behavior relies on a particular setup and another
+component which is not part of these changes. However the first
+watchdog on the system, tied with the Cortex-M4 #0 is a particular
+case where it will reset the system directly. This is enough for the
+watchdog purpose on Linux.
 
-> Lee Jones <lee@kernel.org> 於 2025年4月4日 週五 下午10:21寫道：
-> >
-> > > ...
-> > > > > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x1),
-> > > > > >
-> > > > > > IDs are usually given in base-10.
-> > > > > >
-> > > > >
-> > > > > Fix it in v9.
-> > > > >
-> > > > > > Why are you manually adding the device IDs?
-> > > > > >
-> > > > > > PLATFORM_DEVID_AUTO doesn't work for you?
-> > > > > >
-> > > > >
-> > > > > I need to manage these IDs to ensure that child devices can be
-> > > > > properly utilized within their respective modules.
-> > > >
-> > > > How?  Please explain.
-> > > >
-> > > > This numbering looks sequential and arbitrary.
-> > > >
-> > > > What does PLATFORM_DEVID_AUTO do differently such that it is not useful?
-> > > >
-> > >
-> > > As far as I know, PLATFORM_DEVID_AUTO assigns dynamic IDs to devices,
-> > > but I need fixed IDs.
-> > > For example, the GPIO driver relies on these IDs to determine the
-> > > group, allowing the firmware to identify which GPIO group to operate
-> > > on through the API.
-> >
-> > PLATFORM_DEVID_AUTO will allocate IDs 0 through 16, the same as you've
-> > done here.  These lines do not have any differentiating attributes, so
-> > either way we are not allocating specific IDs to specific pieces of the
-> > H/W.  I still do not understand why you need to allocate them manually.
-> >
-> 
-> I'm using PLATFORM_DEVID_AUTO to allocate child device IDs with
-> MFD_CELL_NAME(), like this:
-> 
-> static const struct mfd_cell nct6694_dev[] = {
->     MFD_CELL_NAME("nct6694-gpio"),
->     MFD_CELL_NAME("nct6694-gpio"),
->     ......
->     MFD_CELL_NAME("nct6694-gpio"),
->     MFD_CELL_NAME("nct6694-i2c"),
->     MFD_CELL_NAME("nct6694-i2c"),
->     ......
->     MFD_CELL_NAME("nct6694-i2c"),
->     ......
-> };
-> 
-> For example, the device IDs retrieved in gpio-nct6694.c is 1~16, and
-> i2c-nct6694.c is 17~22. Does this mean each driver should
-> independently handle its dynamically assigned IDs?
-> Additionally, I originally referred to cgbc-core.c with i2c-cgbc.c,
-> and ab8500-core.c with pwm-ab8500.c for associating child devices. Do
-> you think this approach is appropriate in my case?
+The watchdog relies on the default timeout described in the device
+tree but if another timeout is needed at boot time, it can be changed
+with the module parameter.
 
-Yes, if you _need_ the ranges to start from 0, then you will have to
-call mfd_add_devices() separately on those ranges.  Otherwise one range
-will follow directly on to another range.
+If the kernel has to service the watchdog in place of the userspace,
+it can specify the 'early-enable' option at boot time.
 
-But wait, you're using mfd_add_hotplug_devices(), which means you are
-using PLATFORM_DEVID_AUTO.  So your .id values that you've added are
-being ignored anyway.  Thus, if you have tested that this works, you
-don't need them anyway, right?
+And finally, if starting the watchdog has no wayback then the option
+'nowayout' can be also specified in the boot option.
+
+Changelog:
+
+ - v4:
+    - Update the watchdog timeout when the callback is called (Alexandru-Catalin Ionita)
+    - Fix the clocks bindings to have all the clocks described (Krzysztof Kozlowski)
+
+ - v3:
+    - Add the clocks for the module and the register (Ghennadi Procopciuc)
+    - Use the clock name from the driver
+    - Removed Review-by tag from Krzysztof Kozlowski as the bindings changed
+
+ - v2:
+    - Removed debugfs code as considered pointless for a such simple
+      driver (Arnd Bergmann)
+    - Replaced __raw_readl / __raw_writel by readl and writel (Arnd Bergmann)
+    - Reordered alphabetically the headers (Guenter Roeck)
+    - Enclosed macro parameter into parenthesis (Guenter Roeck)
+    - Fixed checkpatch reported errors (Guenter Roeck)
+    - Clarified a ping on a stopped timer does not affect it (Guenter Roeck)
+    - Used wdt_is_running() to save an extra IO (Guenter Roeck)
+    - Fixed a misleading comment about starting the watchdog at boot time (Guenter Roeck)
+    - Replaced allocation size sizeof(struct ...) by sizeof(*var) (Krzysztof Kozlowski)
+    - Drop old way of describing the module and use table module device (Krzysztof Kozlowski)
+    - Replaced additionalProperties by unevaluatedProperties (Rob Herring)
+    - Removed the DT bindings description as it is obvious (Ghennadi Procopciuc)
+    - Fixed DT bindings compatible string (Krzysztof Kozlowski)
+
+ - v1: initial posting
+
+Daniel Lezcano (2):
+  dt-bindings: watchdog: Add NXP Software Watchdog Timer
+  watchdog: Add the Watchdog Timer for the NXP S32 platform
+
+ .../bindings/watchdog/nxp,s32g2-swt.yaml      |  54 +++
+ drivers/watchdog/Kconfig                      |   9 +
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/s32g_wdt.c                   | 315 ++++++++++++++++++
+ 4 files changed, 379 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/nxp,s32g2-swt.yaml
+ create mode 100644 drivers/watchdog/s32g_wdt.c
 
 -- 
-Lee Jones [李琼斯]
+2.43.0
+
 
