@@ -1,96 +1,83 @@
-Return-Path: <linux-watchdog+bounces-3275-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3276-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D7B6A83CEC
-	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Apr 2025 10:29:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0658EA83F5D
+	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Apr 2025 11:51:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 54A047A0274
-	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Apr 2025 08:26:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D69DB19E4586
+	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Apr 2025 09:51:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC18620C026;
-	Thu, 10 Apr 2025 08:26:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4045A268684;
+	Thu, 10 Apr 2025 09:50:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="A9KWnX6+"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Bi8l/MZ2"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7608F1F1306
-	for <linux-watchdog@vger.kernel.org>; Thu, 10 Apr 2025 08:26:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44E052686AB;
+	Thu, 10 Apr 2025 09:50:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744273611; cv=none; b=KnOXFo3XCkcQZOosUZstaWQjoUbEWis9tEaf42SVcDXy+puKXNGvC2cS0I6cNs/yhJ3bkPvgkIGHSG9DsQTOXM0hJyCfrthCNC7OLR3gvexwWDbc8Od6Abc7zKcaSHjBQVUupTa1CqZbV4+AZ7hthq+Vd0sif/YA0Ve3nrzUyto=
+	t=1744278659; cv=none; b=C1YIgVZZMyeL2yWby1Qu5jq0CVeTwgeOQAZfGNQjA2AjJE4/NaIy8rK9UCf/PUk43Aod3gbk1DDdk7oMO9BXuKIbrcXHIm+n8mGHm5hCopoRQnXVZreXiEocfNV6VPghycVr1CBpM8GYCu/10S108EKz5uKwz6zwOXOnEEmN/vs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744273611; c=relaxed/simple;
-	bh=2NlBya4Gy2mn69j6LOVDyYndwxnv+ZY2yaWWXYJ1DeQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=K7r9LO9RMYW2aUmmg1uirbIUjVzK1YlRCkCodBFRbG0g+eAV81BiTm8zgphkV2Yyz2Kdg5kfrIdCj9H/NbanglR/wO1kND6CADeRat+v4RjI7WYFKnciybcap6y3Cdp1VObchCSGhcXbN6RBGMhfOs7Vfu5GcZaG7dn4TwNGoSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=A9KWnX6+; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-43d0618746bso3731525e9.2
-        for <linux-watchdog@vger.kernel.org>; Thu, 10 Apr 2025 01:26:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1744273608; x=1744878408; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e6EMee0sX5sy0z0UGDkG2OVQqlmpAh5xiZkPTPZtxxY=;
-        b=A9KWnX6+zbp6mmxTuMiP8CkRImWC8nQI7WPdzfa2q5w5bXmwtxXwrNj2PfmJgkHLmf
-         crcK/xPx2t9dzY722xFrQDEz488ddJkZ165gG1qSna/IYZrQDmGbioOflfRY025Bq/ih
-         h6HaS5p5ZXt4Nc1peo3G+ejJ9nv6z7hS2d3h+xGIcv3ULAF3Z37mcOpgdpNqnajqUqlg
-         XQoopsUd3a3dsWcKtzDTrnCGmtRXi8yfnNP5bb3JwFMZSd6VPq6o91mOGnU/PPpSBvww
-         6KqPWW8awGu9QChHMftyMe6BjyoI0ouYR1A0ZzxuaiS1pYYFzVqhMEzmArthbTQhOHtj
-         IBgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744273608; x=1744878408;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e6EMee0sX5sy0z0UGDkG2OVQqlmpAh5xiZkPTPZtxxY=;
-        b=xPEJYxaVqbQraLzsz6ndp/IGnisDxLyYXB4OOCo1epsWoqRfkA3qd4JQ5JBhQhihPl
-         1qq9u3t58spP8CBEwrOS1IwkBRo7zcaX3jGqpaTq0fxPLNPSuRdJTCU8n4TvuKm/aVM1
-         6h6K4gXARUWiCPKRZT/YIdhmd1KOi0w8vUnTFW/PBpBQzYLxrdpdzQPoonM5PwuK3DT9
-         6jk9ZCxO4psU1dBsbS092zYdfJv1690nS2tELPrC3i7g+Q/SrljhnpqaTPndgdkqN9DQ
-         8YUGOe4g869360qkT94J/8Gd5A3Q9Tdz+pTtNm7VEQEPjgkkNpISFUrM8zTiJ/p5euL5
-         Ed4g==
-X-Forwarded-Encrypted: i=1; AJvYcCWZUs4nPTIKLAx18hTtOobFKzf5XaelM224I0qaR1a4f+itjTb0nXrxPm7d6wrEeKgw1RaNKiD4VgGkuFNWLg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YypTqtvvwTbFsphs0XQVSrrwNgHC7D9hwokf+e3AWndHsVQM9/n
-	GszZ2kIcc909tMQAgsi8h6S7F02hjerXqU6jh1mawlZTxqS1pt3mW9z/sl/1pqQ=
-X-Gm-Gg: ASbGnctdMK55ctg9cjkf/HVb2wXzCiE/G7wv11IBP5KHONLRO5HEdFbhttj3Qu9GX+d
-	wQ50uCFVAVPqdEVmKfaxJaTJC9INt3t6nXO3kus7dFvvSdMU4XMrzkQEO1JiR6WBpbnr28oNccJ
-	ZExf3JTkyqqlWLw8/gnQXjHC3nxkx3mDVymziL9huT95YaLKIc/BEpT2m1KgGN9MrH50sCmd1Ul
-	i8TBpV/UZBNWGq0YDCthG6KN4CaimKHW8xxs56eHzeNo9P/9TKvQHvEFdme/W+dg9j34cZXzWh3
-	URsutcH7bzhU7aSd2RKYLAvNxuBMrDCAy6pcBvgurCBVmP5YT+uPFets6dPL6inlOiU=
-X-Google-Smtp-Source: AGHT+IHsw3MOWLTsHMZOXGmz/UGbxzGXknZC1Na/Msqa53w29x7UzhUDEeJ9uGBAXSX0jZbUtspyYg==
-X-Received: by 2002:a05:600c:444d:b0:43d:bb9:ad00 with SMTP id 5b1f17b1804b1-43f2d7e9349mr18109365e9.15.1744273607581;
-        Thu, 10 Apr 2025 01:26:47 -0700 (PDT)
-Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43f233a2c84sm42884645e9.11.2025.04.10.01.26.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Apr 2025 01:26:47 -0700 (PDT)
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-To: wim@linux-watchdog.org
-Cc: linux@roeck-us.net,
-	linux-watchdog@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	S32@nxp.com,
-	ghennadi.procopciuc@nxp.com,
-	thomas.fossati@linaro.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	devicetree@vger.kernel.org,
-	alexandru-catalin.ionita@nxp.com
-Subject: [PATCH v4 2/2] watchdog: Add the Watchdog Timer for the NXP S32 platform
-Date: Thu, 10 Apr 2025 10:26:14 +0200
-Message-ID: <20250410082616.1855860-3-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250410082616.1855860-1-daniel.lezcano@linaro.org>
-References: <20250410082616.1855860-1-daniel.lezcano@linaro.org>
+	s=arc-20240116; t=1744278659; c=relaxed/simple;
+	bh=9zwCt4WL9DhM7iAXo1kLqlNoBK9UgBmf+m+uUAiOiwk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Abwu1idHmXVeV8spI8vNfq4d+nNj/wWNCC3bSH6DKH80Ph/sLQnF38bAmvYmvk8NjzCkgmpNo9yd02rOsjhPnGhk8mZUXPDgKnsBSp/DBAaBhJ4J0KKVlJ9cIFDtGeVZu5q/YYxvf1FRN0XXa7bwm0U+NgYGTieWhjvN+X0w6uI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Bi8l/MZ2; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53A5p51r021780;
+	Thu, 10 Apr 2025 09:50:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=gEDQnPFlGqTWD9lpPPKxCFAgqSawbto+ETElrbgJq
+	BM=; b=Bi8l/MZ27LaY9ChO5gKHv+WJBaALCPwbEOoXo81iPthMrruyDnaFiPpHF
+	LWCg9wbGEewVowrMB9QxzNmQrhMwX+S0fx+lpodpky6ezaObZaqNRMY1MJSTBnxv
+	kQbfF2s3E8NxXy3ETUePBowlPfP9BMb4h3GRWBadYoog4v7bvmmI1LyJFH6525jm
+	Kb412OLVArbYayro1jDbeRo8r5UVG6gSkA6sETZKzflBo8pF8pY6/voAjZsHTVWu
+	3IVtbQkWUIqXQZ8oWi/ECQgNf5KFLeL0/C0d1wCyX6Q1853Rd7hzxJI6zGPQwNcZ
+	iwgMnLW6oJmNS2KdzB1XatZA56Hlw==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 45x02qbw2s-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 10 Apr 2025 09:50:41 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 53A8DFRj011062;
+	Thu, 10 Apr 2025 09:50:41 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 45uf7ywk2x-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 10 Apr 2025 09:50:40 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 53A9oa2v46334368
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 10 Apr 2025 09:50:37 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id DE23E2004D;
+	Thu, 10 Apr 2025 09:50:36 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8B46420043;
+	Thu, 10 Apr 2025 09:50:36 +0000 (GMT)
+Received: from tuxmaker.lnxne.boe (unknown [9.152.85.9])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 10 Apr 2025 09:50:36 +0000 (GMT)
+From: Heiko Carstens <hca@linux.ibm.com>
+To: Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: [PATCH] watchdog: diag288_wdt: Implement module autoload
+Date: Thu, 10 Apr 2025 11:50:36 +0200
+Message-ID: <20250410095036.1525057-1-hca@linux.ibm.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -98,398 +85,289 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: xszypIP9zJbmL25bdU133rbcGlkcxxoB
+X-Proofpoint-ORIG-GUID: xszypIP9zJbmL25bdU133rbcGlkcxxoB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-04-10_01,2025-04-08_04,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
+ priorityscore=1501 mlxlogscore=999 lowpriorityscore=0 spamscore=0
+ clxscore=1011 suspectscore=0 mlxscore=0 adultscore=0 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502280000 definitions=main-2504100070
 
-The S32 platform has several Watchdog Timer available and tied with a
-CPU. The SWT0 is the only one which directly asserts the reset line,
-other SWT require an external setup to configure the reset behavior
-which is not part of this change.
+The s390 specific diag288_wdt watchdog driver makes use of the virtual
+watchdog timer, which is available in most machine configurations.
+If executing the diagnose instruction with subcode 0x288 results in an
+exception the watchdog timer is not available, otherwise it is available.
 
-As a side note, in the NXP documentation, the s32g2 and s32g3
-reference manuals refer the watchdog as the 'Software Timer Watchdog'
-where the name can be misleading as it is actually a hardware
-watchdog.
+In order to allow module autoload of the diag288_wdt module, move the
+detection of the virtual watchdog timer to early boot code, and provide
+its availability as a cpu feature.
 
-The maximum watchdog timeout value depends on the clock feeding the
-SWT counter which is 32bits wide. On the s32g274-rb2, the clock has a
-rate of 51MHz which result on 83 seconds maximum timeout.
+This allows to make use of module_cpu_feature_match() to automatically load
+the module iff the virtual watchdog timer is available.
 
-The timeout can be specified via the device tree with the usual
-existing bindings 'timeout-sec' or via the module param timeout.
-
-The watchdog can be loaded with the 'nowayout' option, preventing the
-watchdog to be stopped.
-
-The watchdog can be started at boot time with the 'early-enable'
-option, thus letting the watchdog framework to service the watchdog
-counter.
-
-The watchdog support the magic character to stop when the userspace
-releases the device.
-
-Cc: Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>
-Cc: Thomas Fossati <thomas.fossati@linaro.org>
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Suggested-by: Marc Hartmayer <mhartmay@linux.ibm.com>
+Tested-by: Mete Durlu <meted@linux.ibm.com>
+Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
 ---
- drivers/watchdog/Kconfig    |   9 ++
- drivers/watchdog/Makefile   |   1 +
- drivers/watchdog/s32g_wdt.c | 315 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 325 insertions(+)
- create mode 100644 drivers/watchdog/s32g_wdt.c
+ arch/s390/boot/startup.c           | 17 ++++++++++
+ arch/s390/include/asm/cpufeature.h |  1 +
+ arch/s390/include/asm/diag288.h    | 41 +++++++++++++++++++++++
+ arch/s390/include/asm/machine.h    |  1 +
+ arch/s390/kernel/cpufeature.c      |  5 +++
+ drivers/watchdog/diag288_wdt.c     | 53 ++----------------------------
+ 6 files changed, 68 insertions(+), 50 deletions(-)
+ create mode 100644 arch/s390/include/asm/diag288.h
 
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index f81705f8539a..4ab4275ef49f 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -792,6 +792,15 @@ config IMX7ULP_WDT
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called imx7ulp_wdt.
+diff --git a/arch/s390/boot/startup.c b/arch/s390/boot/startup.c
+index 06316fb8e0fa..da8337e63a3e 100644
+--- a/arch/s390/boot/startup.c
++++ b/arch/s390/boot/startup.c
+@@ -6,6 +6,7 @@
+ #include <asm/boot_data.h>
+ #include <asm/extmem.h>
+ #include <asm/sections.h>
++#include <asm/diag288.h>
+ #include <asm/maccess.h>
+ #include <asm/machine.h>
+ #include <asm/sysinfo.h>
+@@ -71,6 +72,20 @@ static void detect_machine_type(void)
+ 		set_machine_feature(MFEATURE_VM);
+ }
  
-+config S32G_WDT
-+	tristate "S32G Watchdog"
-+	depends on ARCH_S32 || COMPILE_TEST
-+	select WATCHDOG_CORE
-+	help
-+	  This is the driver for the hardware watchdog on the NXP
-+	  S32G platforms. If you wish to have watchdog support
-+	  enabled, say Y, otherwise say N.
++static void detect_diag288(void)
++{
++	/* "BEGIN" in EBCDIC character set */
++	static const char cmd[] = "\xc2\xc5\xc7\xc9\xd5";
++	unsigned long action, len;
 +
- config DB500_WATCHDOG
- 	tristate "ST-Ericsson DB800 watchdog"
- 	depends on MFD_DB8500_PRCMU
-diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-index 8411626fa162..d0f9826e32c3 100644
---- a/drivers/watchdog/Makefile
-+++ b/drivers/watchdog/Makefile
-@@ -69,6 +69,7 @@ obj-$(CONFIG_TS72XX_WATCHDOG) += ts72xx_wdt.o
- obj-$(CONFIG_IMX2_WDT) += imx2_wdt.o
- obj-$(CONFIG_IMX_SC_WDT) += imx_sc_wdt.o
- obj-$(CONFIG_IMX7ULP_WDT) += imx7ulp_wdt.o
-+obj-$(CONFIG_S32G_WDT) += s32g_wdt.o
- obj-$(CONFIG_DB500_WATCHDOG) += db8500_wdt.o
- obj-$(CONFIG_RETU_WATCHDOG) += retu_wdt.o
- obj-$(CONFIG_BCM2835_WDT) += bcm2835_wdt.o
-diff --git a/drivers/watchdog/s32g_wdt.c b/drivers/watchdog/s32g_wdt.c
++	action = machine_is_vm() ? (unsigned long)cmd : LPARWDT_RESTART;
++	len = machine_is_vm() ? sizeof(cmd) : 0;
++	if (__diag288(WDT_FUNC_INIT, MIN_INTERVAL, action, len))
++		return;
++	__diag288(WDT_FUNC_CANCEL, 0, 0, 0);
++	set_machine_feature(MFEATURE_DIAG288);
++}
++
+ static void detect_diag9c(void)
+ {
+ 	unsigned int cpu;
+@@ -519,6 +534,8 @@ void startup_kernel(void)
+ 	detect_facilities();
+ 	detect_diag9c();
+ 	detect_machine_type();
++	/* detect_diag288() needs machine type */
++	detect_diag288();
+ 	cmma_init();
+ 	sanitize_prot_virt_host();
+ 	max_physmem_end = detect_max_physmem_end();
+diff --git a/arch/s390/include/asm/cpufeature.h b/arch/s390/include/asm/cpufeature.h
+index e08169bd63a5..6c6a99660e78 100644
+--- a/arch/s390/include/asm/cpufeature.h
++++ b/arch/s390/include/asm/cpufeature.h
+@@ -15,6 +15,7 @@ enum {
+ 	S390_CPU_FEATURE_MSA,
+ 	S390_CPU_FEATURE_VXRS,
+ 	S390_CPU_FEATURE_UV,
++	S390_CPU_FEATURE_D288,
+ 	MAX_CPU_FEATURES
+ };
+ 
+diff --git a/arch/s390/include/asm/diag288.h b/arch/s390/include/asm/diag288.h
 new file mode 100644
-index 000000000000..ad55063060af
+index 000000000000..5e1b43cea9d6
 --- /dev/null
-+++ b/drivers/watchdog/s32g_wdt.c
-@@ -0,0 +1,315 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Watchdog driver for S32G SoC
-+ *
-+ * Copyright 2017-2019, 2021-2025 NXP.
-+ *
-+ */
-+#include <linux/clk.h>
-+#include <linux/debugfs.h>
-+#include <linux/io.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/moduleparam.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/watchdog.h>
++++ b/arch/s390/include/asm/diag288.h
+@@ -0,0 +1,41 @@
++/* SPDX-License-Identifier: GPL-2.0 */
 +
-+#define DRIVER_NAME "s32g-swt"
++#ifndef _ASM_S390_DIAG288_H
++#define _ASM_S390_DIAG288_H
 +
-+#define S32G_SWT_CR(__base)	((__base) + 0x00)	/* Control Register offset	*/
-+#define S32G_SWT_CR_SM		(BIT(9) | BIT(10))	/* -> Service Mode		*/
-+#define S32G_SWT_CR_STP		BIT(2)			/* -> Stop Mode Control		*/
-+#define S32G_SWT_CR_FRZ		BIT(1)			/* -> Debug Mode Control	*/
-+#define S32G_SWT_CR_WEN		BIT(0)			/* -> Watchdog Enable		*/
++#include <asm/asm-extable.h>
++#include <asm/types.h>
 +
-+#define S32G_SWT_TO(__base)	((__base) + 0x08)	/* Timeout Register offset	*/
++#define MIN_INTERVAL 15	    /* Minimal time supported by diag288 */
++#define MAX_INTERVAL 3600   /* One hour should be enough - pure estimation */
 +
-+#define S32G_SWT_SR(__base)	((__base) + 0x10)	/* Service Register offset	*/
-+#define S32G_WDT_SEQ1		0xA602			/* -> service sequence number 1	*/
-+#define S32G_WDT_SEQ2		0xB480			/* -> service sequence number 2	*/
++#define WDT_DEFAULT_TIMEOUT 30
 +
-+#define S32G_SWT_CO(__base)	((__base) + 0x14)	/* Counter output register	*/
++/* Function codes - init, change, cancel */
++#define WDT_FUNC_INIT 0
++#define WDT_FUNC_CHANGE 1
++#define WDT_FUNC_CANCEL 2
++#define WDT_FUNC_CONCEAL 0x80000000
 +
-+#define S32G_WDT_DEFAULT_TIMEOUT	30
++/* Action codes for LPAR watchdog */
++#define LPARWDT_RESTART 0
 +
-+struct s32g_wdt_device {
-+	int rate;
-+	void __iomem *base;
-+	struct watchdog_device wdog;
-+};
-+
-+static bool nowayout = WATCHDOG_NOWAYOUT;
-+module_param(nowayout, bool, 0);
-+MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
-+		 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-+
-+static unsigned int timeout_param = S32G_WDT_DEFAULT_TIMEOUT;
-+module_param(timeout_param, uint, 0);
-+MODULE_PARM_DESC(timeout_param, "Watchdog timeout in seconds (default="
-+		 __MODULE_STRING(S32G_WDT_DEFAULT_TIMEOUT) ")");
-+
-+static bool early_enable;
-+module_param(early_enable, bool, 0);
-+MODULE_PARM_DESC(early_enable,
-+		 "Watchdog is started on module insertion (default=false)");
-+
-+static const struct watchdog_info s32g_wdt_info = {
-+	.identity = "s32g watchdog",
-+	.options = WDIOF_KEEPALIVEPING | WDIOF_SETTIMEOUT | WDIOF_MAGICCLOSE |
-+	WDIOC_GETTIMEOUT | WDIOC_GETTIMELEFT,
-+};
-+
-+static struct s32g_wdt_device *wdd_to_s32g_wdt(struct watchdog_device *wdd)
++static inline int __diag288(unsigned int func, unsigned int timeout,
++			    unsigned long action, unsigned int len)
 +{
-+	return container_of(wdd, struct s32g_wdt_device, wdog);
++	union register_pair r1 = { .even = func, .odd = timeout, };
++	union register_pair r3 = { .even = action, .odd = len, };
++	int rc = -EINVAL;
++
++	asm volatile(
++		"	diag	%[r1],%[r3],0x288\n"
++		"0:	lhi	%[rc],0\n"
++		"1:"
++		EX_TABLE(0b, 1b)
++		: [rc] "+d" (rc)
++		: [r1] "d" (r1.pair), [r3] "d" (r3.pair)
++		: "cc", "memory");
++	return rc;
 +}
 +
-+static unsigned int wdog_sec_to_count(struct s32g_wdt_device *wdev, unsigned int timeout)
-+{
-+	return wdev->rate * timeout;
-+}
-+
-+static int s32g_wdt_ping(struct watchdog_device *wdog)
-+{
-+	struct s32g_wdt_device *wdev = wdd_to_s32g_wdt(wdog);
-+
-+	writel(S32G_WDT_SEQ1, S32G_SWT_SR(wdev->base));
-+	writel(S32G_WDT_SEQ2, S32G_SWT_SR(wdev->base));
-+
-+	return 0;
-+}
-+
-+static int s32g_wdt_start(struct watchdog_device *wdog)
-+{
-+	struct s32g_wdt_device *wdev = wdd_to_s32g_wdt(wdog);
-+	unsigned long val;
-+
-+	val = readl(S32G_SWT_CR(wdev->base));
-+
-+	val |= S32G_SWT_CR_WEN;
-+
-+	writel(val, S32G_SWT_CR(wdev->base));
-+
-+	return 0;
-+}
-+
-+static int s32g_wdt_stop(struct watchdog_device *wdog)
-+{
-+	struct s32g_wdt_device *wdev = wdd_to_s32g_wdt(wdog);
-+	unsigned long val;
-+
-+	val = readl(S32G_SWT_CR(wdev->base));
-+
-+	val &= ~S32G_SWT_CR_WEN;
-+
-+	writel(val, S32G_SWT_CR(wdev->base));
-+
-+	return 0;
-+}
-+
-+static int s32g_wdt_set_timeout(struct watchdog_device *wdog, unsigned int timeout)
-+{
-+	struct s32g_wdt_device *wdev = wdd_to_s32g_wdt(wdog);
-+
-+	writel(wdog_sec_to_count(wdev, timeout), S32G_SWT_TO(wdev->base));
-+
-+	wdog->timeout = timeout;
-+
-+	/*
-+	 * Conforming to the documentation, the timeout counter is
-+	 * loaded when servicing is operated (aka ping) or when the
-+	 * counter is enabled. In case the watchdog is already started
-+	 * it must be stopped and started again to update the timeout
-+	 * register or a ping can be sent to refresh the counter. Here
-+	 * we choose to send a ping to the watchdog which is harmless
-+	 * if the watchdog is stopped.
-+	 */
-+	return s32g_wdt_ping(wdog);
-+}
-+
-+static unsigned int s32g_wdt_get_timeleft(struct watchdog_device *wdog)
-+{
-+	struct s32g_wdt_device *wdev = wdd_to_s32g_wdt(wdog);
-+	unsigned long counter;
-+	bool is_running;
-+
-+	/*
-+	 * The counter output can be read only if the SWT is
-+	 * disabled. Given the latency between the internal counter
-+	 * and the counter output update, there can be very small
-+	 * difference. However, we can accept this matter of fact
-+	 * given the resolution is a second based unit for the output.
-+	 */
-+	is_running = watchdog_hw_running(wdog);
-+
-+	if (is_running)
-+		s32g_wdt_stop(wdog);
-+
-+	counter = readl(S32G_SWT_CO(wdev->base));
-+
-+	if (is_running)
-+		s32g_wdt_start(wdog);
-+
-+	return counter / wdev->rate;
-+}
-+
-+static const struct watchdog_ops s32g_wdt_ops = {
-+	.owner		= THIS_MODULE,
-+	.start		= s32g_wdt_start,
-+	.stop		= s32g_wdt_stop,
-+	.ping		= s32g_wdt_ping,
-+	.set_timeout	= s32g_wdt_set_timeout,
-+	.get_timeleft	= s32g_wdt_get_timeleft,
-+};
-+
-+static void s32g_wdt_init(struct s32g_wdt_device *wdev)
-+{
-+	unsigned long val;
-+
-+	/* Set the watchdog's Time-Out value */
-+	val = wdog_sec_to_count(wdev, wdev->wdog.timeout);
-+
-+	writel(val, S32G_SWT_TO(wdev->base));
-+
-+	/*
-+	 * Get the control register content. We are at init time, the
-+	 * watchdog should not be started.
-+	 */
-+	val = readl(S32G_SWT_CR(wdev->base));
-+
-+	/*
-+	 * We want to allow the watchdog timer to be stopped when
-+	 * device enters debug mode.
-+	 */
-+	val |= S32G_SWT_CR_FRZ;
-+
-+	/*
-+	 * However, when the CPU is in WFI or suspend mode, the
-+	 * watchdog must continue. The documentation refers it as the
-+	 * stopped mode.
-+	 */
-+	val &= ~S32G_SWT_CR_STP;
-+
-+	/*
-+	 * Use Fixed Service Sequence to ping the watchdog which is
-+	 * 0x00 configuration value for the service mode. It should be
-+	 * already set because it is the default value but we reset it
-+	 * in case.
-+	 */
-+	val &= ~S32G_SWT_CR_SM;
-+
-+	writel(val, S32G_SWT_CR(wdev->base));
-+
-+	/*
-+	 * When the 'early_enable' option is set, we start the
-+	 * watchdog from the kernel.
-+	 */
-+	if (early_enable) {
-+		s32g_wdt_start(&wdev->wdog);
-+		set_bit(WDOG_HW_RUNNING, &wdev->wdog.status);
-+	}
-+}
-+
-+static int s32g_wdt_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct resource *res;
-+	struct clk *clk;
-+	struct s32g_wdt_device *wdev;
-+	struct watchdog_device *wdog;
-+	int ret;
-+
-+	wdev = devm_kzalloc(dev, sizeof(*wdev), GFP_KERNEL);
-+	if (!wdev)
-+		return -ENOMEM;
-+
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	wdev->base = devm_ioremap_resource(dev, res);
-+	if (IS_ERR(wdev->base))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(wdev->base), "Can not get resource\n");
-+
-+	clk = devm_clk_get_enabled(dev, "counter");
-+	if (IS_ERR(clk))
-+		return dev_err_probe(dev, PTR_ERR(clk), "Can't get Watchdog clock\n");
-+
-+	wdev->rate = clk_get_rate(clk);
-+	if (!wdev->rate) {
-+		dev_err(dev, "Input clock rate is not valid\n");
-+		return -EINVAL;
-+	}
-+
-+	wdog = &wdev->wdog;
-+	wdog->info = &s32g_wdt_info;
-+	wdog->ops = &s32g_wdt_ops;
-+
-+	/*
-+	 * The code converts the timeout into a counter a value, if
-+	 * the value is less than 0x100, then it is clamped by the SWT
-+	 * module, so it is safe to specify a zero value as the
-+	 * minimum timeout.
-+	 */
-+	wdog->min_timeout = 0;
-+
-+	/*
-+	 * The counter register is a 32 bits long, so the maximum
-+	 * counter value is UINT_MAX and the timeout in second is the
-+	 * value divided by the rate.
-+	 *
-+	 * For instance, a rate of 51MHz lead to 84 seconds maximum
-+	 * timeout.
-+	 */
-+	wdog->max_timeout = UINT_MAX / wdev->rate;
-+
-+	/*
-+	 * The module param and the DT 'timeout-sec' property will
-+	 * override the default value if they are specified.
-+	 */
-+	ret = watchdog_init_timeout(wdog, timeout_param, dev);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * As soon as the watchdog is started, there is no way to stop
-+	 * it if the 'nowayout' option is set at boot time
-+	 */
-+	watchdog_set_nowayout(wdog, nowayout);
-+
-+	/*
-+	 * The devm_ version of the watchdog_register_device()
-+	 * function will call watchdog_unregister_device() when the
-+	 * device is removed.
-+	 */
-+	watchdog_stop_on_unregister(wdog);
-+
-+	s32g_wdt_init(wdev);
-+
-+	ret = devm_watchdog_register_device(dev, wdog);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Cannot register watchdog device\n");
-+
-+	dev_info(dev, "S32G Watchdog Timer Registered, timeout=%ds, nowayout=%d, early_enable=%d\n",
-+		 wdog->timeout, nowayout, early_enable);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id s32g_wdt_dt_ids[] = {
-+	{ .compatible = "nxp,s32g2-swt" },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, s32g_wdt_dt_ids);
-+
-+static struct platform_driver s32g_wdt_driver = {
-+	.probe = s32g_wdt_probe,
-+	.driver = {
-+		.name = DRIVER_NAME,
-+		.of_match_table = s32g_wdt_dt_ids,
-+	},
-+};
-+
-+module_platform_driver(s32g_wdt_driver);
-+
-+MODULE_AUTHOR("Daniel Lezcano <daniel.lezcano@linaro.org>");
-+MODULE_DESCRIPTION("Watchdog driver for S32G SoC");
-+MODULE_LICENSE("GPL");
++#endif /* _ASM_S390_DIAG288_H */
+diff --git a/arch/s390/include/asm/machine.h b/arch/s390/include/asm/machine.h
+index 54478caa5237..8abe5afdbfc4 100644
+--- a/arch/s390/include/asm/machine.h
++++ b/arch/s390/include/asm/machine.h
+@@ -18,6 +18,7 @@
+ #define MFEATURE_VM		7
+ #define MFEATURE_KVM		8
+ #define MFEATURE_LPAR		9
++#define MFEATURE_DIAG288	10
+ 
+ #ifndef __ASSEMBLY__
+ 
+diff --git a/arch/s390/kernel/cpufeature.c b/arch/s390/kernel/cpufeature.c
+index 1b2ae42a0c15..76210f001028 100644
+--- a/arch/s390/kernel/cpufeature.c
++++ b/arch/s390/kernel/cpufeature.c
+@@ -5,11 +5,13 @@
+ 
+ #include <linux/cpufeature.h>
+ #include <linux/bug.h>
++#include <asm/machine.h>
+ #include <asm/elf.h>
+ 
+ enum {
+ 	TYPE_HWCAP,
+ 	TYPE_FACILITY,
++	TYPE_MACHINE,
+ };
+ 
+ struct s390_cpu_feature {
+@@ -21,6 +23,7 @@ static struct s390_cpu_feature s390_cpu_features[MAX_CPU_FEATURES] = {
+ 	[S390_CPU_FEATURE_MSA]	= {.type = TYPE_HWCAP, .num = HWCAP_NR_MSA},
+ 	[S390_CPU_FEATURE_VXRS]	= {.type = TYPE_HWCAP, .num = HWCAP_NR_VXRS},
+ 	[S390_CPU_FEATURE_UV]	= {.type = TYPE_FACILITY, .num = 158},
++	[S390_CPU_FEATURE_D288]	= {.type = TYPE_MACHINE, .num = MFEATURE_DIAG288},
+ };
+ 
+ /*
+@@ -38,6 +41,8 @@ int cpu_have_feature(unsigned int num)
+ 		return !!(elf_hwcap & BIT(feature->num));
+ 	case TYPE_FACILITY:
+ 		return test_facility(feature->num);
++	case TYPE_MACHINE:
++		return test_machine_feature(feature->num);
+ 	default:
+ 		WARN_ON_ONCE(1);
+ 		return 0;
+diff --git a/drivers/watchdog/diag288_wdt.c b/drivers/watchdog/diag288_wdt.c
+index 76dffc89c641..887d5a6c155b 100644
+--- a/drivers/watchdog/diag288_wdt.c
++++ b/drivers/watchdog/diag288_wdt.c
+@@ -29,26 +29,13 @@
+ #include <linux/watchdog.h>
+ #include <asm/machine.h>
+ #include <asm/ebcdic.h>
++#include <asm/diag288.h>
+ #include <asm/diag.h>
+ #include <linux/io.h>
+ 
+ #define MAX_CMDLEN 240
+ #define DEFAULT_CMD "SYSTEM RESTART"
+ 
+-#define MIN_INTERVAL 15     /* Minimal time supported by diag88 */
+-#define MAX_INTERVAL 3600   /* One hour should be enough - pure estimation */
+-
+-#define WDT_DEFAULT_TIMEOUT 30
+-
+-/* Function codes - init, change, cancel */
+-#define WDT_FUNC_INIT 0
+-#define WDT_FUNC_CHANGE 1
+-#define WDT_FUNC_CANCEL 2
+-#define WDT_FUNC_CONCEAL 0x80000000
+-
+-/* Action codes for LPAR watchdog */
+-#define LPARWDT_RESTART 0
+-
+ static char wdt_cmd[MAX_CMDLEN] = DEFAULT_CMD;
+ static bool conceal_on;
+ static bool nowayout_info = WATCHDOG_NOWAYOUT;
+@@ -75,22 +62,8 @@ static char *cmd_buf;
+ static int diag288(unsigned int func, unsigned int timeout,
+ 		   unsigned long action, unsigned int len)
+ {
+-	union register_pair r1 = { .even = func, .odd = timeout, };
+-	union register_pair r3 = { .even = action, .odd = len, };
+-	int err;
+-
+ 	diag_stat_inc(DIAG_STAT_X288);
+-
+-	err = -EINVAL;
+-	asm volatile(
+-		"	diag	%[r1],%[r3],0x288\n"
+-		"0:	la	%[err],0\n"
+-		"1:\n"
+-		EX_TABLE(0b, 1b)
+-		: [err] "+d" (err)
+-		: [r1] "d" (r1.pair), [r3] "d" (r3.pair)
+-		: "cc", "memory");
+-	return err;
++	return __diag288(func, timeout, action, len);
+ }
+ 
+ static int diag288_str(unsigned int func, unsigned int timeout, char *cmd)
+@@ -189,8 +162,6 @@ static struct watchdog_device wdt_dev = {
+ 
+ static int __init diag288_init(void)
+ {
+-	int ret;
+-
+ 	watchdog_set_nowayout(&wdt_dev, nowayout_info);
+ 
+ 	if (machine_is_vm()) {
+@@ -199,24 +170,6 @@ static int __init diag288_init(void)
+ 			pr_err("The watchdog cannot be initialized\n");
+ 			return -ENOMEM;
+ 		}
+-
+-		ret = diag288_str(WDT_FUNC_INIT, MIN_INTERVAL, "BEGIN");
+-		if (ret != 0) {
+-			pr_err("The watchdog cannot be initialized\n");
+-			kfree(cmd_buf);
+-			return -EINVAL;
+-		}
+-	} else {
+-		if (diag288(WDT_FUNC_INIT, WDT_DEFAULT_TIMEOUT,
+-			    LPARWDT_RESTART, 0)) {
+-			pr_err("The watchdog cannot be initialized\n");
+-			return -EINVAL;
+-		}
+-	}
+-
+-	if (diag288(WDT_FUNC_CANCEL, 0, 0, 0)) {
+-		pr_err("The watchdog cannot be deactivated\n");
+-		return -EINVAL;
+ 	}
+ 
+ 	return watchdog_register_device(&wdt_dev);
+@@ -228,5 +181,5 @@ static void __exit diag288_exit(void)
+ 	kfree(cmd_buf);
+ }
+ 
+-module_init(diag288_init);
++module_cpu_feature_match(S390_CPU_FEATURE_D288, diag288_init);
+ module_exit(diag288_exit);
 -- 
-2.43.0
+2.45.2
 
 
