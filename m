@@ -1,82 +1,82 @@
-Return-Path: <linux-watchdog+bounces-3280-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3281-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AED48A842A3
-	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Apr 2025 14:12:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE37CA8430C
+	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Apr 2025 14:25:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EFB13179DD8
-	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Apr 2025 12:10:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 05FF28A75DB
+	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Apr 2025 12:24:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0E00283685;
-	Thu, 10 Apr 2025 12:10:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7218284B47;
+	Thu, 10 Apr 2025 12:25:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gAkbzjD3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a/Gd1EqT"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 638E9198A2F;
-	Thu, 10 Apr 2025 12:10:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51EE5267F64;
+	Thu, 10 Apr 2025 12:25:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744287055; cv=none; b=L6IPO41R44GjuVG76UYQqATZwvBymVHPsAe+JNEDglVH/UsjYBYqoakqu6S/iRFR3pZuBEEiJ+MAMVVgne9jadAJ7nIt8n5iSMQ0hY81erTAMEHHcRTD3rAvv+NIp4i9BYJXlnOYHeLH7zvRiMV1nc9ivvh8leLmYmDav1dhO8w=
+	t=1744287905; cv=none; b=J70o5ARi7fa56CVaLuokYnkIU6pv9FO1XwbjF+S7PM6Ee+vORVmCM2sjY8qfNHwFDlaozmVSiz6dHWrqIJmJPuW2J0zXCbCeb2LjuC+DZxvRUEtbJ5t4tQu8bbuxZNz0x7Drhk4MPc0Z2t4SQB3ZErhHyBaHk/LZ8IZZ50i13LE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744287055; c=relaxed/simple;
-	bh=W89uqurvfV2ffvRAadFN8DfjUAHNIlyYLWQuHh7dvds=;
+	s=arc-20240116; t=1744287905; c=relaxed/simple;
+	bh=dTdntEGF9GLArvpbACvuaE8hfW51JaJ6oHb1cznBLVY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nhI5NCiAIfDNJH37zkbELyY6aMrC7zxNZDeizqcINfQOEZ7JMvYWF6/LU6XT5y7Q3wUfM+G1/ndmTlgDj7QGC+9Gc2xgMwpbasE064hapfObvIwbiSOGUVHS8IKjPq6LvhbhMvZ/r0RePNFrcVG4r+wQc5QZW3k/RBbi2xZCZg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gAkbzjD3; arc=none smtp.client-ip=209.85.214.173
+	 In-Reply-To:Content-Type; b=Xf8ezumvq/VFis5dcug6UIhf6onOZaVkPRiQkT4POPMSbQnZPdwTfP+M/VXZXN27optE3PF+R9JYdvHR9k5So6sYUXkHDUqvUqn95V7Fb4Lz5VCX1ehOWT0+X6RyjOECgQMnaOdhy79gRtvHDYdzXy/P5yQNv01JYaYNf75qUMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a/Gd1EqT; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2255003f4c6so7100425ad.0;
-        Thu, 10 Apr 2025 05:10:53 -0700 (PDT)
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2260c91576aso5270815ad.3;
+        Thu, 10 Apr 2025 05:25:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744287052; x=1744891852; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1744287902; x=1744892702; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=SG1DwgSYKF7Iuy6VY+Yfuv0GEqkxa2LoLkZRsBjQyyI=;
-        b=gAkbzjD3+xKgvbPciC+FiPlgU3eGsw1oJzilhzuuKNbRH27NFKbPSGN7DbjS5qJGFk
-         hfyZtAy1WTaQYV1K/48xNnQmeeGC29CT7qces9b/kZ+rc6grfnmPySRItdbH4FXcEdLH
-         oZralK7L2SqBgR6zcwW4dqRmlqRLsRuAFMV6pX5wySL6C7v6EK22D9kJ/jhyL+XjTsob
-         VgNSAZ4Nl253buSKDrwXC2paXaO3WG2iMdGg+O14LXPyQAiWha0WiaAJXJIWVQCZqzpz
-         frJTvqWQpIYUuCmr6GgtT0fAHusUsrWD1Z4dG2vzmyLREwKS7PAkkbuP1cMaoknXJZkq
-         LjAg==
+        bh=oKOLYO8FnGN01IqnTwIrrJzZAlO0fpdQ4M5UBKeFqOA=;
+        b=a/Gd1EqT65Pg6VKdL6H/llUHNHOM2+pZe40uTfdT6B2q1yE+eZY90qSrgL5EWBn4iT
+         X1aW9/B6XAKUZtyrpsxeJDOAYkewoQdVrdvT/kNfZ/CJArSNhj/s0ffllMDiLd5lZHEb
+         9zTgJDu5u+jWfIO30dXD+KqqucyCt3soH6xr0/sCrfhHXxIJpcgV2EamxcD111MoIFu+
+         +sYUWaP8nlQMHlwvzBv8UUtQLNSG1Qw7PJdrzRO2KIwgsAeful8hBud9dH5X+IPTSkmC
+         I1A1lwIQEW2q0k6yKIZqTdljRRKBp6PTCLAFDDMlxdNFMXsHlqcQqdkGGNIw1ZHYFS/n
+         Jy2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744287052; x=1744891852;
+        d=1e100.net; s=20230601; t=1744287902; x=1744892702;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SG1DwgSYKF7Iuy6VY+Yfuv0GEqkxa2LoLkZRsBjQyyI=;
-        b=rCCf+ROMVEAVVLkg4FtOhH1WlI67J2VuhcSPJCGyIetPeJ1PQhAoKTUtQP5OLmGes2
-         nb7/ju1pet0TKNDsxAgqmYUM8CVUF4bmljxmrKaHeJV2UHAObM5CmP9ZXceR+UtRKFFs
-         jKi+iZddRyU2FhcujK1uX80P+p63tOgzCu8jY2erEZD0Ot8SFk6C8V/Lln0x6tfOv2tK
-         6G+PBqp1bISGOIKif4wKhN5zJzdVbOTqFhpExz7DZ2CR93vBpjFtZRIoxpW4v8WTT7mH
-         XW0tP/CUcPKWucRpP16z8aGVHOKlNIoIqYVGIkU+j9FJRNiZt8uPAjYdQvPwF+QG855S
-         oLbw==
-X-Forwarded-Encrypted: i=1; AJvYcCU36B5H6kPqyHBdbqunHLod/H7J6srNwLcDdVhJTcP1KgPqoJmXvSVrMIW2LlKnsNHi1bXQFCpG9swA+J17DCg=@vger.kernel.org, AJvYcCUzSLrq9psw6p67g+QFFSDpe9GTGytXJWHzv0yhLOZohJ46TnVq/Btb2Qve5ytvJsEsx9kFnjs64JXPLVU=@vger.kernel.org, AJvYcCVm4HocQE8yh8AagW9LWny4CyK6Evrjvp33cMxvbDLHZFLIETjmbE46MdcGRzcd/Krn2Zjiguj7uHPYIQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBcsp+S9UrARweRrWBNAS59601b1vpFYhEgXgMd93e5WDCVJqK
-	H00mUAxltJKbFy6KN84qiSA/9SW1Yl7v+7JFuXeYQx4FVy8ApW6O
-X-Gm-Gg: ASbGncvMlA3CF+rsrNza99/aAGkbFn+5lzVbeksouH78ijnQqBk453eWBuvxWX6v/iq
-	fAN6/M9rIFtFpATGW9gRbiZRyOmikKViZOMnsbF6uIkMK4ZyPeuGJ+NCaaON//x/EIpSpRt4O/I
-	wPpCgFh/aYvY0ASzuJygfkegNkDBBAY1G5H0XTSUajGdzopOlAEJtoecy9Ba7rQP0P/OIo5KEDX
-	mXUGd4Lh5Ph7O6HsdUvqIyukjkQM6+2jdC/4mTzJpx61hhWXGNjzKuSGmLSa/T8R22knXl9OIVc
-	nj1sxBuF0n59MRkZVyv3w6Cs5C64GHVcG3iwuRU6ApBPsgd68abQxSkoWQNsSRDvw5Z7Dv6p314
-	we//1RVR8tPwXDNzO3bu01RqU
-X-Google-Smtp-Source: AGHT+IHdd2cc/ri+v71rQo8PKP2VgMHOLXyWv4L9s9sDA8hBblMITR/YOkATIOI9o71ngVe84cnBOA==
-X-Received: by 2002:a17:903:1a68:b0:223:517c:bfa1 with SMTP id d9443c01a7336-22b42c28921mr43610385ad.38.1744287052402;
-        Thu, 10 Apr 2025 05:10:52 -0700 (PDT)
+        bh=oKOLYO8FnGN01IqnTwIrrJzZAlO0fpdQ4M5UBKeFqOA=;
+        b=uXh5FsVn2uK9MoTBhb6rkjlHhoqWFpHCuB4r6bxV+l2mwa+9xs+p4qSelUg0s/2UP0
+         R3iHp2XthH0S3xMt50ZjDDV2R1phoWj99PHMbeznpB1sVgzQyXML0LhqmeLC7Jft/Ntq
+         w7P91gh4Tv1QLffhl7br0FbcWk+bkxDAo5226vwCFdTKLM+DZVY2UPayS/GFUB+G/9iF
+         yTOs47T6rmbicOF3qcOR92YRKMIbJpNBaSMeqAdZqw2ngKdK9n2eCyT/61Q+cecS4dfF
+         k40C+/2QS8YyfCq92L8p8XFxm60iNb1EKLwam10oX5PXRiHsc7I70Eiogn7cte5JcoHA
+         iz3A==
+X-Forwarded-Encrypted: i=1; AJvYcCU+y1w1I1haZki0jRhDFqHo1lgvLS2IqHVAHQXUXRmCu+o09SHC8ti1WuQTuC1gJBttwQEs9d3A0Opuky2jIXE=@vger.kernel.org, AJvYcCU/o8/ZFFNKiJvc6Tlths06WpaJwBFYfwZBBBsEMq+83BO5ACHkV2xYF4Ot4j5wa6wXdEzgV6sHgFXtSrSaElFk336dCQ==@vger.kernel.org, AJvYcCUTwovbiqCr9Q+IDKLqiZIo6ZMyV+v/qyxX0aa1TOsKiQ0N/gfjdGTv32/zJZJDeH5Jh/tXbov7JXvQ5iUM@vger.kernel.org, AJvYcCVSM0J00jajaaRH+/rGgqH9HXVdh9XBY2KkdEd/ZHdSCu1CaBXX0BztvlkHPiOlERGbrI/pokiGW9MB@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzm1YeRdUxEqIao4tjagtaCS6QRHJs99c4Eahicq51Uq0nGIoFt
+	b8ycOXhiuYxZLkifOIVBVdSEn55SI5S2zXhqFHgIHucpEhhSeL65
+X-Gm-Gg: ASbGnctKEyff7kP4qz+s2gUyMXy6qUZeWEETQHfiTDfcu2Oob2Mz1DZdZXw8cdLWsef
+	MhNiUpqub2x+sshXsykRPki55sXLf+FWMvw10R9cWXx2wwBVEzfmcYmT4IRfq5IJim16MDZ88+c
+	BhoDnYTu7Cixlrt91MGSy6bY2t+cTjSj8NOzuVANmelJloa5l1kzsJw7k2g8jXX/hYOkphmS/Yf
+	DDzHzBWXmWXCfzqFkhMXI2t3blAUwvH8D3T+9Q5CqsrKbk/quoM6kxgI2wtMqXMjlXDv/LQrV14
+	EZAaDDz5CsyghwVQ0Ri8mZMUpOVaC7wRZQYQY1bzzFRegNBSaH8w03jMe+KVa8m7FIiP6N57p3y
+	u/4AedK3+acya7ScHybnkjx9x
+X-Google-Smtp-Source: AGHT+IEvHnk+ya9JlBhjAetYTJPo8LZRwfHCpGUX70o5A/0qbdG1bQh/Qn8alZ/7QgCmYF3vSTIwIw==
+X-Received: by 2002:a17:903:1d2:b0:220:ca08:8986 with SMTP id d9443c01a7336-22b2ede9785mr42047585ad.22.1744287902421;
+        Thu, 10 Apr 2025 05:25:02 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73bb1d2b20esm3074470b3a.2.2025.04.10.05.10.51
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22ac7c97212sm28722945ad.119.2025.04.10.05.25.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Apr 2025 05:10:51 -0700 (PDT)
+        Thu, 10 Apr 2025 05:25:01 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <abe3b3f3-0c9d-4ac2-af1f-59aa186c723c@roeck-us.net>
-Date: Thu, 10 Apr 2025 05:10:50 -0700
+Message-ID: <a24155a3-281b-433d-9964-eedc40ae2bf8@roeck-us.net>
+Date: Thu, 10 Apr 2025 05:25:00 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -84,15 +84,16 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] watchdog: diag288_wdt: Implement module autoload
-To: Heiko Carstens <hca@linux.ibm.com>,
- Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
- Vasily Gorbik <gor@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>, linux-watchdog@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-References: <20250410095036.1525057-1-hca@linux.ibm.com>
+Subject: Re: [PATCH v3] platform/x86: portwell-ec: Add GPIO and WDT driver for
+ Portwell EC
+To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Yen-Chi Huang <jesse.huang@portwell.com.tw>
+Cc: Hans de Goede <hdegoede@redhat.com>, linus.walleij@linaro.org,
+ brgl@bgdev.pl, wim@linux-watchdog.org, LKML <linux-kernel@vger.kernel.org>,
+ platform-driver-x86@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-watchdog@vger.kernel.org, jay.chen@canonical.com
+References: <d6b14c26-e70b-4edb-8661-b213e3fed9d4@portwell.com.tw>
+ <475693ed-d11c-024a-c9f3-a270ab5b68a3@linux.intel.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -138,283 +139,299 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20250410095036.1525057-1-hca@linux.ibm.com>
+In-Reply-To: <475693ed-d11c-024a-c9f3-a270ab5b68a3@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 4/10/25 02:50, Heiko Carstens wrote:
-> The s390 specific diag288_wdt watchdog driver makes use of the virtual
-> watchdog timer, which is available in most machine configurations.
-> If executing the diagnose instruction with subcode 0x288 results in an
-> exception the watchdog timer is not available, otherwise it is available.
+On 4/10/25 05:07, Ilpo Järvinen wrote:
+> On Thu, 10 Apr 2025, Yen-Chi Huang wrote:
 > 
-> In order to allow module autoload of the diag288_wdt module, move the
-> detection of the virtual watchdog timer to early boot code, and provide
-> its availability as a cpu feature.
+>> Adds a driver for the ITE Embedded Controller (EC) on Portwell boards.
+>> It integrates with the Linux GPIO and watchdog subsystems to provide:
+>>
+>> - Control/monitoring of up to 8 EC GPIO pins.
+>> - Hardware watchdog timer with 1-255 second timeouts.
+>>
+>> The driver communicates with the EC via I/O port 0xe300 and identifies
+>> the hardware by the "PWG" firmware signature. This enables enhanced
+>> system management for Portwell embedded/industrial platforms.
+>>
+>> Signed-off-by: Yen-Chi Huang <jesse.huang@portwell.com.tw>
+>> ---
+>> V2->V3:
+>>    - Reworked based on review from Bartosz Golaszewski
+>>    - Changed to use platform_driver and platform_device
+>>    - Updated GPIO to use .set_rv() instead of .set()
+>>    - Used devm_ helpers for request_region, GPIO and watchdog registration
+>>
+>> V1->V2:
+>>    - Addressed review comments from Ilpo Jarvinen
+>>    - Add DMI system check to avoid running on unsupported platforms
+>>    - Add 'force' module parameter to override DMI matching
+>>    - Use request_region() to claim I/O port access
+>>    - Extend WDT timeout handling to use both minute and second registers
+>>    - Increase WDT max timeout from 255s to 15300s
+>>    - Use named defines for WDT enable/disable
+>>    - Remove dummy pr_info() messages
+>>    - Fix several coding style issues (comments, alignment, spacing)
+>> ---
+>>   MAINTAINERS                        |   6 +
+>>   drivers/platform/x86/Kconfig       |  14 ++
+>>   drivers/platform/x86/Makefile      |   3 +
+>>   drivers/platform/x86/portwell-ec.c | 292 +++++++++++++++++++++++++++++
+>>   4 files changed, 315 insertions(+)
+>>   create mode 100644 drivers/platform/x86/portwell-ec.c
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index d5dfb9186962..c52f819786dc 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -19132,6 +19132,12 @@ F:	kernel/time/itimer.c
+>>   F:	kernel/time/posix-*
+>>   F:	kernel/time/namespace.c
+>>   
+>> +PORTWELL EC DRIVER
+>> +M:	Yen-Chi Huang <jesse.huang@portwell.com.tw>
+>> +L:	platform-driver-x86@vger.kernel.org
+>> +S:	Maintained
+>> +F:	drivers/platform/x86/portwell-ec.c
+>> +
+>>   POWER MANAGEMENT CORE
+>>   M:	"Rafael J. Wysocki" <rafael@kernel.org>
+>>   L:	linux-pm@vger.kernel.org
+>> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+>> index 43407e76476b..2f26d1bf0a75 100644
+>> --- a/drivers/platform/x86/Kconfig
+>> +++ b/drivers/platform/x86/Kconfig
+>> @@ -779,6 +779,20 @@ config PCENGINES_APU2
+>>   	  To compile this driver as a module, choose M here: the module
+>>   	  will be called pcengines-apuv2.
+>>   
+>> +config PORTWELL_EC
+>> +	tristate "Portwell Embedded Controller driver"
+>> +	depends on X86 && HAS_IOPORT && WATCHDOG && GPIOLIB
+>> +	help
+>> +	  This driver provides support for the GPIO pins and watchdog timer
+>> +	  embedded in Portwell's EC.
+>> +
+>> +	  Theoretically, this driver should work on multiple Portwell platforms,
+>> +	  but it has only been tested on the Portwell NANO-6064 board.
+>> +	  If you encounter any issues on other boards, please report them.
+>> +
+>> +	  To compile this driver as a module, choose M here: the module
+>> +	  will be called portwell-ec.
+>> +
+>>   config BARCO_P50_GPIO
+>>   	tristate "Barco P50 GPIO driver for identify LED/button"
+>>   	depends on GPIOLIB
+>> diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
+>> index 650dfbebb6c8..83dd82e04457 100644
+>> --- a/drivers/platform/x86/Makefile
+>> +++ b/drivers/platform/x86/Makefile
+>> @@ -92,6 +92,9 @@ obj-$(CONFIG_XO1_RFKILL)	+= xo1-rfkill.o
+>>   # PC Engines
+>>   obj-$(CONFIG_PCENGINES_APU2)	+= pcengines-apuv2.o
+>>   
+>> +# Portwell
+>> +obj-$(CONFIG_PORTWELL_EC)	+= portwell-ec.o
+>> +
+>>   # Barco
+>>   obj-$(CONFIG_BARCO_P50_GPIO)	+= barco-p50-gpio.o
+>>   
+>> diff --git a/drivers/platform/x86/portwell-ec.c b/drivers/platform/x86/portwell-ec.c
+>> new file mode 100644
+>> index 000000000000..7a60ced0c984
+>> --- /dev/null
+>> +++ b/drivers/platform/x86/portwell-ec.c
+>> @@ -0,0 +1,292 @@
+>> +// SPDX-License-Identifier: GPL-2.0-or-later
+>> +/*
+>> + * portwell-ec.c: Portwell embedded controller driver.
+>> + *
+>> + * Tested on:
+>> + *  - Portwell NANO-6064
+>> + *
+>> + * This driver provides support for GPIO and Watchdog Timer
+>> + * functionalities of the Portwell boards with ITE embedded controller (EC).
+>> + * The EC is accessed through I/O ports and provides:
+>> + *  - 8 GPIO pins for control and monitoring
+>> + *  - Hardware watchdog with 1-15300 second timeout range
+>> + *
+>> + * It integrates with the Linux GPIO and Watchdog subsystems, allowing
+>> + * userspace interaction with EC GPIO pins and watchdog control,
+>> + * ensuring system stability and configurability.
+>> + *
+>> + * (C) Copyright 2025 Portwell, Inc.
+>> + * Author: Yen-Chi Huang (jesse.huang@portwell.com.tw)
+>> + */
+>> +
+>> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+>> +
+>> +#include <linux/acpi.h>
+>> +#include <linux/bitfield.h>
+>> +#include <linux/dmi.h>
+>> +#include <linux/gpio/driver.h>
+>> +#include <linux/init.h>
+>> +#include <linux/io.h>
+>> +#include <linux/ioport.h>
+>> +#include <linux/module.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/string.h>
+>> +#include <linux/watchdog.h>
+>> +
+>> +#define PORTWELL_EC_IOSPACE 0xe300
+>> +#define PORTWELL_EC_IOSPACE_LEN 0x100
 > 
-> This allows to make use of module_cpu_feature_match() to automatically load
-> the module iff the virtual watchdog timer is available.
+> SZ_256 + add #include for it.
 > 
-> Suggested-by: Marc Hartmayer <mhartmay@linux.ibm.com>
-> Tested-by: Mete Durlu <meted@linux.ibm.com>
-> Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+>> +
+>> +#define PORTWELL_GPIO_PINS 8
+>> +#define PORTWELL_GPIO_DIR_REG 0x2b
+>> +#define PORTWELL_GPIO_VAL_REG 0x2c
+>> +
+>> +#define PORTWELL_WDT_EC_CONFIG_ADDR 0x06
+>> +#define PORTWELL_WDT_CONFIG_ENABLE 0x1
+>> +#define PORTWELL_WDT_CONFIG_DISABLE 0x0
+> 
+> Align values.
+> 
+>> +#define PORTWELL_WDT_EC_COUNT_MIN_ADDR 0x07
+>> +#define PORTWELL_WDT_EC_COUNT_SEC_ADDR 0x08
+>> +#define PORTWELL_WDT_EC_MAX_COUNT_SECOND 15300 //255*60secs
+> 
+> Move the formula from the comment to the define itself. While doing so,
+> you need to add () around it and add spaces around *.
+> 
+>> +
+>> +#define PORTWELL_EC_FW_VENDOR_ADDRESS 0x4d
+>> +#define PORTWELL_EC_FW_VENDOR_LENGTH 3
+>> +#define PORTWELL_EC_FW_VENDOR_NAME "PWG"
+>> +
+>> +static bool force;
+>> +module_param(force, bool, 0444);
+>> +MODULE_PARM_DESC(force, "Force loading ec driver without checking DMI boardname");
+> 
+> EC
+> 
+>> +static const struct dmi_system_id pwec_dmi_table[] = {
+>> +	{
+>> +		.ident = "NANO-6064 series",
+>> +		.matches = {
+>> +			DMI_MATCH(DMI_BOARD_NAME, "NANO-6064"),
+>> +		},
+>> +	},
+>> +	{ }
+>> +};
+>> +MODULE_DEVICE_TABLE(dmi, pwec_dmi_table);
+>> +
+>> +/* Functions for access EC via IOSPACE*/
+>> +
+>> +static void pwec_write(u8 index, u8 data)
+>> +{
+>> +	outb(data, PORTWELL_EC_IOSPACE + index);
+>> +}
+>> +
+>> +static u8 pwec_read(u8 address)
+>> +{
+>> +	return inb(PORTWELL_EC_IOSPACE + address);
+>> +}
+>> +
+>> +/* GPIO functions*/
+> 
+> Missing space. Please check all your comments as the one above seems to
+> have the same lack of space at the end.
+> 
+>> +
+>> +static int pwec_gpio_get(struct gpio_chip *chip, unsigned int offset)
+>> +{
+>> +	return (pwec_read(PORTWELL_GPIO_VAL_REG) & (1 << offset)) ? 1 : 0;
+>> +}
+>> +
+>> +static int pwec_gpio_set_rv(struct gpio_chip *chip, unsigned int offset, int val)
+>> +{
+>> +	u8 tmp = pwec_read(PORTWELL_GPIO_VAL_REG);
+>> +
+>> +	if (val)
+>> +		tmp |= (1 << offset);
+>> +	else
+>> +		tmp &= ~(1 << offset);
+>> +	pwec_write(PORTWELL_GPIO_VAL_REG, tmp);
+> 
+> Add empty line here.
+> 
+>> +	return 0;
+>> +}
+>> +
+>> +static int pwec_gpio_get_direction(struct gpio_chip *chip, unsigned int offset)
+>> +{
+>> +	u8 direction = pwec_read(PORTWELL_GPIO_DIR_REG) & (1 << offset);
+>> +
+>> +	if (direction)
+>> +		return GPIO_LINE_DIRECTION_IN;
+>> +	else
+>> +		return GPIO_LINE_DIRECTION_OUT;
+>> +}
+>> +
+>> +/*
+>> + * Changing direction causes issues on some boards,
+>> + * so direction_input and direction_output are disabled for now.
+>> + */
+>> +
+>> +static int pwec_gpio_direction_input(struct gpio_chip *gc, unsigned int offset)
+>> +{
+>> +	return -EOPNOTSUPP;
+>> +}
+>> +
+>> +static int pwec_gpio_direction_output(struct gpio_chip *gc, unsigned int offset, int value)
+>> +{
+>> +	return -EOPNOTSUPP;
+>> +}
+>> +
+>> +static struct gpio_chip pwec_gpio_chip = {
+>> +	.label = "portwell-ec-gpio",
+>> +	.get_direction = pwec_gpio_get_direction,
+>> +	.direction_input = pwec_gpio_direction_input,
+>> +	.direction_output = pwec_gpio_direction_output,
+>> +	.get = pwec_gpio_get,
+>> +	.set_rv = pwec_gpio_set_rv,
+>> +	.base = -1,
+>> +	.ngpio = PORTWELL_GPIO_PINS,
+>> +};
+>> +
+>> +/* Watchdog functions*/
+>> +
+>> +static int pwec_wdt_trigger(struct watchdog_device *wdd)
+>> +{
+>> +	int retry = 10;
+>> +	u8 min, sec;
+>> +	unsigned int timeout;
+>> +
+>> +	do {
+>> +		pwec_write(PORTWELL_WDT_EC_COUNT_MIN_ADDR, wdd->timeout / 60);
+>> +		pwec_write(PORTWELL_WDT_EC_COUNT_SEC_ADDR, wdd->timeout % 60);
+>> +		pwec_write(PORTWELL_WDT_EC_CONFIG_ADDR, PORTWELL_WDT_CONFIG_ENABLE);
+>> +		min = pwec_read(PORTWELL_WDT_EC_COUNT_MIN_ADDR);
+>> +		sec = pwec_read(PORTWELL_WDT_EC_COUNT_SEC_ADDR);
+>> +		timeout = min * 60 + sec;
+> 
+> This readback could reuse pwec_wdt_get_timeleft().
+> 
+>> +		retry--;
+> 
+> Decrementing could be done within the condition that checks it.
+> 
+>> +	} while (timeout != wdd->timeout && retry >= 0);
+> 
+> Is this write until timeout matches the one written typical thing for
+> watchdog drivers, or is there something specific to this HW you should
+> comment + note in the changelog so it is recorded for future readers of
+> this code?
+> 
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+No, this is absolutely not typical, and it has nothing to do with watchdog
+drivers in the first place. If the code was in drivers/watchdog/ I'd
+request a detailed comment explaining why it is needed.
 
-> ---
->   arch/s390/boot/startup.c           | 17 ++++++++++
->   arch/s390/include/asm/cpufeature.h |  1 +
->   arch/s390/include/asm/diag288.h    | 41 +++++++++++++++++++++++
->   arch/s390/include/asm/machine.h    |  1 +
->   arch/s390/kernel/cpufeature.c      |  5 +++
->   drivers/watchdog/diag288_wdt.c     | 53 ++----------------------------
->   6 files changed, 68 insertions(+), 50 deletions(-)
->   create mode 100644 arch/s390/include/asm/diag288.h
-> 
-> diff --git a/arch/s390/boot/startup.c b/arch/s390/boot/startup.c
-> index 06316fb8e0fa..da8337e63a3e 100644
-> --- a/arch/s390/boot/startup.c
-> +++ b/arch/s390/boot/startup.c
-> @@ -6,6 +6,7 @@
->   #include <asm/boot_data.h>
->   #include <asm/extmem.h>
->   #include <asm/sections.h>
-> +#include <asm/diag288.h>
->   #include <asm/maccess.h>
->   #include <asm/machine.h>
->   #include <asm/sysinfo.h>
-> @@ -71,6 +72,20 @@ static void detect_machine_type(void)
->   		set_machine_feature(MFEATURE_VM);
->   }
->   
-> +static void detect_diag288(void)
-> +{
-> +	/* "BEGIN" in EBCDIC character set */
-> +	static const char cmd[] = "\xc2\xc5\xc7\xc9\xd5";
-> +	unsigned long action, len;
-> +
-> +	action = machine_is_vm() ? (unsigned long)cmd : LPARWDT_RESTART;
-> +	len = machine_is_vm() ? sizeof(cmd) : 0;
-> +	if (__diag288(WDT_FUNC_INIT, MIN_INTERVAL, action, len))
-> +		return;
-> +	__diag288(WDT_FUNC_CANCEL, 0, 0, 0);
-> +	set_machine_feature(MFEATURE_DIAG288);
-> +}
-> +
->   static void detect_diag9c(void)
->   {
->   	unsigned int cpu;
-> @@ -519,6 +534,8 @@ void startup_kernel(void)
->   	detect_facilities();
->   	detect_diag9c();
->   	detect_machine_type();
-> +	/* detect_diag288() needs machine type */
-> +	detect_diag288();
->   	cmma_init();
->   	sanitize_prot_virt_host();
->   	max_physmem_end = detect_max_physmem_end();
-> diff --git a/arch/s390/include/asm/cpufeature.h b/arch/s390/include/asm/cpufeature.h
-> index e08169bd63a5..6c6a99660e78 100644
-> --- a/arch/s390/include/asm/cpufeature.h
-> +++ b/arch/s390/include/asm/cpufeature.h
-> @@ -15,6 +15,7 @@ enum {
->   	S390_CPU_FEATURE_MSA,
->   	S390_CPU_FEATURE_VXRS,
->   	S390_CPU_FEATURE_UV,
-> +	S390_CPU_FEATURE_D288,
->   	MAX_CPU_FEATURES
->   };
->   
-> diff --git a/arch/s390/include/asm/diag288.h b/arch/s390/include/asm/diag288.h
-> new file mode 100644
-> index 000000000000..5e1b43cea9d6
-> --- /dev/null
-> +++ b/arch/s390/include/asm/diag288.h
-> @@ -0,0 +1,41 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +
-> +#ifndef _ASM_S390_DIAG288_H
-> +#define _ASM_S390_DIAG288_H
-> +
-> +#include <asm/asm-extable.h>
-> +#include <asm/types.h>
-> +
-> +#define MIN_INTERVAL 15	    /* Minimal time supported by diag288 */
-> +#define MAX_INTERVAL 3600   /* One hour should be enough - pure estimation */
-> +
-> +#define WDT_DEFAULT_TIMEOUT 30
-> +
-> +/* Function codes - init, change, cancel */
-> +#define WDT_FUNC_INIT 0
-> +#define WDT_FUNC_CHANGE 1
-> +#define WDT_FUNC_CANCEL 2
-> +#define WDT_FUNC_CONCEAL 0x80000000
-> +
-> +/* Action codes for LPAR watchdog */
-> +#define LPARWDT_RESTART 0
-> +
-> +static inline int __diag288(unsigned int func, unsigned int timeout,
-> +			    unsigned long action, unsigned int len)
-> +{
-> +	union register_pair r1 = { .even = func, .odd = timeout, };
-> +	union register_pair r3 = { .even = action, .odd = len, };
-> +	int rc = -EINVAL;
-> +
-> +	asm volatile(
-> +		"	diag	%[r1],%[r3],0x288\n"
-> +		"0:	lhi	%[rc],0\n"
-> +		"1:"
-> +		EX_TABLE(0b, 1b)
-> +		: [rc] "+d" (rc)
-> +		: [r1] "d" (r1.pair), [r3] "d" (r3.pair)
-> +		: "cc", "memory");
-> +	return rc;
-> +}
-> +
-> +#endif /* _ASM_S390_DIAG288_H */
-> diff --git a/arch/s390/include/asm/machine.h b/arch/s390/include/asm/machine.h
-> index 54478caa5237..8abe5afdbfc4 100644
-> --- a/arch/s390/include/asm/machine.h
-> +++ b/arch/s390/include/asm/machine.h
-> @@ -18,6 +18,7 @@
->   #define MFEATURE_VM		7
->   #define MFEATURE_KVM		8
->   #define MFEATURE_LPAR		9
-> +#define MFEATURE_DIAG288	10
->   
->   #ifndef __ASSEMBLY__
->   
-> diff --git a/arch/s390/kernel/cpufeature.c b/arch/s390/kernel/cpufeature.c
-> index 1b2ae42a0c15..76210f001028 100644
-> --- a/arch/s390/kernel/cpufeature.c
-> +++ b/arch/s390/kernel/cpufeature.c
-> @@ -5,11 +5,13 @@
->   
->   #include <linux/cpufeature.h>
->   #include <linux/bug.h>
-> +#include <asm/machine.h>
->   #include <asm/elf.h>
->   
->   enum {
->   	TYPE_HWCAP,
->   	TYPE_FACILITY,
-> +	TYPE_MACHINE,
->   };
->   
->   struct s390_cpu_feature {
-> @@ -21,6 +23,7 @@ static struct s390_cpu_feature s390_cpu_features[MAX_CPU_FEATURES] = {
->   	[S390_CPU_FEATURE_MSA]	= {.type = TYPE_HWCAP, .num = HWCAP_NR_MSA},
->   	[S390_CPU_FEATURE_VXRS]	= {.type = TYPE_HWCAP, .num = HWCAP_NR_VXRS},
->   	[S390_CPU_FEATURE_UV]	= {.type = TYPE_FACILITY, .num = 158},
-> +	[S390_CPU_FEATURE_D288]	= {.type = TYPE_MACHINE, .num = MFEATURE_DIAG288},
->   };
->   
->   /*
-> @@ -38,6 +41,8 @@ int cpu_have_feature(unsigned int num)
->   		return !!(elf_hwcap & BIT(feature->num));
->   	case TYPE_FACILITY:
->   		return test_facility(feature->num);
-> +	case TYPE_MACHINE:
-> +		return test_machine_feature(feature->num);
->   	default:
->   		WARN_ON_ONCE(1);
->   		return 0;
-> diff --git a/drivers/watchdog/diag288_wdt.c b/drivers/watchdog/diag288_wdt.c
-> index 76dffc89c641..887d5a6c155b 100644
-> --- a/drivers/watchdog/diag288_wdt.c
-> +++ b/drivers/watchdog/diag288_wdt.c
-> @@ -29,26 +29,13 @@
->   #include <linux/watchdog.h>
->   #include <asm/machine.h>
->   #include <asm/ebcdic.h>
-> +#include <asm/diag288.h>
->   #include <asm/diag.h>
->   #include <linux/io.h>
->   
->   #define MAX_CMDLEN 240
->   #define DEFAULT_CMD "SYSTEM RESTART"
->   
-> -#define MIN_INTERVAL 15     /* Minimal time supported by diag88 */
-> -#define MAX_INTERVAL 3600   /* One hour should be enough - pure estimation */
-> -
-> -#define WDT_DEFAULT_TIMEOUT 30
-> -
-> -/* Function codes - init, change, cancel */
-> -#define WDT_FUNC_INIT 0
-> -#define WDT_FUNC_CHANGE 1
-> -#define WDT_FUNC_CANCEL 2
-> -#define WDT_FUNC_CONCEAL 0x80000000
-> -
-> -/* Action codes for LPAR watchdog */
-> -#define LPARWDT_RESTART 0
-> -
->   static char wdt_cmd[MAX_CMDLEN] = DEFAULT_CMD;
->   static bool conceal_on;
->   static bool nowayout_info = WATCHDOG_NOWAYOUT;
-> @@ -75,22 +62,8 @@ static char *cmd_buf;
->   static int diag288(unsigned int func, unsigned int timeout,
->   		   unsigned long action, unsigned int len)
->   {
-> -	union register_pair r1 = { .even = func, .odd = timeout, };
-> -	union register_pair r3 = { .even = action, .odd = len, };
-> -	int err;
-> -
->   	diag_stat_inc(DIAG_STAT_X288);
-> -
-> -	err = -EINVAL;
-> -	asm volatile(
-> -		"	diag	%[r1],%[r3],0x288\n"
-> -		"0:	la	%[err],0\n"
-> -		"1:\n"
-> -		EX_TABLE(0b, 1b)
-> -		: [err] "+d" (err)
-> -		: [r1] "d" (r1.pair), [r3] "d" (r3.pair)
-> -		: "cc", "memory");
-> -	return err;
-> +	return __diag288(func, timeout, action, len);
->   }
->   
->   static int diag288_str(unsigned int func, unsigned int timeout, char *cmd)
-> @@ -189,8 +162,6 @@ static struct watchdog_device wdt_dev = {
->   
->   static int __init diag288_init(void)
->   {
-> -	int ret;
-> -
->   	watchdog_set_nowayout(&wdt_dev, nowayout_info);
->   
->   	if (machine_is_vm()) {
-> @@ -199,24 +170,6 @@ static int __init diag288_init(void)
->   			pr_err("The watchdog cannot be initialized\n");
->   			return -ENOMEM;
->   		}
-> -
-> -		ret = diag288_str(WDT_FUNC_INIT, MIN_INTERVAL, "BEGIN");
-> -		if (ret != 0) {
-> -			pr_err("The watchdog cannot be initialized\n");
-> -			kfree(cmd_buf);
-> -			return -EINVAL;
-> -		}
-> -	} else {
-> -		if (diag288(WDT_FUNC_INIT, WDT_DEFAULT_TIMEOUT,
-> -			    LPARWDT_RESTART, 0)) {
-> -			pr_err("The watchdog cannot be initialized\n");
-> -			return -EINVAL;
-> -		}
-> -	}
-> -
-> -	if (diag288(WDT_FUNC_CANCEL, 0, 0, 0)) {
-> -		pr_err("The watchdog cannot be deactivated\n");
-> -		return -EINVAL;
->   	}
->   
->   	return watchdog_register_device(&wdt_dev);
-> @@ -228,5 +181,5 @@ static void __exit diag288_exit(void)
->   	kfree(cmd_buf);
->   }
->   
-> -module_init(diag288_init);
-> +module_cpu_feature_match(S390_CPU_FEATURE_D288, diag288_init);
->   module_exit(diag288_exit);
+Guenter
 
 
