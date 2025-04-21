@@ -1,47 +1,47 @@
-Return-Path: <linux-watchdog+bounces-3331-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3332-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAB1AA956D2
-	for <lists+linux-watchdog@lfdr.de>; Mon, 21 Apr 2025 21:43:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B639A956D6
+	for <lists+linux-watchdog@lfdr.de>; Mon, 21 Apr 2025 21:44:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2BFDA174205
-	for <lists+linux-watchdog@lfdr.de>; Mon, 21 Apr 2025 19:43:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B322F7A4E30
+	for <lists+linux-watchdog@lfdr.de>; Mon, 21 Apr 2025 19:43:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9B7A1EA7C2;
-	Mon, 21 Apr 2025 19:43:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D68D1EF389;
+	Mon, 21 Apr 2025 19:44:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L2w67U6X"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ja3DSu2u"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF1BC2F37;
-	Mon, 21 Apr 2025 19:43:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45D431E7C25;
+	Mon, 21 Apr 2025 19:44:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745264591; cv=none; b=LjNGDIdVC+qqTdpWFU7RWhr81pqpYiVcTkvdBSkYFwnES+oNoadeA6Qmcx5vD2NyG1XOFapDTJqhrKXz5l9JsfWh1HIedUM8yn4Q+4+QId6YQNO8lYP4beOarY8Vgj6fD7X2SXqyxAgqhfwbLSPo1E5DMlyQgcehwp+Z8jPw3c4=
+	t=1745264646; cv=none; b=UtA+9CoqwSDzM1dEcZ/aRyFHZr4ZTZtBj4vmPAqJy7ClZK3OOMI16ybqL0BSu6kTOhRipezaudVOcu4sBSuDw2Ae864Cp3ifPRuKNmrivQFQzt7J6E+o/r8PQln941oOYgfaBsjIcfbcetvvnBR37P8WESqiO4S4VNX4YI/00og=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745264591; c=relaxed/simple;
-	bh=mbFRu4gB90P3Mi/FfFkSe82F4DRlvEx/uY0WdIUFdXM=;
+	s=arc-20240116; t=1745264646; c=relaxed/simple;
+	bh=OQPd287Xqaz5BKCPqxpAWyeo8nqSBSiCzbKGCNX3e/k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HKzc2NtR3WcnI5Nx2S7ffdK+ULlZjbLGoAmZeP6j3bpz3kZY5DliTleE1yuNoSIgERrTbJsmd5bXC7bEUy0sdGKDDhH1q0fqUIPlzTiPMLVavYRQxcew6PWpQHuL+FKDlNTQDCq85v1op98o/eYVqZprDs/j0kJE7gYIG1EvPPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L2w67U6X; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA69CC4CEE4;
-	Mon, 21 Apr 2025 19:43:08 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=W4d/LoOnod0dPVBZ3BvJ7+zFdlrEcOkmOrx4whjCN1gGN8qZz6PrxGDYuUP6F9cYBA1mka+DN0ibhl5UiURfzQfN7j9zVwHSa1NvIF2ZsRZi+xmm0bHoVM3tdgkirq5FZdp0bJTCY8O7XzRJ4cWtYtABopGkCeIT/qY5b7whMY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ja3DSu2u; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89FB5C4CEE4;
+	Mon, 21 Apr 2025 19:44:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745264589;
-	bh=mbFRu4gB90P3Mi/FfFkSe82F4DRlvEx/uY0WdIUFdXM=;
+	s=k20201202; t=1745264645;
+	bh=OQPd287Xqaz5BKCPqxpAWyeo8nqSBSiCzbKGCNX3e/k=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=L2w67U6XcmMHUD416BPDfjhkqqJz7okSxqUjZX3l+qfU7F68TQzyQ1kG31Tzr6Az+
-	 ilOUiOqSld4ASOddTIJpHOmq6/MOspDY8e0vM1N3I7Vx7x7cwgScThDQ8mddB9y8mH
-	 TXu/rcsN1YwSTHqqisfwtKxPuRhvECxU8k00XIp91PPDSagRP/8CIxVtz9pTMiybGH
-	 tfxeDH92hrlCx7h5a2k096hM0MrWdsZDtLOknc5eOp6PEY65ZNO9IkgM5fxdveQTXV
-	 5oLNmfYeVAQ77yXBy0eoVoExouOrqS4MNGE4wrZ1ARnuGY3meZ9rK2yAdrOSEZhMEm
-	 WeeZyAgkz19cg==
-Date: Mon, 21 Apr 2025 14:43:06 -0500
+	b=ja3DSu2uajyCRUi5DOTo++HYxnIuapNJcsC2X+ZL41UanqjfwezkE/D6Uh+suOAV+
+	 IsgDsgF1miayazfOwHo10++SehOBlL6bXMtC0diMFTm/0/dmP5Dn5q06LSK7LjqIDj
+	 p2q3E1hBela8/i0eZLxBZDzrZv/d2V6E9Zimr9LFCgpXH6EP1ofcHzPYOUCuiSKu+B
+	 PQZNI1cuyODAPZi3LaZzfH/xjNab/qrtehsorSyauNs90adE9gSrhZDRIRdYQyitXU
+	 6EBGM0D9Al+6JZ0dxEmy48lx0e/XAOjGFN3X2ZkvJFLBvOxf5TeC55yQf7e3vIiM2n
+	 S/BYG/5Gr4IgQ==
+Date: Mon, 21 Apr 2025 14:44:03 -0500
 From: Rob Herring <robh@kernel.org>
 To: Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>
 Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -53,11 +53,11 @@ Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Rajendra Nayak <quic_rjendra@quicinc.com>,
 	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v2 3/5] dt-bindings: watchdog: separate out the IPQ5424
- compatilble
-Message-ID: <20250421194306.GA2648051-robh@kernel.org>
+Subject: Re: [PATCH v2 4/5] arm64: dts: qcom: ipq5424: drop the fallback WDT
+ compatible
+Message-ID: <20250421194403.GB2648051-robh@kernel.org>
 References: <20250416-wdt_reset_reason-v2-0-c65bba312914@oss.qualcomm.com>
- <20250416-wdt_reset_reason-v2-3-c65bba312914@oss.qualcomm.com>
+ <20250416-wdt_reset_reason-v2-4-c65bba312914@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -66,61 +66,38 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250416-wdt_reset_reason-v2-3-c65bba312914@oss.qualcomm.com>
+In-Reply-To: <20250416-wdt_reset_reason-v2-4-c65bba312914@oss.qualcomm.com>
 
-On Wed, Apr 16, 2025 at 01:59:20PM +0530, Kathiravan Thirumoorthy wrote:
-> To retrieve the system restart reason code from IMEM, need to define the
-> certain device specific data. To achieve that, decouple the IPQ5424
-> compatible from the existing list and define along with 'qcom,kpss-wdt'.
-
-You have missed the whole point of why there's both a specific 
-compatible and a fallback. The specific one existed for a case like this 
-where you need to start distinguishing the specific device. In short, 
-this binding and dts changes are not needed at all, only the driver 
-change is needed. Then you maintain forwards and backwards 
-compatibility. 
-
+On Wed, Apr 16, 2025 at 01:59:21PM +0530, Kathiravan Thirumoorthy wrote:
+> To retrieve the restart reason from IMEM, certain device specific data
+> to be used. To achieve that, drop the fallback compatible.
 > 
 > Signed-off-by: Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>
 > ---
 > Changes in v2:
-> 	- New patch
+> 	- New Patch
 > ---
->  Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
+>  arch/arm64/boot/dts/qcom/ipq5424.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+
+Just so it is abundantly clear. NAK.
+
+See my reply on the binding patch.
+
 > 
-> diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> index 49e2b807db0bc9d3edfc93ec41ad0df0b74ed032..e800f53381ef5626787eff1029bc94177e2635a4 100644
-> --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> @@ -20,7 +20,6 @@ properties:
->                - qcom,kpss-wdt-ipq4019
->                - qcom,apss-wdt-ipq5018
->                - qcom,apss-wdt-ipq5332
-> -              - qcom,apss-wdt-ipq5424
->                - qcom,apss-wdt-ipq9574
->                - qcom,apss-wdt-msm8226
->                - qcom,apss-wdt-msm8974
-> @@ -56,6 +55,8 @@ properties:
->                - qcom,kpss-wdt-msm8960
->            - const: qcom,kpss-timer
->            - const: qcom,msm-timer
-> +      - items:
-> +          - const: qcom,apss-wdt-ipq5424
+> diff --git a/arch/arm64/boot/dts/qcom/ipq5424.dtsi b/arch/arm64/boot/dts/qcom/ipq5424.dtsi
+> index 4f18ea79502738c2b9cb4b13e8eb4ac4ddd89adf..21252352b7328e4a1b7ba6ca7080f73722f097ad 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq5424.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/ipq5424.dtsi
+> @@ -376,7 +376,7 @@ intc: interrupt-controller@f200000 {
+>  		};
 >  
->    reg:
->      maxItems: 1
-> @@ -93,7 +94,9 @@ allOf:
->        properties:
->          compatible:
->            contains:
-> -            const: qcom,kpss-wdt
-> +            enum:
-> +              - qcom,apss-wdt-ipq5424
-> +              - qcom,kpss-wdt
->      then:
->        properties:
->          clock-frequency: false
+>  		watchdog@f410000 {
+> -			compatible = "qcom,apss-wdt-ipq5424", "qcom,kpss-wdt";
+> +			compatible = "qcom,apss-wdt-ipq5424";
+>  			reg = <0 0x0f410000 0 0x1000>;
+>  			interrupts = <GIC_SPI 0 IRQ_TYPE_EDGE_RISING>;
+>  			clocks = <&sleep_clk>;
 > 
 > -- 
 > 2.34.1
