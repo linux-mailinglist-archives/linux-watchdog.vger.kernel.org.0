@@ -1,82 +1,82 @@
-Return-Path: <linux-watchdog+bounces-3328-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3329-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77258A955E7
-	for <lists+linux-watchdog@lfdr.de>; Mon, 21 Apr 2025 20:28:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47F79A955F2
+	for <lists+linux-watchdog@lfdr.de>; Mon, 21 Apr 2025 20:29:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 177CB188F313
-	for <lists+linux-watchdog@lfdr.de>; Mon, 21 Apr 2025 18:29:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA95916BBA7
+	for <lists+linux-watchdog@lfdr.de>; Mon, 21 Apr 2025 18:29:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84F391E9B07;
-	Mon, 21 Apr 2025 18:28:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F8DA1E9B0D;
+	Mon, 21 Apr 2025 18:29:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YmuTAGCT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ThdijOIP"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAA691E9B31;
-	Mon, 21 Apr 2025 18:28:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3AAA14883F;
+	Mon, 21 Apr 2025 18:29:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745260120; cv=none; b=PZZa/jGAJrBLvLCTFEEINNMr9Kzt8lR1jyOr1PC4gvx1gKnj0ea7GF/I1mRlT2CFhKYTcLsw09BirjqLcWRE1Ds+t61zNqzUwQQhfknVXAn3m5/C259+6pXCO0qqV94gsxrMpeKkgg0h0139LnvsDZrMzzGF6MRIeu7bEJFpXHY=
+	t=1745260145; cv=none; b=DRqgNEFPfqmcGaGJ//18saPTUT1wECf2qyK7mBiDkB4+9nYJBFaBkoI+YtZEvQy+Lp1pk7yiWQD4ujFsk44xLFjy8PqRsNdvFfx9Ng7RZNKLnL+8+ndVVygWR64fE7Lm73JyMuFt/OHGidV/G/9fRUn/FNOIaidgji6Bhr4F54E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745260120; c=relaxed/simple;
-	bh=dJ42hyFRaKvCRXRgVd/5sUAj9cgtrGwEXODTEyU1eQY=;
+	s=arc-20240116; t=1745260145; c=relaxed/simple;
+	bh=RKZeGBfLf2qtqFtq3zPZmyB/nlO3RinSRchjjFTJcv4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=t5cJJAZ92u0SGFIb/7Vq5kQoW258qdXOjRRpCFW5c74EfjIdEb71c9o1Hq8KoZ5o50kP5Iwqjz9Q8uXRHTYlLJG14tpxnUoaisqfdbjavC9ze76SP+oLEPbcQ7rL+ySPI6NPg46TJ5X50rnhyviDh4ii9N9T5hPtjIk852LjtqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YmuTAGCT; arc=none smtp.client-ip=209.85.215.182
+	 In-Reply-To:Content-Type; b=NBEnT9PnVUJBf9aIimUnR/DCp9Of7zLnZ63OVuVMBglFWk4TWbruU3RPOGf8RqPl/C09FKsKEX3U3e6W05AYnDBfPkKhLbMb+xVEgBmHKQew8Sawh8oyE6UHu+GTvW/hkhZdYBGeCr7+dZvTDj1lcIoBooJrIhQaQL00w1S07fI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ThdijOIP; arc=none smtp.client-ip=209.85.210.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-af908bb32fdso3582716a12.1;
-        Mon, 21 Apr 2025 11:28:38 -0700 (PDT)
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-739be717eddso3189684b3a.2;
+        Mon, 21 Apr 2025 11:29:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745260118; x=1745864918; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1745260143; x=1745864943; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=FKfezAbyINz439QFK7u4LKc0xE0oolzizXsIr73Ko5k=;
-        b=YmuTAGCTvJLuAcyXGBzpRgrWtYsrAyrFtiIBwe7zwG/kwIxqfnZf+KiXoWFifOijMg
-         H0fziDow3Z8xX5/O7e7kDS9NtljD0t96V0LxmcsnHJ+81J32A18N+flzY+DZQJ32RzRE
-         d6zq9IMtEx5d/8RKH3DIOUtN4OZzM4P/eI00kFhito0yItfEvJF61pIE04PP1dR8jdLO
-         jaz1fHBp+8cD+jv0VOYNgRKw1YqixQNQEuiNmdgXsqDAxe6SOo3vxrWDlNpHEBOXNswv
-         1dAiPUhTgu+4RkBmED0xNhEsTsw+JHSnzFOhWwEKLLoiGxeV54lWYk/Au8H28hjRxl6/
-         h8Pg==
+        bh=LEkfejIw1pTO7xQTKbeC6S3IuRHAGhwYTjYXnJBC6zE=;
+        b=ThdijOIPdbEt9oy2eetK9BEUUPuLb63cW8GkFY889IGqK7TdM982LPLPudBI5sij5y
+         em6faz+AQ3B8wgHleIZ1H2hX9q3sSq7DLf8RvUtHxc09yD/XcG//ojltpShfGVZIuqMV
+         a9V8x7ZEFplC5pj7Ne9Vpxeii8A9RDI2zIKbmVzMo9IbcaDa5U7EsnzxGmSQSm7q/4/K
+         Mo2RkrJw43hVcasMiENQjpozHXC2yUinw0OD9iHNhY878TjsFl4hDOjoBSDVFS2FFzZ9
+         67fvl99cJ4l8lug1SuA3ltEGAhZ5otUzsL3cqt66LGOg5wGrkMukyRieGbgwiChsh6ql
+         8hxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745260118; x=1745864918;
+        d=1e100.net; s=20230601; t=1745260143; x=1745864943;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FKfezAbyINz439QFK7u4LKc0xE0oolzizXsIr73Ko5k=;
-        b=fALUiJCiCXcL14EeGVeTSis8IJWXPGY710Mb7DnuN2oNrC3PrLpotLWwYuEttFK3b9
-         0pik3Qlksja4yA9fTAMq4f8sc1JeMzm8iEWFbCq1sWn82gggKp62RC8fR6eU+IDPkBbe
-         JWxseKq1Tw4caAaU1KmP/wHsJGcDkGggwdb2gNcpj+suBrsRKZatS9qKETFBLI4FmoRl
-         JQTyKKe2sMwfHYLzfhcqr0SrogIePBPYE2fPygRKD4i9NzYHD2ca7LcXO/NSlpDsmaVZ
-         L3JwuQTm0LIdySiIMOOVUEemMX+9HyWyI4epyfiR538L6QgWdSU8Ut3CkoroqFWFwfII
-         ALJg==
-X-Forwarded-Encrypted: i=1; AJvYcCVc1sD837W4JH8UzegZTqCAEgT8wO2CLStKcG5Dj49363obCk7XsyDng5sdi/V/Q4P8tWCAoKD29sC8g3B6Nnk=@vger.kernel.org, AJvYcCWDIVdzGbN0HuKYSASa6eibNb2CtE1GVkGfsOSpnkeOuB0dtwapM4vug2vwfMyWKeaxcW8O+e5/YX0iva2j@vger.kernel.org, AJvYcCXWJcUYTR9HMADbfGmilq8VtTwNMLRjo3PmI0OdSLDqOIkbEyv+0bzp+Wg6cX7qstDN2sz+rpH/VdVM@vger.kernel.org, AJvYcCXX7KPFCMh1e9e5SUDrpCFmKdE7XapPgAoZXM7mgGgVRvf2+AEMs0+F2TpcEkelTRhgrDObtlmpDGOGa3YeNYQBg6Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxfgiLPlIgDKEu0wrx2Zcz0i07POo2mAsn2Ci1q5L9jFpx2U8D4
-	xvUSFfiCR7acFJ3UA5b+9yVhi9lwnsgKk9rkjx0GdpAL5eMFD9gf
-X-Gm-Gg: ASbGncsCPP2+8bDD/3fu7j3I7WIr3gKOu/+zfd6RyPQCiD/VYcPoZYsQdSzc4jMkNX+
-	gv08av6WFoD1MSWoDreXwiC/ExDtqVFThoJ/9mMeOj4l9eJEVPjzaJRK+P7ch4N5tFgJX+uHA+2
-	hbVncCN6UZBwRgnPX4XdN35E0ZBzTmPst4n76+Kn/St26k9s8MODvXjuZ8Q5hMzuJABMabEEVrB
-	hmJKLhtFiRP7WTv6l1dYEFpmpzioagdgQQAEzXox+P4MceXuE69nwXDB80vXr0hwYmFR8/YHCP7
-	YuPC90slTRs0fmuB+ZStloCacIC0Wo2meijEkuAnMQMpl1ksLNJBuQSoTWm5UxQrvdYflP68dAn
-	u7g/A7Q/RLJhOWRJbV87oCyKt
-X-Google-Smtp-Source: AGHT+IH6BxuaRCy94Tqcr62CL4dRSN2/IdSa5qdhKN6CxeugqX6Z08+pZeNfnhrpl8lHjVMGtoOlfg==
-X-Received: by 2002:a05:6a21:6b0b:b0:1ee:b5f4:b1d7 with SMTP id adf61e73a8af0-203cc5ce546mr17208028637.7.1745260118137;
-        Mon, 21 Apr 2025 11:28:38 -0700 (PDT)
+        bh=LEkfejIw1pTO7xQTKbeC6S3IuRHAGhwYTjYXnJBC6zE=;
+        b=a3ulCIS+FN5Hfx5Re5TrpV86TdXlFYRiDFOqFPLjwA0xxlxUWPv/U3DZJ+5EFyapkO
+         jG7Rnk+YlkuGuXi0J+4P43W6TBwXqC2eXPxQJdilqbdTaTm420Hq05T7v96LGIx3akpG
+         mKkzBP+94ONjHcdq/qxomVwIc7WbW4ZT5Ni8V1eussNMOfwPJq3vNS7QO9QX/UYmYv8C
+         1RLV8d7gFL8uCBnFkDDYsAMRW9Vc++r93eIPOYzhUXUyG+jc7xEb++t70Ee2Om/XTCNH
+         19r1ZQOfe6Po9G6UJV9VFsq7hLiOL2FGMM59f7u+CVr7jP0oKBvFnRdASDebCmzIWQqu
+         zIyg==
+X-Forwarded-Encrypted: i=1; AJvYcCUDtaKI6LWBi2o2xvLWMhYvikOZkrPMP9rxfOQg/ixy2CsFoHD6UUxWREowHydzOsNzRktDl5egqB2t1Qn44oIq8uc=@vger.kernel.org, AJvYcCUnlJCqbh/4uXkK7n7vqXf9rxcDncLq98U2cezeelilx6WK3kSDCMMILw14koDBvN2Ol+mZghpdn00IbEIQ@vger.kernel.org, AJvYcCWj3L2PQyKkncdhdsi+KZL+32rhBvgvunMk22af/F42M+CQkPhdz7i1FUPqMOHj8YnRlMvcVfrHBkAftJbGe4g=@vger.kernel.org, AJvYcCXzVESWBp3MA02134YPKXFO+gzdxF28xufFvoRd0Z85d/iLKpnLlKi8lpOBYNrzR3Xz2Ax+JPfZiNin@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwBi8MtRAtpnAC7k3NqmzR6jwTvN7AZdsRdOYWbi9MFmFTzgH5
+	bbbP7dISDNZW01tN5Rm0ZsvKF8JMljS01+XDdgCNQ6Lcm0oQNp8V
+X-Gm-Gg: ASbGncssPKUdSOXtyFBL3JnG4+a9sO4WYhIvN1aSL6O84ExO/4SXjjZMARnD6QElET1
+	hfOrbWG3N9Ck8kvCVo+M4OO2yNxc7zcG/MKSdrS+IL/bxXDzVQGqrwO3tNAOaBL1hwMwj/x1Tpg
+	8moEFRCq9zib8dRjhxkKSG3KECcgDYtQ8bUGv9MCHuqRdFajIpop6+nVSSjvwPczp5jIbOP8vJd
+	D8l42Kdyen/rlVt82gmKGrI1dRi9+QwJDt0JrSVwbcmaDR1cexfo2bOZp42psjE0scd3KDlufG8
+	2xUB+nk2UDXkTLOxJwWp7wfMN7yvsDdDvssEuZ/Hk9wANEso5K3WcBhSK5yio+txphKLk2cgxPn
+	nF0TjyXDHyhhvnyBn/Y71Ks3o
+X-Google-Smtp-Source: AGHT+IHZ7aaJiKwDHEgBaIUKXOY9XmDU1DAmhPjLIz0F50JBRbZvABqt/8IIpKMjegOYyi51WnyVuw==
+X-Received: by 2002:aa7:9306:0:b0:736:d6da:8f9e with SMTP id d2e1a72fcca58-73dc119fb18mr17166388b3a.0.1745260143068;
+        Mon, 21 Apr 2025 11:29:03 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b0db13c6355sm6013366a12.41.2025.04.21.11.28.36
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73dbf901187sm6940807b3a.76.2025.04.21.11.29.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Apr 2025 11:28:37 -0700 (PDT)
+        Mon, 21 Apr 2025 11:29:02 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d21dba8c-dde9-4071-9b1f-8632b08f011b@roeck-us.net>
-Date: Mon, 21 Apr 2025 11:28:36 -0700
+Message-ID: <a6b7948e-3143-4836-b9bd-81c652a08aab@roeck-us.net>
+Date: Mon, 21 Apr 2025 11:29:01 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -84,8 +84,8 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: watchdog: samsung-wdt: Add exynos990-wdt
- compatible
+Subject: Re: [PATCH 2/2] watchdog: s3c2410_wdt: Add exynos990-wdt compatible
+ data
 To: Igor Belwon <igor.belwon@mentallysanemainliners.org>,
  Wim Van Sebroeck <wim@linux-watchdog.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
@@ -95,7 +95,7 @@ Cc: Krzysztof Kozlowski <krzk@kernel.org>, linux-watchdog@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
  Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 References: <20250420-wdt-resends-april-v1-0-f58639673959@mentallysanemainliners.org>
- <20250420-wdt-resends-april-v1-1-f58639673959@mentallysanemainliners.org>
+ <20250420-wdt-resends-april-v1-2-f58639673959@mentallysanemainliners.org>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -141,16 +141,14 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20250420-wdt-resends-april-v1-1-f58639673959@mentallysanemainliners.org>
+In-Reply-To: <20250420-wdt-resends-april-v1-2-f58639673959@mentallysanemainliners.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 4/20/25 12:00, Igor Belwon wrote:
-> Add a dt-binding compatible for the Exynos990 Watchdog timer.
-> This watchdog is compatible with the GS101/Exynos850 design, as
-> such it requires the cluster-index and syscon-phandle properties
-> to be present. It also contains a cl2 cluster, as such the
-> cluster-index property has been expanded.
+> The Exynos990 has two watchdog clusters - cl0 and cl2. Add new
+> driver data for these two clusters, making it possible to use the
+> watchdog timer on this SoC.
 > 
 > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > Signed-off-by: Igor Belwon <igor.belwon@mentallysanemainliners.org>
