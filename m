@@ -1,166 +1,195 @@
-Return-Path: <linux-watchdog+bounces-3326-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3327-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 144E3A948F0
-	for <lists+linux-watchdog@lfdr.de>; Sun, 20 Apr 2025 21:01:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98BEDA94FBC
+	for <lists+linux-watchdog@lfdr.de>; Mon, 21 Apr 2025 13:00:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 26FED1711A6
-	for <lists+linux-watchdog@lfdr.de>; Sun, 20 Apr 2025 19:01:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5AE0B1894224
+	for <lists+linux-watchdog@lfdr.de>; Mon, 21 Apr 2025 11:00:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC7A821128D;
-	Sun, 20 Apr 2025 19:01:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70C6526159E;
+	Mon, 21 Apr 2025 11:00:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b="rx3eCw78"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NPuNhvAd"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E58F7199947
-	for <linux-watchdog@vger.kernel.org>; Sun, 20 Apr 2025 19:01:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.202.193.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7A3717CA17;
+	Mon, 21 Apr 2025 11:00:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745175683; cv=none; b=iF4b5Cw2KbwMNIT9g+Ex6CPI0Z26/FJF6YuaVVVtjcK8M68TDZbynpYPs65YTGI28Gc8FPrmeuWm1BSH7W/8LPKinMWfbsltTrCtkI+MEK+yeImZYrDc/pJ+ndToNdyRVRhuxcaFVWHUbtjNsdmkqWcIU1HdwV5XcSk99vvR2HQ=
+	t=1745233229; cv=none; b=DyYaaE6NCbTX9JBBa8dTlkFYZOv1zTAfZqV4ZjvEjpyoEwRKfvrfbiYgRAoZUm9iNBX8wzS9eqEYRS8rCtV5ymyNe2668CSlV3E2mDbGQXL2s9wHC3zNLdrXPpI41jGJGSr60fBiy/yRy8FYMYLGkZQUe3wmmCTUzJqvfcj/Vlw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745175683; c=relaxed/simple;
-	bh=Fxg61Yte1UPz7xtMEapmFGrdMeVN/z75TtaNETL9lu4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=J+Tpd5KSEQACfmG8jen/+CVnpY7O7Z/9RFXGDtJ+WScDkusQFkNiZE3KC1u/USCsFXHy18ZnvUZV2U4JNnWqzOFNVieUTixdmMtA29868JXUE0YLS4cIt289n+hgGeRaiPNlp4tuLD4C+raREEg1udhmzeZOtzt25wxKpOGZKM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mentallysanemainliners.org; spf=pass smtp.mailfrom=mentallysanemainliners.org; dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b=rx3eCw78; arc=none smtp.client-ip=34.202.193.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mentallysanemainliners.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mentallysanemainliners.org
-Authentication-Results: purelymail.com; auth=pass
-DKIM-Signature: a=rsa-sha256; b=rx3eCw78qPhYWNuVRMoyRSAjmJCKBcAPF4akoG2OB04SC+117kpMAyYjYQjgz3+wlNUKgYTEPiQVPlNL8Bxp/e0nYcBG7SBQL+oCU2Utc+SRmhAN5N/UAW4w45WSoM81Xwz+V6MEXgkeU+vmy6OoJfBC4hUZ+v6my8fbZnKa3cJgV8jGD5j9YPBvlVIYPCpW+sQZanK9OYteZt/E2FC0sf087Lp1gAVCt1cu13TL4OVqKrjmzZb6amia3ZIbqmP6hoz+ur483/NXy857405jj7fGvUVIaORu023lUGeL8U1xGeIeG5uGGlCJziV+nonN4IRSGDXQe/Pyuz8zeq+gWw==; s=purelymail3; d=purelymail.com; v=1; bh=Fxg61Yte1UPz7xtMEapmFGrdMeVN/z75TtaNETL9lu4=; h=Feedback-ID:Received:From:Date:Subject:To;
-Feedback-ID: 68247:10037:null:purelymail
-X-Pm-Original-To: linux-watchdog@vger.kernel.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1640089901;
-          (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
-          Sun, 20 Apr 2025 19:00:45 +0000 (UTC)
-From: Igor Belwon <igor.belwon@mentallysanemainliners.org>
-Date: Sun, 20 Apr 2025 21:00:39 +0200
-Subject: [PATCH 2/2] watchdog: s3c2410_wdt: Add exynos990-wdt compatible
- data
+	s=arc-20240116; t=1745233229; c=relaxed/simple;
+	bh=l5zPS8y6iowCGIfNInsmJ0YWWMW6rrpVtTzMCrgMbTo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=e/VzIBHI2ImsEY3HzBdT89kGY0X6EPYnzK2/iRWDXRqxrG+xaPoQOVXT9TI2UkIz0CU3aFPBOytGU4NrNkszrDb3N7FOAGHarZQoxkxqUuAhEU6oHoanXxLAR9zEPnSXqpz93kh65sFp8vMd6AjzpGqTOcNwsAkWzf1g3Xsb68g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NPuNhvAd; arc=none smtp.client-ip=209.85.128.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-706cb438672so25527007b3.3;
+        Mon, 21 Apr 2025 04:00:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1745233226; x=1745838026; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=viAID0OFSfWPdzwpqnKUlHRrEMqoxHvEgq73p5L8B4c=;
+        b=NPuNhvAdASLO5KA9eZqnSFG1fC7zuIRY+fRwraWyDboxLB1H5N5spYyk7KfOJtn0Aw
+         PsOApmgNU1agFoJPGk6QLiR5JHvYtNPAx64xtFDtnCTt5SJwx5lZXfFY2mrMM5vSZ3FD
+         tWkS83mF0ltclqlO3rbzeEuOIkbhMIItf1KIWwOGQEndmrJVgKNOsVOMIpwewFzux0Jg
+         HsNCHLO85gufY3t+cm016dhn37i9OUsajHTyk1f7iYjKiuoq428Fh2KlWf2KxQmBimHn
+         el2d0S0rMJSav0O3T+FJlil2trrQxKV68PVV+13gTe3J8MOwp+w6d/hcH/KLYrjeSoXE
+         5stA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745233226; x=1745838026;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=viAID0OFSfWPdzwpqnKUlHRrEMqoxHvEgq73p5L8B4c=;
+        b=CB5H+SnpnW5y6nJeMgFYjjXhmCzlwTy2XFy3seuWovjxZotiz/luCPB+Fr3gds6XAS
+         xEmrKVr+kUcNqaaYklCSL/ShyvCk4lqWtdBzFZ77zJGhFs1RA8PqzxtNflBLgN6tVR3q
+         L3Me6nylrYvGhtUuRWn+6GOlP3J40kko6H6410vsD8fD84omsnMyLtcJ7Rn5JP75NEIk
+         gfg3Rn7LcqbG6CBcsrjhbtNWTT5DDb+8Iol4WXL2K0itEojeoSe0GWQM0AuOaRCq1jhS
+         F1LZ9wBqjt1psEVYdECcTED17T9RW7VU1bWcl2OKFcCRWUryfugVI2iisJ8HtFhfSFKw
+         sslg==
+X-Forwarded-Encrypted: i=1; AJvYcCU3QcfpJag8rq1lc1LrtZeeJEUGBrbswCh22ROLEfCQw2N5JLud/5S8w6Xb0aCqZtLm/kKN8vlH8NuOk8U=@vger.kernel.org, AJvYcCUE/dbXN6SuWxBh5z2jspE3L/ptFxC9fPznicNyQmQ1Q/p26Iqpw4tDQnbTSR+nX/HkzyPgUjwat7xU5KZN@vger.kernel.org, AJvYcCUd0FPLOqgDP5PZ2Pl+aokpOPlFEajitRZBQadWRfxrVRNFWymmd7zi3mIoj+pAIOX60juDClz07z0Y@vger.kernel.org, AJvYcCVAlnkonTaK2LUTsLkVleWIA3KLa8hIwL592384G/g7nl57UAkcNdJIgmsLTobyUm2RahWdxEUpibAu@vger.kernel.org, AJvYcCWfDkB0/VPWDveOdZBLEMnTbWaV3bl7pDlXEFJuLL51cTfqI7qPZ3ka8JmaK4HVaTkhNFsH77Ho@vger.kernel.org, AJvYcCWpb2nTtNJlxaZqXiP9+7wRoBCYD1rfBT911+kJuErP6D5HQZa1xLMRngZqj/P32a6b3WxbuOezqVuTZmOSAZs=@vger.kernel.org, AJvYcCX/fF4gF+YWwV7sXykA7797RbAMxPNVaFbLAnIVYB45LPAKWLmly9JqS89qBfAS43/1K+v5LYHosYQ=@vger.kernel.org, AJvYcCX5XvfOnxsvtfxLA5A2g1SD+x2FjMSmAn+/4VFfY59V+Q/eL0pnXlbsrsCmw3vqk8sFfijcNJcEfzG1YQ==@vger.kernel.org, AJvYcCXGkiEbh+myd8yS+gro1rnbT0ziL5b4RfAlosuxY/lNkEnql11HpH/XIeKl0LgbPK62+lps1Mb42xOe@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxuu6/hErfw3kg3JSHKH0FJEXOVJHrkcFlnqSPhi3iVtxt4iM8y
+	bhjuMHssgB6J5UbEWU3UQTahchw7Yl57COT3pJgZ5scRlniwJda5kDfpyJE0jAaKuI3cywEf/o+
+	Z65JwL2TtdrGD/VSmj62ynS33T+Q=
+X-Gm-Gg: ASbGnctWVn55G+UO++gg/trH/z4UyJ34A47DK5j77DL+uM62/utj67loFyh0Z7ISzMG
+	zADKE6xwNWKdnWrb5H/j7FZpb9a6c66kNrgApHia2cEEVcuVHkGMsJsGIbwwOUFj40KuwrPNNiq
+	jnTzuKX8SOB+5ZZtwt9OXWAwrrpYdknVtQnLXaIn/EmHkH1GApUfpChVff
+X-Google-Smtp-Source: AGHT+IG7euA4BFR+Mx5i/i0jG3mwDi1xEltiPr00AQmdaQcpf6Ouk/sCc3/HcH3nGYloVrsJS5NYz9rk2JRvmLgu4/g=
+X-Received: by 2002:a05:690c:4a09:b0:703:c3ed:1f61 with SMTP id
+ 00721157ae682-706ccd2a836mr163642197b3.20.1745233226387; Mon, 21 Apr 2025
+ 04:00:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250420-wdt-resends-april-v1-2-f58639673959@mentallysanemainliners.org>
-References: <20250420-wdt-resends-april-v1-0-f58639673959@mentallysanemainliners.org>
-In-Reply-To: <20250420-wdt-resends-april-v1-0-f58639673959@mentallysanemainliners.org>
-To: Wim Van Sebroeck <wim@linux-watchdog.org>, 
- Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, linux-watchdog@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
- Igor Belwon <igor.belwon@mentallysanemainliners.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1745175638; l=3556;
- i=igor.belwon@mentallysanemainliners.org; s=20241206;
- h=from:subject:message-id; bh=Fxg61Yte1UPz7xtMEapmFGrdMeVN/z75TtaNETL9lu4=;
- b=JS2lGNZDyaaVkljswDbu0dXHW1KjOUlEXMzWb1hi1S0JfSb0OvEezHI/eSl5ZSjQDddueAUxa
- mC7O1cSh3l1D1Da+z7cGPy79Iul+5yUJOh1EurlCLDM9Vu0H/B8bbrF
-X-Developer-Key: i=igor.belwon@mentallysanemainliners.org; a=ed25519;
- pk=qKAuSTWKTaGQM0vwBxV0p6hPKMN4vh0CwZ+bozrG5lY=
+References: <20250225081644.3524915-1-a0282524688@gmail.com>
+ <20250225081644.3524915-2-a0282524688@gmail.com> <20250307011542.GE8350@google.com>
+ <CAOoeyxUgiTqtSksfHopEDhZHwNkUq9+d-ojo8ma3PX2dosuwyQ@mail.gmail.com>
+ <20250320145042.GS3890718@google.com> <CAOoeyxXZmrzBSNRdRx9vK84m5Z5y8T_A+wY98vVrPUZ7f4w4iw@mail.gmail.com>
+ <20250404142115.GC278642@google.com> <CAOoeyxVVgHGkH5ajQT0NGNPv7FmVPLzuZtGjCiF7mRRto70aAg@mail.gmail.com>
+ <20250410082132.GP372032@google.com>
+In-Reply-To: <20250410082132.GP372032@google.com>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Mon, 21 Apr 2025 19:00:15 +0800
+X-Gm-Features: ATxdqUESxNdKH3-Yj-9uSqFAuc712zSM3LkrmRSu8wa-twvX0fsx93cPWbbNJ5U
+Message-ID: <CAOoeyxV-dzrJNJ83Y55SKc0rBqcFk2jPM1Z2T+hPF+QFGz3GRA@mail.gmail.com>
+Subject: Re: [PATCH v8 1/7] mfd: Add core driver for Nuvoton NCT6694
+To: Lee Jones <lee@kernel.org>
+Cc: tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
+	linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com, 
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The Exynos990 has two watchdog clusters - cl0 and cl2. Add new
-driver data for these two clusters, making it possible to use the
-watchdog timer on this SoC.
+Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B44=E6=9C=8810=E6=97=A5 =E9=
+=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=884:21=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On Mon, 07 Apr 2025, Ming Yu wrote:
+>
+> > Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B44=E6=9C=884=E6=97=A5 =
+=E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=8810:21=E5=AF=AB=E9=81=93=EF=BC=9A
+> > >
+> > > > ...
+> > > > > > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x1),
+> > > > > > >
+> > > > > > > IDs are usually given in base-10.
+> > > > > > >
+> > > > > >
+> > > > > > Fix it in v9.
+> > > > > >
+> > > > > > > Why are you manually adding the device IDs?
+> > > > > > >
+> > > > > > > PLATFORM_DEVID_AUTO doesn't work for you?
+> > > > > > >
+> > > > > >
+> > > > > > I need to manage these IDs to ensure that child devices can be
+> > > > > > properly utilized within their respective modules.
+> > > > >
+> > > > > How?  Please explain.
+> > > > >
+> > > > > This numbering looks sequential and arbitrary.
+> > > > >
+> > > > > What does PLATFORM_DEVID_AUTO do differently such that it is not =
+useful?
+> > > > >
+> > > >
+> > > > As far as I know, PLATFORM_DEVID_AUTO assigns dynamic IDs to device=
+s,
+> > > > but I need fixed IDs.
+> > > > For example, the GPIO driver relies on these IDs to determine the
+> > > > group, allowing the firmware to identify which GPIO group to operat=
+e
+> > > > on through the API.
+> > >
+> > > PLATFORM_DEVID_AUTO will allocate IDs 0 through 16, the same as you'v=
+e
+> > > done here.  These lines do not have any differentiating attributes, s=
+o
+> > > either way we are not allocating specific IDs to specific pieces of t=
+he
+> > > H/W.  I still do not understand why you need to allocate them manuall=
+y.
+> > >
+> >
+> > I'm using PLATFORM_DEVID_AUTO to allocate child device IDs with
+> > MFD_CELL_NAME(), like this:
+> >
+> > static const struct mfd_cell nct6694_dev[] =3D {
+> >     MFD_CELL_NAME("nct6694-gpio"),
+> >     MFD_CELL_NAME("nct6694-gpio"),
+> >     ......
+> >     MFD_CELL_NAME("nct6694-gpio"),
+> >     MFD_CELL_NAME("nct6694-i2c"),
+> >     MFD_CELL_NAME("nct6694-i2c"),
+> >     ......
+> >     MFD_CELL_NAME("nct6694-i2c"),
+> >     ......
+> > };
+> >
+> > For example, the device IDs retrieved in gpio-nct6694.c is 1~16, and
+> > i2c-nct6694.c is 17~22. Does this mean each driver should
+> > independently handle its dynamically assigned IDs?
+> > Additionally, I originally referred to cgbc-core.c with i2c-cgbc.c,
+> > and ab8500-core.c with pwm-ab8500.c for associating child devices. Do
+> > you think this approach is appropriate in my case?
+>
+> Yes, if you _need_ the ranges to start from 0, then you will have to
+> call mfd_add_devices() separately on those ranges.  Otherwise one range
+> will follow directly on to another range.
+>
+> But wait, you're using mfd_add_hotplug_devices(), which means you are
+> using PLATFORM_DEVID_AUTO.  So your .id values that you've added are
+> being ignored anyway.  Thus, if you have tested that this works, you
+> don't need them anyway, right?
+>
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Igor Belwon <igor.belwon@mentallysanemainliners.org>
----
- drivers/watchdog/s3c2410_wdt.c | 39 ++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 38 insertions(+), 1 deletion(-)
+Yes, it uses PLATFORM_DEVID_AUTO, but in my implementation, the
+sub-devices use cell->id instead of platform_device->id, so it doesn't
+affect the current behavior.
 
-diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
-index bdd81d8074b2496d68c2b0f086f477dc8652e452..40901bdac42613458f93c09654353190785ff072 100644
---- a/drivers/watchdog/s3c2410_wdt.c
-+++ b/drivers/watchdog/s3c2410_wdt.c
-@@ -82,6 +82,10 @@
- #define GS_CLUSTER2_NONCPU_INT_EN		0x1644
- #define GS_RST_STAT_REG_OFFSET			0x3B44
- 
-+#define EXYNOS990_CLUSTER2_NONCPU_OUT		0x1620
-+#define EXYNOS990_CLUSTER2_NONCPU_INT_EN	0x1644
-+#define EXYNOS990_CLUSTER2_WDTRESET_BIT		23
-+
- /**
-  * DOC: Quirk flags for different Samsung watchdog IP-cores
-  *
-@@ -259,6 +263,32 @@ static const struct s3c2410_wdt_variant drv_data_exynos850_cl1 = {
- 		  QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_CNT_EN,
- };
- 
-+static const struct s3c2410_wdt_variant drv_data_exynos990_cl0 = {
-+	.mask_reset_reg = GS_CLUSTER0_NONCPU_INT_EN,
-+	.mask_bit = 2,
-+	.mask_reset_inv = true,
-+	.rst_stat_reg = EXYNOS5_RST_STAT_REG_OFFSET,
-+	.rst_stat_bit = EXYNOS850_CLUSTER0_WDTRESET_BIT,
-+	.cnt_en_reg = EXYNOSAUTOV920_CLUSTER0_NONCPU_OUT,
-+	.cnt_en_bit = 7,
-+	.quirks = QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_PMU_MASK_RESET |
-+		  QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_CNT_EN |
-+		  QUIRK_HAS_DBGACK_BIT,
-+};
-+
-+static const struct s3c2410_wdt_variant drv_data_exynos990_cl2 = {
-+	.mask_reset_reg = EXYNOS990_CLUSTER2_NONCPU_INT_EN,
-+	.mask_bit = 2,
-+	.mask_reset_inv = true,
-+	.rst_stat_reg = EXYNOS5_RST_STAT_REG_OFFSET,
-+	.rst_stat_bit = EXYNOS990_CLUSTER2_WDTRESET_BIT,
-+	.cnt_en_reg = EXYNOS990_CLUSTER2_NONCPU_OUT,
-+	.cnt_en_bit = 7,
-+	.quirks = QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_PMU_MASK_RESET |
-+		  QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_CNT_EN |
-+		  QUIRK_HAS_DBGACK_BIT,
-+};
-+
- static const struct s3c2410_wdt_variant drv_data_exynosautov9_cl0 = {
- 	.mask_reset_reg = EXYNOS850_CLUSTER0_NONCPU_INT_EN,
- 	.mask_bit = 2,
-@@ -350,6 +380,8 @@ static const struct of_device_id s3c2410_wdt_match[] = {
- 	  .data = &drv_data_exynos7 },
- 	{ .compatible = "samsung,exynos850-wdt",
- 	  .data = &drv_data_exynos850_cl0 },
-+	{ .compatible = "samsung,exynos990-wdt",
-+	  .data = &drv_data_exynos990_cl0 },
- 	{ .compatible = "samsung,exynosautov9-wdt",
- 	  .data = &drv_data_exynosautov9_cl0 },
- 	{ .compatible = "samsung,exynosautov920-wdt",
-@@ -678,7 +710,8 @@ s3c2410_get_wdt_drv_data(struct platform_device *pdev, struct s3c2410_wdt *wdt)
- 	if (variant == &drv_data_exynos850_cl0 ||
- 	    variant == &drv_data_exynosautov9_cl0 ||
- 	    variant == &drv_data_gs101_cl0 ||
--	    variant == &drv_data_exynosautov920_cl0) {
-+	    variant == &drv_data_exynosautov920_cl0 ||
-+	    variant == &drv_data_exynos990_cl0) {
- 		u32 index;
- 		int err;
- 
-@@ -700,6 +733,10 @@ s3c2410_get_wdt_drv_data(struct platform_device *pdev, struct s3c2410_wdt *wdt)
- 			else if (variant == &drv_data_exynosautov920_cl0)
- 				variant = &drv_data_exynosautov920_cl1;
- 			break;
-+		case 2:
-+			if (variant == &drv_data_exynos990_cl0)
-+				variant = &drv_data_exynos990_cl2;
-+			break;
- 		default:
- 			return dev_err_probe(dev, -EINVAL, "wrong cluster index: %u\n", index);
- 		}
+However, if you think there's a better approach or that this should be
+changed for consistency or correctness, I'm happy to update it, please
+let me know your recommendation.
 
--- 
-2.47.2
 
+Thanks,
+Ming
 
