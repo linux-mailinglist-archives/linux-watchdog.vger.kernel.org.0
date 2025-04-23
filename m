@@ -1,53 +1,82 @@
-Return-Path: <linux-watchdog+bounces-3365-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3367-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D6C6A97A0D
-	for <lists+linux-watchdog@lfdr.de>; Wed, 23 Apr 2025 00:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A173A980C6
+	for <lists+linux-watchdog@lfdr.de>; Wed, 23 Apr 2025 09:27:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CD9B51888C0E
-	for <lists+linux-watchdog@lfdr.de>; Tue, 22 Apr 2025 22:07:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 57E3A1B62C03
+	for <lists+linux-watchdog@lfdr.de>; Wed, 23 Apr 2025 07:27:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F01A92BE103;
-	Tue, 22 Apr 2025 22:07:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F357726A1C4;
+	Wed, 23 Apr 2025 07:27:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="aYPUA556"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="bmtdL42b"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E26832BCF52;
-	Tue, 22 Apr 2025 22:07:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 661AE269B18
+	for <linux-watchdog@vger.kernel.org>; Wed, 23 Apr 2025 07:27:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745359643; cv=none; b=XAB9Vw17iC9mIlspBLZ2nqsWA0+1MT3O4KB3m3EXYYVFkDCO9zOwEaRPrFULwoEACwq/yuywHcLvxPw/vq+5vvxHHG0uQTW9qPUjIJcCA4K1FveYyHxmvvKRyU0kOAgWTIZRHNUkEvIxbxQaRxQg8A1pyNBJwUaFCHe9DBk+kd8=
+	t=1745393223; cv=none; b=a8QnafGAkzD2W5vcPSMkOJfI9ZgHY0VwOe3p17KIbwduHugs9cmo34GMt9aGyWql2sRHGiNZO4vPW6cx72Drb6sFhwcTe2JRscAw1MvbwMrt7JWQrs1puB4kyxwpFpOzC9Ol7aKNlCMP8VQUJ9rygSfF6zLWHRzEu3YTo7APJPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745359643; c=relaxed/simple;
-	bh=HHAqqniu+70PkZcui0L6q6BNnIsbNpEmqB6CAF2ooZs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ufc+2Pyw4senbsog8fF/XdV/me0C+CyriWirFpP9Zxal+SJOt3CidW+YbJUgjQUyDssthwENe7/mE6jo6j4t7Fyw6QydBwJBvWeiQbTRBZCZniaEtKnGF/BUZnCjgxLvaryd0bQOiKF9qkWG39o5KWN/aCeQ0DF/BVF+KDnzNK4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=aYPUA556; arc=none smtp.client-ip=5.75.144.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
-Received: from [172.20.123.187] (xdsl-87-78-95-159.nc.de [87.78.95.159])
-	by mail.mainlining.org (Postfix) with ESMTPSA id 1EF7FBBAD3;
-	Tue, 22 Apr 2025 22:07:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mainlining.org;
-	s=psm; t=1745359633;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=YLEEL3ypzQdRJMrQunu4Ob1ubXvJsyBO7YBIDjBB4wU=;
-	b=aYPUA5566zjczjEjArLW66jjsriNlPgp6SQiT7uVTqwQqgamaiz0k45Auni253BVuHh16S
-	CqN2J4LtKXDGNhiHn3aed4fwkpI/vF+kMaqu4W8lbpkHJ47QdpLuVvtZh1oGE3yhGDRpvI
-	y074nW8X0DpRne03mB1m14dzH0yLP6k+rz/P7sF4XAX6JaZKpFXkvQEWWZaxdfdnuG/uB9
-	gBYioNo9HrCW8TdQY0XNx9EKFK7Zqzkvlu30mbbob+Jr3EeG+gdVSt4GayedAsE76Ln3qb
-	NDsUpLVqYKEobnpwuKMddQcCCUlTjcTQlHXpjGu07eWz2p3SmoB2VlLjKF1s7Q==
-Message-ID: <2ca2b774-fd7f-4612-b38d-f60e32ff6f9a@mainlining.org>
-Date: Wed, 23 Apr 2025 00:07:11 +0200
+	s=arc-20240116; t=1745393223; c=relaxed/simple;
+	bh=Jrbw0OKpQbJ1dFid4p4N4XtPsI8/qSLnEpsHW9bCCKg=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=JhZawhuxbsFYyaRCfWCy6ty9/YmQ1TkKl1AaB1GCifoQLlj8DBM6d3AER0qW4h/EL3I/6hDJxkuUbgy/ilPTUGHXMUSK+/gpk6tVfygaXKOOyt9NuhsPtDTMj26unuHtuzZIK2dBb/6IOQlmTeK5f8nbvE+cImGql1y+iwHbQXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=bmtdL42b; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-43cfe574976so44702465e9.1
+        for <linux-watchdog@vger.kernel.org>; Wed, 23 Apr 2025 00:27:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1745393219; x=1745998019; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kn/kdeC0hIJ6fPjKrtocu5NnRgujubxfAbJ5Urbgh9w=;
+        b=bmtdL42b8fd44VWrOmvcv9L85/Pr7B1mn+KeujWBOFlNNct3bRCeZB9/YyLQJRkqz+
+         i1vu6kE+VAkQcdMe7Z7zUGkiZ9XQp50g0Kvnf0dK2Pp9kkmsCW3mfqEEWlPOSlzpONt5
+         9/YSssROFJXUS01qbFsrEEwVvdW8PCwi19es+o388bCb0zEbq9kqCWKkf56RHlRW0atl
+         vI4EShStAvNhlwh+zYSkP7ecmdLv5G1VI194raLQGfFE2waaKwATKuilbpXQRmPq7KaQ
+         Y7nJIxPdoY8qcPM4araiv+/LnR7Qkq8ownob6mkpDnc/6lrBUEEg0dgGoK+Q37Ki8VWm
+         RW9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745393219; x=1745998019;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=kn/kdeC0hIJ6fPjKrtocu5NnRgujubxfAbJ5Urbgh9w=;
+        b=DoFmLIS+ZNdgqhy8RrVT3n3NWBrkT4JaMuHZxDtydY9+RvRQk0XMPfFbYJDvvJvZlz
+         5AEDYnQDY6E/tLJ5nAb4QMLgWO9tbgGJkvHf7CJSmRXwYm2ZSZgQ2Xz1CWF0Jbs13rbE
+         0oFJyLMUE2/i0Hnz2dhggWRGWM8ZacvwWkbIvBL8wWbQJ+50wXvRTmxiPrdy4iDanFfc
+         Iui6i0Iu3dHh7OIqocMhYyq+9JW+zZli3CkKnB1maDU7Twy+gziQeA3jlAaRBz71SY74
+         +B71phPRN4VlYMYQnXLK0vtqkOFFECDIJYMiOQ3P9FamkTjEMkdcsahFaDwHpWsEQfQH
+         Yj9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCV5JGuUamwxNL6y8x3rfJPnIFBaz4LIM456SZU6rRa8EwZ5xvERL8cvhL0XzlwWErQfXtTIX+E7ne6AUNCChA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxlxt9JMa9lQbtWgnemVKY41mV7yVhIpyHTQa7z6BAnQGVme7Vf
+	KfPb0WjmsxryBIPX5hjPM83+Qqwi5dXcNR0swsRGu/8FwanJEhpVhHv/xWXBxfM=
+X-Gm-Gg: ASbGncuP94R37o6isGwGGw215sCTrh9N83H+L+PzJPe8SAjfmd6CdJ+v/ZNnmWplcRJ
+	+SjXqNL/F5AA6bzIIMc/uSDb9sDHlSgOlsAT8/cVaEjRup3Ze82wAlP8lfihM1dYOLGF3/oRfQN
+	XU2RUzxrgHiNzkQoWu9V4NVMgMjMn6miLKbjREbD+hNS2pS6r5u93EhQ2TvHNbEabIaYhA0EnwE
+	lUfvT0nF5GFq/sWYMSWYc2h159DwrBmCLS+0AAWjOtvV+S6Q6kpEHhPwFx3ax56Xkypo9UMYWlF
+	8UBwaTM7emNzJBiLc03LjAbuf8sxI2dDwCR4KhaqkGjxQO6TCgTawZsexEQ6m+DNKHAb0Oby8Pc
+	4aBUiivDp7HrMZbMLlg==
+X-Google-Smtp-Source: AGHT+IGQjZAyp9xHW8ASlQKrR9fCiGMeMbCakgAb3SkKNca/+Rt6CnnTlRW63K73V1hHmlOCRLIMvA==
+X-Received: by 2002:a05:600c:1c8f:b0:43c:fe5e:f040 with SMTP id 5b1f17b1804b1-4406abffc5emr134620725e9.23.1745393218300;
+        Wed, 23 Apr 2025 00:26:58 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:3d9:2080:2835:c2f4:c226:77dd? ([2a01:e0a:3d9:2080:2835:c2f4:c226:77dd])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-44092db2bd5sm15015645e9.26.2025.04.23.00.26.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Apr 2025 00:26:57 -0700 (PDT)
+Message-ID: <283096ad-ae1b-42b8-8312-b192f735fc80@linaro.org>
+Date: Wed, 23 Apr 2025 09:26:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -55,52 +84,11 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
 Subject: Re: [PATCH 00/33] Add support for Qualcomm Snapdragon SM7150 SoC and
  Google Pixel 4a
-To: Danila Tikhonov <danila@jiaxyga.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Lorenzo Pieralisi <lpieralisi@kernel.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
- <linux@roeck-us.net>, Rajendra Nayak <quic_rjendra@quicinc.com>,
- Jassi Brar <jassisinghbrar@gmail.com>, Bjorn Andersson
- <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>,
- Amit Kucheria <amitk@kernel.org>, Thara Gopinath <thara.gopinath@gmail.com>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Thomas Gleixner <tglx@linutronix.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Wesley Cheng <quic_wcheng@quicinc.com>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>,
- Ulf Hansson <ulf.hansson@linaro.org>,
- Souradeep Chowdhury <quic_schowdhu@quicinc.com>, Lee Jones <lee@kernel.org>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Alex Elder <elder@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>,
- Avri Altman <avri.altman@wdc.com>, Bart Van Assche <bvanassche@acm.org>,
- Andy Gross <agross@kernel.org>, Srinivas Kandagatla <srini@kernel.org>,
- Herbert Xu <herbert@gondor.apana.org.au>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Georgi Djakov <djakov@kernel.org>,
- Loic Poulain <loic.poulain@oss.qualcomm.com>, Robert Foss
- <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Taniya Das <quic_tdas@quicinc.com>,
- Sibi Sankar <quic_sibis@quicinc.com>, Will Deacon <will@kernel.org>,
- Robin Murphy <robin.murphy@arm.com>, Joerg Roedel <joro@8bytes.org>,
- Imran Shaik <quic_imrashai@quicinc.com>,
- Mathieu Poirier <mathieu.poirier@linaro.org>,
- Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
- Neil Armstrong <neil.armstrong@linaro.org>,
- Jessica Zhang <quic_jesszhan@quicinc.com>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- Kees Cook <kees@kernel.org>, Tony Luck <tony.luck@intel.com>,
- "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
- David Wronek <david@mainlining.org>
+To: Jens Reidel <adrian@mainlining.org>, Danila Tikhonov <danila@jiaxyga.com>
 Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
  linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
@@ -113,21 +101,52 @@ Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-hardening@vger.kernel.org, linux@mainlining.org,
  ~postmarketos/upstreaming@lists.sr.ht, Connor Mitchell <c.dog29@hotmail.com>
 References: <20250422-sm7150-upstream-v1-0-bf9a9081631d@jiaxyga.com>
-Content-Language: en-US
-From: Jens Reidel <adrian@mainlining.org>
-In-Reply-To: <20250422-sm7150-upstream-v1-0-bf9a9081631d@jiaxyga.com>
+ <2ca2b774-fd7f-4612-b38d-f60e32ff6f9a@mainlining.org>
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+In-Reply-To: <2ca2b774-fd7f-4612-b38d-f60e32ff6f9a@mainlining.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi everyone,
+Hi,
 
-apologies for the mess this created. Danila's mail provider ratelimited 
-him halfway through sending the series and the attempt to re-try sending 
-the second half an hour later ended up with a new message ID (I think 
-due to not using --in-reply-to).
-He asked me to let you know that this will be resolved later and the 
-whole series will be re-sent once the problems are resolved.
+On 23/04/2025 00:07, Jens Reidel wrote:
+> Hi everyone,
+> 
+> apologies for the mess this created. Danila's mail provider ratelimited him halfway through sending the series and the attempt to re-try sending the second half an hour later ended up with a new message ID (I think due to not using --in-reply-to).
+> He asked me to let you know that this will be resolved later and the whole series will be re-sent once the problems are resolved.
 
-Best regards,
-Jens
+The b4 web submission is a great alternative when the mail provider is rate limited:
+https://b4.docs.kernel.org/en/latest/contributor/send.html#web-endpoint
+
+Neil
+
+> 
+> Best regards,
+> Jens
+
 
