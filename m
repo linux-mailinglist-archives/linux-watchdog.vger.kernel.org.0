@@ -1,484 +1,203 @@
-Return-Path: <linux-watchdog+bounces-3376-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3377-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5756BA9862A
-	for <lists+linux-watchdog@lfdr.de>; Wed, 23 Apr 2025 11:44:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1480A9891C
+	for <lists+linux-watchdog@lfdr.de>; Wed, 23 Apr 2025 14:04:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8C5B17AD1C4
-	for <lists+linux-watchdog@lfdr.de>; Wed, 23 Apr 2025 09:43:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B90B3AC6ED
+	for <lists+linux-watchdog@lfdr.de>; Wed, 23 Apr 2025 12:04:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFDC6274FD2;
-	Wed, 23 Apr 2025 09:41:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D1CA2165F3;
+	Wed, 23 Apr 2025 12:04:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QeNlUiiO"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SG9Tmj7y"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A01D2749F6;
-	Wed, 23 Apr 2025 09:41:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 235601FFC4B
+	for <linux-watchdog@vger.kernel.org>; Wed, 23 Apr 2025 12:04:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745401305; cv=none; b=MvOq3I6I+txKixNnCFTAIvuktOqk9VTAHi55KMgZkMT9G088Cl5fMDRuSB5xvwUuH8uHjkVFm7QncUd1Q4kv9lkvjO1vIScJN/T4WvB16juoZ4Sx1Fuz8Hmfb4LI1mG9AL9lYS9ZpNjq+ptzPDylGKV8MqgycQjkzfjO6zYepss=
+	t=1745409849; cv=none; b=uHTm8xPfZufZzY+gf5GFezo1QhBkuhnxOVy73xUOeZ5OvirsEHbnS+SigF2OknlXGghbHcEVGcL8ZSreSvc9hgBhZbOXm7bYqwwSZddHVDyJUVv+k9FwUBjEh45Hia95TfYUJUn6eMCMkN+tUH877kAsZ1YtCsCEF4cNbvpFjPs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745401305; c=relaxed/simple;
-	bh=8ZWT716Kvf9Nmir1qWbHYxD7A02pPultL0YPRcp8J0I=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=gc33yBDNj/gk2xn/oQu+bD12yyVLBMxbvV3G44aR1XcG+1t07f1ptNR26wk7JeIuUE8OKPby3pd1hliZ1DLSA5VSPslvngQx7s7SDKNZlBRCK6cF3xHocuxr3Q/+KZU3f0TiqgH7iQ9QfdO/PNXQqX5p93Jd1NgxehYxs/jEz+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QeNlUiiO; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-22c33677183so72489605ad.2;
-        Wed, 23 Apr 2025 02:41:43 -0700 (PDT)
+	s=arc-20240116; t=1745409849; c=relaxed/simple;
+	bh=nO6Rg8RoPt3fGEMckf1bI8pF/9LXP6clHDAG+/ggTdA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kgzovs82vtXl5oKu+MSQ2aFMzWRTg7sEF7U7uD/Cc+s+s1A2/nvSG/ue4CnDnERI7jXGmS5gNfSd05fzbgR5JFYoS8xJZiVRQMQq46rPuPeDN1RcZUiXP4VUZjrIkVt2XAvYgKh52oS9HmaltfPflinE/gFi2ME/nb8pKYuo5zY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SG9Tmj7y; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-43cfe99f2a7so7544895e9.2
+        for <linux-watchdog@vger.kernel.org>; Wed, 23 Apr 2025 05:04:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745401303; x=1746006103; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Sog+/W6AVctfHjoxm2zZUHdfyp4KwnzETFplxHLsp8g=;
-        b=QeNlUiiO9wQGB+IJ+CkkMFsWG4cQkMOhb13OZqRbbyof/4NmznYWWEAFGL9dJfsYsJ
-         +KpiyPHEm2t0w4vdmYsm0NfZKFJX4z2eggXYnAkhTk30H4BlWcpEgPpc5+Z+880ztEkW
-         9QKX3vNfGkwPmhpw/jPsqCthzggXUeEAe7DfHZBwwFed2NDKfVVxzJtGY6nxBQtigV5T
-         swTWXgn0QN4CvuDkY/DuXPsxh+hv81QINwsWWL+cglVHefdSiURy0+UoL4sVTpMxvo+0
-         3Mz1rvX8GgCxNOu8HO2jJvwhxrfLF4xaWNMAh1QjVLAvzHvchZrZnTFD6lHI/1a4T9c3
-         eUXw==
+        d=linaro.org; s=google; t=1745409844; x=1746014644; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=nO6Rg8RoPt3fGEMckf1bI8pF/9LXP6clHDAG+/ggTdA=;
+        b=SG9Tmj7yVHO80wQItgxm9Y5e+gR+cmIMI6DdQnA9l3Ukm+K2Z7PJcYy1hWUPNQ0h9B
+         HrypxPLziXhDMgfkBiBQTq5k5h0O6SjP1wW8qJ1xawkdQJoERI/mj0e6XPwPaBcL9aKD
+         rNa14hoUHZs7wu8dGfQFiseBp35SVlYTRupr0wHCoHFsMN4fce+C0HkCBefNdXucmq2Z
+         7Ak4wVd059DaVedVezhtJPRwhOVzWJQAbQP/jVjbNo/VcWPtZrXwe8NETK2uL2w3bf6M
+         Gt2BbzSzkl+aTTuWy1x1uyQODNHS//KxC1ZsWKiJ1ydUzbBLTXMJZsmMEips+tm51WxO
+         3NDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745401303; x=1746006103;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Sog+/W6AVctfHjoxm2zZUHdfyp4KwnzETFplxHLsp8g=;
-        b=gX53t/6MmZGOvMFXLAp7SHDhplfF7uFIX5FEFtrZ2SxAR3llowhLpQm+6iRZROGxn+
-         ptosc2vtBnPRk/86sm2XoNT68FNIEAxH/Gyrdlttx8tDUvLRlxvr6+KnRaRbg5g3uyjb
-         KWHy7idXW2fG1X/zSqMk7aRemttYwn+Zp6Ws98Zqqr+hBFfrUI3bIIV/okrwbueHKinF
-         UcVyQz+dsJQT8XIwZlNlCtZxEv35y3JNp2RobU9ztP4ulHIyCGl+qGycxN1IVDBkSlKY
-         04NKQhLxoOUOgk41AeVMick+/lb5fu+WxH3DxfJRtxj94n8+fZytnGW/2dOW45Ps2alr
-         2Cmg==
-X-Forwarded-Encrypted: i=1; AJvYcCUEuhnLiQCU9rMYC8ipRqt9hOATYFL7D/r8PnYdQasX3fupZjrPUnDgrwP+YKxHyBquduTVr9JRm0Y=@vger.kernel.org, AJvYcCUKPCsJWvstqgbGF68uMXgo03TMWF6Xj2ABNMXRDoX5lxW5K8NbpuN69XhFnKia8FKWuEV2Wa+u@vger.kernel.org, AJvYcCUddnZMviwJteFh29gBJtQf+mOzxhvD43TMY5LddzzEUHPUNR5f1lA2RC6R5qoeoKsJ+h0dZtfHgL1j/ak=@vger.kernel.org, AJvYcCWCRVZBvYcWXEsFKu6u42CUJqhlQJxEn/7tmR8bIsClSmdNzwcAHtopZrtSU30lLmjDoatCxu2vDl1gyA==@vger.kernel.org, AJvYcCWK4d/wNxEyomzDxrktSDq1d20ZaPx82Nw37veOeONyyIwfRx4/uMHtCtctBwORAu0LKO3oTmA1f/V3@vger.kernel.org, AJvYcCWucO6oo70vkd2mK5xfd1Gu07KWBrfiL4m+dv/QQwjufm/esirwq7dUofoaTO+TH3Zqk0nwkW+Ubobl@vger.kernel.org, AJvYcCXHQRGq3Uemxlx/5xRoynYsjk080hQlrWsHh1ehGAZsEn1Jj4GikGAoJEjR47vI3IXi4FkYvWmwAsJW@vger.kernel.org, AJvYcCXb9PZ0GAu3gnB5+x9BQrT9ugEzZztfxD3TT/n61ahtEqq+31x4SSKCIo+pHKNWRwoRwiDmJeFZ8oDYcZmxh/U=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw6Fo63Anb5YC8zdPNeLWKlbeBxe5nwjQabjHtTCSeI5yJABjl4
-	7JLj+otcSt/D88BPKvVXkqpZjd6nd265zDLu9tKjHVz+sBXfI0DW
-X-Gm-Gg: ASbGnct85X6P4cvzCVHvO+WUcYs24WcT6eVAoWxP3RucMGeWhoHtULIs2BCIigTGklP
-	8gnZvvz7Y91M3J2RpKd//i5jzUEMmGOCO/u4mRproPb70WazD102FmPn41nvNCVels/tlBlJ6NX
-	z7UE7crPoFMrc6bXDW4Y4/EWYKBIIe1WlWK/HD9e7WpYvC+UJi/qIlExYPxOqy16KJJU/tpcknB
-	XHvmAqWzOMMMBO1Hn9/MkPEj+IaUnnvPPNLBdfwCCASi3jHAl6By5sUrTVdf2jNSCmBAk96XHxO
-	7xPV+V1l6rFjQ37ZvsDRfSCdIx69zNJQxwT+w3jdDbqFWHEzf8Q1Qf03V4uTs+4QulfZIYzCxV8
-	gYyA=
-X-Google-Smtp-Source: AGHT+IErZyJ7tT8dzYSmK+hrSa5NYGbKDJ5zpqYD7lrhUFQQUR6L51YgyQh6NQl+PA3JRfhf2AdxAQ==
-X-Received: by 2002:a17:903:986:b0:224:e33:889b with SMTP id d9443c01a7336-22c5359a406mr311914135ad.12.1745401303161;
-        Wed, 23 Apr 2025 02:41:43 -0700 (PDT)
-Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22c50eb4b8esm99972775ad.124.2025.04.23.02.41.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Apr 2025 02:41:42 -0700 (PDT)
-From: a0282524688@gmail.com
-X-Google-Original-From: tmyu0@nuvoton.com
-To: lee@kernel.org,
-	linus.walleij@linaro.org,
-	brgl@bgdev.pl,
-	andi.shyti@kernel.org,
-	mkl@pengutronix.de,
-	mailhol.vincent@wanadoo.fr,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	wim@linux-watchdog.org,
-	linux@roeck-us.net,
-	jdelvare@suse.com,
-	alexandre.belloni@bootlin.com
-Cc: linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	linux-can@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-rtc@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Ming Yu <tmyu0@nuvoton.com>
-Subject: [PATCH v10 7/7] rtc: Add Nuvoton NCT6694 RTC support
-Date: Wed, 23 Apr 2025 17:40:58 +0800
-Message-Id: <20250423094058.1656204-8-tmyu0@nuvoton.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250423094058.1656204-1-tmyu0@nuvoton.com>
-References: <20250423094058.1656204-1-tmyu0@nuvoton.com>
+        d=1e100.net; s=20230601; t=1745409844; x=1746014644;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nO6Rg8RoPt3fGEMckf1bI8pF/9LXP6clHDAG+/ggTdA=;
+        b=qMDHpVReLZ5xPeM2dp5emRJSj9sDs31J5/zrqkF1r6PQxiRViLVUtyAs5pVqXfi8fA
+         C1SnIHg1oaU+4QlimVUIwAlh9nIFvbVWCSEgxXg7b7tmYo6pWW52d7i57kvq3KjRAxt7
+         qETybdLUCFAoEwmMnSB9yhqGB7LD/EcTiCqVOpbQzOLRhFzCmHOsSYnmFxl/+ePyianK
+         IguzowuX2QYYvR/VVa7XeJU4+BsiqgEBJD5cydepTvpX3TDiqFA30pOdOfbOU6AI9b9f
+         QLWQexnN4FakGXCOtoYw2FrEyDjt0/iZtjocKrha27TSbWVz6rEbo4h54WxxMI2hgWoa
+         66nw==
+X-Forwarded-Encrypted: i=1; AJvYcCUV7JV1yT54uPyzT3ycwA/ioQYXtSNWA6hQzC4XNulytbbRdXSUIla6bBo+Q6c63dudS0UztCa3REq8gPS8Og==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyYPlSljmAhE7fHjjRIIa4AhXZI3H8h0WXqdDai+JFeCBS+PQh8
+	S/+nIwUzZgMdUrJ5VrP85mix/W0XPEq69NP8L2f1B+82OlpS1kLIhiwj/mnlp1g=
+X-Gm-Gg: ASbGncvYJ3SgpXucIZ+QsGkxzHPfhJVeV334akMa4R/CMvfGGFiqaVgwgIylN8uGmjO
+	rvDguLSDArJyINUKboQgD4zv1ZnNYgVBdt0tJlYoSGGVIOg3sM2xnG5uPvEfD2aSxOD5HHWiEZn
+	FBjhrGFWZVbFncR8QpFVI1Fa182WvotTw1fdjp7fk8Ue/C+G3cuW9e9cIkyjE1gK8NNh+zKN5U4
+	a/CVF2QAhdNgt3IZsyCsw03Jc9GQR45vcqJdiPWRkBE2Ey1q7d0Baq5osJnbRiM4g3HfsA5XgC4
+	6aYXIMqih0LJRRCnEJmps7vP0hlmt9MCpo8ClIEupJxyymqmTzdPLyeF3Y0=
+X-Google-Smtp-Source: AGHT+IHBmQn5KrPTQJfeGklq9iOK8t35CZPk8g0XpKG9bcIRUP76LQys6TvjZPdcNOM3Gg/IO+LciQ==
+X-Received: by 2002:a05:600c:1c12:b0:439:9a1f:d73d with SMTP id 5b1f17b1804b1-4406aca6d18mr64398105e9.8.1745409844268;
+        Wed, 23 Apr 2025 05:04:04 -0700 (PDT)
+Received: from [192.168.1.29] ([178.197.207.88])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39efa433141sm18723340f8f.35.2025.04.23.05.03.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Apr 2025 05:04:03 -0700 (PDT)
+Message-ID: <6166e76f-286a-4c59-be78-e188e5847ea9@linaro.org>
+Date: Wed, 23 Apr 2025 14:03:57 +0200
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/33] Add support for Qualcomm Snapdragon SM7150 SoC and
+ Google Pixel 4a
+To: Danila Tikhonov <danila@jiaxyga.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Lorenzo Pieralisi <lpieralisi@kernel.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
+ <linux@roeck-us.net>, Rajendra Nayak <quic_rjendra@quicinc.com>,
+ Jassi Brar <jassisinghbrar@gmail.com>, Bjorn Andersson
+ <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>,
+ Amit Kucheria <amitk@kernel.org>, Thara Gopinath <thara.gopinath@gmail.com>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Wesley Cheng <quic_wcheng@quicinc.com>, Vinod Koul <vkoul@kernel.org>,
+ Kishon Vijay Abraham I <kishon@kernel.org>,
+ Ulf Hansson <ulf.hansson@linaro.org>,
+ Souradeep Chowdhury <quic_schowdhu@quicinc.com>, Lee Jones <lee@kernel.org>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Alex Elder <elder@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>,
+ Avri Altman <avri.altman@wdc.com>, Bart Van Assche <bvanassche@acm.org>,
+ Andy Gross <agross@kernel.org>, Srinivas Kandagatla <srini@kernel.org>,
+ Herbert Xu <herbert@gondor.apana.org.au>, Georgi Djakov <djakov@kernel.org>,
+ Loic Poulain <loic.poulain@oss.qualcomm.com>, Robert Foss
+ <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Taniya Das <quic_tdas@quicinc.com>,
+ Sibi Sankar <quic_sibis@quicinc.com>, Will Deacon <will@kernel.org>,
+ Robin Murphy <robin.murphy@arm.com>, Joerg Roedel <joro@8bytes.org>,
+ Imran Shaik <quic_imrashai@quicinc.com>,
+ Mathieu Poirier <mathieu.poirier@linaro.org>,
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+ Neil Armstrong <neil.armstrong@linaro.org>,
+ Jessica Zhang <quic_jesszhan@quicinc.com>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ Kees Cook <kees@kernel.org>, Tony Luck <tony.luck@intel.com>,
+ "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+ David Wronek <david@mainlining.org>, Jens Reidel <adrian@mainlining.org>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-phy@lists.infradead.org, linux-mmc@vger.kernel.org,
+ netdev@vger.kernel.org, linux-scsi@vger.kernel.org,
+ dmaengine@vger.kernel.org, linux-crypto@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+ linux-remoteproc@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-hardening@vger.kernel.org, linux@mainlining.org,
+ ~postmarketos/upstreaming@lists.sr.ht, Connor Mitchell <c.dog29@hotmail.com>
+References: <20250422-sm7150-upstream-v1-0-bf9a9081631d@jiaxyga.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzTRLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5vcmc+wsGUBBMBCgA+FiEE
+ m9B+DgxR+NWWd7dUG5NDfTtBYpsFAmI+BxMCGwMFCRRfreEFCwkIBwIGFQoJCAsCBBYCAwEC
+ HgECF4AACgkQG5NDfTtBYptgbhAAjAGunRoOTduBeC7V6GGOQMYIT5n3OuDSzG1oZyM4kyvO
+ XeodvvYv49/ng473E8ZFhXfrre+c1olbr1A8pnz9vKVQs9JGVa6wwr/6ddH7/yvcaCQnHRPK
+ mnXyP2BViBlyDWQ71UC3N12YCoHE2cVmfrn4JeyK/gHCvcW3hUW4i5rMd5M5WZAeiJj3rvYh
+ v8WMKDJOtZFXxwaYGbvFJNDdvdTHc2x2fGaWwmXMJn2xs1ZyFAeHQvrp49mS6PBQZzcx0XL5
+ cU9ZjhzOZDn6Apv45/C/lUJvPc3lo/pr5cmlOvPq1AsP6/xRXsEFX/SdvdxJ8w9KtGaxdJuf
+ rpzLQ8Ht+H0lY2On1duYhmro8WglOypHy+TusYrDEry2qDNlc/bApQKtd9uqyDZ+rx8bGxyY
+ qBP6bvsQx5YACI4p8R0J43tSqWwJTP/R5oPRQW2O1Ye1DEcdeyzZfifrQz58aoZrVQq+innR
+ aDwu8qDB5UgmMQ7cjDSeAQABdghq7pqrA4P8lkA7qTG+aw8Z21OoAyZdUNm8NWJoQy8m4nUP
+ gmeeQPRc0vjp5JkYPgTqwf08cluqO6vQuYL2YmwVBIbO7cE7LNGkPDA3RYMu+zPY9UUi/ln5
+ dcKuEStFZ5eqVyqVoZ9eu3RTCGIXAHe1NcfcMT9HT0DPp3+ieTxFx6RjY3kYTGLOwU0EVUNc
+ NAEQAM2StBhJERQvgPcbCzjokShn0cRA4q2SvCOvOXD+0KapXMRFE+/PZeDyfv4dEKuCqeh0
+ hihSHlaxTzg3TcqUu54w2xYskG8Fq5tg3gm4kh1Gvh1LijIXX99ABA8eHxOGmLPRIBkXHqJY
+ oHtCvPc6sYKNM9xbp6I4yF56xVLmHGJ61KaWKf5KKWYgA9kfHufbja7qR0c6H79LIsiYqf92
+ H1HNq1WlQpu/fh4/XAAaV1axHFt/dY/2kU05tLMj8GjeQDz1fHas7augL4argt4e+jum3Nwt
+ yupodQBxncKAUbzwKcDrPqUFmfRbJ7ARw8491xQHZDsP82JRj4cOJX32sBg8nO2N5OsFJOcd
+ 5IE9v6qfllkZDAh1Rb1h6DFYq9dcdPAHl4zOj9EHq99/CpyccOh7SrtWDNFFknCmLpowhct9
+ 5ZnlavBrDbOV0W47gO33WkXMFI4il4y1+Bv89979rVYn8aBohEgET41SpyQz7fMkcaZU+ok/
+ +HYjC/qfDxT7tjKXqBQEscVODaFicsUkjheOD4BfWEcVUqa+XdUEciwG/SgNyxBZepj41oVq
+ FPSVE+Ni2tNrW/e16b8mgXNngHSnbsr6pAIXZH3qFW+4TKPMGZ2rZ6zITrMip+12jgw4mGjy
+ 5y06JZvA02rZT2k9aa7i9dUUFggaanI09jNGbRA/ABEBAAHCwXwEGAEKACYCGwwWIQSb0H4O
+ DFH41ZZ3t1Qbk0N9O0FimwUCYDzvagUJFF+UtgAKCRAbk0N9O0Fim9JzD/0auoGtUu4mgnna
+ oEEpQEOjgT7l9TVuO3Qa/SeH+E0m55y5Fjpp6ZToc481za3xAcxK/BtIX5Wn1mQ6+szfrJQ6
+ 59y2io437BeuWIRjQniSxHz1kgtFECiV30yHRgOoQlzUea7FgsnuWdstgfWi6LxstswEzxLZ
+ Sj1EqpXYZE4uLjh6dW292sO+j4LEqPYr53hyV4I2LPmptPE9Rb9yCTAbSUlzgjiyyjuXhcwM
+ qf3lzsm02y7Ooq+ERVKiJzlvLd9tSe4jRx6Z6LMXhB21fa5DGs/tHAcUF35hSJrvMJzPT/+u
+ /oVmYDFZkbLlqs2XpWaVCo2jv8+iHxZZ9FL7F6AHFzqEFdqGnJQqmEApiRqH6b4jRBOgJ+cY
+ qc+rJggwMQcJL9F+oDm3wX47nr6jIsEB5ZftdybIzpMZ5V9v45lUwmdnMrSzZVgC4jRGXzsU
+ EViBQt2CopXtHtYfPAO5nAkIvKSNp3jmGxZw4aTc5xoAZBLo0OV+Ezo71pg3AYvq0a3/oGRG
+ KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
+ fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20250422-sm7150-upstream-v1-0-bf9a9081631d@jiaxyga.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Ming Yu <tmyu0@nuvoton.com>
+On 22/04/2025 22:17, Danila Tikhonov wrote:
+> This patch series adds support for the Qualcomm Snapdragon 730/730G/732G
+> (SM7150) platform along with the Google Pixel 4a (sunfish) device. Since
+> the most critical drivers were submitted and applied in separate patch
+> series, this series is largely composed of DT bindings and device‑trees.
 
-This driver supports RTC functionality for NCT6694 MFD device
-based on USB interface.
+Targeting 20 or 30 different maintainers in one patchset is not the way
+to go. The minimum is to split/group by few patches (e.g. you have few
+remoteprocs, so separate).
 
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
----
- MAINTAINERS               |   1 +
- drivers/rtc/Kconfig       |  10 ++
- drivers/rtc/Makefile      |   1 +
- drivers/rtc/rtc-nct6694.c | 298 ++++++++++++++++++++++++++++++++++++++
- 4 files changed, 310 insertions(+)
- create mode 100644 drivers/rtc/rtc-nct6694.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8f76bf3bdbf4..885e74f8ff5a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17366,6 +17366,7 @@ F:	drivers/hwmon/nct6694-hwmon.c
- F:	drivers/i2c/busses/i2c-nct6694.c
- F:	drivers/mfd/nct6694.c
- F:	drivers/net/can/usb/nct6694_canfd.c
-+F:	drivers/rtc/rtc-nct6694.c
- F:	drivers/watchdog/nct6694_wdt.c
- F:	include/linux/mfd/nct6694.h
- 
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index 838bdc138ffe..d8662b5d1e47 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -416,6 +416,16 @@ config RTC_DRV_NCT3018Y
- 	   This driver can also be built as a module, if so, the module will be
- 	   called "rtc-nct3018y".
- 
-+config RTC_DRV_NCT6694
-+	tristate "Nuvoton NCT6694 RTC support"
-+	depends on MFD_NCT6694
-+	help
-+	  If you say yes to this option, support will be included for Nuvoton
-+	  NCT6694, a USB device to RTC.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called rtc-nct6694.
-+
- config RTC_DRV_RK808
- 	tristate "Rockchip RK805/RK808/RK809/RK817/RK818 RTC"
- 	depends on MFD_RK8XX
-diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-index 31473b3276d9..da091d66e2d7 100644
---- a/drivers/rtc/Makefile
-+++ b/drivers/rtc/Makefile
-@@ -118,6 +118,7 @@ obj-$(CONFIG_RTC_DRV_MXC)	+= rtc-mxc.o
- obj-$(CONFIG_RTC_DRV_MXC_V2)	+= rtc-mxc_v2.o
- obj-$(CONFIG_RTC_DRV_GAMECUBE)	+= rtc-gamecube.o
- obj-$(CONFIG_RTC_DRV_NCT3018Y)	+= rtc-nct3018y.o
-+obj-$(CONFIG_RTC_DRV_NCT6694)	+= rtc-nct6694.o
- obj-$(CONFIG_RTC_DRV_NTXEC)	+= rtc-ntxec.o
- obj-$(CONFIG_RTC_DRV_OMAP)	+= rtc-omap.o
- obj-$(CONFIG_RTC_DRV_OPAL)	+= rtc-opal.o
-diff --git a/drivers/rtc/rtc-nct6694.c b/drivers/rtc/rtc-nct6694.c
-new file mode 100644
-index 000000000000..a6e79304d7ac
---- /dev/null
-+++ b/drivers/rtc/rtc-nct6694.c
-@@ -0,0 +1,298 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Nuvoton NCT6694 RTC driver based on USB interface.
-+ *
-+ * Copyright (C) 2024 Nuvoton Technology Corp.
-+ */
-+
-+#include <linux/bcd.h>
-+#include <linux/irqdomain.h>
-+#include <linux/kernel.h>
-+#include <linux/mfd/core.h>
-+#include <linux/mfd/nct6694.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/rtc.h>
-+#include <linux/slab.h>
-+
-+/*
-+ * USB command module type for NCT6694 RTC controller.
-+ * This defines the module type used for communication with the NCT6694
-+ * RTC controller over the USB interface.
-+ */
-+#define NCT6694_RTC_MOD		0x08
-+
-+/* Command 00h - RTC Time */
-+#define NCT6694_RTC_TIME	0x0000
-+#define NCT6694_RTC_TIME_SEL	0x00
-+
-+/* Command 01h - RTC Alarm */
-+#define NCT6694_RTC_ALARM	0x01
-+#define NCT6694_RTC_ALARM_SEL	0x00
-+
-+/* Command 02h - RTC Status */
-+#define NCT6694_RTC_STATUS	0x02
-+#define NCT6694_RTC_STATUS_SEL	0x00
-+
-+#define NCT6694_RTC_IRQ_INT_EN	BIT(0)	/* Transmit a USB INT-in when RTC alarm */
-+#define NCT6694_RTC_IRQ_GPO_EN	BIT(5)	/* Trigger a GPO Low Pulse when RTC alarm */
-+
-+#define NCT6694_RTC_IRQ_EN	(NCT6694_RTC_IRQ_INT_EN | NCT6694_RTC_IRQ_GPO_EN)
-+#define NCT6694_RTC_IRQ_STS	BIT(0)	/* Write 1 clear IRQ status */
-+
-+struct __packed nct6694_rtc_time {
-+	u8 sec;
-+	u8 min;
-+	u8 hour;
-+	u8 week;
-+	u8 day;
-+	u8 month;
-+	u8 year;
-+};
-+
-+struct __packed nct6694_rtc_alarm {
-+	u8 sec;
-+	u8 min;
-+	u8 hour;
-+	u8 alarm_en;
-+	u8 alarm_pend;
-+};
-+
-+struct __packed nct6694_rtc_status {
-+	u8 irq_en;
-+	u8 irq_pend;
-+};
-+
-+union __packed nct6694_rtc_msg {
-+	struct nct6694_rtc_time time;
-+	struct nct6694_rtc_alarm alarm;
-+	struct nct6694_rtc_status sts;
-+};
-+
-+struct nct6694_rtc_data {
-+	struct nct6694 *nct6694;
-+	struct rtc_device *rtc;
-+	union nct6694_rtc_msg *msg;
-+	int irq;
-+};
-+
-+static int nct6694_rtc_read_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_time *time = &data->msg->time;
-+	static const struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_TIME,
-+		.sel = NCT6694_RTC_TIME_SEL,
-+		.len = cpu_to_le16(sizeof(*time))
-+	};
-+	int ret;
-+
-+	ret = nct6694_read_msg(data->nct6694, &cmd_hd, time);
-+	if (ret)
-+		return ret;
-+
-+	tm->tm_sec = bcd2bin(time->sec);		/* tm_sec expect 0 ~ 59 */
-+	tm->tm_min = bcd2bin(time->min);		/* tm_min expect 0 ~ 59 */
-+	tm->tm_hour = bcd2bin(time->hour);		/* tm_hour expect 0 ~ 23 */
-+	tm->tm_wday = bcd2bin(time->week) - 1;		/* tm_wday expect 0 ~ 6 */
-+	tm->tm_mday = bcd2bin(time->day);		/* tm_mday expect 1 ~ 31 */
-+	tm->tm_mon = bcd2bin(time->month) - 1;		/* tm_month expect 0 ~ 11 */
-+	tm->tm_year = bcd2bin(time->year) + 100;	/* tm_year expect since 1900 */
-+
-+	return ret;
-+}
-+
-+static int nct6694_rtc_set_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_time *time = &data->msg->time;
-+	static const struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_TIME,
-+		.sel = NCT6694_RTC_TIME_SEL,
-+		.len = cpu_to_le16(sizeof(*time))
-+	};
-+
-+	time->sec = bin2bcd(tm->tm_sec);
-+	time->min = bin2bcd(tm->tm_min);
-+	time->hour = bin2bcd(tm->tm_hour);
-+	time->week = bin2bcd(tm->tm_wday + 1);
-+	time->day = bin2bcd(tm->tm_mday);
-+	time->month = bin2bcd(tm->tm_mon + 1);
-+	time->year = bin2bcd(tm->tm_year - 100);
-+
-+	return nct6694_write_msg(data->nct6694, &cmd_hd, time);
-+}
-+
-+static int nct6694_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_alarm *alarm = &data->msg->alarm;
-+	static const struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_ALARM,
-+		.sel = NCT6694_RTC_ALARM_SEL,
-+		.len = cpu_to_le16(sizeof(*alarm))
-+	};
-+	int ret;
-+
-+	ret = nct6694_read_msg(data->nct6694, &cmd_hd, alarm);
-+	if (ret)
-+		return ret;
-+
-+	alrm->time.tm_sec = bcd2bin(alarm->sec);
-+	alrm->time.tm_min = bcd2bin(alarm->min);
-+	alrm->time.tm_hour = bcd2bin(alarm->hour);
-+	alrm->enabled = alarm->alarm_en;
-+	alrm->pending = alarm->alarm_pend;
-+
-+	return ret;
-+}
-+
-+static int nct6694_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_alarm *alarm = &data->msg->alarm;
-+	static const struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_ALARM,
-+		.sel = NCT6694_RTC_ALARM_SEL,
-+		.len = cpu_to_le16(sizeof(*alarm))
-+	};
-+
-+	alarm->sec = bin2bcd(alrm->time.tm_sec);
-+	alarm->min = bin2bcd(alrm->time.tm_min);
-+	alarm->hour = bin2bcd(alrm->time.tm_hour);
-+	alarm->alarm_en = alrm->enabled ? NCT6694_RTC_IRQ_EN : 0;
-+	alarm->alarm_pend = 0;
-+
-+	return nct6694_write_msg(data->nct6694, &cmd_hd, alarm);
-+}
-+
-+static int nct6694_rtc_alarm_irq_enable(struct device *dev, unsigned int enabled)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_status *sts = &data->msg->sts;
-+	static const struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_STATUS,
-+		.sel = NCT6694_RTC_STATUS_SEL,
-+		.len = cpu_to_le16(sizeof(*sts))
-+	};
-+
-+	if (enabled)
-+		sts->irq_en |= NCT6694_RTC_IRQ_EN;
-+	else
-+		sts->irq_en &= ~NCT6694_RTC_IRQ_EN;
-+
-+	sts->irq_pend = 0;
-+
-+	return nct6694_write_msg(data->nct6694, &cmd_hd, sts);
-+}
-+
-+static const struct rtc_class_ops nct6694_rtc_ops = {
-+	.read_time = nct6694_rtc_read_time,
-+	.set_time = nct6694_rtc_set_time,
-+	.read_alarm = nct6694_rtc_read_alarm,
-+	.set_alarm = nct6694_rtc_set_alarm,
-+	.alarm_irq_enable = nct6694_rtc_alarm_irq_enable,
-+};
-+
-+static irqreturn_t nct6694_irq(int irq, void *dev_id)
-+{
-+	struct nct6694_rtc_data *data = dev_id;
-+	struct nct6694_rtc_status *sts = &data->msg->sts;
-+	static const struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_STATUS,
-+		.sel = NCT6694_RTC_STATUS_SEL,
-+		.len = cpu_to_le16(sizeof(*sts))
-+	};
-+	int ret;
-+
-+	rtc_lock(data->rtc);
-+
-+	sts->irq_en = NCT6694_RTC_IRQ_EN;
-+	sts->irq_pend = NCT6694_RTC_IRQ_STS;
-+	ret = nct6694_write_msg(data->nct6694, &cmd_hd, sts);
-+	if (ret) {
-+		rtc_unlock(data->rtc);
-+		return IRQ_NONE;
-+	}
-+
-+	rtc_update_irq(data->rtc, 1, RTC_IRQF | RTC_AF);
-+
-+	rtc_unlock(data->rtc);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static void nct6694_irq_dispose_mapping(void *d)
-+{
-+	struct nct6694_rtc_data *data = d;
-+
-+	irq_dispose_mapping(data->irq);
-+}
-+
-+static int nct6694_rtc_probe(struct platform_device *pdev)
-+{
-+	struct nct6694_rtc_data *data;
-+	struct nct6694 *nct6694 = dev_get_drvdata(pdev->dev.parent);
-+	int ret;
-+
-+	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	data->msg = devm_kzalloc(&pdev->dev, sizeof(union nct6694_rtc_msg),
-+				 GFP_KERNEL);
-+	if (!data->msg)
-+		return -ENOMEM;
-+
-+	data->irq = irq_create_mapping(nct6694->domain, NCT6694_IRQ_RTC);
-+	if (!data->irq)
-+		return -EINVAL;
-+
-+	ret = devm_add_action_or_reset(&pdev->dev, nct6694_irq_dispose_mapping,
-+				       data);
-+	if (ret)
-+		return ret;
-+
-+	ret = devm_device_init_wakeup(&pdev->dev);
-+	if (ret)
-+		return dev_err_probe(&pdev->dev, ret, "Failed to init wakeup\n");
-+
-+	data->rtc = devm_rtc_allocate_device(&pdev->dev);
-+	if (IS_ERR(data->rtc))
-+		return PTR_ERR(data->rtc);
-+
-+	data->nct6694 = nct6694;
-+	data->rtc->ops = &nct6694_rtc_ops;
-+	data->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-+	data->rtc->range_max = RTC_TIMESTAMP_END_2099;
-+
-+	platform_set_drvdata(pdev, data);
-+
-+	ret = devm_request_threaded_irq(&pdev->dev, data->irq, NULL,
-+					nct6694_irq, IRQF_ONESHOT,
-+					"rtc-nct6694", data);
-+	if (ret < 0)
-+		return dev_err_probe(&pdev->dev, ret, "Failed to request irq\n");
-+
-+	return devm_rtc_register_device(data->rtc);
-+}
-+
-+static struct platform_driver nct6694_rtc_driver = {
-+	.driver = {
-+		.name	= "nct6694-rtc",
-+	},
-+	.probe		= nct6694_rtc_probe,
-+};
-+
-+module_platform_driver(nct6694_rtc_driver);
-+
-+MODULE_DESCRIPTION("USB-RTC driver for NCT6694");
-+MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
-+MODULE_LICENSE("GPL");
-+MODULE_ALIAS("platform:nct6694-rtc");
--- 
-2.34.1
-
+Best regards,
+Krzysztof
 
