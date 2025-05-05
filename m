@@ -1,46 +1,46 @@
-Return-Path: <linux-watchdog+bounces-3431-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3432-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 308DBAAA9BE
-	for <lists+linux-watchdog@lfdr.de>; Tue,  6 May 2025 03:21:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 634A3AAB310
+	for <lists+linux-watchdog@lfdr.de>; Tue,  6 May 2025 06:37:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 87B6C4A7EEF
-	for <lists+linux-watchdog@lfdr.de>; Tue,  6 May 2025 01:20:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 83647189DC4B
+	for <lists+linux-watchdog@lfdr.de>; Tue,  6 May 2025 04:34:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BD6035C924;
-	Mon,  5 May 2025 22:47:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D17533974F;
+	Tue,  6 May 2025 00:32:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oWcXvCm9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PEctCCj3"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 998723110ED;
-	Mon,  5 May 2025 22:45:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 924A7280A51;
+	Mon,  5 May 2025 22:59:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746485112; cv=none; b=kboQNnJ3N9P5LwEIEN4ymmpgDtXTb2Bn3tlEvzkBIlp/yqoBVVnmeQD15wqvgRhtz5Dn1a3DN401r6z6a3rmjg6KUtLYN8/0vTFvXhcSUkCqko6jaBXao6jLpCwh0ui0ARknLou7IfzFGqyw+fbG6rzZuUJmvyeu9YdJae5kMSA=
+	t=1746485993; cv=none; b=Ftk/LE1cP2/SZA9K1Q5BC2v/yFxpJe7K8vYrIbeD/8FgHJqwYc6gUVPeev6Wp5gXgdsGVwhhu4oM1tQwluHPBc904UCMD+yqcrx1OuxK78zT2k793sAiXZOWAeyXZAy78TxtKyeVes8ioGwwO0OUMPJWlg1DPOF4lOMxO5ig30U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746485112; c=relaxed/simple;
-	bh=Y8gOUr/d7B6ukn7cFkOC8T9Tsre9FJWWrtBN+lk4QgU=;
+	s=arc-20240116; t=1746485993; c=relaxed/simple;
+	bh=2M8uPCt36C3of6ENKMaaIlkGVz65Qcmxt5L5qeA9Jus=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=a8gsNKHQ4sIExoq4PoozPJoUYdFdMbv97OhbLcAhuBLVl/b3Y8lP3X7tsfG9C+wnxyzi2tZeLZkLXaV2gflqaZj53ItJbSuu3Td730Nh9Gs4OUt3oyhBJb00GcPSWQnmkKUAjC8aUqLTNGw8rEowiymsBJ5/aRJncTgWGt62PLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oWcXvCm9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F2D2C4CEE4;
-	Mon,  5 May 2025 22:45:11 +0000 (UTC)
+	 MIME-Version; b=qfzoswWsB6tPpELJ/kQgwzvdqlpm57+tp9Sm/kOD8xFDHYE44tQZsRN1dnwL/ApXqvycxynFvPiheusszI7nVil1eVyQ/qV7Rwd9ppmoRwz4YpQcO3wV9jXxl0GDtrLLJV70hg78BRjP5TMtMJKBT2IfOlKB4E6JEvjFEVlRL0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PEctCCj3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FCFBC4CEED;
+	Mon,  5 May 2025 22:59:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746485112;
-	bh=Y8gOUr/d7B6ukn7cFkOC8T9Tsre9FJWWrtBN+lk4QgU=;
+	s=k20201202; t=1746485992;
+	bh=2M8uPCt36C3of6ENKMaaIlkGVz65Qcmxt5L5qeA9Jus=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=oWcXvCm9v6ab1U2TGl8pkcbrUsOYwAigkn3hna4Em85To3hNX3iK8+h4h5zz7amip
-	 334FS3D0O1QS1rHIQi7o2VSW81Tr22J44MZsVTC3mk6rCOfxelZ7unnw+HEsQEbzNm
-	 89las5pw8Ct0GmNgGXMbGDt1gSccu2fHrWAaG3vKKvNjkVwUYzYImKZgJ3y5gMgq1s
-	 XiriOpScHo4OO1l4IwxxlXQr/J2iA3RYUNqk2fqoVi+z2PeD7EgUPNci1wpJM4Duxd
-	 c3mIyYWEgHcIA2W1N8p+SgDSm2FnitsXbYj9JhwFXtp8DkaRRoBbZerqxx1pO4DcDD
-	 KmMPMVxjCPe+w==
+	b=PEctCCj3OgCddDU4ao2KrwEcYmJsZhR6DIGOu36l6q7ZsRCbvyT8hcJLOaZC5zTj3
+	 g/+YqQXKZu60oLPydbzvD/cmCuZqUzUgKJGkdLxxRd1KzjXiSPbnvvcfqIuBbIj7kS
+	 41tgl5Oku6MYOw+aBYJemXeKrTTHVYdN2qsrFlnOzre8oXBRmrbZxS0Flqd/sxd78A
+	 lRAPZCX0FmjJ0N8kJi8rfXPbmG6wiThSJzyEh6UxKm9epvilzaXT3XYbVkXBBeRNnO
+	 XEVhn7pHXED+uV14/6yocN169MblBcZjA7dtqmHzvdvlebM+1YzPNOagGEikm6kIGs
+	 JTBvZE8C5i0FA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -53,12 +53,12 @@ Cc: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
 	linux-watchdog@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-aspeed@lists.ozlabs.org
-Subject: [PATCH AUTOSEL 6.12 168/486] watchdog: aspeed: Update bootstatus handling
-Date: Mon,  5 May 2025 18:34:04 -0400
-Message-Id: <20250505223922.2682012-168-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 101/294] watchdog: aspeed: Update bootstatus handling
+Date: Mon,  5 May 2025 18:53:21 -0400
+Message-Id: <20250505225634.2688578-101-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250505223922.2682012-1-sashal@kernel.org>
-References: <20250505223922.2682012-1-sashal@kernel.org>
+In-Reply-To: <20250505225634.2688578-1-sashal@kernel.org>
+References: <20250505225634.2688578-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -67,7 +67,7 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.12.26
+X-stable-base: Linux 6.6.89
 Content-Transfer-Encoding: 8bit
 
 From: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
@@ -103,7 +103,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 79 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/watchdog/aspeed_wdt.c b/drivers/watchdog/aspeed_wdt.c
-index b4773a6aaf8cc..369635b38ca0e 100644
+index b72a858bbac70..7bc0fb1df1e00 100644
 --- a/drivers/watchdog/aspeed_wdt.c
 +++ b/drivers/watchdog/aspeed_wdt.c
 @@ -11,21 +11,30 @@
@@ -174,7 +174,7 @@ index b4773a6aaf8cc..369635b38ca0e 100644
  };
  
  static const struct of_device_id aspeed_wdt_of_table[] = {
-@@ -213,6 +240,56 @@ static int aspeed_wdt_restart(struct watchdog_device *wdd,
+@@ -211,6 +238,56 @@ static int aspeed_wdt_restart(struct watchdog_device *wdd,
  	return 0;
  }
  
@@ -231,7 +231,7 @@ index b4773a6aaf8cc..369635b38ca0e 100644
  /* access_cs0 shows if cs0 is accessible, hence the reverted bit */
  static ssize_t access_cs0_show(struct device *dev,
  			       struct device_attribute *attr, char *buf)
-@@ -458,10 +535,10 @@ static int aspeed_wdt_probe(struct platform_device *pdev)
+@@ -447,10 +524,10 @@ static int aspeed_wdt_probe(struct platform_device *pdev)
  		writel(duration - 1, wdt->base + WDT_RESET_WIDTH);
  	}
  
