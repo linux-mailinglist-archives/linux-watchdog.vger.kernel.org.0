@@ -1,207 +1,194 @@
-Return-Path: <linux-watchdog+bounces-3441-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3442-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 859F7AAD32D
-	for <lists+linux-watchdog@lfdr.de>; Wed,  7 May 2025 04:17:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD947AAD48E
+	for <lists+linux-watchdog@lfdr.de>; Wed,  7 May 2025 06:44:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7FA831C034E0
-	for <lists+linux-watchdog@lfdr.de>; Wed,  7 May 2025 02:18:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 66D741637BC
+	for <lists+linux-watchdog@lfdr.de>; Wed,  7 May 2025 04:44:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E954F70824;
-	Wed,  7 May 2025 02:17:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EB161D6DB5;
+	Wed,  7 May 2025 04:43:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="Otzecflp"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="BYwoS1a+"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-m3285.qiye.163.com (mail-m3285.qiye.163.com [220.197.32.85])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2079.outbound.protection.outlook.com [40.107.244.79])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F50EBA38;
-	Wed,  7 May 2025 02:17:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.85
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746584267; cv=none; b=crnwIpdUx7C41lGf86ulM+wzfgNoCiFriOwGenOBSeQ/9P7joZeQUD0V47J6C6nTdbdYJ/hbM9qaN3OTUX8jhXYRyZ8Fm+GqfQ6FYLTHMWpcMo4LOp5i+qsRcW7J2NLjMKR7KHAHvejBOjuraduRABPwEuNM02ilVmJqwD/ZDCE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746584267; c=relaxed/simple;
-	bh=yEDtcuagXBE3WpNM9QEf7srqAr2BZBmw0w+sUPDns4M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KemD5BYjdZXgqdegVNQCKknmZln/JkhkNbYjP5Zkr3y5DEv0I316u1SPKtXKm4FahpyB9Qd24l7CsFETgVLmnT91corxtpRc+jzk0aMDxZ/KJC+mQqpdAfuL/z3vjVI4lV0Lo6qG+OHodAdx+kYrRjqrpm4doQVuUyETa2Mq1zU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=Otzecflp; arc=none smtp.client-ip=220.197.32.85
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from [192.168.60.65] (unknown [103.29.142.67])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 142d62da9;
-	Wed, 7 May 2025 10:02:14 +0800 (GMT+08:00)
-Message-ID: <a5da2a81-6944-4d4e-a582-a24f8340efc5@rock-chips.com>
-Date: Wed, 7 May 2025 10:02:12 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 816DB78C9C;
+	Wed,  7 May 2025 04:43:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.79
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1746593034; cv=fail; b=CffxBAQBR6+7DvHCTV9dAI6cBQdWuqsMjMLl9WCRQcamtDM8sq9gnora/TIULmE4gx2f+gF4QKDqwPNCB1PcGsNNISSINd9CyD8kwfJQZAgFztmuUjMLpF+v2/1vZh5BOuRMRRezMq9zFJ5agcRlL3GS8UjQkETfpMEDOfhDza0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1746593034; c=relaxed/simple;
+	bh=54riDDuwwmDz2UFHRpGNoT64RGGqY2jc5dRI+jibQ04=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Vg+r8Elq2lCP1PBYZNyq8q6RHNJQICJG413wZjHTEwxGtumBUDVt6MI69OZ9yHRsUNNMKc1QX4MZP89MubLmgpjCQ4qJ3YSzTOx7JwuMprtDLvsxzARW9RZv8sj7KrWizDS6mxTjWT+XGM+2ETZQLjfnauqp+p3bXp36l9T/U9E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=BYwoS1a+; arc=fail smtp.client-ip=40.107.244.79
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=XSC4kMRZ97W41JCNAKAxqPO3IrtUhzM32Tcd8JOKhso6c6X2QIAwOzqXkN4w1S3RldL+w5lmFlU1CFeADNfukyZ8ZU+57MhN3xA+9m60cAoocokRwltFrfII5aKA4qCqanwRFVbTtYD6qC5xMQulGR1sWpCvREUrgJBY8pksNFz4UWUy2V46zGEeWOBS/zviBFGz32AMLjzKA+saDBd60LyRIEsysrAj/+sNdDhJAnXvoiEl0jAos+mv0a35sf/Ii8VGPMMncNfXir+/CvkHi0fCYMvtRE5Hh7Mprtr6ktOPalUSlCM/sXJ/j8dH/hfSob5YWmksuiQ67rHJ+nqTWg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zVRJREJZPYZzgsL3NWismhJ+iWEkv5S5b4Cekm0N/vc=;
+ b=qV9IJmftvAkFWKJkU+FqrgFWR/bmt+eZEDwf4Rh0Zt37ZR7laMJk1M+731p1DegK/vQMTpF2JAqRiLZbtu3z8bdHcnwVkaKLZFperKqG2Ua7W839N8NHEfoBUfowblxEqdcWSlfqNSQjHByNBY5B5H6R4sIbXce8cgzULDd1I6Yl+3Si85TWDjH6wk6gC2hMHa6oS69dUeoLXmQtpwUin8sYQXRtAHpcqVpJmzwBOukZ/rTzxhOAbzhmppvFjnVqJIsIql053aIXLJPTIl21dD7+w562m2aPIP6ts5w/WUsiR8LTjsuvyHn9+qZ5lgzysxlGiMMbQsKsT1DfTdYp1A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zVRJREJZPYZzgsL3NWismhJ+iWEkv5S5b4Cekm0N/vc=;
+ b=BYwoS1a+X4Q9lhXugz4a/qU8BUMqA0Wr6R7zmHwRI1fV7xxvJlrm1Q9kC4alp7M+I4SAo5SMUNqUT61t66e0EYOGIKg03XmMZ3enExZh0GKjHegjq5pvJSRAEvUSycadZmgIjVfqzrGmnclqxfKC+FlaAy2kYs3gxFNUCSxVNfVYfC6lOsjj3vp376I82JDJDNfSapyQscTj111watrVqXtOKBiCyqQhNNXb03JnpDll5/v0P/4M7ObzUFJkN/94i1VWuUiz4jks8TYRZF0lWLt9eLWN13UtuAEg8U0833MSA3/gh7q+EZsWk/eWgxHPSh7fimBFoGgV6z2hJUzyaA==
+Received: from DS7PR05CA0061.namprd05.prod.outlook.com (2603:10b6:8:57::15) by
+ CYYPR12MB8890.namprd12.prod.outlook.com (2603:10b6:930:c7::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8699.19; Wed, 7 May 2025 04:43:45 +0000
+Received: from DS3PEPF000099D9.namprd04.prod.outlook.com
+ (2603:10b6:8:57:cafe::2c) by DS7PR05CA0061.outlook.office365.com
+ (2603:10b6:8:57::15) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8722.20 via Frontend Transport; Wed,
+ 7 May 2025 04:43:45 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DS3PEPF000099D9.mail.protection.outlook.com (10.167.17.10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8722.18 via Frontend Transport; Wed, 7 May 2025 04:43:45 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 6 May 2025
+ 21:43:39 -0700
+Received: from robelin-Precision-3660.nvidia.com (10.126.231.35) by
+ rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14; Tue, 6 May 2025 21:43:29 -0700
+From: Robert Lin <robelin@nvidia.com>
+To: <thierry.reding@gmail.com>, <daniel.lezcano@linaro.org>,
+	<jonathanh@nvidia.com>, <tglx@linutronix.de>, <pohsuns@nvidia.com>
+CC: <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+	<sumitg@nvidia.com>, <linux-watchdog@vger.kernel.org>,
+	<wim@linux-watchdog.org>, <linux@roeck-us.net>, robelin <robelin@nvidia.com>
+Subject: [PATCH v8 0/3] clocksource: fix Tegra234 SoC Watchdog Timer.
+Date: Wed, 7 May 2025 12:43:08 +0800
+Message-ID: <20250507044311.3751033-1-robelin@nvidia.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 0/6] rockchip: Add rk3562 SoC and evb support
-To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: heiko@sntech.de, linux-kernel@vger.kernel.org,
- Jonas Karlman <jonas@kwiboo.se>,
- Detlev Casanova <detlev.casanova@collabora.com>,
- Dragan Simic <dsimic@manjaro.org>, Yao Zi <ziyao@disroot.org>,
- Junhao Xie <bigfoot@classfun.cn>, devicetree@vger.kernel.org,
- Elaine Zhang <zhangqing@rock-chips.com>,
- Marcin Juszkiewicz <marcin.juszkiewicz@linaro.org>,
- Jamie Iles <jamie@jamieiles.com>, Guenter Roeck <linux@roeck-us.net>,
- Frank Wang <frank.wang@rock-chips.com>, linux-rockchip@lists.infradead.org,
- linux-watchdog@vger.kernel.org, Jimmy Hon <honyuenkwun@gmail.com>,
- Wim Van Sebroeck <wim@linux-watchdog.org>,
- linux-arm-kernel@lists.infradead.org,
- Finley Xiao <finley.xiao@rock-chips.com>,
- Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
- FUKAUMI Naoki <naoki@radxa.com>, Diederik de Haas <didi.debian@cknow.org>,
- Shresth Prasad <shresthprasad7@gmail.com>,
- Quentin Schulz <quentin.schulz@cherry.de>, Johan Jonker <jbx6244@gmail.com>,
- Conor Dooley <conor+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>
-References: <20250506025715.33595-1-kever.yang@rock-chips.com>
- <174655575165.2171034.16453137338500014976.robh@kernel.org>
-Content-Language: en-US
-From: Kever Yang <kever.yang@rock-chips.com>
-In-Reply-To: <174655575165.2171034.16453137338500014976.robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlDHxhJVkhLTE5PS0IdSBlJTlYVFAkWGhdVEwETFh
-	oSFyQUDg9ZV1kYEgtZQVlKS0hVSUJVSk9JVU1MWVdZFhoPEhUdFFlBWU9LSFVKS0lIQktDVUpLS1
-	VKQlkG
-X-HM-Tid: 0a96a87aadb103afkunm142d62da9
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Ogg6Sxw*DjJLThVONSMKMjhL
-	CzMaFDJVSlVKTE9NTkNISEhMT09OVTMWGhIXVRAeDR4JVQIaFRw7CRQYEFYYExILCFUYFBZFWVdZ
-	EgtZQVlKS0hVSUJVSk9JVU1MWVdZCAFZQU5DSkw3Bg++
-DKIM-Signature:a=rsa-sha256;
-	b=OtzecflpZnKWD8Lhk8YvqQFaFozPhpcL1pqbDiGpgC9A0ZDXFmuvh+VcYpV8dUal9T4xeNviwwGdxZ1idVC02A3wz5eHeYeDzO+YJ0vE5KOvgIsr+GLtwQRxbsc8LujSNLYBAJ2FeVNUIvCo8GcLng88Kqx8G+yVuzEPSt8FDv4=; c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
-	bh=1zFclqcGuYPNryGvnI+na4Nb66ye8cJcL9CEUWPikAg=;
-	h=date:mime-version:subject:message-id:from;
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS3PEPF000099D9:EE_|CYYPR12MB8890:EE_
+X-MS-Office365-Filtering-Correlation-Id: c29f3cd2-d0d8-40a0-8a82-08dd8d21c036
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|36860700013|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?cckRCWyknU+d7mokEaoIzczXVP5sIVfuq4/M2mkqYBA4+xGHBF04vLJdyPzu?=
+ =?us-ascii?Q?OzMvDYEFqa449oHpVulRkcKpBxGpcjcmJR2D7zN+9EpSzGx3TJ1gSf2OlelL?=
+ =?us-ascii?Q?iVAbb3uksp2yWS8gHaU0qzgyZHIm+SPQg6C1jjkmaTrXFcafRP3tjzRIr/mY?=
+ =?us-ascii?Q?u9dfqBRcr3KaKPnfmOOWn7i0YdcSMmiffMFUJycbP0/4iDrZRZy58z3tSdVN?=
+ =?us-ascii?Q?Ean2bDRJhV3NNcpHX3NTH1kXTIi5lvq5+1RMKgQdLvrn28GL5x0H37T6e2rT?=
+ =?us-ascii?Q?IjswuiLluYzlyZtDs/DqPxXAdWBjLyb4G0SAdy1wG1sPUmAEnx5LULgdH3WR?=
+ =?us-ascii?Q?AFcecyh8M96/HhnG8DrruX0PVL673x8CxHVBN5OMLQA/ikmY43Lel5ZcaCyO?=
+ =?us-ascii?Q?YhGl+NNe+ssWcuXXQWpuyZm93WuyObwi+ZeerQoDEhA/BDm3RH8QPwCSj/Xq?=
+ =?us-ascii?Q?6rGCYYgS4Dt6Wvj1iRMkc78+KPWci7XMc7FsikTDROazz3hZbpiCSBGYe/Tl?=
+ =?us-ascii?Q?kxEEaep2lMPnSFkjJ98dSiGKZ/i6weDqnbIr81JoZGkuYe3Qi4fpjNnBTZpU?=
+ =?us-ascii?Q?K2V/90KG+lSLPkQGjuCbbPRzkS5F+wob/V8zTfxhMWo6bw3pqWnqzeeHKB2G?=
+ =?us-ascii?Q?Amg9oTzZa+6DYkUKjfEfwwrlBkQfNIC31Wm8ba+3lUvA2Xkeey7ooXR4q0By?=
+ =?us-ascii?Q?lFo390WdpQmp36qeFMR0o3ZbsMBhTMeHCeev3jfKu096MT5MOwoBonQjwgtR?=
+ =?us-ascii?Q?b7dmm24S8ZOINtrA9RcqgSAl6fxoRG99SoOUh94u+fkOj+snciZfVl6dcZJq?=
+ =?us-ascii?Q?/Z3kxZriI3qWAXerRk0AWYXt+3oeprKtO08aHroR0cGFieVmvvlDkeBy9gEA?=
+ =?us-ascii?Q?qGE+8HswVf1hWDSk7LGdwDCBoFNSlNHxPN06HTlEnEapfA/0zbEcX1jLptnJ?=
+ =?us-ascii?Q?NbAverZ532jwAE0z5wleiTvWzEBvp6oHVPH1Gm8Cd8fnozFkxhVpe0kBQPpX?=
+ =?us-ascii?Q?2iWv/GDgWRTy9zta0C6yvlnhSwzpOhGz56/3pcsb2j90aL7Gef7GtFYPJhae?=
+ =?us-ascii?Q?Z7ut0s+G/XdhpDXxMRUSK9lYlGv5WoacQKVrkYjQFXls7H5k1iHUwzc3cLkI?=
+ =?us-ascii?Q?T9R8ArKwrY6264GP9/3AxlwNSBlhJV+X9KxLEmmLm6recnupoVoazBYtVtrt?=
+ =?us-ascii?Q?GRLgG4CUmzHtdIW4urRPi/cpm9yP4V/fKMsNZIKg/eJvu6+9eH/pCKqab3q4?=
+ =?us-ascii?Q?aHZjqY+YUEQQeWnFSPcN//2kew68EJDKZeS9La5qEymXlXFl8yH4uXi4BIrc?=
+ =?us-ascii?Q?MU735L4E8DOF9Ra5NGBHdK29tMnoQbjY/kr1+AFaKAw6PJuYE2+U8E3SR1s2?=
+ =?us-ascii?Q?styX9OiF/EY3frM68Z6NXMpGKe+lT1Pupt5V2In7GXyfflztlFlw1ui9XHVu?=
+ =?us-ascii?Q?phOM1klJ7ld9bl4C8NZXIOv3Iel+fdxOQ1WHz4FWZJYgJaJfEDwoakF/q04E?=
+ =?us-ascii?Q?Nn1zulQpLkrPD3AyFraXmI1GopRmQe0A69AC?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 May 2025 04:43:45.3251
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c29f3cd2-d0d8-40a0-8a82-08dd8d21c036
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DS3PEPF000099D9.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR12MB8890
+
+From: robelin <robelin@nvidia.com>
+
+This set of patches includes a fix for watchdog for it may not bark
+due to self-pinging and adds WDIOC_GETTIMELEFT support.
+
+--
+V8:
+- Change WARN_ON() to WARN_ON_ONCE() to not spew too many message
+- Use pre-exist DIV_ROUND_CLOSEST_ULL for the same math operation
+
+V7:
+- Fix formatting
+- Consider overflow and warn if happens
+
+V6:
+- Fix timeleft value addition using unmatched time unit
+- Use u64 type to maintain the microseconds value in case of overflow
+
+V5:
+- Print warning message if get unexpected value from the register
+
+V4:
+- Improve the precision of timeleft value
+- Fix the unused variable warning
+
+V3:
+- Improve comment description
+- Refactor to fit codeline within 80 columns
+- Remove unused if(0) blocks
 
 
-On 2025/5/7 02:23, Rob Herring (Arm) wrote:
-> On Tue, 06 May 2025 10:57:09 +0800, Kever Yang wrote:
->> Patch series V5 remove [v4 1/7] which had taken by Manivannan, and move
->> scmi-shmem from soc node to reserved memory.
->>
->> Patch series V4 remove patches already landed, and remove dts nodes for
->> modules still under review.
->>
->> This patch set adds rk3562 SoC and its evb support.
->>
->> I have split out patches need driver change for different subsystem.
->> And all the modules with dt-binding document update in this patch set
->> do not need any driver change. I put them together to make it clear we
->> have a new SoC and board to use the new compatible. Please pick up the
->> patch for your subsystem, or please let me know if the patch has to
->> send separate.
->>
->> Test with USB, PCIe, EMMC, SD Card.
->>
->> This patch set is base on the patch set for rk3576 evb1 support.
->>
->> V3:
->> https://lore.kernel.org/linux-rockchip/20250227111913.2344207-1-kever.yang@rock-chips.com/
->> V2:
->> https://lore.kernel.org/linux-rockchip/b4df8a73-58a2-4765-a9e4-3513cb2bc720@rock-chips.com/T/
->>
->>
->> Changes in v5:
->> - Collect review tag
->> - Update scmi-shmem from soc to reserved memory
->>
->> Changes in v4:
->> - Collect ack tag
->> - Collect ack tag
->> - Collect ack tag
->> - remove gmac and otp nodes
->> - remove gmac nodes
->>
->> Changes in v3:
->> - Collect reveiw tag
->> - Collect the Acked-by tag
->> - remove i2c/serial/spi alias
->> - add soc node
->>
->> Changes in v2:
->> - Update in sort order
->> - remove grf in cru
->> - Update some properties order
->>
->> Finley Xiao (2):
->>    arm64: dts: rockchip: add core dtsi for RK3562 Soc
->>    arm64: dts: rockchip: Add RK3562 evb2 devicetree
->>
->> Kever Yang (4):
->>    dt-bindings: watchdog: Add rk3562 compatible
->>    dt-bindings: rockchip: pmu: Add rk3562 compatible
->>    dt-bindings: soc: rockchip: Add rk3562 syscon compatibles
->>    dt-bindings: arm: rockchip: Add rk3562 evb2 board
->>
->>   .../devicetree/bindings/arm/rockchip.yaml     |    5 +
->>   .../devicetree/bindings/arm/rockchip/pmu.yaml |    2 +
->>   .../devicetree/bindings/soc/rockchip/grf.yaml |    7 +
->>   .../bindings/watchdog/snps,dw-wdt.yaml        |    1 +
->>   arch/arm64/boot/dts/rockchip/Makefile         |    1 +
->>   .../boot/dts/rockchip/rk3562-evb2-v10.dts     |  488 ++++
->>   .../boot/dts/rockchip/rk3562-pinctrl.dtsi     | 2352 +++++++++++++++++
->>   arch/arm64/boot/dts/rockchip/rk3562.dtsi      | 1270 +++++++++
->>   8 files changed, 4126 insertions(+)
->>   create mode 100644 arch/arm64/boot/dts/rockchip/rk3562-evb2-v10.dts
->>   create mode 100644 arch/arm64/boot/dts/rockchip/rk3562-pinctrl.dtsi
->>   create mode 100644 arch/arm64/boot/dts/rockchip/rk3562.dtsi
->>
->> --
->> 2.25.1
->>
->>
->>
->
-> My bot found new DTB warnings on the .dts files added or changed in this
-> series.
->
-> Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-> are fixed by another series. Ultimately, it is up to the platform
-> maintainer whether these warnings are acceptable or not. No need to reply
-> unless the platform maintainer has comments.
->
-> If you already ran DT checks and didn't see these error(s), then
-> make sure dt-schema is up to date:
->
->    pip3 install dtschema --upgrade
->
->
-> This patch series was applied (using b4) to base:
->   Base: attempting to guess base-commit...
->   Base: tags/next-20250506 (exact match)
->
-> If this is not the correct base, please add 'base-commit' tag
-> (or use b4 which does this automatically)
->
-> New warnings running 'make CHECK_DTBS=y for arch/arm64/boot/dts/rockchip/' for 20250506025715.33595-1-kever.yang@rock-chips.com:
->
-> arch/arm64/boot/dts/rockchip/rk3562-evb2-v10.dtb: /soc/usb2-phy@ff740000: failed to match any schema with compatible: ['rockchip,rk3562-usb2phy']
-
-The usb2-phy patch set[1] has send and got reviewed tag from Heiko for a 
-long time, what should I do for that patch?
+V2:
+- Fix a compilation error, a warning and updates copyright
+--
 
 
-Thanks,
-- Kever
+Pohsun Su (2):
+  clocksource/drivers/timer-tegra186: add WDIOC_GETTIMELEFT support
+  clocksource/drivers/timer-tegra186: fix watchdog self-pinging
 
-[1] 
-https://patchwork.kernel.org/project/linux-phy/patch/20250415050005.52773-2-kever.yang@rock-chips.com/
+robelin (1):
+  clocksource/drivers/timer-tegra186: Remove unused bits
 
->
->
->
->
->
->
+ drivers/clocksource/timer-tegra186.c | 100 +++++++++++++++++----------
+ 1 file changed, 63 insertions(+), 37 deletions(-)
+
+-- 
+2.34.1
+
 
