@@ -1,145 +1,160 @@
-Return-Path: <linux-watchdog+bounces-3453-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3454-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAA55AB1765
-	for <lists+linux-watchdog@lfdr.de>; Fri,  9 May 2025 16:29:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96DD7AB1FBD
+	for <lists+linux-watchdog@lfdr.de>; Sat, 10 May 2025 00:13:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D992E526A10
-	for <lists+linux-watchdog@lfdr.de>; Fri,  9 May 2025 14:28:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 06D19528081
+	for <lists+linux-watchdog@lfdr.de>; Fri,  9 May 2025 22:13:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B673B2192F4;
-	Fri,  9 May 2025 14:28:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 717BE262FFA;
+	Fri,  9 May 2025 22:13:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CDeY3Ffu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IYKV3aNs"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A8621E5B82;
-	Fri,  9 May 2025 14:28:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3C83261565;
+	Fri,  9 May 2025 22:13:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746800907; cv=none; b=BAOb7n2X+B+v/1ZwSVORKAi5KFFCD21PUPm4nLEDXMaemSEkp0dYJ5F7j695LlraGbPM5P1Ww2ZHDuu0H8xixMGcI1v+4CeiJDgw/p5cLaxe2AGO/9Ytt1Za/JCK4/U0gYrVOFofv48Ixga+gHn3/9a2yYIPZJJD2JWi2v89idk=
+	t=1746828817; cv=none; b=YDFZ0pGErLwGJLhJ/LSfHLRVM3XfzkR8lT03RmKoqlxwZySE4eUwUU+nie+gvAVp7e+FRDLPUHcPSSN4INqbXBlxBmhZgHExtUeQy98hXMDrRfx6IASFxSTymrN7z5XN6K346FZipInFEJ231U6xmv2IxqhikbTTRc1xNHWXZKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746800907; c=relaxed/simple;
-	bh=fNRLig7bAYi1L1Kq7n0i/6zijpbMaAknetCXULDY9CM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ksJny0jhVHTzkHXk7Rw1W4Cvhii6VzjvjKABXNmp+eZkiWo5G5uSsYQLlieIRSQgUif+1QlOL9TUfHYwglTzS3e9UCFFOuYdHOj1o1/22P+Jjbs7JH8iBLe/eTRSWXZXE5R37t/eIPkS3MSmtpO/6kHKCYa4J5VXexFVDtzpCRk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CDeY3Ffu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51886C4CEE4;
-	Fri,  9 May 2025 14:28:22 +0000 (UTC)
+	s=arc-20240116; t=1746828817; c=relaxed/simple;
+	bh=JEtojtxozBeZKb4L4slRczK0pe/giC0x9qDchrNk1q8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=DMEZicljxU4WleBdeNhhJlfDS5+SiICeb0rhebwqK3gwI8QV05POED5l11jsjITj966Kw1MdswzGyyfmKqy7XiUrvfjRJbAgKlnw+2AcMyKLfBL3F1636/0eQvZb9ebwsu/hOkJQ5mUHePloSwt1BK+Mx8QHL4vgy+2lL8Nklvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IYKV3aNs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 862ABC4CEEE;
+	Fri,  9 May 2025 22:13:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746800906;
-	bh=fNRLig7bAYi1L1Kq7n0i/6zijpbMaAknetCXULDY9CM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CDeY3FfuWHHr5ejCUZjrZfxLJ19JvZe/RsVbusBSk3mJbCZBndZddB5O2dP/eV8HK
-	 ik/fCKZlR7BGiQ8VI7eGCgcWeQOEahApJyI22knewmpxyfvWp3wlc9gq8Ak86xvDzp
-	 pBbq/9/fR4Kky+db9ieJJltllj/DLGK2f2fHtldJI4g721+ez5je893Bp8YPKGaAfL
-	 FOPT+WtvsI5JyP6T1rRcCX09RcQlvcfP80a5gCTNvqotCeJzW7gkrH+4tQR/I/m241
-	 w3WWYeZcEBdUTPqwtf9w+4hHfkhMWt0JJiQiGKgkNxCuNbrtZaQgSajZFKkSkQxAfD
-	 MJHjru/wqRDkw==
-Date: Fri, 9 May 2025 15:28:19 +0100
-From: Lee Jones <lee@kernel.org>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
-	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
-	linux@roeck-us.net, jdelvare@suse.com,
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-can@vger.kernel.org, netdev@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
-	Ming Yu <tmyu0@nuvoton.com>
-Subject: Re: [PATCH v10 1/7] mfd: Add core driver for Nuvoton NCT6694
-Message-ID: <20250509142819.GG2492385@google.com>
-References: <20250423094058.1656204-1-tmyu0@nuvoton.com>
- <20250423094058.1656204-2-tmyu0@nuvoton.com>
- <20250501122214.GK1567507@google.com>
- <CAOoeyxVL2MV83CJaYCXMiw0b5YUzk728H4B9GY1q9h_P8D43fg@mail.gmail.com>
- <20250502080754.GD3865826@google.com>
- <CAOoeyxWpYmcg1_FBXYqDfMi28R5ZXp2Sk2PhUo=cL10Nn3iVEw@mail.gmail.com>
+	s=k20201202; t=1746828816;
+	bh=JEtojtxozBeZKb4L4slRczK0pe/giC0x9qDchrNk1q8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=IYKV3aNsMm0whQPXKjXlBEOn2trCbtazdDfHlO5yPtdyE5J3GweuFhzrUbr7Snoww
+	 qqZF7RYOoIR380q1jSD71Ck0351FOW3wBU334Ik2Q8iw6QLTEG3x62c0dOEubnlHGU
+	 uDwQ2z3vTuJcEfDVgiuuK7uYNS+RlyuRpoFTmbRRkVTsb++SFB42yPStgJALge6Uh1
+	 iF8eehmqqX8IawRvuD2N01tJxqP6opnaPgKie0o23LHTLxL8bziAXGZWya9r08SVRj
+	 YaudW4inWVVWlif6YhdroDU16ct+tjyIvqBrqpaI4K+X8q6bXBgXXjr35mKh6wnh0W
+	 8QSTtY9VxavPA==
+From: Bjorn Andersson <andersson@kernel.org>
+To: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rajendra Nayak <quic_rjendra@quicinc.com>,
+	Jassi Brar <jassisinghbrar@gmail.com>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Amit Kucheria <amitk@kernel.org>,
+	Thara Gopinath <thara.gopinath@gmail.com>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Wesley Cheng <quic_wcheng@quicinc.com>,
+	Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+	Lee Jones <lee@kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Alex Elder <elder@kernel.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Avri Altman <avri.altman@wdc.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	Andy Gross <agross@kernel.org>,
+	Srinivas Kandagatla <srini@kernel.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Georgi Djakov <djakov@kernel.org>,
+	Loic Poulain <loic.poulain@oss.qualcomm.com>,
+	Robert Foss <rfoss@kernel.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Taniya Das <quic_tdas@quicinc.com>,
+	Sibi Sankar <quic_sibis@quicinc.com>,
+	Will Deacon <will@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Joerg Roedel <joro@8bytes.org>,
+	Imran Shaik <quic_imrashai@quicinc.com>,
+	Mathieu Poirier <mathieu.poirier@linaro.org>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Jessica Zhang <quic_jesszhan@quicinc.com>,
+	David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Kees Cook <kees@kernel.org>,
+	Tony Luck <tony.luck@intel.com>,
+	"Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+	David Wronek <david@mainlining.org>,
+	Jens Reidel <adrian@mainlining.org>,
+	Danila Tikhonov <danila@jiaxyga.com>
+Cc: devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-phy@lists.infradead.org,
+	linux-mmc@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	dmaengine@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	iommu@lists.linux.dev,
+	linux-remoteproc@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linux-hardening@vger.kernel.org,
+	linux@mainlining.org,
+	~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: (subset) [PATCH 17/33] dt-bindings: nvmem: qfprom: Add the SM7150 compatible
+Date: Fri,  9 May 2025 17:13:23 -0500
+Message-ID: <174682880484.49052.7211478690993150122.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250422213137.80366-1-danila@jiaxyga.com>
+References: <20250422213137.80366-1-danila@jiaxyga.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOoeyxWpYmcg1_FBXYqDfMi28R5ZXp2Sk2PhUo=cL10Nn3iVEw@mail.gmail.com>
 
-On Fri, 02 May 2025, Ming Yu wrote:
 
-> Lee Jones <lee@kernel.org> 於 2025年5月2日 週五 下午4:08寫道：
-> >
-> ...
-> > > > > +static const struct mfd_cell nct6694_devs[] = {
-> > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 0),
-> > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 1),
-> > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 2),
-> > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 3),
-> > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 4),
-> > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 5),
-> > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 6),
-> > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 7),
-> > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 8),
-> > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 9),
-> > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 10),
-> > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 11),
-> > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 12),
-> > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 13),
-> > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 14),
-> > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 15),
-> > > >
-> > > > These are all identical.
-> > > >
-> > > > I thought you were going to use PLATFORM_DEVID_AUTO?  In fact, you are
-> > > > already using PLATFORM_DEVID_AUTO since you are calling
-> > > > mfd_add_hotplug_devices().  So you don't need this IDs.
-> > > >
-> > > > MFD_CELL_NAME() should do.
-> > > >
-> > >
-> > > Yes, it uses PLATFORM_DEVID_AUTO, but in my implementation, the
-> > > sub-devices use cell->id instead of platform_device->id, so it doesn't
-> > > affect the current behavior.
-> > > However, if you think there's a better approach or that this should be
-> > > changed for consistency or correctness, I'm happy to update it, please
-> > > let me know your recommendation.
-> > >
-> > > When using MFD_CELL_NAME(), the platform_device->id for the GPIO
-> > > devices is assigned values from 1 to 16, and for the I2C devices from
-> > > 1 to 6, but I need the ID offset to start from 0 instead.
-> >
-> > Oh no, don't do that.  mfd_cell isn't supposed to be used outside of MFD.
-> >
-> > Just use the platform_device id-- if you really need to start from 0.
-> >
-> > As an aside, I'm surprised numbering starts from 1.
-> >
+On Wed, 23 Apr 2025 00:31:21 +0300, Danila Tikhonov wrote:
+> Document QFPROM compatible for SM7150.
 > 
-> OK, I will use platform_device->id instead. However, I'm still unsure
-> why the ID starts from1.
 > 
-> Additionally, I noticed that when calling mfd_add_devices()
-> separately, the IDs are also assigned consecutively (e.g., GPIO: 1~16,
-> I2C: 17~22, ...).
-> 
-> Do you have any recommendations on how I should implement this?
 
-If you are to use this mechanism, you'd have to submit separate
-mfd_add_devices() calls I guess.
+Applied, thanks!
 
-However, this all seems a bit silly for simple, contextless (where
-device 3 is identical to device 10, etc) enumeration.  Can you use IDA
-instead?
+[31/33] dt-bindings: arm: qcom: Add SM7150 Google Pixel 4a
+        commit: bd4718d97d308fdc20ddcd471444b3e398ce877d
 
+Best regards,
 -- 
-Lee Jones [李琼斯]
+Bjorn Andersson <andersson@kernel.org>
 
