@@ -1,82 +1,82 @@
-Return-Path: <linux-watchdog+bounces-3477-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3478-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59F92AB7413
-	for <lists+linux-watchdog@lfdr.de>; Wed, 14 May 2025 20:08:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B134AB741A
+	for <lists+linux-watchdog@lfdr.de>; Wed, 14 May 2025 20:09:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F1FFF189A729
-	for <lists+linux-watchdog@lfdr.de>; Wed, 14 May 2025 18:08:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C75C5177989
+	for <lists+linux-watchdog@lfdr.de>; Wed, 14 May 2025 18:09:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B87DE289E35;
-	Wed, 14 May 2025 18:05:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E43E1EB5C2;
+	Wed, 14 May 2025 18:09:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="elpIh2hI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PBHecUyM"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C47FE289838;
-	Wed, 14 May 2025 18:05:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99EE2196C7C;
+	Wed, 14 May 2025 18:09:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747245936; cv=none; b=ZX4iLD2CvFtk1lmY2oJoMpK3+5eJj7fkj87Dg+t1euE8VMiHFYh1P+0zl2OSYE86rDFxdtE2B1LSc5rZqllv95Ur4bH+xpsvPzeOkRKxrL9blqZYLK5UWecEojUaPEp/iE2bXxYC9J1t+c649PoVZP2wvyM85XrlMPaIPV73EPA=
+	t=1747246162; cv=none; b=XKkXH77iwKbd54Mcf4W76Zwfr3dLCEHZsn7z6PlTA/mFtECzuYsuH4XqU9S3EiwDmNFQ6zrVHTctYwX1FUJRElkCVZfuyw43ljFKXw8TBgPJApGgq8D68M9jwIuYOsK4JL+P1qVnBkjVWAa8Va/IfOeYLCgGt2w/3MK6dr5kysc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747245936; c=relaxed/simple;
-	bh=NKLCWMtT9bUeH7wNJNs83ozV84X8TXUuwcufTbcj4lk=;
+	s=arc-20240116; t=1747246162; c=relaxed/simple;
+	bh=TWEeF3FIwffivcD69LOpbpJvcTv56PwYnVjLEOxgtac=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fnyXbULSoW7cYjsC2UmVmbKJIkhH6K/2G2a3IIuCY4Q+PRKsRS3g7DBvOZl0rXVjCmcvQwgs4IlM0z0/rTG981CeBhuXgVUHmHKiYl3036IIT2mFuoxA0qnDztGkKQYSQ6ig1gdIO7sNwY8QtOm+ru2l5OvBjpExeH5InSes6+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=elpIh2hI; arc=none smtp.client-ip=209.85.214.173
+	 In-Reply-To:Content-Type; b=PNNzbd3nNb8Xdec0THrrPali/iY0lTn5fItRHJNHANOfCB7zyDgO//XWVlG9NiGtwvg6EMabQcifRmLRW0tS88B1X8e1xV4xl13KrKPagdjtIZp7BYimUpAXhMOrL4AlmCrXEAkgAg43tl9+KJNi1Iewxctlz5cOeeQ2V7WsRvE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PBHecUyM; arc=none smtp.client-ip=209.85.215.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-22c336fcdaaso865975ad.3;
-        Wed, 14 May 2025 11:05:34 -0700 (PDT)
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-b1fd59851baso17121a12.0;
+        Wed, 14 May 2025 11:09:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747245934; x=1747850734; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1747246158; x=1747850958; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=bdpZ7A9mhCIkEnuwUrHpmchCoydgr+FaDnHXJaGXt58=;
-        b=elpIh2hIECJ+5PFpcHxhf/OyaotXx/i3jk4egJEvt4NlavxdLS7Kg66wEZ3g/XBDIK
-         bVcb9JOz0YXzWFPeInZAi0iIbOu/ki8rUEAj8BkPPh14W1iSTjbULq3xm526i7hS+QVM
-         frsJz2OZyvI9LFee6YjU/ufsGgbrKAJh2PxREVKPtjp9/CMtbfcymThD1NsmXIRZEHRh
-         Au6uFXZ77REDz2pw91hVyqcruUUnhJLjbsClWqNQ1jSPPLsZeuCyEk6j3Sm0jideaOBa
-         ntJ/A2WTC+OJa4eVjUU/iqT2HjAbNCsIHpfn1ySZCumU/Ibo66dg0BVxTjm30pAdHHX2
-         UB6Q==
+        bh=ULDTPZ/Q8WDC42rx45jcf2YeFArXxWDu9Vq6TcbBvkc=;
+        b=PBHecUyMo/KZ7G6uiIh0e5YZmHhDqr0PvMCHPzn9UHZGgwoNbImxRXkqRVsxNoGTh1
+         Ny4noHAnnOgVO9nUzAVvhlKRYO9ys39ZFRNnekDDlSKfuJhRHdsRpV5sy7ETB4vZnktb
+         Hoqt0WG51f949v+nJRoHAnHrBaXV+Fv5yv+tZayIADoEBUjTOOabVp7YIOO1BBWWKNEz
+         m8+z/RH3xgOSNpJ6IOBIxnyu5Al5oeLZ87pFTstzRzq1HQgiulh8v+Mtltzb/QhWq0Oy
+         CKOhM3qRjQv7fnXYxzD+DnfmSspFl2Rim+zb0K9TR54xigUsT9G9n4/h1SQr+S01UGvy
+         +rlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747245934; x=1747850734;
+        d=1e100.net; s=20230601; t=1747246158; x=1747850958;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bdpZ7A9mhCIkEnuwUrHpmchCoydgr+FaDnHXJaGXt58=;
-        b=TPtr8P7w9rzbAo4ssSNbvIgujDO39D559EOZPv6pBm5jWRhWHl3aESxASgSmgcyEFJ
-         2tABqAIb84bdB3hjmEgBLvfFreOz3fNA7DHpZV1zX4rTmqFjSkFUZtt6+L3x6JaAX06F
-         IwxLVMN4To8E7Y1RdpBdXryQGp7HYg4TWn/BbgvEyEdxaoZk1q6Xf2naaSuuVM6555fD
-         hgfzlz7oyhsiqe+VrxSBvlSrm/i0hHYPEdOE3Km7Z4jfbwpJGosHpAhuFArdLl0Vl5MI
-         fOuA2X6JtStgZNkMi1QyF56wAVor9eCtbkWPZDRzpbHC7LmCfhjF+ehYIKCVmqd3734G
-         0djQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUaAQsKONWk7BNvU7XC8Gyhg0k2ejleL/7tO4dL2hz/FtDI+WOrEGOgHz3NchVKJYEhJ7vCJ7zhJ40UaebnXq8=@vger.kernel.org, AJvYcCVz5h1vR7k3kVLzzU80tM1gYEC6ZFmhcdaHzbO2OYhW5Z6s1S6lSAAJ3f+Um8i8I1xpYYmswMxZhKbbOnEO@vger.kernel.org, AJvYcCXVkXIn8Bq6PWCVSdC2iQejQ4wMkjJDAMLWBKSKqU/C//8ozym1mXFbOi+M+z9GMBsvY2dB65mUbSxX@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz8i/qHkzVgybBYjSR39MvtNjWRssrRXUSQMn7RlbHEEhxNh4p1
-	EQKcRa370FjLMn/Bhx4ZHIIWNoq9OVacDykLA/tq7lwL4YRJW/qyaWzfoA==
-X-Gm-Gg: ASbGnctVv102hF/DtaSaiqFPkpXc1A/fOnwDK+QRCf7McL1nhDI4FtDDjmhH6SG7/fV
-	QSbWrJELqkU7feCl2Qgfk2Gc3SQsrTx9KUiqRfqt5pN1RMrf0u4zOmH93k8S8wOAT8fJ6bxqOaY
-	DfjA20P9Rtq9T/vlGIGHajbHOSo6mqI9l/u3L94s63DNp5jdSytzY5mUhBUeifKHpYV+nziJZwp
-	CHdujljLHWxlhVsQDwHOVrCykPB0VTsXq9lszG2N7p9GPlHq/AnqAFVM/r+R9v8kXKLqleIvgjs
-	yIdvGL4KOP2Sw+Q6hswSW6EdMJiT7+rrBUoRP8/4+jGDqbJ+SrFBwrrHAOeMoLVXBwJbNfj5iId
-	iSkV8UVhyQHYXNKumJaLKzgwP
-X-Google-Smtp-Source: AGHT+IHOu8dDl8zmaHcg+Jhlmv2CjICYrW/SwrhPLBA/5dt/25XpQEFYQzrfzY4CBzUrzX5L1dlSVg==
-X-Received: by 2002:a17:903:3baf:b0:220:d257:cdbd with SMTP id d9443c01a7336-2319816fad8mr71443675ad.48.1747245933819;
-        Wed, 14 May 2025 11:05:33 -0700 (PDT)
+        bh=ULDTPZ/Q8WDC42rx45jcf2YeFArXxWDu9Vq6TcbBvkc=;
+        b=OIxWU2Ae38cD+Ilq2ucGPVur1I9Nb5MdHoSTXBnTwstc7cgQTW5iSMF/VhYHBgiLbT
+         NWWJxaAAIDHil69+Top3nzy0X7jNPOk6E8YETLzUGE7HK1SvKN3urMFfd0gjNw5IHWfG
+         +K+vUwfcaGXY5v+EluAeVsehk/BBxFn/200AdO37cuA6nfS3FC8+M12KMT3hXaVWTt5C
+         9TesUxrHXKEj6tp8b/ve5el9Y8oMVOGnyYE0aYXAMYY7ohDX9UjrqPUylj9wgJ/pAgaK
+         h7xB7/Ptx0RbCQOQO/B3Vcx5WmtyIjhBNojYYRKBNhrt0OQd7bRAn7aGYnAtMyCLRUhj
+         PRlQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV1WCRb0Sw9EetYIUX+uKM5OnTMUA9MbKdckLi53S1r3lNSz0iLh9actxG20Gkblxp9zmHQ9w64zZw6@vger.kernel.org, AJvYcCXxkwX/Dmo/FX6zQVBOeq5ZEN0rrVm9TKAwkrwkJyMbzU9hl8raX6Xvs61UIgsycrnK8zN8L9n718f/U52J@vger.kernel.org
+X-Gm-Message-State: AOJu0YwD3lz9Kj8ZU/LbVyivfV0FAzXR7EB73SmJSBulK7Rd7QjMIeoN
+	L7YcnDs3ap74GqfrLmPmLUXuWGdTl28lPIMMl3cOseGgOkYQ+C2t
+X-Gm-Gg: ASbGnct5F2tdZ6sZ7ppdYvgLQADsyC6qnjlBBxZ6ScT9QorSzyj5Zw8MjfCGhdLJfVp
+	mXr4jirtEJEDg3Ni0ipL+ejJ6kxUC2k0RBSweZftcn8R9O3PQkuoK0lhX5r0emXOx+VwMHnxhZa
+	BnxJmZdCJO2k029OdUmn7w4rIablD54o9epSBJt+fZ39uL11xvEwRkUGTZitbk1uJVbW3PUdU7N
+	r79BPj5LMg+WbOGYbJ2bsNyeTOX6lMqXDjKvA8Xz2q/N+ar4ZO9t1s3pQQC3YsVyR558PymnezI
+	9zAXc5nuWxd+kYd8EkC+NNlSxn3bxuGzWKxqcCcNWjTjDVU14Uy1any6k1emgZWb5L2ofbVxVS+
+	Cy5MVj+nfohxWIjevRZxitBjj
+X-Google-Smtp-Source: AGHT+IEW+o/7nHuU3n9jWceYrdb8uyM7bO7kRGY33fwGU7J24OIzl7vJ8KpCEgSRgpMjKR3aAqeIDA==
+X-Received: by 2002:a17:90b:1fcd:b0:301:1d9f:4ba2 with SMTP id 98e67ed59e1d1-30e2e625db6mr6285302a91.28.1747246157704;
+        Wed, 14 May 2025 11:09:17 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22fc8271f6csm102273595ad.129.2025.05.14.11.05.32
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-30e371d626esm1678651a91.44.2025.05.14.11.09.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 May 2025 11:05:32 -0700 (PDT)
+        Wed, 14 May 2025 11:09:17 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <9b951404-3bcf-4302-a647-3cef86b4bd3b@roeck-us.net>
-Date: Wed, 14 May 2025 11:05:31 -0700
+Message-ID: <2a8e1ae7-2a8a-4cd8-b699-c010019c766e@roeck-us.net>
+Date: Wed, 14 May 2025 11:09:15 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -84,24 +84,14 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/4] watchdog: qcom: add support to read the restart
- reason from IMEM
-To: Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>,
- Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, Rob Herring
- <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, bod.linux@nxsw.ie,
- Srinivas Kandagatla <srini@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
-References: <20250502-wdt_reset_reason-v3-0-b2dc7ace38ca@oss.qualcomm.com>
- <20250502-wdt_reset_reason-v3-4-b2dc7ace38ca@oss.qualcomm.com>
- <2036ef2f-c7ef-4f42-858d-8d95c430c21a@oss.qualcomm.com>
- <68d280db-f7df-48c8-821d-f7d408c302ad@oss.qualcomm.com>
- <8a763c70-adcf-4a14-bb68-72ddc61fa045@oss.qualcomm.com>
- <8c2a53c2-c11b-4d49-bfb5-b948767ba6c7@oss.qualcomm.com>
- <1e871aed-705f-4142-b72d-4232ae729a37@oss.qualcomm.com>
+Subject: Re: [PATCH v4 0/2] Add the NXP S32 Watchdog
+To: Daniel Lezcano <daniel.lezcano@linaro.org>, wim@linux-watchdog.org
+Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+ S32@nxp.com, ghennadi.procopciuc@nxp.com, thomas.fossati@linaro.org,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ devicetree@vger.kernel.org, alexandru-catalin.ionita@nxp.com
+References: <20250410082616.1855860-1-daniel.lezcano@linaro.org>
+ <650c336b-a698-42f5-ad59-7dcdf24667f4@linaro.org>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -147,85 +137,80 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <1e871aed-705f-4142-b72d-4232ae729a37@oss.qualcomm.com>
+In-Reply-To: <650c336b-a698-42f5-ad59-7dcdf24667f4@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 5/14/25 06:15, Kathiravan Thirumoorthy wrote:
-> 
-> On 5/6/2025 4:31 PM, Kathiravan Thirumoorthy wrote:
+On 5/14/25 08:30, Daniel Lezcano wrote:
+> On 4/10/25 10:26, Daniel Lezcano wrote:
+>> The NXP S32 watchdog, referenced in the documentation as the Software
+>> Watchdog Timer is actually a hardware watchdog. The system has one
+>> watchdog per core but an assertation does not directly reset the
+>> system as this behavior relies on a particular setup and another
+>> component which is not part of these changes. However the first
+>> watchdog on the system, tied with the Cortex-M4 #0 is a particular
+>> case where it will reset the system directly. This is enough for the
+>> watchdog purpose on Linux.
 >>
->> On 5/3/2025 3:53 AM, Konrad Dybcio wrote:
->>> On 5/2/25 6:28 PM, Kathiravan Thirumoorthy wrote:
->>>> On 5/2/2025 7:33 PM, Konrad Dybcio wrote:
->>>>>> +static int qcom_wdt_get_restart_reason(struct qcom_wdt *wdt,
->>>>>> +                    const struct qcom_wdt_match_data *data)
->>>>>> +{
->>>>>> +    struct regmap *imem;
->>>>>> +    unsigned int val;
->>>>>> +    int ret;
->>>>>> +
->>>>>> +    imem = syscon_regmap_lookup_by_compatible(data->imem_compatible);
->>>>> Try syscon_regmap_lookup_by_phandle_args() and pass a phandle, see e.g.
->>>>> drivers/phy/qualcomm/phy-qcom-qmp-pcie.c & phy@1bfc000 in x1e80100.dtsi
->>>>>
->>>>> That way all platform specifics will live in the DT, requiring no
->>>>> hardcode-y driver changes on similar platforms
->>>>
->>>> Thanks. I thought about this API but it didn't strike that I can use the args to fetch and match the value.
->>>>
->>>> I need a suggestion here. There is a plan to extend this feature to other IPQ targets and also support WDIOF_POWERUNDER and WDIOF_OVERHEAT cause as well. For IPQ5424, all 3 cause will support and for other IPQ platforms, we are exploring how to integrate WDIOF_OVERHEAT. In any case, can I define the DT entry like below
->>>>
->>>>          imem,phandle = <&imem 0x7b0 <Non secure WDT value> <Power Under value> <Overheat value>>;
->>>>
->>>> and store these in values args[1], args[2] and args[3] respectively and use it for manipulation? If any of the platform doesn't support all 3, I can update the bindings and define the number of args as required.
->>> Let's call the property qcom,restart-reason and only pass the register value
->>>
->>> Because we may have any number of crazy combinations of various restart
->>> reasons, we can go two paths:
->>>
->>> 1. promise really really really hard we won't be too crazy with the number
->>>     of possible values and put them in the driver
->>> 2. go all out on DT properties (such as `bootstatus-overheat`,
->>> `bootstatus-fanfault` etc.
+>> The watchdog relies on the default timeout described in the device
+>> tree but if another timeout is needed at boot time, it can be changed
+>> with the module parameter.
 >>
+>> If the kernel has to service the watchdog in place of the userspace,
+>> it can specify the 'early-enable' option at boot time.
 >>
->> Thanks Konrad for the suggestions and the offline discussions.
+>> And finally, if starting the watchdog has no wayback then the option
+>> 'nowayout' can be also specified in the boot option.
 >>
->> @Guenter, I need a suggestion here. Currently as part of this series, we are planning to expose WDIOF_CARDRESET, WDIOF_POWERUNDER, WDIOF_OVERHEAT reasons.
+>> Changelog:
 >>
->> Once this is done, we do have the custom reason codes like Kernel Panic, Secure Watchdog Bite, Bus error timeout, Bus error access and few many. Is it okay to expose these values also via the bootstatus sysFS by extending the current list of reasons? Since these are outside the scope of watchdog, need your thoughts on this.
+>>   - v4:
+>>      - Update the watchdog timeout when the callback is called (Alexandru-Catalin Ionita)
+>>      - Fix the clocks bindings to have all the clocks described (Krzysztof Kozlowski)
+>>
+>>   - v3:
+>>      - Add the clocks for the module and the register (Ghennadi Procopciuc)
+>>      - Use the clock name from the driver
+>>      - Removed Review-by tag from Krzysztof Kozlowski as the bindings changed
+>>
+>>   - v2:
+>>      - Removed debugfs code as considered pointless for a such simple
+>>        driver (Arnd Bergmann)
+>>      - Replaced __raw_readl / __raw_writel by readl and writel (Arnd Bergmann)
+>>      - Reordered alphabetically the headers (Guenter Roeck)
+>>      - Enclosed macro parameter into parenthesis (Guenter Roeck)
+>>      - Fixed checkpatch reported errors (Guenter Roeck)
+>>      - Clarified a ping on a stopped timer does not affect it (Guenter Roeck)
+>>      - Used wdt_is_running() to save an extra IO (Guenter Roeck)
+>>      - Fixed a misleading comment about starting the watchdog at boot time (Guenter Roeck)
+>>      - Replaced allocation size sizeof(struct ...) by sizeof(*var) (Krzysztof Kozlowski)
+>>      - Drop old way of describing the module and use table module device (Krzysztof Kozlowski)
+>>      - Replaced additionalProperties by unevaluatedProperties (Rob Herring)
+>>      - Removed the DT bindings description as it is obvious (Ghennadi Procopciuc)
+>>      - Fixed DT bindings compatible string (Krzysztof Kozlowski)
+>>
+>>   - v1: initial posting
+>>
+>> Daniel Lezcano (2):
+>>    dt-bindings: watchdog: Add NXP Software Watchdog Timer
+>>    watchdog: Add the Watchdog Timer for the NXP S32 platform
+>>
+>>   .../bindings/watchdog/nxp,s32g2-swt.yaml      |  54 +++
+>>   drivers/watchdog/Kconfig                      |   9 +
+>>   drivers/watchdog/Makefile                     |   1 +
+>>   drivers/watchdog/s32g_wdt.c                   | 315 ++++++++++++++++++
+>>   4 files changed, 379 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/watchdog/nxp,s32g2-swt.yaml
+>>   create mode 100644 drivers/watchdog/s32g_wdt.c
 > 
+> Hi,
 > 
-> Konrad / Guenter,
+> Gentle ping, we are close to the merge window.
 > 
-> We had a further discussion on this internally. Outcome is, it wouldn't be ideal to hook the custom restart reason codes in watchdog framework, since there is no involvement of watchdog in such cases. Also I don't find any references to hook the custom values in watchdog's bootstatus.
-> 
-Correct. The watchdog subsystem can only handle watchdog triggered reboots/resets.
 
-
-> If this is fine, I'm planning to resend the series to handle only the non secure watchdog timeout case. In that case, as suggested by Konrad, everything will be handled in DT like below to avoid the device data.
-> 
-> imem,phandle = <&phandle <imem_offset> <value>>;
-> 
-> Kindly share your thoughts and inputs on this to proceed further.
-> 
-Sounds good to me.
+AFAICS the patches do have Reviewed-by: tags, so this is just waiting for Wim
+to pick it up.
 
 Guenter
-
-> 
->>
->>
->>>
->>> I'd much prefer to go with 1 really.. If we used nvmem, we could have a map
->>> of cell names to restart reasons, but we've already established IMEM is
->>> volatile and we shouldn't mess up the convention just because that
->>> subsystem has nicer APIs..
->>>
->>> Unless we rename the subsystem to `fuses`, `magic-values` or something..
->>> +Srini? :P
->>>
->>> Konrad
 
 
