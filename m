@@ -1,81 +1,81 @@
-Return-Path: <linux-watchdog+bounces-3507-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3508-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A295AB8F70
-	for <lists+linux-watchdog@lfdr.de>; Thu, 15 May 2025 20:55:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4250AB8F73
+	for <lists+linux-watchdog@lfdr.de>; Thu, 15 May 2025 20:56:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B85213BCB3F
-	for <lists+linux-watchdog@lfdr.de>; Thu, 15 May 2025 18:55:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7180216F3C8
+	for <lists+linux-watchdog@lfdr.de>; Thu, 15 May 2025 18:56:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3C96298C37;
-	Thu, 15 May 2025 18:55:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAAC729B22C;
+	Thu, 15 May 2025 18:55:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LcgJ6W5e"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O2KWIiPT"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A36C28AAE1;
-	Thu, 15 May 2025 18:55:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 017D128DF09;
+	Thu, 15 May 2025 18:55:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747335335; cv=none; b=Tm4sHCFhljgTfAZXRpd77PLwDsv+1N//G/sXtIXNMQByOG8kYkdZKz38m8a/ZSJvbIImyIYi7iHPtTMwAqNTjRcHwfd2zCuY+GoKHoAvlNJJf7HctyYYRZC4/RYxzqC44SR2Zvw2fD49n9GzssNVRYvteyi+rk23681ngmzd71w=
+	t=1747335336; cv=none; b=oQ63J+dsPoxYtg7JJpWf/yqj9RWgK5Ln724d64BhD4OOh/zmMQDwQdofJ+32PZYJzp59RAenKz1fpnHWtW5Du4uw+x0rVrlKNPQbiRbEidR2pa0hoylH1r4fAqWavBAvFTZ7KaY3/CEvhdbjpzzdyuFCjn/5Eo4khe9LPJ6rwbY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747335335; c=relaxed/simple;
-	bh=4CyYsnhnKma2xppJbhsHsOk6fmvNYSaorpOr7AaIMyg=;
+	s=arc-20240116; t=1747335336; c=relaxed/simple;
+	bh=QbpS/kQkJJiwh5PckUNMqicAThM5PNWf6q83MVBs0Vs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=gTlOl09Jf30z66TXLaa4/osoinKKQHghZGn4GmUG30cACsHTuIIPSbwMZZvWZ/vx0gEV94gUJv9pJY6gZhXcgu1XtzL5/gDPU7MdZUDGMclnMMv+h5ysFHPXd9pPTORbqGtKVkhVp21p7pEKAUbThribAgr6ty6jrcJgwZlhnjs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LcgJ6W5e; arc=none smtp.client-ip=209.85.167.46
+	 In-Reply-To:To:Cc; b=dHWrXsE/29Go5CxFBFFjDkeNwLJ7P5DGF8dXkMqfW7EMAQ/aVgJgLS/yK37u4Eo3Y1gxy3an/laEaXqRly0mTvrYfbzoPs7JPim7g88zK/m8PEiWmb8YeH5+3DP1m4eMHD2btucPN0Jdoca+vPGbZfVQa/bkweYHlbklQMv1zYQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O2KWIiPT; arc=none smtp.client-ip=209.85.167.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-54298ec925bso1873553e87.3;
-        Thu, 15 May 2025 11:55:33 -0700 (PDT)
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-54acc0cd458so1560912e87.0;
+        Thu, 15 May 2025 11:55:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747335332; x=1747940132; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1747335333; x=1747940133; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=K/YRE9eWWpFH2r4v7/hrx7dmjRCdICuJbKw6jMjRMZw=;
-        b=LcgJ6W5eChWX28qT8zq85zPjd/BZxawfJCAjGJILnZ8h8is/VsM4FWRefrbzU2YUbS
-         bz4UsC4lwsIAR6CMnaigbVwLnC//fhTP9gTJMiERX46N80NSqLcoEcuckMtK8Lx9FDTe
-         2+1Iv9E5gGZOh3DqJEJd02dh2pamRSyMxh5gZgCrwauEk+p7fa2P1WtdFBFjByA4t4e9
-         /9rq4euSoFI3O7qXYG3gP6paPaIYnSaVc6B0IdPB4huPh5eUBYA+6ctg/K7jTgpyhk7+
-         fwerbjJz8u/yaUuQmfQ3r1rrN/Qsxme4OMRuLQzNujkgvxAUEPiS+9rfd0jORMRMb3M3
-         BtIA==
+        bh=89X5cDkgwMX67Wp+mdH+TqpQpjI3cSH5Pn7YIWEV0tU=;
+        b=O2KWIiPTuzhYw1iCjjZ/n3vhzKfoYF04pYxQ2ZXnYRaFK/PBcccuBKBcuKzDxiNtGa
+         0N9PJsprqb+T+G8rBh8gybzHOqXPqu8y+cCcwqKq+gkUiewQntZQ8GVRmFdjA9WEih87
+         AtwD+OUZ7jpKC2E6rCXT6aaZsbz70XutPwrrfg8yxcW/HtJyU6WN2p7OXOM1xDwKcUoy
+         6/GG3BiLvGh8NFu/iXRsl11wTxH4wxNsosmZL9rg0EovncUFSrQRKTUyLGfsIag9JwW9
+         33J2Xn5/1o/ySY2Gu5aJC5DY5fvGETUTbH00kxY5NgHaaxzQA6vRMkQVh/TERD6miqXI
+         XKgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747335332; x=1747940132;
+        d=1e100.net; s=20230601; t=1747335333; x=1747940133;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=K/YRE9eWWpFH2r4v7/hrx7dmjRCdICuJbKw6jMjRMZw=;
-        b=a+u/PfAPhqybJxfk+4MZtpP0r4Lu7U4zhl2p8a6Mlqymn8pKxfzB7hgIuclbWdpK24
-         1ASH3M5sAWyajWDMqYavtuullSWkh1OFi8nRG41tjfR8oNJ2WX9UXXOpZBGrw27vvgVT
-         pT75EJosgtruxGKNdXG6U2FWaWnycI+WD1qASd9N79Z0RsTMSYtGrNrUbEPjGZCwQLVI
-         9yPGdshzx5TXmtmbRZAPJx6P1Ms2rvhngiUCcpYLuQQBqLa/3MTlGvzOY+f/OZ7pvfzl
-         +ezbIQ6tUO7t8Pjoa4yEUuuA7iPIBSaslNMetufscwGc7qeBmnqiDz2eexf2D5Nj8yB/
-         D2kQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUE3muT5ULE9w6YBjstZhAUx+OTWiQZbLVNuEc2QhGJe7kuJ7X3LWVO5l+UZA8JtrEwOD0g3Rax2iPKUoHA@vger.kernel.org, AJvYcCVY7C5PlWbfZ4xZ0pOnDLzFVArkQMqpO9SPtDQ/fjGqQ5Jb26XGiJ1VeubXbKiV5cEkt7C9leDK27uS@vger.kernel.org, AJvYcCVhOZY7jBrC9c8sjgBEDuhed1m1ACBkXtDTAmxR8lrZ9X92r4gvUFwLnG7mmUDTENxCPahMNF4t3p8/lMSlsEA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJCPoQP6lLFDFT3+oCB1C/mr9eaOy//JJzF7QMMWxW0+sEoubw
-	M8KiRDArd7JbJkhvSr4l0lEnumlxFIyJ0VMzF+EXZNdzGj/LncJQqW/5
-X-Gm-Gg: ASbGncvqoWnxJKb4LMTs/9u0cI/M3nlmtGBjULSR+OVQUFf+a0aD+yabEekMIZrjtcz
-	jyHmt/a16URJ+zcHoHc19nS8MCPdrErt8aH67TuhgtigmaXDhstrRkBXp0UVsvGwhZ6ZYsF5HkA
-	veDdalHEXWKxsL/3clW6vPsi4LUepqt8Yweg6C4+wY0pDCSm7zhwWMlXkGTfoAQOpjWUW9RzSF+
-	KDth6cQ57vB9IJ2uBtVZzJUopv/a3wLD8T7tBCMY6zzt2yppzPHuQ3BW/9yT78AM2ZDwfKfKBkw
-	FvY/ycMtx2w/ffplkrAFicowaa9yoPhlzxmClX+QwmNp27Wn/zHI3IyoXoWt8STP
-X-Google-Smtp-Source: AGHT+IHApBPb/phj1NVTHxxkqJc2zUdEfupFPSOaxaq4axktTPQJcm8n1VDeCMcQoF0U6De0zLqslA==
-X-Received: by 2002:a05:6512:31d1:b0:54f:bc43:dafb with SMTP id 2adb3069b0e04-550e7243888mr215821e87.43.1747335331765;
-        Thu, 15 May 2025 11:55:31 -0700 (PDT)
+        bh=89X5cDkgwMX67Wp+mdH+TqpQpjI3cSH5Pn7YIWEV0tU=;
+        b=fLzEnGigpVoclmu0PXnCCsjbpS8iah0Tq8Li7xTWxefPktp2iMir7+ZaOBB0+jMwV8
+         AdPqE5Ga0OiX567adbbfj+ve/DokdQnuDNjFpsD4Z9E1N0xPifQVMmJawcC3+OW/WjJe
+         IfBnbikushpiwvi+Ghg9eMO1PuUdr53V8iGSzdt3qhRG+AqxasI1N9PmTq9chVcVXN3D
+         oaGtQie3qEKLq8XWljcMTTEwet6Y5/L5XmqvldDltdYhDNwG7vo41p0ggR4KwmQuFzhk
+         wFQy/VwUmIU6saHL+AUkPd2q7JOgTeEs+PfR+/+LuEg8xfHCZSAOac/vDitL1UV2TNci
+         aSrA==
+X-Forwarded-Encrypted: i=1; AJvYcCUDpCGN9IKsPyfFXoXd7WqTTpMwkdLsF/X9EBii+Lj9rSkYT3C893Tq0IF3CNa8bV/F21WD6b2EVZpf2gyD@vger.kernel.org, AJvYcCVMbFeNqF3W7VDQJaGVa5jxUNXDXpxHyr1u0x2iaCiw/3w2UntbBZz6YItwoNuS5rXoxlVcFW64Tj5C@vger.kernel.org, AJvYcCXM4pbE453HGQZNL9b7nAAfS9qd3lz4NMbZPTB7ESWfTpZmoCI8WdyPEazlqgfIMJB5hoi15U/rdm5mBP/A8uA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyNwm2VTeJ1rkO5YIkWBx+jW39C71rbtYP4niCYiJ6xzKvSqY4f
+	rijfWhgfQtPkcTS74zbQevwhHgeBQjRMw4QaXNqEMTTMahYo53Ap4Hhn
+X-Gm-Gg: ASbGncvTcHqVVoXTJs/x7ELvtCgZK9JlQeZx75KnfS8SpGIuvZXfkj2gnHwZw0a32Hn
+	xSd2koIaOqIxeiu+6K3ZuZ8LYE34VcPF5W2VYp2u8jtveYs49hITWEPkr9C5enLlSaarX0zWrRh
+	YVTDlxq7EYsf2bFJkkV5kZ5mgH57LPVDK9Bs4WH5Atryh2oKnmcinGLPNIp8uHsgmdjxrujmiI+
+	m4RJlN9UhrSZKz/LK1lutK/oOV8S9mOy2IDlTITkFBeZJP/q5cTED/kaH5ey1I3C1DnHX0ZTNVz
+	BcziAAi/JktIkoYXmfeSgRBfiQE2NtI7R2zTXi5hHPFavMRLcHPvKVUdmmY1jLVm
+X-Google-Smtp-Source: AGHT+IFXphhaPfRYQNVaaNL19dEd3OxAeFx5dTiTdykGmgZQ7ms0RJw5IjYe+nVQU2nwQqYh4pYpSA==
+X-Received: by 2002:a05:6512:3e04:b0:54b:f33:cc16 with SMTP id 2adb3069b0e04-550e71b2359mr207965e87.16.1747335332811;
+        Thu, 15 May 2025 11:55:32 -0700 (PDT)
 Received: from NB-GIGA003.letovo.school ([95.167.212.10])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-550e702dd8asm60389e87.196.2025.05.15.11.55.30
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-550e702dd8asm60389e87.196.2025.05.15.11.55.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 May 2025 11:55:31 -0700 (PDT)
+        Thu, 15 May 2025 11:55:32 -0700 (PDT)
 From: Alexey Charkov <alchark@gmail.com>
-Date: Thu, 15 May 2025 21:55:27 +0300
-Subject: [PATCH v3 2/4] clocksource/drivers/timer-vt8500: Add defines for
- magic constants
+Date: Thu, 15 May 2025 21:55:28 +0300
+Subject: [PATCH v3 3/4] clocksource/drivers/timer-vt8500: Prepare for
+ watchdog functionality
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -84,7 +84,7 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250515-vt8500-timer-updates-v3-2-2197a1b062bd@gmail.com>
+Message-Id: <20250515-vt8500-timer-updates-v3-3-2197a1b062bd@gmail.com>
 References: <20250515-vt8500-timer-updates-v3-0-2197a1b062bd@gmail.com>
 In-Reply-To: <20250515-vt8500-timer-updates-v3-0-2197a1b062bd@gmail.com>
 To: Krzysztof Kozlowski <krzk@kernel.org>, 
@@ -98,141 +98,147 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org, 
  Alexey Charkov <alchark@gmail.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1747335328; l=4723;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1747335328; l=4681;
  i=alchark@gmail.com; s=20250416; h=from:subject:message-id;
- bh=4CyYsnhnKma2xppJbhsHsOk6fmvNYSaorpOr7AaIMyg=;
- b=oax/cP43gm6/fN+1TVTnpNq77UoNNvIAD9cQbR19U34VFUVdyq2fIGy/3QiCSwVASJSocHcBl
- gHX4ZTGOHRIAxWTYub6LTkjMpWNNQhcWHPEoZWR9SQ3DKbXm/Qp759D
+ bh=QbpS/kQkJJiwh5PckUNMqicAThM5PNWf6q83MVBs0Vs=;
+ b=NNBbfD5AkIXlxdWKECjLPB/BWipzyhlLO3lQ2bGgNY4WpyUStbEqnzJqvlhuzrdozgq9Wdp/4
+ Rok+ZGrpZS4BrkT3pqfAh/A97GspyxUL7USnY8hmvT2cWFBEYgTAV8x
 X-Developer-Key: i=alchark@gmail.com; a=ed25519;
  pk=ltKbQzKLTJPiDgPtcHxdo+dzFthCCMtC3V9qf7+0rkc=
 
-Add defines for all known registers and their bits to make the code more
-self-explanatory. While at that, replace _VAL suffixes with more
-intuitive _REG suffixes on register offsets.
+VIA/WonderMedia system timer can generate a watchdog reset when its
+clocksource counter matches the value in the match register 0 and
+watchdog function is enabled. For this to work, obvously the clock event
+device must use a different match register (1~3) and respective interrupt.
 
-No functional changes.
+Check if at least two interrupts are provided by the device tree, then use
+match register 1 for system clock events and reserve match register 0 for
+the watchdog. Instantiate a platform device for the watchdog and give it
+access to the MMIO registers base of the timer through platform data.
 
 Signed-off-by: Alexey Charkov <alchark@gmail.com>
 ---
- drivers/clocksource/timer-vt8500.c | 65 ++++++++++++++++++++++++--------------
- 1 file changed, 42 insertions(+), 23 deletions(-)
+ drivers/clocksource/timer-vt8500.c | 68 +++++++++++++++++++++++++++++++++++---
+ 1 file changed, 63 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/clocksource/timer-vt8500.c b/drivers/clocksource/timer-vt8500.c
-index a469b1b5f97233202bf01298b9f612e07026c20c..9f28f30dcaf83ab4e9c89952175b0d4c75bd6b40 100644
+index 9f28f30dcaf83ab4e9c89952175b0d4c75bd6b40..122cc046140d5e9edff20ff41a49b4e62064dd40 100644
 --- a/drivers/clocksource/timer-vt8500.c
 +++ b/drivers/clocksource/timer-vt8500.c
-@@ -24,15 +24,31 @@
+@@ -21,6 +21,8 @@
+ #include <linux/of.h>
+ #include <linux/of_address.h>
+ #include <linux/of_irq.h>
++#include <linux/of_platform.h>
++#include <linux/platform_device.h>
  
  #define VT8500_TIMER_OFFSET	0x0100
  #define VT8500_TIMER_HZ		3000000
--#define TIMER_MATCH_VAL		0x0000
--#define TIMER_COUNT_VAL		0x0010
--#define TIMER_STATUS_VAL	0x0014
--#define TIMER_IER_VAL		0x001c		/* interrupt enable */
--#define TIMER_CTRL_VAL		0x0020
--#define TIMER_AS_VAL		0x0024		/* access status */
--#define TIMER_COUNT_R_ACTIVE	(1 << 5)	/* not ready for read */
--#define TIMER_COUNT_W_ACTIVE	(1 << 4)	/* not ready for write */
--#define TIMER_MATCH_W_ACTIVE	(1 << 0)	/* not ready for write */
-+
-+#define TIMER_MATCH_REG(x)	(4 * (x))
-+#define TIMER_COUNT_REG		0x0010	 /* clocksource counter */
-+
-+#define TIMER_STATUS_REG	0x0014
-+#define TIMER_STATUS_MATCH(x)	BIT((x))
-+#define TIMER_STATUS_CLEARALL	(TIMER_STATUS_MATCH(0) | \
-+				 TIMER_STATUS_MATCH(1) | \
-+				 TIMER_STATUS_MATCH(2) | \
-+				 TIMER_STATUS_MATCH(3))
-+
-+#define TIMER_WATCHDOG_EN_REG	0x0018
-+#define TIMER_WD_EN		BIT(0)
-+
-+#define TIMER_INT_EN_REG	0x001c	 /* interrupt enable */
-+#define TIMER_INT_EN_MATCH(x)	BIT((x))
-+
-+#define TIMER_CTRL_REG		0x0020
-+#define TIMER_CTRL_ENABLE	BIT(0)	 /* enable clocksource counter */
-+#define TIMER_CTRL_RD_REQ	BIT(1)	 /* request counter read */
-+
-+#define TIMER_ACC_STS_REG	0x0024	 /* access status */
-+#define TIMER_ACC_WR_MATCH(x)	BIT((x)) /* writing Match (x) value */
-+#define TIMER_ACC_WR_COUNTER	BIT(4)	 /* writing clocksource counter */
-+#define TIMER_ACC_RD_COUNTER	BIT(5)	 /* reading clocksource counter */
+@@ -55,6 +57,9 @@
+ #define MIN_OSCR_DELTA		16
  
- #define msecs_to_loops(t) (loops_per_jiffy / 1000 * HZ * t)
+ static void __iomem *regbase;
++static unsigned int sys_timer_ch;	 /* which match register to use
++					  * for the system timer
++					  */
  
-@@ -43,11 +59,12 @@ static void __iomem *regbase;
  static u64 vt8500_timer_read(struct clocksource *cs)
  {
- 	int loops = msecs_to_loops(10);
--	writel(3, regbase + TIMER_CTRL_VAL);
--	while ((readl((regbase + TIMER_AS_VAL)) & TIMER_COUNT_R_ACTIVE)
--						&& --loops)
-+
-+	writel(TIMER_CTRL_ENABLE | TIMER_CTRL_RD_REQ, regbase + TIMER_CTRL_REG);
-+	while (readl(regbase + TIMER_ACC_STS_REG) & TIMER_ACC_RD_COUNTER
-+	     && --loops)
- 		cpu_relax();
--	return readl(regbase + TIMER_COUNT_VAL);
-+	return readl(regbase + TIMER_COUNT_REG);
- }
- 
- static struct clocksource clocksource = {
-@@ -63,23 +80,25 @@ static int vt8500_timer_set_next_event(unsigned long cycles,
- {
+@@ -81,15 +86,15 @@ static int vt8500_timer_set_next_event(unsigned long cycles,
  	int loops = msecs_to_loops(10);
  	u64 alarm = clocksource.read(&clocksource) + cycles;
--	while ((readl(regbase + TIMER_AS_VAL) & TIMER_MATCH_W_ACTIVE)
--						&& --loops)
-+
-+	while (readl(regbase + TIMER_ACC_STS_REG) & TIMER_ACC_WR_MATCH(0)
-+	       && --loops)
+ 
+-	while (readl(regbase + TIMER_ACC_STS_REG) & TIMER_ACC_WR_MATCH(0)
++	while (readl(regbase + TIMER_ACC_STS_REG) & TIMER_ACC_WR_MATCH(sys_timer_ch)
+ 	       && --loops)
  		cpu_relax();
--	writel((unsigned long)alarm, regbase + TIMER_MATCH_VAL);
-+	writel((unsigned long)alarm, regbase + TIMER_MATCH_REG(0));
+-	writel((unsigned long)alarm, regbase + TIMER_MATCH_REG(0));
++	writel((unsigned long)alarm, regbase + TIMER_MATCH_REG(sys_timer_ch));
  
  	if ((signed)(alarm - clocksource.read(&clocksource)) <= MIN_OSCR_DELTA)
  		return -ETIME;
  
--	writel(1, regbase + TIMER_IER_VAL);
-+	writel(TIMER_INT_EN_MATCH(0), regbase + TIMER_INT_EN_REG);
+-	writel(TIMER_INT_EN_MATCH(0), regbase + TIMER_INT_EN_REG);
++	writel(TIMER_INT_EN_MATCH(sys_timer_ch), regbase + TIMER_INT_EN_REG);
  
  	return 0;
  }
- 
- static int vt8500_shutdown(struct clock_event_device *evt)
- {
--	writel(readl(regbase + TIMER_CTRL_VAL) | 1, regbase + TIMER_CTRL_VAL);
--	writel(0, regbase + TIMER_IER_VAL);
-+	writel(readl(regbase + TIMER_CTRL_REG) | TIMER_CTRL_ENABLE,
-+	       regbase + TIMER_CTRL_REG);
-+	writel(0, regbase + TIMER_INT_EN_REG);
- 	return 0;
- }
- 
-@@ -95,7 +114,7 @@ static struct clock_event_device clockevent = {
- static irqreturn_t vt8500_timer_interrupt(int irq, void *dev_id)
- {
- 	struct clock_event_device *evt = dev_id;
--	writel(0xf, regbase + TIMER_STATUS_VAL);
-+	writel(TIMER_STATUS_CLEARALL, regbase + TIMER_STATUS_REG);
- 	evt->event_handler(evt);
- 
- 	return IRQ_HANDLED;
-@@ -119,9 +138,9 @@ static int __init vt8500_timer_init(struct device_node *np)
- 		return -EINVAL;
+@@ -131,7 +136,9 @@ static int __init vt8500_timer_init(struct device_node *np)
+ 		return -ENXIO;
  	}
  
--	writel(1, regbase + TIMER_CTRL_VAL);
--	writel(0xf, regbase + TIMER_STATUS_VAL);
--	writel(~0, regbase + TIMER_MATCH_VAL);
-+	writel(TIMER_CTRL_ENABLE, regbase + TIMER_CTRL_REG);
-+	writel(TIMER_STATUS_CLEARALL, regbase + TIMER_STATUS_REG);
-+	writel(~0, regbase + TIMER_MATCH_REG(0));
+-	timer_irq = irq_of_parse_and_map(np, 0);
++	sys_timer_ch = of_irq_count(np) > 1 ? 1 : 0;
++
++	timer_irq = irq_of_parse_and_map(np, sys_timer_ch);
+ 	if (!timer_irq) {
+ 		pr_err("%s: Missing irq description in Device Tree\n",
+ 								__func__);
+@@ -140,7 +147,7 @@ static int __init vt8500_timer_init(struct device_node *np)
+ 
+ 	writel(TIMER_CTRL_ENABLE, regbase + TIMER_CTRL_REG);
+ 	writel(TIMER_STATUS_CLEARALL, regbase + TIMER_STATUS_REG);
+-	writel(~0, regbase + TIMER_MATCH_REG(0));
++	writel(~0, regbase + TIMER_MATCH_REG(sys_timer_ch));
  
  	ret = clocksource_register_hz(&clocksource, VT8500_TIMER_HZ);
  	if (ret) {
+@@ -166,4 +173,55 @@ static int __init vt8500_timer_init(struct device_node *np)
+ 	return 0;
+ }
+ 
++/*
++ * This probe gets called after the timer is already up and running. This will create
++ * the watchdog device as a child since the registers are shared.
++ */
++static int vt8500_timer_probe(struct platform_device *pdev)
++{
++	struct platform_device *vt8500_watchdog_device;
++	struct device *dev = &pdev->dev;
++	int ret;
++
++	if (!sys_timer_ch) {
++		dev_info(dev, "Not enabling watchdog: only one irq was given");
++		return 0;
++	}
++
++	if (!regbase)
++		return dev_err_probe(dev, -ENOMEM,
++			"Timer not initialized, cannot create watchdog");
++
++	vt8500_watchdog_device = platform_device_alloc("vt8500-wdt", -1);
++	if (!vt8500_watchdog_device)
++		return dev_err_probe(dev, -ENOMEM,
++			"Failed to allocate vt8500-wdt");
++
++	/* Pass the base address as platform data and nothing else */
++	vt8500_watchdog_device->dev.platform_data = regbase;
++	vt8500_watchdog_device->dev.parent = dev;
++
++	ret = platform_device_add(vt8500_watchdog_device);
++	if (ret)
++		platform_device_put(vt8500_watchdog_device);
++
++	return ret;
++}
++
++static const struct of_device_id vt8500_timer_of_match[] = {
++	{ .compatible = "via,vt8500-timer", },
++	{},
++};
++
++static struct platform_driver vt8500_timer_driver = {
++	.probe  = vt8500_timer_probe,
++	.driver = {
++		.name = "vt8500-timer",
++		.of_match_table = vt8500_timer_of_match,
++		.suppress_bind_attrs = true,
++	},
++};
++
++builtin_platform_driver(vt8500_timer_driver);
++
+ TIMER_OF_DECLARE(vt8500, "via,vt8500-timer", vt8500_timer_init);
 
 -- 
 2.49.0
