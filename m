@@ -1,82 +1,82 @@
-Return-Path: <linux-watchdog+bounces-3484-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3492-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 587E8AB7FA3
-	for <lists+linux-watchdog@lfdr.de>; Thu, 15 May 2025 10:03:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01BDDAB814F
+	for <lists+linux-watchdog@lfdr.de>; Thu, 15 May 2025 10:48:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0C6B01B66533
-	for <lists+linux-watchdog@lfdr.de>; Thu, 15 May 2025 08:03:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 409AD188782D
+	for <lists+linux-watchdog@lfdr.de>; Thu, 15 May 2025 08:47:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B181288519;
-	Thu, 15 May 2025 08:03:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3883928C845;
+	Thu, 15 May 2025 08:47:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="pmYFseS5"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=taladin.ro header.i=@taladin.ro header.b="CVZEwBWS"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+Received: from clean236.mxserver.ro (clean236.mxserver.ro [46.102.249.236])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3FBC2882A5
-	for <linux-watchdog@vger.kernel.org>; Thu, 15 May 2025 08:03:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F19B28C84D;
+	Thu, 15 May 2025 08:47:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.102.249.236
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747296195; cv=none; b=SNvP+/HW/tI/L6tHvGBmX+VIK2MVH/5WNkT7T3VeJ2r2Zp+ZGnC45qg9Z5zFbs2TrDFkb6amR+rfZUtU3K2AhS9Py1umgqfOEWDzMuqbz/jo3qb7G4qaMxcP6LPzM+22ZYzr4F/kPcONcZr7OP2Qr92ug2ao8kNz/IkeaqJ8oe0=
+	t=1747298843; cv=none; b=eZS+MOmenDdwgwEiJj/N60aQb50jxTOJrefGVx+jFJDdUySSl6YTYklTXt/ZffWJJ3MMpyB1whJe3H6jPQL/KsT+Bfvaryudci2HMxwod+sz9tkK0fNWQYojyuoC5XzuJphY+gjJx9Y4K4aKzlZ4Ue/es0GeoC8hLYcwrNS7CVc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747296195; c=relaxed/simple;
-	bh=EyGor6XVIMq7J+WDI1N7ciU1xsKQCdfgZtKjtEldfQg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:MIME-Version:
-	 Content-Type:References; b=gY5GYZikdx4rKPhUR9pHSy/6redcTEsTan7zcWcL29qgEqd8TNGyeMV4Nq44AY7rpiAXBVOJrIU7kx3Sm1Muox8iNkTHhYzQWfxqgAVCavuki5keKQpSAVoi/utZ12l9wMxbU2MeS+fNsn/OBsIL4Xc3Bu2E5f+u9/80ZkzFLrY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=pmYFseS5; arc=none smtp.client-ip=203.254.224.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
-	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20250515080311epoutp0198ce60ac95036e6afac2e82688c88c0f~-pKD_SlKv0978009780epoutp01Z
-	for <linux-watchdog@vger.kernel.org>; Thu, 15 May 2025 08:03:11 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20250515080311epoutp0198ce60ac95036e6afac2e82688c88c0f~-pKD_SlKv0978009780epoutp01Z
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1747296191;
-	bh=6E+pV7n6F1eiQsjNgSMeovGhdczmhV6c5wMuEuVtyBs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=pmYFseS5N4H5pnvdK01BIqDgEPdkLbvewVptfUh5Fm17MgtQKW60Djm8m2yMvEQH3
-	 mHwLJ1AzgqUoIGf7KbfJBEDb1hg3LGGwujszqKPyHBZRsPb0FFl4BYIpuqn76ISwkl
-	 0UDXurBYrUF+AgSjqWCBnhjX0NVlyQNoDmAg/i/k=
-Received: from epsnrtp01.localdomain (unknown [182.195.42.153]) by
-	epcas2p3.samsung.com (KnoxPortal) with ESMTPS id
-	20250515080311epcas2p37c9372ba816747ad9656a31ce32f9b3f~-pKDlpvx90512805128epcas2p3N;
-	Thu, 15 May 2025 08:03:11 +0000 (GMT)
-Received: from epcas2p3.samsung.com (unknown [182.195.36.102]) by
-	epsnrtp01.localdomain (Postfix) with ESMTP id 4ZyjPq0RPgz6B9mS; Thu, 15 May
-	2025 08:03:11 +0000 (GMT)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-	epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
-	20250515080310epcas2p3e045327d03d031d38614464e881957d1~-pKCtzKMG0512805128epcas2p3J;
-	Thu, 15 May 2025 08:03:10 +0000 (GMT)
-Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
-	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20250515080310epsmtrp251f35ed8e6bc7e92010376c57bc1c705~-pKCsNObh0272802728epsmtrp29;
-	Thu, 15 May 2025 08:03:10 +0000 (GMT)
-X-AuditID: b6c32a52-40bff70000004c16-08-68259fbe1191
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
-	FD.77.19478.EBF95286; Thu, 15 May 2025 17:03:10 +0900 (KST)
-Received: from localhost.localdomain (unknown [10.229.9.126]) by
-	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20250515080310epsmtip2d6c9b47d2e65d4be8635ae76e0ab739b~-pKCeOpfZ1291412914epsmtip23;
-	Thu, 15 May 2025 08:03:10 +0000 (GMT)
-From: Sangwook Shin <sw617.shin@samsung.com>
-To: krzk@kernel.org, alim.akhtar@samsung.com, wim@linux-watchdog.org,
-	linux@roeck-us.net
-Cc: linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org, Sangwook Shin
-	<sw617.shin@samsung.com>
-Subject: [PATCH v3 5/5] watchdog: s3c2410_wdt: exynosautov9: Enable
- supported features
-Date: Thu, 15 May 2025 16:53:50 +0900
-Message-Id: <20250515075350.3368635-6-sw617.shin@samsung.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250515075350.3368635-1-sw617.shin@samsung.com>
+	s=arc-20240116; t=1747298843; c=relaxed/simple;
+	bh=cRWidd52qz45UTzRBYVqc/bvlG4ksdV/625FmAaW0Gk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cUJmArn9N1RbA1ZlFAh9IMA/U+HYdrBvIFv9tEunzlAeArK/2oQzDNz1hYw6/NlrzhmIoAX5pefqhDqeEE9iClV28jtSv8VhXSheSTq8qYC+NXE31rpBQvS5tdXquUN5RzUtmoCIeLo3JFAZArRvQ29HOpyApPcy+/RlZz+3wrI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=taladin.ro; spf=pass smtp.mailfrom=taladin.ro; dkim=pass (2048-bit key) header.d=taladin.ro header.i=@taladin.ro header.b=CVZEwBWS; arc=none smtp.client-ip=46.102.249.236
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=taladin.ro
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=taladin.ro
+Received: from cloud347.c-f.ro ([185.236.86.218])
+	by cleanserver2.mxserver.ro with esmtps (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <asoponar@taladin.ro>)
+	id 1uFTlx-001Vs0-E1; Thu, 15 May 2025 04:17:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=taladin.ro;
+	s=default; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
+	Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=9osiAM7EArqlFfuk2KHjpv3HYzglesdn+c5l6d4e9HA=; b=CVZEwBWSBbFK+YvvNXxlW1Grsy
+	fUveYrcJOUUeyQai73Xtm2fsSD06D6pN3sw9FX1zBolIrEpzV8iLtM1FxjbQSXv8oPAfiCTw66GGv
+	ZCWjLEk4slWdlSNhpTPzfBZnYfVYKBTp4dz+o/UlNECYRnXVUXZk9YOC29AYBom4FhOYVF9hDoL5B
+	1FmsJqoEuRktdMq+egZ2i43BP4mXpPe8a3YPLR/0GBFAYMzM+vFu2f4OxbUERB2QAy9kWBXLsaSLc
+	e/djPOh3WXVuV4ejrt1no7A6N+W6zYCDuUjqHvR4XYfng4uER3BuJISiv+2mnRqL4S4K2ytxtCg2D
+	+/vchoyw==;
+Received: from [109.166.137.172] (port=37860 helo=localhost)
+	by cloud347.c-f.ro with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.98.1)
+	(envelope-from <asoponar@taladin.ro>)
+	id 1uFTlj-00000006q6u-2GBu;
+	Thu, 15 May 2025 11:16:52 +0300
+From: Alexandru Soponar <asoponar@taladin.ro>
+To: linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-iio@vger.kernel.org,
+	linux-leds@vger.kernel.org,
+	linux-watchdog@vger.kernel.org
+Cc: jdelvare@suse.com,
+	linux@roeck-us.net,
+	jic23@kernel.org,
+	pavel@ucw.cz,
+	lee@kernel.org,
+	baocheng.su@siemens.com,
+	wim@linux-watchdog.org,
+	tobias.schaffner@siemens.com,
+	angelogioacchino.delregno@collabora.com,
+	benedikt.niedermayr@siemens.com,
+	matthias.bgg@gmail.com,
+	aardelean@baylibre.com,
+	contact@sopy.one,
+	Alexandru Soponar <asoponar@taladin.ro>
+Subject: [PATCH 0/16] lib: Refactor find_closest() and find_closest_descending() from macros to lib functions
+Date: Thu, 15 May 2025 11:13:16 +0300
+Message-ID: <20250515081332.151250-1-asoponar@taladin.ro>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -84,65 +84,101 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrALMWRmVeSWpSXmKPExsWy7bCSvO6++aoZBscvCVk8mLeNzeL8+Q3s
-	FpseX2O1uLxrDpvFjPP7mCxurNvHbvFk4RkmixmLT7JZPH75j9mB02PTqk42j5Vr1rB6bF5S
-	77HzewO7R9+WVYwenzfJBbBFcdmkpOZklqUW6dslcGVMfTObpeA9V8Xe263MDYwLOLsYOTkk
-	BEwkmt9sZ+xi5OIQEtjOKLFp8R32LkYOoISUxLtnlhA1whL3W46wQtR8YJT41PWfESTBJqAj
-	Mf3fbRYQW0QgTuJY+2ZmkCJmgZ2MEi3TfzODJIQFwiRevP/LBGKzCKhK/Nl0gBlkAa+ArcSy
-	WXUQC+QlZl76zg5icwrYSUy8uAtsvhBQyeE9T9hAbF4BQYmTM5+A7WIGqm/eOpt5AqPALCSp
-	WUhSCxiZVjGKphYU56bnJhcY6hUn5haX5qXrJefnbmIEB7pW0A7GZev/6h1iZOJgPMQowcGs
-	JMJ7PUs5Q4g3JbGyKrUoP76oNCe1+BCjNAeLkjivck5nipBAemJJanZqakFqEUyWiYNTqoFp
-	cX9q4vrq1qslwjMnr5nH0f+S92yvjdIK8yb2AwdEn6zOvcffNKWi7mi18LsnLcdCY16nB93m
-	q+TeqrrQPYNtpeUkG2bhjaxBLq8vaH9ZUn8j2u3dLPa1f1mEQ/RsFyjMmTzrz+Krtz5s8Fq+
-	Sv2nbeWeekO1Ei13TYPO2gOCmtfeGG5nsPv/MdiAU9JelkVk4k2e0xnNV2eHJvbeSeR8ev38
-	lnMfQn7t/s7ZZvWYlzOzytSaN3PN/HX77H9xhsiovp+tv9f6eJOZVWYA06z4Z2t4p2esvFav
-	t9Kw8KDW7UUuxreWqRzoFnnc48RyueNzweYLf8t4p6lsfBE06Yip8Ob911oi5pw5fzzvGPde
-	JZbijERDLeai4kQAlpDYcuMCAAA=
-X-CMS-MailID: 20250515080310epcas2p3e045327d03d031d38614464e881957d1
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-cpgsPolicy: CPGSC10-234,N
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20250515080310epcas2p3e045327d03d031d38614464e881957d1
-References: <20250515075350.3368635-1-sw617.shin@samsung.com>
-	<CGME20250515080310epcas2p3e045327d03d031d38614464e881957d1@epcas2p3.samsung.com>
+X-SpamExperts-Domain: cloud347.c-f.ro
+X-SpamExperts-Username: 185.236.86.218
+Authentication-Results: mxserver.ro; auth=pass smtp.auth=185.236.86.218@cloud347.c-f.ro
+X-SpamExperts-Outgoing-Class: ham
+X-SpamExperts-Outgoing-Evidence: SB/global_tokens (0.00142511043704)
+X-Recommended-Action: accept
+X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT/l1RxW2J9YM5Z2+IdQaoSXPUtbdvnXkggZ
+ 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5w1OL79HMxE022P+rQy8YAdcSeERs4TOTnIH1kc1IWc5TSx
+ S75yz9IFZiY7BarU/NrpK8SEOwGmfn6ucAKqn/OHRh3BqzFaEnAEj4UixLJBjVNiLZt/QXQnOBRD
+ +jq1HsIBmHTFdhqXZEtguZY7iGKpkcJnJKaJfT+dw1udmv00tbIRNtoyOobb3xnDyRRylAVTYi2b
+ f0F0JzgUQ/o6tR7C8pLPCtTiVLo0r89ClJHDKhDGKgJ+T00JeCnHBmMdB1eMZAyYlfUtEN4pUyes
+ jVRntA/J5DcfwvG53FyVviDO9UET3GKmqv1jT0lY+AQz8YX4CVph7ctC7tRH2SPTQJ/0klTuXKq/
+ B9rqRWsYzNfBLt79i78aPHyWnIqxGMxPZotYvH/es1vXuByXo2bkrYMqq0x5CzaUoJIoBUQayHle
+ UvbvCQmh9x4kn6NeQcRkc6G+OgAcq5x+BzhRyg9rYO6I0H7Q2OEpckvWJAOmdJd77Z9vwc+QHB+X
+ +u7aTqYHtT2CBuxNPBc9JM2jck1NnIBf0tvflhq7Xjhll72AYgnW/6M0ftSpvLIx+X1vKami8KF6
+ jWQ71uVNIY/EFPWeDmcZuFRQy1vmjjPiYw8fUCp0/qY6cmSW9oUDdvKuTRfTGZ6f8nTXoYFaQ71l
+ mMti8uxA0gKVmIzBXtbLDVvAQ/KVNbMOTYsa8ktxPJcneEY5WtSSAN5VcIfsMVILjVAz6RZsCHxD
+ lgOJwEwCFaF+62b2lf1UUDu9jECN1V/lwmsioRLmNJoHOZOE/9e5UD715p61XAQw85DCXa0iAPEd
+ fYyrF5wMRSLGyY+i0m2IxQLxQUzTb3Mji+CrO1+NTWs5OBXbSDBPqdRoFsq0hfzdx0oxkgNI/jhY
+ WFhu7VV+HdWjdZLlmQ5z83qEVVG/6RJ+BW7FmGcwL889DSW2cZWGkIYVQAbHnYkWUz1gRIjAiMvi
+ vM7um7t0SVa5NVZ2g1u6DnOpqk1nwAzTSgytNKIH5lfAuQc8I07FTFcjpdfX/Jcr87en7cKbI0NU
+ afdkQMG+6qjtXoANVR89VM6f75a5kmRIbungV7ywXD8VtmM8wef5C6IkqMFhROX1HYRo9Sm1kZOW
+ saz62DSUUd/fn3Ix/aSqJVglEtnFggTvi4y/qO0sxBxzHDeqqFz43py4SDhdaHkWOGxZQgSAzbb+
+ OB/nFYi5VbOv2oY4HXLSfAUu3sMpupaxyWIY+zWFG7j7LacXdPm5MvYnkNWjwSQDaUU9MqYUCeef
+ 0nlkmUPzlfoLUG4g/XHuva4NQ7gH1kLtR+dZ31Wj92PNDpgLsd6Ddd/s7VM53twrVC8K+lj1c6e/
+ tTmd6eMo8njYQeCXryE9YzCFXixhuytCzYpdzLgCyU1NoaLI1a6CFspCMTS3AJKRNkDoiCdr/yiP
+ gGFyxS1LuwmPRAQzaEJVYkfhZXq/u54kZVCWtfUf9oDBqtClgM5jH/om1Q6gjkapWNvVA5HRyb3X
+ trWYR6vnFpUUmgU46LTsHtrjRqVe/ojyw7bapws3danDDsxD6gvvWu5/Lf1bKbM1VroDfVYPkwIu
+ /8x7KhILIr1IfwgT9kxT5f4reZBSMLp/jH4zvQRYQJnl3XNqRK2lK/zP
+X-Report-Abuse-To: spam@cleanserver1.mxserver.ro
+X-Complaints-To: abuse@cleanserver1.mxserver.ro
 
-Enable supported features for ExynosAutov9 SoC.
-- QUIRK_HAS_DBGACK_BIT
-- QUIRK_HAS_32BIT_MAXCNT
+This patch series converts the find_closest() and find_closest_descending() macros
+into proper library functions. The conversion moves these utilities from macro
+implementations in util_macros.h to standard C functions in lib/find_closest.c.
 
-Signed-off-by: Sangwook Shin <sw617.shin@samsung.com>
----
- drivers/watchdog/s3c2410_wdt.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+The first 15 patches modify individual callers across hwmon, iio, leds, regulator,
+and watchdog subsystems to ensure they work correctly with the new function-based
+implementation. This maintains compatibility while allowing the final conversion.
 
-diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
-index 3c12a3ae50f8..bbc1d9916f67 100644
---- a/drivers/watchdog/s3c2410_wdt.c
-+++ b/drivers/watchdog/s3c2410_wdt.c
-@@ -275,7 +275,8 @@ static const struct s3c2410_wdt_variant drv_data_exynosautov9_cl0 = {
- 	.cnt_en_reg = EXYNOS850_CLUSTER0_NONCPU_OUT,
- 	.cnt_en_bit = 7,
- 	.quirks = QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_PMU_MASK_RESET |
--		  QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_CNT_EN,
-+		  QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_CNT_EN |
-+		  QUIRK_HAS_DBGACK_BIT | QUIRK_HAS_32BIT_MAXCNT,
- };
- 
- static const struct s3c2410_wdt_variant drv_data_exynosautov9_cl1 = {
-@@ -287,7 +288,8 @@ static const struct s3c2410_wdt_variant drv_data_exynosautov9_cl1 = {
- 	.cnt_en_reg = EXYNOSAUTOV9_CLUSTER1_NONCPU_OUT,
- 	.cnt_en_bit = 7,
- 	.quirks = QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_PMU_MASK_RESET |
--		  QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_CNT_EN,
-+		  QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_CNT_EN |
-+		  QUIRK_HAS_DBGACK_BIT | QUIRK_HAS_32BIT_MAXCNT,
- };
- 
- static const struct s3c2410_wdt_variant drv_data_gs101_cl0 = {
+The final patch implements the actual refactoring by moving the code to
+lib/find_closest.c. This approach was chosen based on discussions between
+Andrew Morton and Alexandru Ardelean[1], who suggested that a non-inline
+implementation would be appropriate given the size of the functions.
+
+The refactoring avoids of macro expansion-related issues and proper function
+prototypes with well-defined parameter types.
+
+Links:
+[1] https://lore.kernel.org/lkml/20241105145406.554365-1-aardelean@baylibre.com/
+
+Alexandru Soponar (16):
+  hwmon: w83795: Fix type incompatibility with non-macro find_closest
+  hwmon: emc1403: Fix type incompatibility with non-macro find_closest
+  hwmon: ina3221: Fix type incompatibility with non-macro find_closest
+  hwmon: lm95234: Fix type incompatibility with non-macro find_closest
+  hwmon: max1619: Fix type incompatibility with non-macro find_closest
+  hwmon: lm75: Fix type incompatibility with non-macro find_closest
+  hwmon: ltc4282: Fix type incompatibility with non-macro find_closest
+  hwmon: max6639: Fix type incompatibility with non-macro find_closest
+  hwmon: max20740: Fix type incompatibility with non-macro find_closest
+  iio: ad7606: Fix type incompatibility with non-macro find_closest
+  iio: mcp3564: Fix type incompatibility with non-macro find_closest
+  iio: max44009: Fix type incompatibility with non-macro find_closest
+  leds: eds-mt6370-rgb: Fix type incompatibility with find_closest()
+  regulator: max77857: Fix type incompatibility with find_closest()
+  watchdog: simatic-ipc-wdt: Fix type incompatibility with
+    find_closest()
+  lib: move find_closest() and find_closest_descending() to lib
+    functions
+
+ drivers/hwmon/emc1403.c                |  2 +-
+ drivers/hwmon/ina3221.c                |  8 +--
+ drivers/hwmon/lm75.c                   | 42 +++++++--------
+ drivers/hwmon/lm95234.c                |  2 +-
+ drivers/hwmon/ltc4282.c                |  2 +-
+ drivers/hwmon/max1619.c                |  2 +-
+ drivers/hwmon/max6639.c                |  2 +-
+ drivers/hwmon/pmbus/max20730.c         |  4 +-
+ drivers/hwmon/w83795.c                 |  2 +-
+ drivers/iio/adc/ad7606.c               |  8 +--
+ drivers/iio/adc/mcp3564.c              |  2 +-
+ drivers/iio/light/max44009.c           |  2 +-
+ drivers/leds/rgb/leds-mt6370-rgb.c     |  9 ++--
+ drivers/regulator/max77857-regulator.c |  2 +-
+ drivers/watchdog/simatic-ipc-wdt.c     |  2 +-
+ include/linux/find_closest.h           | 13 +++++
+ include/linux/util_macros.h            | 61 +---------------------
+ lib/Makefile                           |  2 +-
+ lib/find_closest.c                     | 71 ++++++++++++++++++++++++++
+ 19 files changed, 132 insertions(+), 106 deletions(-)
+ create mode 100644 include/linux/find_closest.h
+ create mode 100644 lib/find_closest.c
+
 -- 
-2.40.1
+2.49.0
 
 
