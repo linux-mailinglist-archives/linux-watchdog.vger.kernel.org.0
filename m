@@ -1,236 +1,144 @@
-Return-Path: <linux-watchdog+bounces-3528-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3529-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBD6BABC4A7
-	for <lists+linux-watchdog@lfdr.de>; Mon, 19 May 2025 18:36:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4720ABC51F
+	for <lists+linux-watchdog@lfdr.de>; Mon, 19 May 2025 19:03:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8693A16742F
-	for <lists+linux-watchdog@lfdr.de>; Mon, 19 May 2025 16:36:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A054B7A2F82
+	for <lists+linux-watchdog@lfdr.de>; Mon, 19 May 2025 17:02:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD57F286D7E;
-	Mon, 19 May 2025 16:35:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6292B26AAB5;
+	Mon, 19 May 2025 17:03:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="hY3aAFwM"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="oNuqiAW1"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CD83199931
-	for <linux-watchdog@vger.kernel.org>; Mon, 19 May 2025 16:35:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 784D7288C13;
+	Mon, 19 May 2025 17:03:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747672554; cv=none; b=iPA7IMRtRSLhb+dUnUV1Q8lxCRcchyPTjK1+B1q2P0ilN+QryL71BinZvFzmw3qLaM+Tse8617x+D3XJbLbWHvWzW/lssAsYirhpREfbV0565KX5CN24ShPSXNv2l+xZ3rMplyJMeGDN19Ng8S9BYeoRmnqny8O5MupxKdRu/kc=
+	t=1747674187; cv=none; b=bDrGblNmbUS7RTGudPacjqUzcVPVnQuuhymUklGvEuURywbL5HBcj2W6gQHXFiPD/dJXQyR7LIN9Uv96mkjq2ER4NRIN4JanqsSPW7P232mMqAHDoXQouPjXcsKwiVG00s+pd+on6kJh9ODGLMwRuZQxwfphpIP9FhT1HSEp9Vw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747672554; c=relaxed/simple;
-	bh=0QbvWiCAa+GioZRtVuR1peg4Ser/UC7UOzTp8JIZmZ8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VG3kVAhhxWADeLxSBAbBDIHm53vrHP9TFLq5VBm/tROqTzRFXpDWnOugNYOWBmRokXP2+hSaS58lHEili+N/MwTnalAdQCKFrJzc0V5SrINkZfOV5R8KqW1blmxpTzZYfW+RsjZWUuhynT7Sr/3aPF/i4XI6UfW/ddhpDkxA2/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=hY3aAFwM; arc=none smtp.client-ip=209.85.160.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-2cc82edcf49so816261fac.1
-        for <linux-watchdog@vger.kernel.org>; Mon, 19 May 2025 09:35:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1747672550; x=1748277350; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=W58GfmIWiZ3U0eNBo2ssjSmziqMleoXnnwt1PGdnFxg=;
-        b=hY3aAFwMukUfRB4AEd3dg6nw0Qs+GhudysQ/b7DPD6wJ1IDksewyTz7pA7Xiu4wBsC
-         MdCc81yOBJZ5HMK3/TqeQaPyH8yLJmvyU3rW1mN96Y2d0AIJHZPI8++eTkfrj86/ZjXy
-         3j8xWG9XVMpO15C6FKlCxVwPju6N5yWS9gdZy1ADxJghtsX18J/c3vnfYNWmiySrNc3t
-         0s0NP5/TMh6Nc5m2ly6XV+2GDT9mu1cf0N9BxJfHih+0X9r2HcUfBcyM3+T5O3E85oKB
-         EIF2F0yxJsExwNsc8BcUkUF8gO6w5aZNt64W7FcA0fdYz2VecfhatUXstNNyhlQouFzV
-         d+tQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747672550; x=1748277350;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W58GfmIWiZ3U0eNBo2ssjSmziqMleoXnnwt1PGdnFxg=;
-        b=LNn4O478AvnuQV52gNEcpcm05auRYQwCZPoZnDWYL5dRcEEyUO5SdRqS99Ur4icS2i
-         lsDPrcXoMEs4u17bAbJXJMYnuFMYSdes/GmQCIUBo4+sDpdgwC83onE6ltPe7KMnAhc2
-         jt+YTDNTF2dEU7wvj067xLuenaFbm97rEof29buI0fqWo0G4/cZNZKhI5sHjyqmY8EuS
-         lWf5hahl5q1TWQKFg+oqA3KlZz+j/erAp8jqb0B2hClks4Z5s/xObZ6VZXShrDuKPTYU
-         VWQ1dfOO52k/K5JJoB0PQM4r19b+IOt1VqGxK137jnHh7sxYV/bJkydmSzloo8g/lt2R
-         mEdw==
-X-Forwarded-Encrypted: i=1; AJvYcCXmke+xe50L/OiM5yjU9Y/kPpbcTlFlj/M+iIV0m55Fp2MxP/r2/BuXhSOnaqEUwl0AGHWKWpkT71QH3p30KA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxzeS4KBXgMGgsIPTayEv6IBuUBjneZWI8teamjEB658skbCK2U
-	NYLRx6z3O5Vr6djDgNRSqFGMNfSWi+awLD6KEfadUBvxYdPeLzuMS94218FT2Y2tlXk=
-X-Gm-Gg: ASbGncv0uappoUHjikrAGKXUVzQ/MJsZ/+TrKXsVvMQwLrjw9Lpd3N5w5w6pJQUc93Q
-	QBRQDYLS6luxl+Twwsjx8cMZDiyNA6fe+5x5H3DeEBlreP+FRMQaAeU7vnatoVPg7W8xYsm2SKq
-	BeW3irWaeaDnj7FKFl3LoXPca+c99QUo8C48eP8/KANewpZAvkVxzHBX4aJjFYEtMMeUEXaAxKI
-	MP+WoKS8/xVQ57qcTmQpWRhUrqq9V+jYeWURr9qzy5JkuTUJVz7zlluyAc98CdIWLm6yyt20Ouo
-	h4hU0MEvaZNmn/zNgtKt8JqlGzSifh2w3bbbXop2dXm0KrLfxIwAco7BfSP1or0knS+3lsvAVpi
-	GcVVwO+YDJ99bjHsPD44idlPK5O+RjxWAVbcB
-X-Google-Smtp-Source: AGHT+IEqxryGUIrvlFRjjbZt/fpBB4e1H0kstalMU3B2lw3tKXhvZEegqt/3++j3ZSdhGSKMO3o38w==
-X-Received: by 2002:a05:6870:ad97:b0:2d9:45b7:8ffc with SMTP id 586e51a60fabf-2e3c817196amr7065629fac.3.1747672550446;
-        Mon, 19 May 2025 09:35:50 -0700 (PDT)
-Received: from ?IPV6:2600:8803:e7e4:1d00:a628:91ca:eb5:d6f5? ([2600:8803:e7e4:1d00:a628:91ca:eb5:d6f5])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-2e3c06baca3sm1795657fac.19.2025.05.19.09.35.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 May 2025 09:35:50 -0700 (PDT)
-Message-ID: <ba79221f-9acd-4919-abe9-e2c49e80fb6c@baylibre.com>
-Date: Mon, 19 May 2025 11:35:48 -0500
+	s=arc-20240116; t=1747674187; c=relaxed/simple;
+	bh=id6sLlLT8e6OOCvWPFO2ag8J665oE4QuQbuDd62e+sA=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Z2I0rrmRhyg/X6yrBrEcwAcv6tTA5LCt4S20+987ZePD8FXtfCw29oliO7mDkZi6PI7OVXHAn+fdcxtY4I8z86RS3yJtMJwl39qV7iOYqYoNBeE215m/9qOjY1Qj814ylG+NlOIUYZLZ8TjCR+T21I8lLzElq2z52NNOYTqd9MM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=oNuqiAW1; arc=none smtp.client-ip=91.207.212.93
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54JENVIQ010263;
+	Mon, 19 May 2025 19:02:47 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=selector1; bh=/GHcyFS0HynTNqpKjFvRFs
+	q5Oc2635v1fvZXhZzErh0=; b=oNuqiAW1ifBHjNyvHpFVETOZ0KvqqrmF6zMp4Y
+	8CVo/IWxBq/PvB/qyIW/QA2FP091vTAmFj9r0AazMhtMV7Q1gy27YsdfQFb3s3//
+	qmeOQZjmaAl+jZA/JtktB3FkcfkTvp5UTgbA4z4qK+PKB0LG6+0YVpsY+NJvQ+Be
+	+E/Ckl509SJvGeJW/DRlo6PQbj3cSMfdqY21Oqe3uxRu0k92+MFY9wg9nrXDQ5d+
+	cfMXfTQRw9OOLpyaiiez2elqEdfztHh0KYF5mqRqID9nFFPzwG+HZfTUlFrtGob6
+	raZADNeuPopF6ZcGaX8eYjCD+tz/aqs/TH0U33mnJa11dp4w==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 46pfka13yw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 19 May 2025 19:02:47 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 9A48D40052;
+	Mon, 19 May 2025 19:01:46 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5E64DAF7007;
+	Mon, 19 May 2025 19:01:17 +0200 (CEST)
+Received: from localhost (10.48.86.132) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 19 May
+ 2025 19:01:17 +0200
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+To: Julius Werner <jwerner@chromium.org>, Evan Benn <evanbenn@chromium.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck
+	<linux@roeck-us.net>, <linux-watchdog@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC: Antonio Borneo <antonio.borneo@foss.st.com>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+Subject: [PATCH] watchdog: arm_smc_wdt: get wdt status through SMCWD_GET_TIMELEFT
+Date: Mon, 19 May 2025 19:00:55 +0200
+Message-ID: <20250519170055.205544-1-antonio.borneo@foss.st.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 16/16] lib: move find_closest() and
- find_closest_descending() to lib functions
-To: Alexandru Soponar <asoponar@taladin.ro>, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-leds@vger.kernel.org, linux-watchdog@vger.kernel.org
-Cc: jdelvare@suse.com, linux@roeck-us.net, jic23@kernel.org, pavel@ucw.cz,
- lee@kernel.org, baocheng.su@siemens.com, wim@linux-watchdog.org,
- tobias.schaffner@siemens.com, angelogioacchino.delregno@collabora.com,
- benedikt.niedermayr@siemens.com, matthias.bgg@gmail.com,
- aardelean@baylibre.com, contact@sopy.one
-References: <20250515081332.151250-1-asoponar@taladin.ro>
- <20250515081332.151250-17-asoponar@taladin.ro>
-Content-Language: en-US
-From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <20250515081332.151250-17-asoponar@taladin.ro>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SAFCAS1NODE1.st.com (10.75.90.11) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-19_07,2025-05-16_03,2025-03-28_01
 
-On 5/15/25 3:13 AM, Alexandru Soponar wrote:
-> Move the utility macros find_closest() and find_closest_descending()
-> from inline macros to proper library functions in lib/.
-> 
-> Signed-off-by: Alexandru Soponar <asoponar@taladin.ro>
-> ---
->  include/linux/find_closest.h | 13 +++++++
->  include/linux/util_macros.h  | 61 +------------------------------
->  lib/Makefile                 |  2 +-
->  lib/find_closest.c           | 71 ++++++++++++++++++++++++++++++++++++
->  4 files changed, 86 insertions(+), 61 deletions(-)
->  create mode 100644 include/linux/find_closest.h
->  create mode 100644 lib/find_closest.c
-> 
-> diff --git a/include/linux/find_closest.h b/include/linux/find_closest.h
-> new file mode 100644
-> index 000000000000..28a5c4d0c768
-> --- /dev/null
-> +++ b/include/linux/find_closest.h
-> @@ -0,0 +1,13 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Find closest element functions
-> + */
-> +#ifndef _LINUX_FIND_CLOSEST_H_
-> +#define _LINUX_FIND_CLOSEST_H_
-> +
-> +#include <linux/types.h>
+The optional SMCWD_GET_TIMELEFT command can be used to detect if
+the watchdog has already been started.
+See the implementation in OP-TEE secure OS [1].
 
-Is this header really needed?
+If CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED is set, at probe time check
+if the watchdog is already started and then set WDOG_HW_RUNNING in
+the watchdog status. This will cause the watchdog framework to
+ping the watchdog until a userspace watchdog daemon takes over the
+control.
 
-> +
-> +unsigned int find_closest(int x, const int *a, unsigned int as);
-> +unsigned int find_closest_descending(int x, const int *a, unsigned int as);
-> +
-> +#endif /* _LINUX_FIND_CLOSEST_H_ */
+Link: https://github.com/OP-TEE/optee_os/commit/a7f2d4bd8632 [1]
 
-...
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+---
+ drivers/watchdog/arm_smc_wdt.c | 18 +++++++++++++++---
+ 1 file changed, 15 insertions(+), 3 deletions(-)
 
-> diff --git a/lib/find_closest.c b/lib/find_closest.c
-> new file mode 100644
-> index 000000000000..d481625cae9d
-> --- /dev/null
-> +++ b/lib/find_closest.c
-> @@ -0,0 +1,71 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Find closest element functions
-> + *
-> + * Based on previous util_macros.h implementation
-> + */
-> +
-> +#include <linux/find_closest.h>
-> +#include <linux/module.h>
-> +
-> +/**
-> + * find_closest - locate the closest element in a sorted array
-> + * @x: The reference value.
-> + * @a: The array in which to look for the closest element. Must be sorted
-> + *  in ascending order.
-> + * @as: Size of 'a'.
-> + *
-> + * Returns the index of the element closest to 'x'.
+diff --git a/drivers/watchdog/arm_smc_wdt.c b/drivers/watchdog/arm_smc_wdt.c
+index 8f3d0c3a005fb..f1268f43327ea 100644
+--- a/drivers/watchdog/arm_smc_wdt.c
++++ b/drivers/watchdog/arm_smc_wdt.c
+@@ -46,6 +46,8 @@ static int smcwd_call(struct watchdog_device *wdd, enum smcwd_call call,
+ 		return -ENODEV;
+ 	if (res->a0 == PSCI_RET_INVALID_PARAMS)
+ 		return -EINVAL;
++	if (res->a0 == PSCI_RET_DISABLED)
++		return -ENODATA;
+ 	if (res->a0 != PSCI_RET_SUCCESS)
+ 		return -EIO;
+ 	return 0;
+@@ -131,10 +133,20 @@ static int smcwd_probe(struct platform_device *pdev)
+ 
+ 	wdd->info = &smcwd_info;
+ 	/* get_timeleft is optional */
+-	if (smcwd_call(wdd, SMCWD_GET_TIMELEFT, 0, NULL))
+-		wdd->ops = &smcwd_ops;
+-	else
++	err = smcwd_call(wdd, SMCWD_GET_TIMELEFT, 0, NULL);
++	switch (err) {
++	case 0:
++		if (IS_ENABLED(CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED))
++			set_bit(WDOG_HW_RUNNING, &wdd->status);
++		fallthrough;
++	case -ENODATA:
+ 		wdd->ops = &smcwd_timeleft_ops;
++		break;
++	default:
++		wdd->ops = &smcwd_ops;
++		break;
++	}
++
+ 	wdd->timeout = res.a2;
+ 	wdd->max_timeout = res.a2;
+ 	wdd->min_timeout = res.a1;
 
-s/Returns/Returns:/
-
-for kernel-doc semantics
-
-> + */
-> +unsigned int find_closest(int x, const int *a, unsigned int as)
-> +{
-> +	unsigned int array_size = as - 1;
-> +	int mid_x, left, right;
-> +	unsigned int i;
-> +
-> +	for (i = 0; i < array_size; i++) {
-> +		mid_x = (a[i] + a[i + 1]) / 2;
-> +		if (x <= mid_x) {
-> +			left = x - a[i];
-> +			right = a[i + 1] - x;
-> +			if (right < left)
-> +				i++;
-> +			break;
-> +		}
-> +	}
-> +
-> +	return i;
-> +}
-> +EXPORT_SYMBOL_GPL(find_closest);
-> +
-> +/**
-> + * find_closest_descending - locate the closest element in a sorted array
-> + * @x: The reference value.
-> + * @a: The array in which to look for the closest element. Must be sorted
-> + *  in descending order.
-> + * @as: Size of 'a'.
-> + *
-
-Would repeat the Returns: section here for completeness.
-
-> + * Similar to find_closest() but 'a' is expected to be sorted in descending
-> + * order.
-
-This seems redundant since @a already says this.
-
->             The iteration is done in reverse order, so that the comparison> + * of 'right' & 'left' also works for unsigned numbers.
-
-This seems like an implementation detail so would be better as a comment inside
-the function. Although, since @a is always signed, is this comment actually
-still applicable?
-
-> + */
-> +unsigned int find_closest_descending(int x, const int *a, unsigned int as)
-> +{
-> +	unsigned int array_size = as - 1;
-> +	int mid_x, left, right;
-> +	unsigned int i;
-> +
-> +	for (i = array_size; i >= 1; i--) {
-> +		mid_x = (a[i] + a[i - 1]) / 2;
-> +		if (x <= mid_x) {
-> +			left = x - a[i];
-> +			right = a[i - 1] - x;
-> +			if (right < left)
-> +				i--;
-> +			break;
-> +		}
-> +	}
-> +
-> +	return i;
-> +}
-> +EXPORT_SYMBOL_GPL(find_closest_descending);
+base-commit: a5806cd506af5a7c19bcd596e4708b5c464bfd21
+-- 
+2.34.1
 
 
