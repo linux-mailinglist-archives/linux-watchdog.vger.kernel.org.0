@@ -1,265 +1,136 @@
-Return-Path: <linux-watchdog+bounces-3552-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3553-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F40EABE465
-	for <lists+linux-watchdog@lfdr.de>; Tue, 20 May 2025 22:05:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19140ABE628
+	for <lists+linux-watchdog@lfdr.de>; Tue, 20 May 2025 23:33:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 625DC4C1BF3
-	for <lists+linux-watchdog@lfdr.de>; Tue, 20 May 2025 20:04:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5397C188A1CF
+	for <lists+linux-watchdog@lfdr.de>; Tue, 20 May 2025 21:34:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2379926B960;
-	Tue, 20 May 2025 20:02:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90CDD25DAE7;
+	Tue, 20 May 2025 21:33:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SZZnJfM/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U3VL1+gF"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 750FD288CB7;
-	Tue, 20 May 2025 20:02:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E1C524C09E;
+	Tue, 20 May 2025 21:33:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747771358; cv=none; b=hyP6mObjSbELJdWENNnLY+3MiJUBjBsHzSm5Vx0fUhdirQ6o1/YxF6FVNfjHM5S4XysG+aaszojHi+e3uxv0ijRDL+1wXJ+u2c9NfXmzB/vv9MSgAqHl8mBlImvnvIYq7ayWbq/DNZoLZ1wsbEG+2sRcTAgWFgIG+TKoiiHgCoo=
+	t=1747776824; cv=none; b=BG4NHua2dY6u1/EPm2vPDRejZA6QgUD/Tw19FACYiBehGkdLk7Mo3r4TDdpvyq0O8pSStOORQQp1/ObF2CbV4mSLgmlv5WPHWB28qW/EGiM0c/Jc20cQ7xFQuV6S+HLnmSFhjA5XiSRV5TiqNgNDMu41YlA5OpqPpt70Vn01DP4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747771358; c=relaxed/simple;
-	bh=qeLngx3703X+Z3T6OTmsiw5w/nGbO6F+UA6hRWuYz9Q=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=sXFi0qeVFUzk4eJvG/9sgAOItnle/Zdwt7gFemlPkEHVdSpaThiFXdbrfoKTBmImblBd56ridUZItU2YXAXRF/9I9hMse6jacwyknQyoWpb4cD4hbi0B4cTuZGq5syt4r/xqCQ8xgLq57yGkRbnXSBwRpG7Hj8WyASnC1wdILKI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SZZnJfM/; arc=none smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-742b614581dso4570715b3a.3;
-        Tue, 20 May 2025 13:02:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747771355; x=1748376155; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OilI7sycFnkHdmKoo1s8NQ3T9dco8FEq3kcJbQef9xQ=;
-        b=SZZnJfM/agtJ/2K6aK9B6aSfpjT9jr6/1dZ3SHAq8MT0FoOUQSzzoAaHHURE9ePMrE
-         BUtwb+J6T10Ng7edeGhMB67TlnLY+BCsJ0UxesLAEblbyb+n0q/iuSh9hyycWjf+qvoL
-         6adY7/GY+F9xXdFIT2Gq1WA4Wh60zgU8D0rCWR+iFze9QDkBmJEp04nW6N4qORUujshn
-         jMcNL5LENlIZVyJqqElH93VnmljXV0ue/BE2VHZBYK1pE7ki5mCzDK9Q6KNdxN+eNTdV
-         7L45IzHrRe88pbxQDf9hsXR+Cq77r1CBzUySprlqY4T+VbrWPmumRlO2u9RpFYRtE8m5
-         zmOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747771355; x=1748376155;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OilI7sycFnkHdmKoo1s8NQ3T9dco8FEq3kcJbQef9xQ=;
-        b=h/DwTcxAg+GyL8MFJbbYUXACFFEX9EZsUsGopdMcc3opWeUpimFt683NaYsFkgoSKf
-         37To0W9HGubkps1BPCRebr6IL/SMTQNp5ScCnvEhL4aIZYgZmh5HLwzOBnPyQIV32Wt2
-         f7Ad8zPh5b45mALODmVWaeWoLrmm9cnozISkJksjXS+3wgLpATXsO2l4Qr7iqoTDcTJw
-         X/tayb7WGJsZ+B6nRJq3ELMztOMI74h6/fS6ABJbbOITK9VFm0v7ei+YhFWiKCrDAmvO
-         tAkYdT91bdRyvz/t1PVm5R/5jisC7WesU4ULIBKrg4EuBlQqquEtdn6W7gmzxGu3O9VM
-         0LNg==
-X-Forwarded-Encrypted: i=1; AJvYcCVUH8m5Oue0hVloZLC98jYIQXYjixrKwI9oavH0n0rKyUo0wAHLKHT+9fSnsHbU22aRs2cip+sRna+QykouHvk=@vger.kernel.org, AJvYcCVtgKGlX+4B6tLgC69GzQ7QEHBbTW+4LzfpQl/rdEVgGTKa4DUVKEmr92ruGvO1c55GqXo09KLUviaS@vger.kernel.org, AJvYcCWnemXXA2Es0qMSUExRD8eDwF8+5u/70e2eH4kzBz012AANpnRDJ8+/GtcWzVw1pZjIP2Tk33/R+pdQCkp/@vger.kernel.org
-X-Gm-Message-State: AOJu0YxkhTcH4u+e61nGmMvro/5NPr6Lkj9XCiAj/YsnJc1W7fIW05/i
-	xD9yl4vnjEPJc836AX1sEMOvubuSdLRg631O4LoMu3QIJxJIMQctfwlJi73yc7h/H4g=
-X-Gm-Gg: ASbGncuo0/PLFuavUBjUmeNidMGDeIA2JfUSc5m0fqaElne3zXdU+T2lqR9l97AQSqs
-	xxwmiCY2EDN+enOhX5F+MO3U2Juq5w7/4CzxAoab9Uptu7BTn858BvFXEweWDoY1+5qCqp5euL+
-	J7TXkqUSP/GIMA9j/CD/RIPT7mxfmjkBxJ3X3wT2N7xQ9+oWTQEuyCsxHBUo9/FBZ9W5GnKUy1C
-	VwRCUxEvtJV4gu3kptPnqtZNXyfZcFeaYDoZW+j9yZEVT0SUUaoPwHDQWVvMLFqvg55D/BdOgXZ
-	Rmjp0aCiwM1rxk9x+z29FQx5MJjVtPpQqXsWxlJE/rJFInvXXdcryrJWXKiInaw=
-X-Google-Smtp-Source: AGHT+IEhswQQobet3SESatd0Ctpu3CzAb+wp/b+kOVjsj+yXjzeVIvW0SymyOexlFvQlNXrXVnoyHQ==
-X-Received: by 2002:a05:6a20:6f8c:b0:215:f519:e2dc with SMTP id adf61e73a8af0-2170cb25042mr26000159637.14.1747771355447;
-        Tue, 20 May 2025 13:02:35 -0700 (PDT)
-Received: from NB-GIGA003.letovo.school ([5.194.95.139])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b26eaf5a0d0sm8412340a12.14.2025.05.20.13.02.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 May 2025 13:02:35 -0700 (PDT)
-From: Alexey Charkov <alchark@gmail.com>
-Date: Wed, 21 May 2025 00:01:44 +0400
-Subject: [PATCH v4 4/4] watchdog: Add support for VIA/WonderMedia SoC
- watchdog functionality
+	s=arc-20240116; t=1747776824; c=relaxed/simple;
+	bh=2dBBkVKAjPqMQO6yAxkJdcJQvunb0imiwfvphMP3bMs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mV/twWMJeYfcGzs1uNwmtMrYTsfNZ9+Z7oM1GmU0V8wXuTMesf9vLKbKxxfIGbzxh0x76mdgxkV2zAGoN9pTb9rf/LaJJU5r06SPYaok3C6Y4l/2QU7j+FaaQocA3ap9yHFIbG7kXN1ICaeVPFgOe9l9jdz/QlsT4HZVJkvmAmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U3VL1+gF; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747776823; x=1779312823;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2dBBkVKAjPqMQO6yAxkJdcJQvunb0imiwfvphMP3bMs=;
+  b=U3VL1+gFt75Uj4DOsCKLH8QYfNgR1GPQY25lWmrGXmqBYWIqCGGvhOI2
+   98x8ef9oOE/zUESh2vz7JOiX7n743wjbCbOU+oxyMjIg3tbpIB4aTTSm2
+   K5vsfPpNre5pjFCby2u4AH7tyQBT0JnnpmUhGSfbwr9O/2CyIpw9+1n94
+   j37ai65XObRaCs62/h/1ZFZttnMil1/YAh3VFSKGLR7RklFSiKxqgQboX
+   HVARqCR13II+eoh8NNPg3E0ZwHbWIIcAHbntV2JaCeI05dPCE0pyHIdbf
+   lnwATr0nFw+A4a7E90pYxamnvm1QWvlv4q5/I2Y47Qed1yKy9qHXwf5mu
+   g==;
+X-CSE-ConnectionGUID: FX8r+Xt7Q9SzCLKEYX4Fig==
+X-CSE-MsgGUID: dvasTuh4QGuMPUdGONXEgQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11439"; a="49886560"
+X-IronPort-AV: E=Sophos;i="6.15,302,1739865600"; 
+   d="scan'208";a="49886560"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2025 14:33:41 -0700
+X-CSE-ConnectionGUID: qKGsHbZ/Soe+T5yrGWF48w==
+X-CSE-MsgGUID: Rx5ednNxSfq2WVZorJIWPg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,302,1739865600"; 
+   d="scan'208";a="143811827"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 20 May 2025 14:33:35 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uHUab-000NaO-0J;
+	Tue, 20 May 2025 21:33:33 +0000
+Date: Wed, 21 May 2025 05:32:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: a0282524688@gmail.com, lee@kernel.org, linus.walleij@linaro.org,
+	brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
+	jdelvare@suse.com, alexandre.belloni@bootlin.com
+Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org, netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
+	Ming Yu <tmyu0@nuvoton.com>
+Subject: Re: [PATCH v11 6/7] hwmon: Add Nuvoton NCT6694 HWMON support
+Message-ID: <202505210555.mud6jZoi-lkp@intel.com>
+References: <20250520020355.3885597-7-tmyu0@nuvoton.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250521-vt8500-timer-updates-v4-4-2d4306a16ae4@gmail.com>
-References: <20250521-vt8500-timer-updates-v4-0-2d4306a16ae4@gmail.com>
-In-Reply-To: <20250521-vt8500-timer-updates-v4-0-2d4306a16ae4@gmail.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, 
- Thomas Gleixner <tglx@linutronix.de>, Rob Herring <robh@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Wim Van Sebroeck <wim@linux-watchdog.org>, 
- Guenter Roeck <linux@roeck-us.net>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org, 
- Alexey Charkov <alchark@gmail.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1747771315; l=5323;
- i=alchark@gmail.com; s=20250416; h=from:subject:message-id;
- bh=qeLngx3703X+Z3T6OTmsiw5w/nGbO6F+UA6hRWuYz9Q=;
- b=E9764OMTvoClSJRuZ7a/FQ8x0MgaPIWF+b2u9p2Kz7GTxhjaJrF7IO8KAdCNGK8Pe5jJohMLN
- ZuEitiKIh3NDdywXAKwsst8un4CHZtcsI0DSGnvdnIblGrV0iZNwYlO
-X-Developer-Key: i=alchark@gmail.com; a=ed25519;
- pk=ltKbQzKLTJPiDgPtcHxdo+dzFthCCMtC3V9qf7+0rkc=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250520020355.3885597-7-tmyu0@nuvoton.com>
 
-VIA/WonderMedia SoCs can use their system timer's first channel as a
-watchdog device which will reset the system if the clocksource counter
-matches the value given in its match register 0 and if the watchdog
-function is enabled.
+Hi,
 
-Since the watchdog function is tightly coupled to the timer itself, it
-is implemented as an auxiliary device of the timer device
+kernel test robot noticed the following build errors:
 
-Signed-off-by: Alexey Charkov <alchark@gmail.com>
----
- MAINTAINERS                   |  1 +
- drivers/watchdog/Kconfig      | 15 ++++++++
- drivers/watchdog/Makefile     |  1 +
- drivers/watchdog/vt8500-wdt.c | 80 +++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 97 insertions(+)
+[auto build test ERROR on andi-shyti/i2c/i2c-host]
+[also build test ERROR on mkl-can-next/testing groeck-staging/hwmon-next abelloni/rtc-next linus/master lee-mfd/for-mfd-fixes v6.15-rc7]
+[cannot apply to lee-mfd/for-mfd-next brgl/gpio/for-next next-20250516]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 5362095240627f613638197fda275db6edc16cf7..97d1842625dbdf7fdca3556260662dab469ed091 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3447,6 +3447,7 @@ F:	drivers/tty/serial/vt8500_serial.c
- F:	drivers/video/fbdev/vt8500lcdfb.*
- F:	drivers/video/fbdev/wm8505fb*
- F:	drivers/video/fbdev/wmt_ge_rops.*
-+F:	drivers/watchdog/vt8500-wdt.c
- F:	include/linux/vt8500-timer.h
- 
- ARM/ZYNQ ARCHITECTURE
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index 0d8d37f712e8cfb4bf8156853baa13c23a57d6d9..8049ae630301a98123f97f6e3ee868bd3bf1534a 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -2003,6 +2003,21 @@ config PIC32_DMT
- 	  To compile this driver as a loadable module, choose M here.
- 	  The module will be called pic32-dmt.
- 
-+config VT8500_WATCHDOG
-+	tristate "VIA/WonderMedia VT8500 watchdog support"
-+	depends on ARCH_VT8500 || COMPILE_TEST
-+	select WATCHDOG_CORE
-+	select AUXILIARY_BUS
-+	help
-+	  VIA/WonderMedia SoCs can use their system timer as a hardware
-+	  watchdog, as long as the first timer channel is free from other
-+	  uses and respective function is enabled in its registers. To
-+	  make use of it, say Y here and ensure that the device tree
-+	  lists at least two interrupts for the VT8500 timer device.
-+
-+	  To compile this driver as a module, choose M here.
-+	  The module will be called vt8500-wdt.
-+
- # PARISC Architecture
- 
- # POWERPC Architecture
-diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-index c9482904bf870a085c7fce2a439ac5089b6e6fee..3072786bf226c357102be3734fe6e701f753d45b 100644
---- a/drivers/watchdog/Makefile
-+++ b/drivers/watchdog/Makefile
-@@ -101,6 +101,7 @@ obj-$(CONFIG_MSC313E_WATCHDOG) += msc313e_wdt.o
- obj-$(CONFIG_APPLE_WATCHDOG) += apple_wdt.o
- obj-$(CONFIG_SUNPLUS_WATCHDOG) += sunplus_wdt.o
- obj-$(CONFIG_MARVELL_GTI_WDT) += marvell_gti_wdt.o
-+obj-$(CONFIG_VT8500_WATCHDOG) += vt8500-wdt.o
- 
- # X86 (i386 + ia64 + x86_64) Architecture
- obj-$(CONFIG_ACQUIRE_WDT) += acquirewdt.o
-diff --git a/drivers/watchdog/vt8500-wdt.c b/drivers/watchdog/vt8500-wdt.c
-new file mode 100644
-index 0000000000000000000000000000000000000000..54fe5ad7695de36f6b3c1d28e955f00bef00e9db
---- /dev/null
-+++ b/drivers/watchdog/vt8500-wdt.c
-@@ -0,0 +1,80 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (C) 2025 Alexey Charkov <alchark@gmail.com */
-+
-+#include <linux/auxiliary_bus.h>
-+#include <linux/container_of.h>
-+#include <linux/io.h>
-+#include <linux/limits.h>
-+#include <linux/module.h>
-+#include <linux/types.h>
-+#include <linux/watchdog.h>
-+#include <linux/vt8500-timer.h>
-+
-+static int vt8500_watchdog_start(struct watchdog_device *wdd)
-+{
-+	struct vt8500_wdt_info *info = watchdog_get_drvdata(wdd);
-+	u64 deadline = info->timer_next(wdd->timeout * VT8500_TIMER_HZ);
-+
-+	writel((u32)deadline, info->wdt_match);
-+	writel(TIMER_WD_EN, info->wdt_en);
-+	return 0;
-+}
-+
-+static int vt8500_watchdog_stop(struct watchdog_device *wdd)
-+{
-+	struct vt8500_wdt_info *info = watchdog_get_drvdata(wdd);
-+
-+	writel(0, info->wdt_en);
-+	return 0;
-+}
-+
-+static const struct watchdog_ops vt8500_watchdog_ops = {
-+	.start			= vt8500_watchdog_start,
-+	.stop			= vt8500_watchdog_stop,
-+};
-+
-+static const struct watchdog_info vt8500_watchdog_info = {
-+	.identity		= "VIA VT8500 watchdog",
-+	.options		= WDIOF_MAGICCLOSE |
-+				  WDIOF_KEEPALIVEPING |
-+				  WDIOF_SETTIMEOUT,
-+};
-+
-+static int vt8500_wdt_probe(struct auxiliary_device *auxdev,
-+			    const struct auxiliary_device_id *id)
-+{
-+	struct vt8500_wdt_info *info;
-+	struct watchdog_device *wdd;
-+
-+	wdd = devm_kzalloc(&auxdev->dev, sizeof(*wdd), GFP_KERNEL);
-+	if (!wdd)
-+		return -ENOMEM;
-+
-+	wdd->info = &vt8500_watchdog_info;
-+	wdd->ops = &vt8500_watchdog_ops;
-+	wdd->max_hw_heartbeat_ms = U32_MAX / (VT8500_TIMER_HZ / 1000);
-+	wdd->parent = &auxdev->dev;
-+
-+	info = container_of(auxdev, struct vt8500_wdt_info, auxdev);
-+	watchdog_set_drvdata(wdd, info);
-+
-+	return devm_watchdog_register_device(&auxdev->dev, wdd);
-+}
-+
-+static const struct auxiliary_device_id vt8500_wdt_ids[] = {
-+	{ .name = "timer_vt8500.vt8500-wdt" },
-+	{},
-+};
-+
-+MODULE_DEVICE_TABLE(auxiliary, my_auxiliary_id_table);
-+
-+static struct auxiliary_driver vt8500_wdt_driver = {
-+	.name =	"vt8500-wdt",
-+	.probe = vt8500_wdt_probe,
-+	.id_table = vt8500_wdt_ids,
-+};
-+module_auxiliary_driver(vt8500_wdt_driver);
-+
-+MODULE_AUTHOR("Alexey Charkov <alchark@gmail.com>");
-+MODULE_DESCRIPTION("Driver for the VIA VT8500 watchdog timer");
-+MODULE_LICENSE("GPL");
+url:    https://github.com/intel-lab-lkp/linux/commits/a0282524688-gmail-com/mfd-Add-core-driver-for-Nuvoton-NCT6694/20250520-100732
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
+patch link:    https://lore.kernel.org/r/20250520020355.3885597-7-tmyu0%40nuvoton.com
+patch subject: [PATCH v11 6/7] hwmon: Add Nuvoton NCT6694 HWMON support
+config: i386-randconfig-013-20250521 (https://download.01.org/0day-ci/archive/20250521/202505210555.mud6jZoi-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250521/202505210555.mud6jZoi-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505210555.mud6jZoi-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/hwmon/nct6694-hwmon.c:12:10: fatal error: linux<mfd/core.h: No such file or directory
+      12 | #include <linux<mfd/core.h>
+         |          ^~~~~~~~~~~~~~~~~~
+   compilation terminated.
+
+
+vim +12 drivers/hwmon/nct6694-hwmon.c
+
+  > 12	#include <linux<mfd/core.h>
+    13	#include <linux/mfd/nct6694.h>
+    14	#include <linux/module.h>
+    15	#include <linux/platform_device.h>
+    16	#include <linux/slab.h>
+    17	
 
 -- 
-2.49.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
