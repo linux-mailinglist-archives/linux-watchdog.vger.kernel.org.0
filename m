@@ -1,220 +1,204 @@
-Return-Path: <linux-watchdog+bounces-3546-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3547-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44C1CABE1EC
-	for <lists+linux-watchdog@lfdr.de>; Tue, 20 May 2025 19:39:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DADEABE324
+	for <lists+linux-watchdog@lfdr.de>; Tue, 20 May 2025 20:49:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D07FE4C3AC9
-	for <lists+linux-watchdog@lfdr.de>; Tue, 20 May 2025 17:39:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 344421BC0E4E
+	for <lists+linux-watchdog@lfdr.de>; Tue, 20 May 2025 18:49:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A022B27FD74;
-	Tue, 20 May 2025 17:39:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AE3D252297;
+	Tue, 20 May 2025 18:48:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dDhPf4V0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DKjTwWZW"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB5D126B2C4;
-	Tue, 20 May 2025 17:39:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28EFD1BD9F0;
+	Tue, 20 May 2025 18:48:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747762762; cv=none; b=gFo2uOI4QFfsPVnEsMX2e2PMeHyoiElSNmVkPe6YzuYc72Epy4QaLqNAo0eGIxv+Zt0Bxo32gVfgXwsctbg5r9578nYLA6Zv7iD3E57Y+9i1+3J4rDl8P5mfp2aU4rG4l0gjS0x84YoguRK1DnwH8nv2SQPdR5CSacs8rj4jnhM=
+	t=1747766897; cv=none; b=dYb3A6YyuFZUVJCSMld6NaWVZh1LYGnZR0KqN+3XSRJ2o9bt7AtQ7l3gfNO7IGFwWy+DkYLlle5cD0ow8EMShf7jq/FCafI+Zp5LtIBtIUjZ0g2RkGwcSIAjrks1pHCiFh85ccJSv/q/CBL1ZAiBb599RSObl0LH0t2Jenc4DeA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747762762; c=relaxed/simple;
-	bh=QM89OVSn6oFRiI0uGzP2UDQ698F7asNar2fVfWiWvYA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Z2J1QMRiOchOXuh1nGcGXKwvb77NDCe4xW0MhvUf+0IsWacDNtzC1sPEUGuM0hfoGomXEgMKGH9iBz307BTQP8qRVGxYwGc4N0wYjl5nl7QUK8Y/I5//hbudAgH/ST0O8DzB4SDu3sanFLCsApG7r4n6DwZQ7lGhghtCzRu0QL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dDhPf4V0; arc=none smtp.client-ip=209.85.160.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1747766897; c=relaxed/simple;
+	bh=CgPjo0iN42ntlFApY89YjhNLWEByIoKYEa6FJ60IKiI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KoZ2FHmcgeA1fuNw944XHpvB9l2+DQePtfuGJcF9YpvQBecD5EEWrypx1+pj6nZf9JNjM0cBwjyqXrJXGShTn1qt5tVp8E3aj4QczH79xhyXHdeF2hxNOUDwhxhAgAJ3SJqV3ytCEjhkL3OiLX61ND4uFcVfBZAqVD/wvPQxgVU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DKjTwWZW; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-476ae781d21so58017741cf.3;
-        Tue, 20 May 2025 10:39:19 -0700 (PDT)
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-73c17c770a7so6434707b3a.2;
+        Tue, 20 May 2025 11:48:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747762758; x=1748367558; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U/cXnZFhK26rMDhHireAeksGXzd4YCvpdsNWOevRhCw=;
-        b=dDhPf4V0YKi1YXLQ1r/QSykytMmgqpe5W3uLnz9yeWv3remsy9ckuQ4qNlWVicUAu0
-         p9lEXWrdiOjjhPhoheLMHOgwC4cO/RKIzTefsJNNH9fWldbm4go3sNA7U8eRjMyiiKxK
-         +W1qh3gWEyhPw7jKU9SCBw1jZds7Wb8/tlGD3MHx2sQFiQgHhaXyQQ7lOTOIAADrAx5c
-         Jz6rKPpLGLdVJyDUdbRP6ayJ2uAu/Nf3qvT2DEoCw9D5jJa8iAzKfkPJoZF3qHRjw2yn
-         jeCVLBQnWs4Yv3yqLb08YK4vsfcLs+mYx/+jj5xhp1uvmmlsTDs4rPXFOjICBMh3A0eu
-         pmJA==
+        d=gmail.com; s=20230601; t=1747766893; x=1748371693; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=NEGW8OYP6vqNIYspfG7hwW+otQHfZSlN8GWZjQQt5E8=;
+        b=DKjTwWZW9d4rQY9uwBAcN3x9mJ43WSJNkR/NUd4Cff2vFVgK4dzNRvhvXwmGrM1O4s
+         ca2ucs1xWsr/X0LRmDFN/M4mmk7T+6s35XoH6ZyMwmrQU7dEWAwLgOuG6gKb25AT3+4c
+         32sDLzwgHtGWvUer5IY5KCqnbZAD9uZrmTAr+Zjyhl/eB1X76A+HSLLW01dEh2Z8RdUG
+         qhjrFTmgG05R66h5QVXgiX1czuzBDXY/UOlLNKmIdJonAqa+ZXqXAbD85dCzpY/dCoEl
+         u+1zgC3k+LBQ2RbuyFUcZyWjgV1auZ6s9sNC4pIDmlS0DKoe1WGq8IyOCgxSRWRv0l6i
+         i8YQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747762758; x=1748367558;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U/cXnZFhK26rMDhHireAeksGXzd4YCvpdsNWOevRhCw=;
-        b=nnlHmuNrHlwFhceV7tPanXunvcpU5z/aUK2Q0iOLPtR5Zi+dR1ijnj2vFHgUblkl3o
-         bMFKfFnDm2w1sIOECyYT19ele4CIO8F/UZzra+flDe6KMiL/5DQdcFGqOy1SADsKSuCy
-         wkj1umCSZfExKLfKmWqdNpIrfYnFm3dbo9rtEDX/GkqPeEj++vOVn/63+l3Q4TBCiD4S
-         aN3kzU892RFNebzshT252qfoJqIWmx5pO1kYcLirfoZvFzWT+5NJBG5h3zlAiOLz/yUm
-         COEFl5yTEYXm0JCYDc231OhqZ74hkcJmUaLZCABvE9kaNCWVODvXU6KsU66w0vuzMTRB
-         YiUw==
-X-Forwarded-Encrypted: i=1; AJvYcCUFAZdLLSN4FgWWl0RzC4Ie/gaXUXu8cwK9uf9uG+ClpDHkHMXY+qLHhxnQsDQ1MumxnDKQrGWeCmuY61I6@vger.kernel.org, AJvYcCUurSD0QvbfoC+lYnoYlABlcp7rm/vbmudu1qzN2Ip2frntSYrqBEBSAmd5KMZPIeJEDNLAvsa7Wny4@vger.kernel.org, AJvYcCVPbEpQUOIIwgIgvJ/hXySerJcduHWiaKPhEuyPfHYIiqAy+HI9150IejyJx8uzdNVhggpNR4r4fvbHGIzbJ+E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYtGRHHbZslqGQv5wY3U5kHZDn8MCKZhxj3g+t2pUixut/Kf+d
-	GMA08hgnhAErj13LcHnYc9dCk0SNR2iUkAD7qMIfDxv94iCyXosfhCCLQbSTsCNviLquMr3hrxe
-	m5ShfycHGoMYZj6w3UJgMi/c8nrgJQ5aJ3Zxp
-X-Gm-Gg: ASbGncuTlaik2mKxlMaBrtongXaCJX2uqcc51ZH4nrHByjTyXSHQEpgCMgDFL4tJidh
-	HoR7gXXX4RqJUgu3T/q7UeYaPHxgsMdOK1/OVFhiMJsopFL008opgJlui5RyRXrw2SDuwUpqgXk
-	NFCdNNa7YnvZerO7I+ZIkRnKIlmi0xs2OyM9rFB+PLPoYEJoYpdBL2k+/IVX7PAAGvvA==
-X-Google-Smtp-Source: AGHT+IGCy8Dky2uDFs544GvIZ3DEH0oxECMeS+ZNPaiNhH+aATrtk0AVPWaVxOrcPA3K24xoB0ESl3vOs26Sf6ozux0=
-X-Received: by 2002:a05:622a:6202:b0:476:76df:d26d with SMTP id
- d75a77b69052e-494b074f915mr256312981cf.8.1747762758261; Tue, 20 May 2025
- 10:39:18 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1747766893; x=1748371693;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NEGW8OYP6vqNIYspfG7hwW+otQHfZSlN8GWZjQQt5E8=;
+        b=hkJ6FaLts9nmuRusOhP6vYol6BcHHNqECcMq572jmpgl5pvg64GdWRFgdc02IXXaRh
+         FCf4N9XBqHXR4AC8CbFVwEMI0WdixTHF3/HFjDGQZ2jJMUOEOYG7b1N91IsQUT6zqhp7
+         e2Qw4duy3gxRl6ixy4YLgJq07n8owN0AgBHmUyp7Zg8kJFu/f3nPelzb4i3ILKCVdc4a
+         FhRyP1yIww5Wt4fHlx2F9C6rrjzIIQXoq8X73kjVrY6ythgM7MKM733poqHAdtrc2+/9
+         4VyUR91OSY9VWRt213FJ3oHDhet2O3tt+o2gOeILVsgjCIzy7YuDEIDxSwGrmjbA0Tfp
+         okPw==
+X-Forwarded-Encrypted: i=1; AJvYcCUEMqsCnki1oSTqFiE9MsMMGgHAKSmSHs7H5suD89g+UB6MeF82ft1biUxx3yxFmpvWGxdzfr9XQBcgR9HVhaE=@vger.kernel.org, AJvYcCUlskiuRDYxskbTWHsx2IjFNx7U7KYcjRo/b+CIQfKkAnUlzyMuVRx2bMc/u4eIWCQTz7LB/P/LXqiT0hE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQxd+O8gNRkp81alos2JS8g4w76dfknsU6Zt+7DJPrjflcOjaz
+	7qfv3GYYPFG3jG7Pns4twTZr3xKf1CA8Q3I76xo9oQbh0SbbxTbn17bd
+X-Gm-Gg: ASbGncszG3Dt943BamlD7iQY/Rt2UU5nFtEIsCg0XPKerZYRihEPljr7aPSzTxKJYN8
+	Dv+Xh5YzE2Z9ok/yTALZdEszLdZshopttjndcM1NUrB+bVd4ptj6iXEUYb0W58ut3xQ1q3AFoxU
+	BxZ2OwB7epTAKyOciJvS7peIJ4pXz9Uo0OxH9DP1XTHz292ivUYRPUTZ+TKzMMab1ehZbSggDmo
+	rFLZuiXFl2qAqQd9U6h8ln3Wk9x++K+Q2huyEAX45/gf/dhNXLjMyNjUNP/JrMye2CvbF7j8ynp
+	kTw+N2wY9p6vYQIjuozVKTynEWwuoT3ho80uRr8xOf9zHRJboMBbl7JT1dUpdLdf0uxYQ9wTdqF
+	VeYEThgB0CetZ/Zbb6K9UDA+m
+X-Google-Smtp-Source: AGHT+IFWWb7cBfTk9OMRuDtWVVYPpXEqxfFx0itPACSefZ+pOiztCqmjtWe0mkzSLDRwWK1il9criQ==
+X-Received: by 2002:a05:6a21:3d8b:b0:217:ff4b:cc57 with SMTP id adf61e73a8af0-217ff4bcc70mr19982865637.39.1747766893374;
+        Tue, 20 May 2025 11:48:13 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-742a982ba69sm8544242b3a.91.2025.05.20.11.48.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 May 2025 11:48:12 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <c45c7b81-9952-43e2-91a8-e92d0860fa5e@roeck-us.net>
+Date: Tue, 20 May 2025 11:48:11 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250515-vt8500-timer-updates-v3-3-2197a1b062bd@gmail.com>
- <202505180911.hDevFA1N-lkp@intel.com> <CABjd4YwJgZiq9_jKGa70GaxaW8TT=JuwDioU6jH=J_O=t+QT8w@mail.gmail.com>
- <f74dbbcb-1628-4280-92e8-d89823a3a318@roeck-us.net>
-In-Reply-To: <f74dbbcb-1628-4280-92e8-d89823a3a318@roeck-us.net>
-From: Alexey Charkov <alchark@gmail.com>
-Date: Tue, 20 May 2025 21:39:15 +0400
-X-Gm-Features: AX0GCFu2VdGiOaPdTGNsD9E3jaLA46XfuVGvrGU1UJ1V9x-G8SIxw9EzEocSyA4
-Message-ID: <CABjd4YyXwznntcLVcYL6qx16YEwv4_VWzrXrE7_QHmQxiE0pXQ@mail.gmail.com>
-Subject: Re: [PATCH v3 3/4] clocksource/drivers/timer-vt8500: Prepare for
- watchdog functionality
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: kernel test robot <lkp@intel.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Wim Van Sebroeck <wim@linux-watchdog.org>, oe-kbuild-all@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] watchdog: arm_smc_wdt: get wdt status through
+ SMCWD_GET_TIMELEFT
+To: Antonio Borneo <antonio.borneo@foss.st.com>,
+ Julius Werner <jwerner@chromium.org>, Evan Benn <evanbenn@chromium.org>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, linux-watchdog@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: linux-stm32@st-md-mailman.stormreply.com
+References: <20250519170055.205544-1-antonio.borneo@foss.st.com>
+ <20250520085952.210723-1-antonio.borneo@foss.st.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20250520085952.210723-1-antonio.borneo@foss.st.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, May 19, 2025 at 5:34=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
-wrote:
->
-> On 5/19/25 04:34, Alexey Charkov wrote:
-> > On Sun, May 18, 2025 at 5:24=E2=80=AFAM kernel test robot <lkp@intel.co=
-m> wrote:
-> >>
-> >> Hi Alexey,
-> >>
-> >> kernel test robot noticed the following build warnings:
-> >>
-> >> [auto build test WARNING on 92a09c47464d040866cf2b4cd052bc60555185fb]
-> >>
-> >> url:    https://github.com/intel-lab-lkp/linux/commits/Alexey-Charkov/=
-dt-bindings-timer-via-vt8500-timer-Convert-to-YAML/20250516-025729
-> >> base:   92a09c47464d040866cf2b4cd052bc60555185fb
-> >> patch link:    https://lore.kernel.org/r/20250515-vt8500-timer-updates=
--v3-3-2197a1b062bd%40gmail.com
-> >> patch subject: [PATCH v3 3/4] clocksource/drivers/timer-vt8500: Prepar=
-e for watchdog functionality
-> >> config: loongarch-randconfig-r123-20250517 (https://download.01.org/0d=
-ay-ci/archive/20250518/202505180911.hDevFA1N-lkp@intel.com/config)
-> >> compiler: loongarch64-linux-gcc (GCC) 14.2.0
-> >> reproduce: (https://download.01.org/0day-ci/archive/20250518/202505180=
-911.hDevFA1N-lkp@intel.com/reproduce)
-> >>
-> >> If you fix the issue in a separate patch/commit (i.e. not just a new v=
-ersion of
-> >> the same patch/commit), kindly add following tags
-> >> | Reported-by: kernel test robot <lkp@intel.com>
-> >> | Closes: https://lore.kernel.org/oe-kbuild-all/202505180911.hDevFA1N-=
-lkp@intel.com/
-> >>
-> >> sparse warnings: (new ones prefixed by >>)
-> >>>> drivers/clocksource/timer-vt8500.c:201:51: sparse: sparse: incorrect=
- type in assignment (different address spaces) @@     expected void *platfo=
-rm_data @@     got void [noderef] __iomem *static [assigned] [toplevel] reg=
-base @@
-> >>     drivers/clocksource/timer-vt8500.c:201:51: sparse:     expected vo=
-id *platform_data
-> >>     drivers/clocksource/timer-vt8500.c:201:51: sparse:     got void [n=
-oderef] __iomem *static [assigned] [toplevel] regbase
-> >>
-> >> vim +201 drivers/clocksource/timer-vt8500.c
-> >>
-> >>     175
-> >>     176  /*
-> >>     177   * This probe gets called after the timer is already up and r=
-unning. This will create
-> >>     178   * the watchdog device as a child since the registers are sha=
-red.
-> >>     179   */
-> >>     180  static int vt8500_timer_probe(struct platform_device *pdev)
-> >>     181  {
-> >>     182          struct platform_device *vt8500_watchdog_device;
-> >>     183          struct device *dev =3D &pdev->dev;
-> >>     184          int ret;
-> >>     185
-> >>     186          if (!sys_timer_ch) {
-> >>     187                  dev_info(dev, "Not enabling watchdog: only on=
-e irq was given");
-> >>     188                  return 0;
-> >>     189          }
-> >>     190
-> >>     191          if (!regbase)
-> >>     192                  return dev_err_probe(dev, -ENOMEM,
-> >>     193                          "Timer not initialized, cannot create=
- watchdog");
-> >>     194
-> >>     195          vt8500_watchdog_device =3D platform_device_alloc("vt8=
-500-wdt", -1);
-> >>     196          if (!vt8500_watchdog_device)
-> >>     197                  return dev_err_probe(dev, -ENOMEM,
-> >>     198                          "Failed to allocate vt8500-wdt");
-> >>     199
-> >>     200          /* Pass the base address as platform data and nothing=
- else */
-> >>   > 201          vt8500_watchdog_device->dev.platform_data =3D regbase=
-;
-> >
-> > Frankly, given that this driver only applies to VT8500 (which is ARM
-> > based), the warning appears a bit overzealous. After all, on ARM MMIO
-> > addresses are in the same physical address space as normal memory
-> > addresses, and furthermore this platform_data is never dereferenced
-> > directly anyway.
->
-> Guess we'll need AI compilers in the future to help them know that.
-> I for my part would argue that "this warning can be ignored" is the
-> source of many problems flying under the radar.
->
-> >
-> > I could silence the warning either by more aggressive casting or by
-> > wrapping the pointer into some struct, but both of those sound a bit
-> > overreaching. Would appreciate guidance from the list on how to best
-> > approach this.
-> >
->
-> First of all, I am quite sure that using platform drivers for this is the
-> wrong approach to start with. This seems to be a perfect candidate for
-> an auxiliary driver.
+On 5/20/25 01:59, Antonio Borneo wrote:
+> The optional SMCWD_GET_TIMELEFT command can be used to detect if
+> the watchdog has already been started.
+> See the implementation in OP-TEE secure OS [1].
+> 
+> At probe time, check if the watchdog is already started and then
+> set WDOG_HW_RUNNING in the watchdog status. This will cause the
+> watchdog framework to ping the watchdog until a userspace watchdog
+> daemon takes over the control.
+> 
+> Link: https://github.com/OP-TEE/optee_os/commit/a7f2d4bd8632 [1]
+> 
+> Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
 
-TIL: auxiliary bus :)
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Thanks for the pointer Guenter, it does indeed look like a more
-appropriate choice. I'll try and port the driver to use that instead,
-and resubmit.
+> ---
+>   drivers/watchdog/arm_smc_wdt.c | 17 ++++++++++++++---
+>   1 file changed, 14 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/watchdog/arm_smc_wdt.c b/drivers/watchdog/arm_smc_wdt.c
+> index 8f3d0c3a005fb..bbba23ace7b85 100644
+> --- a/drivers/watchdog/arm_smc_wdt.c
+> +++ b/drivers/watchdog/arm_smc_wdt.c
+> @@ -46,6 +46,8 @@ static int smcwd_call(struct watchdog_device *wdd, enum smcwd_call call,
+>   		return -ENODEV;
+>   	if (res->a0 == PSCI_RET_INVALID_PARAMS)
+>   		return -EINVAL;
+> +	if (res->a0 == PSCI_RET_DISABLED)
+> +		return -ENODATA;
+>   	if (res->a0 != PSCI_RET_SUCCESS)
+>   		return -EIO;
+>   	return 0;
+> @@ -131,10 +133,19 @@ static int smcwd_probe(struct platform_device *pdev)
+>   
+>   	wdd->info = &smcwd_info;
+>   	/* get_timeleft is optional */
+> -	if (smcwd_call(wdd, SMCWD_GET_TIMELEFT, 0, NULL))
+> -		wdd->ops = &smcwd_ops;
+> -	else
+> +	err = smcwd_call(wdd, SMCWD_GET_TIMELEFT, 0, NULL);
+> +	switch (err) {
+> +	case 0:
+> +		set_bit(WDOG_HW_RUNNING, &wdd->status);
+> +		fallthrough;
+> +	case -ENODATA:
+>   		wdd->ops = &smcwd_timeleft_ops;
+> +		break;
+> +	default:
+> +		wdd->ops = &smcwd_ops;
+> +		break;
+> +	}
+> +
+>   	wdd->timeout = res.a2;
+>   	wdd->max_timeout = res.a2;
+>   	wdd->min_timeout = res.a1;
+> 
+> base-commit: a5806cd506af5a7c19bcd596e4708b5c464bfd21
 
-> Second, I do consider passing an iomem pointer as platform data to be
-> inherently unsafe. I would very much prefer either passing a regmap
-> pointer or, if that doesn't work, a data structure.
-
-I guess it resolves itself with the auxiliary driver approach, as I
-can then just upcast the auxiliary device pointer to the parent's
-enclosing private struct, which can then contain both a timer read
-function and the specific pointers to the two registers the watchdog
-needs. No need then for the child to do its arbitrary offsets into the
-parent's iomem region - just use what's given directly. It's still
-going to be iomem pointer access, but on the other hand putting a
-layer of indirection (i.e. regmap) into the system timer code sounds a
-bit scary to me.
-
-Best regards,
-Alexey
 
