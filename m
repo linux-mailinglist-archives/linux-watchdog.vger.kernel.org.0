@@ -1,132 +1,166 @@
-Return-Path: <linux-watchdog+bounces-3570-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3571-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EF5EAC0455
-	for <lists+linux-watchdog@lfdr.de>; Thu, 22 May 2025 07:58:24 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 977E9AC0606
+	for <lists+linux-watchdog@lfdr.de>; Thu, 22 May 2025 09:45:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F8EEA20AAC
-	for <lists+linux-watchdog@lfdr.de>; Thu, 22 May 2025 05:57:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0B1677ACD2C
+	for <lists+linux-watchdog@lfdr.de>; Thu, 22 May 2025 07:44:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B32741F4C8B;
-	Thu, 22 May 2025 05:57:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EBD321CA17;
+	Thu, 22 May 2025 07:45:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="dtc5EZQQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UvSA7QOS"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D9881F3B89;
-	Thu, 22 May 2025 05:57:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.148.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 790891990B7;
+	Thu, 22 May 2025 07:45:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747893476; cv=none; b=jLftSx+aORX46A5Qxnsh38TseoQS6B7Ug4Z7Bw3hIZrmYWyN3axgJ8GLA0JXymNfEQnKrETKTbuVOoI289L2963muTGa+N0jYo22j52PCwz3ztGvbfEvHOeS8BzfqLEXLbNkHx2VFnUaTT4PacHxMYATDr7OQv1/Rb+ToprJVzk=
+	t=1747899949; cv=none; b=tI7cn+yq+REWFywZV9+kYCXJBlOM+iZ3nfwyDM5lMhnSPoMJlSB3aSLf1PVFEI3iZWFfaSY3Sqtwl7YTr9RdD6od3JojfUXOBCT7ZV12a1OBFLCb4Lka3CHU8iLJeoOJa5c5e2xRi0XW1tXoECeZ8TIKs23hk0Y8H5WtJXHrF5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747893476; c=relaxed/simple;
-	bh=3WeuTWf00a8CIQ6rDioYC/Y6x+vib4vbWBWfGv2pM1Y=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Gef50hJSJibDvlYrWSMsl4YOCDc1B2Gz0wGUoCDWvB/5Cw+rWgVFLLidGXiVyE4zEN/ZBLALlYvVVOduoNn7CcK/4ty5ed37fP3CZKS35wQvYBA8mEoA5dZtmpBgz0JqTHZs1Vz6JtP/MpackG9kYMP7Yub1yKyOBp8m14NElZc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=dtc5EZQQ; arc=none smtp.client-ip=67.231.148.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-	by mx0a-0016f401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54LNWNwG010290;
-	Wed, 21 May 2025 22:57:38 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pfpt0220; bh=X
-	kkuJza7kOUufs/cQ2lXoFNA3GSdaOGpzSuPaapYVyw=; b=dtc5EZQQVfzERy3NI
-	sL+8LgpxmoLHDWtuk7J+y7oZ1fwCRKCDigg/gXzqok8k3gR1k2PicHFJD7xlUSg5
-	/aLdOb7j1Dx9ssKphuRWe0gwyLqRn/47/WABKGX0tBhnkD1H9TF4OdQbYMZ0m0QF
-	KYBeuhQ/9ZZoP90a6ASX32AnrzvlAkEorSl936w88jWxS8pH5F1Fs3jlmdIWYdtD
-	5AzN/V5wmffbg4nVgsLp4xjlVGwFhwaVuGQXJrordtz6igtEV6BYkwwznQHWEuXe
-	3s0oWoyDRwpKXjllYpivkt5VQs81EGceEw6jvpKlIgtn0JWtaECZ/2LPA4XuDGrK
-	K6EvA==
-Received: from dc6wp-exch02.marvell.com ([4.21.29.225])
-	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 46srka8j99-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 21 May 2025 22:57:38 -0700 (PDT)
-Received: from DC6WP-EXCH02.marvell.com (10.76.176.209) by
- DC6WP-EXCH02.marvell.com (10.76.176.209) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.4; Wed, 21 May 2025 22:57:36 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC6WP-EXCH02.marvell.com
- (10.76.176.209) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
- Transport; Wed, 21 May 2025 22:57:36 -0700
-Received: from tx2-sever.caveonetworks.com (unknown [10.110.141.15])
-	by maili.marvell.com (Postfix) with ESMTP id 82CC33F708E;
-	Wed, 21 May 2025 22:57:36 -0700 (PDT)
-From: George Cherian <george.cherian@marvell.com>
-To: <linux@roeck-us.net>, <wim@linux-watchdog.org>, <a.fatoum@pengutronix.de>
-CC: <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "George
- Cherian" <george.cherian@marvell.com>
-Subject: [RESEND PATCH v5 2/2] drivers: sbsa_gwdt: Enable the reset_on_panic feature
-Date: Thu, 22 May 2025 05:57:15 +0000
-Message-ID: <20250522055715.3533356-3-george.cherian@marvell.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250522055715.3533356-1-george.cherian@marvell.com>
-References: <20250522055715.3533356-1-george.cherian@marvell.com>
+	s=arc-20240116; t=1747899949; c=relaxed/simple;
+	bh=zY+lXrRwgKHQKa2ZtuH4yodp16PGhqZFM1RmRq3oX9k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=sMcQJXNTlvGCQrvTiu1KqJEVJN3AEPL6/pmPipWN2w/Qa2DxyQNjp8wksjhNTJXeVAY4uH9nsnYsvoiy/OlRorOyft+TKIzq9QuVlfY3Un4EN2DdgqBlr1OHFvLbBGG+RHItqRNtGkB45+y29pV75uXM9K+cWskWNl6u8UFYaAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UvSA7QOS; arc=none smtp.client-ip=209.85.161.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-604f0d27c24so4044289eaf.2;
+        Thu, 22 May 2025 00:45:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747899946; x=1748504746; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dzW20nwC4VuWDQE29Tj4IgyVUfkVJ+JnWCtTS9PiDHI=;
+        b=UvSA7QOSfSq/Qaq5y0YdXWVEgLYXJzYbb0maA5Mkqv3KkJ2a00frG2WxQVU/xt4j00
+         8a1jtXkr9EE4SDVQLxVeq+rYy//WMDNj20Ix/nmpVmPcVY0aGQY9J4tu955DmqUTQFIB
+         nBkxJIsEP7eTlnr02Lwe4L5Hc6IPBY9sEEQs7wMMeYkpkqw74Qc88nD1PaEm2keqMq7z
+         uPJKfda70dDW2MvRv/LejTHqIQyG2q8+H3K5UWDpY8U/TaoUqUrPR7cTToUMd4kx1M7r
+         66nesz9fQ0VJJA3qWD9317SR6wHmWDXqRQFIrZcNpLkPyrIu7uAUF6YjJ3GE50/RoxF/
+         HmwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747899946; x=1748504746;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dzW20nwC4VuWDQE29Tj4IgyVUfkVJ+JnWCtTS9PiDHI=;
+        b=uZMy1uEYjiQzs0p6dleX4Rk0YSRakzKG0umbIkB7EDr4+OfDreN14sW5yOfpVynpHL
+         azurAMtY84KgA560rvv4DBRqiSnR7/iMKBpFdMk1z3u+HcpuqA41+/O3f9RcjhJRor6s
+         TraGoY5jS7R+W6LY2gDbkBOXE1qtl/U8nD0luFBRyv7Q25vzaOUl2BZqnXP2yLS9+I96
+         uFZPWQsQoqjHpx2JigpFmA0MkezWzhu+VH9KA3yJoR32zIoM16U8iu2c75jb0QI4dZJN
+         MMeEvIwaNc2a4396sax4aOdZshv7aMYolfk3wSnfLl3hL0tVS+pGkvwiynf/ABYJisxT
+         1F6A==
+X-Forwarded-Encrypted: i=1; AJvYcCUMHwHGfIkgWRqQ3DBjBeNgW8NcXUrVm/qtZzmaxlwFWkramxDnb3pFExg+WYLTLZlPJC0GXIauj7QMemLKQVM=@vger.kernel.org, AJvYcCW14VVqrjZc06INkDtKesf/tQNsRt/CFgdViIISw/x9jwbV737pVw6DN+FT5eVQ43v0kTJ9V6ZPB/v0nIHq@vger.kernel.org, AJvYcCWS5suHYgD10xOu7/rzuWB2OYje3C6ZbixdzmWYa8ye6MwKDnTRvgccHVa2lV/Fcr3uQh0gNQd8sl60@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx55civ+CyX0QJWHumdNOL55W/DNO6j+EgiS8OCJxrKCbRLwAKC
+	ydf8xBzUOxjvk2s4Wdhk0ETcACV01FoDUnDgWXRjMN57Kwx9p7vK60XAFqOPFQL3PW6qjpZEtzo
+	T0XVQhySbucmWyWk+gtRFv+eTqx7KH+W7XfSfxJY=
+X-Gm-Gg: ASbGncvO8j5OBOSxmZkHOF58MC4/ppsBIYxnPawg8vrOJV3IHVW7f9fEowaVq/DmExW
+	vuUVbty2KI00848lbiIVgj4sPyjbD/9qlUqLqG90QH+hoOjYjEPtk/OSexjg4Sq/HqpkCqtJg97
+	WZ0lfHEJYoTfc+qyz3oIJ10Ghz2QdDihnSr34Rd/44DQ5Q1L47aY1qEQ+2ZlRQTALT9A==
+X-Google-Smtp-Source: AGHT+IHx9WwGAeBBgIJ2VZAo/LAtKYEWKxbcrPGYRDL9PPLwEM0HTBz1LK7Lmmv50E3X9O8VXiDRpGFVmpONGdmsjyE=
+X-Received: by 2002:a05:622a:244f:b0:494:7ab9:60ad with SMTP id
+ d75a77b69052e-494b09397ebmr403217461cf.38.1747899936138; Thu, 22 May 2025
+ 00:45:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: hMS1bauiqjSZkET81TUw7f6W7F-orrRX
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTIyMDA1NyBTYWx0ZWRfX5wuRj8St0l7o NblrE3eVhUE5lTdoDPs2BapLxsggi34t/Z63L7QETKo05KcP6nfgNIc5HEAnddyhrtxFyTAdZXw OGBOsnmLo9LHsvaHTPdFR3c5aeEJZNjVANT/tMWiWyq0aZRWiBrOKs2iEA31DlerMM0IXQp6iPA
- lz/Zx4tMAzCx/HSTcYEtIMCMPNXH/vv/nF2JFeA+KgmSSRDH1SE3zCgH125qr6iyapU4DvLa28t sbGFSYRlX5KVb0B1/cmAOoPuvUifUUu1uEj4UiG3IHxH8Ri4MqOs03sK2yB768T4MrMj/H19ceB i+KBypVGNePPoDX6vDPGFg7RMZ/Tb+MEJeaX9i2ZvyhzhOSQyPrt75efPJw1qA3g2ULFF6wKXmq
- dPO0iyEMvjv3dnXS5Tma/axIDSTqrfBiCpnuaYylaYYEjy8K8FDSez5LilD102jpaylxhd0f
-X-Proofpoint-ORIG-GUID: hMS1bauiqjSZkET81TUw7f6W7F-orrRX
-X-Authority-Analysis: v=2.4 cv=Bp+dwZX5 c=1 sm=1 tr=0 ts=682ebcd2 cx=c_pps a=gIfcoYsirJbf48DBMSPrZA==:117 a=gIfcoYsirJbf48DBMSPrZA==:17 a=dt9VzEwgFbYA:10 a=M5GUcnROAAAA:8 a=vEtRRzcOuqZZwul3seoA:9 a=OBjm3rFKGHvpk9ecZwUJ:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-22_03,2025-05-20_03,2025-03-28_01
+References: <20250521-vt8500-timer-updates-v5-0-7e4bd11df72e@gmail.com>
+ <20250521-vt8500-timer-updates-v5-4-7e4bd11df72e@gmail.com> <aC4MNjZxnQu8b0kR@mai.linaro.org>
+In-Reply-To: <aC4MNjZxnQu8b0kR@mai.linaro.org>
+From: Alexey Charkov <alchark@gmail.com>
+Date: Thu, 22 May 2025 11:45:33 +0400
+X-Gm-Features: AX0GCFv6jhcev6GhPYo0l88C_vd8Mhb7eF6cQfp7Ylfbkj6Kxv47qMniq6WrRRE
+Message-ID: <CABjd4Yzv6-9KFC1fXcLQ5XPcbWDWdpYgkZJgNr1ygipVd0PV3A@mail.gmail.com>
+Subject: Re: [PATCH v5 4/4] watchdog: Add support for VIA/WonderMedia SoC
+ watchdog functionality
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Rob Herring <robh@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Set the WDIOF_OPS_ATOMIC for sbsa_gwdt driver, since the ops are atomic.
-Also set the reset_on_panic timeout, this enables the panic notifier to
-be registered by watchdog core and use the reset_on_panic timeout to be
-configured in case of kernel panic. reset_on_panic is by default set to
-60sec. This can be modified runtime via sysfs.
+On Wed, May 21, 2025 at 9:24=E2=80=AFPM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> On Wed, May 21, 2025 at 05:00:12PM +0400, Alexey Charkov wrote:
+> > VIA/WonderMedia SoCs can use their system timer's first channel as a
+> > watchdog device which will reset the system if the clocksource counter
+> > matches the value given in its match register 0 and if the watchdog
+> > function is enabled.
+> >
+> > Since the watchdog function is tightly coupled to the timer itself, it
+> > is implemented as an auxiliary device of the timer device
+> >
+> > Signed-off-by: Alexey Charkov <alchark@gmail.com>
+> > ---
+> >  MAINTAINERS                   |  1 +
+> >  drivers/watchdog/Kconfig      | 15 ++++++++
+> >  drivers/watchdog/Makefile     |  1 +
+> >  drivers/watchdog/vt8500-wdt.c | 88 +++++++++++++++++++++++++++++++++++=
+++++++++
+> >  4 files changed, 105 insertions(+)
+> >
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 5362095240627f613638197fda275db6edc16cf7..97d1842625dbdf7fdca3556=
+260662dab469ed091 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -3447,6 +3447,7 @@ F:      drivers/tty/serial/vt8500_serial.c
+> >  F:   drivers/video/fbdev/vt8500lcdfb.*
+> >  F:   drivers/video/fbdev/wm8505fb*
+> >  F:   drivers/video/fbdev/wmt_ge_rops.*
+> > +F:   drivers/watchdog/vt8500-wdt.c
+> >  F:   include/linux/vt8500-timer.h
+> >
+> >  ARM/ZYNQ ARCHITECTURE
+> > diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> > index 0d8d37f712e8cfb4bf8156853baa13c23a57d6d9..2e59303306feba7e15a015c=
+2fce25b1290dc4cbc 100644
+> > --- a/drivers/watchdog/Kconfig
+> > +++ b/drivers/watchdog/Kconfig
+> > @@ -1115,6 +1115,21 @@ config SUNPLUS_WATCHDOG
+> >         To compile this driver as a module, choose M here: the
+> >         module will be called sunplus_wdt.
+> >
+> > +config VT8500_WATCHDOG
+> > +     tristate "VIA/WonderMedia VT8500 watchdog support"
+> > +     depends on ARCH_VT8500 || COMPILE_TEST
+> > +     select WATCHDOG_CORE
+> > +     select AUXILIARY_BUS
+> > +     help
+> > +       VIA/WonderMedia SoCs can use their system timer as a hardware
+> > +       watchdog, as long as the first timer channel is free from other
+> > +       uses and respective function is enabled in its registers. To
+> > +       make use of it, say Y here and ensure that the device tree
+> > +       lists at least two interrupts for the VT8500 timer device.
+> > +
+> > +       To compile this driver as a module, choose M here.
+> > +       The module will be called vt8500-wdt.
+>
+> Module is not supported by the timers. That will change in a very near
+> future but unloading won't be supported, you should consider tying the
+> wdt life cycle with the subsystem it is connected to.
 
-Signed-off-by: George Cherian <george.cherian@marvell.com>
----
- drivers/watchdog/sbsa_gwdt.c | 3 +++
- 1 file changed, 3 insertions(+)
+But there's an auxiliary bus between the timer and this module, so it
+should be possible to boot a system with the timer initialized as
+usual, and then load the watchdog if/when needed. Which also saves a
+bit of space in the main kernel image.
 
-diff --git a/drivers/watchdog/sbsa_gwdt.c b/drivers/watchdog/sbsa_gwdt.c
-index 5f23913ce3b4..fd5095137712 100644
---- a/drivers/watchdog/sbsa_gwdt.c
-+++ b/drivers/watchdog/sbsa_gwdt.c
-@@ -92,6 +92,7 @@ struct sbsa_gwdt {
- };
- 
- #define DEFAULT_TIMEOUT		10 /* seconds */
-+#define DEFAULT_RESET_ON_PANIC_TIMEOUT		60 /* seconds */
- 
- static unsigned int timeout;
- module_param(timeout, uint, 0);
-@@ -242,6 +243,7 @@ static const struct watchdog_info sbsa_gwdt_info = {
- 	.options	= WDIOF_SETTIMEOUT |
- 			  WDIOF_KEEPALIVEPING |
- 			  WDIOF_MAGICCLOSE |
-+			  WDIOF_OPS_ATOMIC |
- 			  WDIOF_CARDRESET,
- };
- 
-@@ -291,6 +293,7 @@ static int sbsa_gwdt_probe(struct platform_device *pdev)
- 	wdd->ops = &sbsa_gwdt_ops;
- 	wdd->min_timeout = 1;
- 	wdd->timeout = DEFAULT_TIMEOUT;
-+	wdd->reset_on_panic = DEFAULT_RESET_ON_PANIC_TIMEOUT;
- 	watchdog_set_drvdata(wdd, gwdt);
- 	watchdog_set_nowayout(wdd, nowayout);
- 	sbsa_gwdt_get_version(wdd);
--- 
-2.34.1
+Or am I missing anything here?
 
+Best regards,
+Alexey
 
