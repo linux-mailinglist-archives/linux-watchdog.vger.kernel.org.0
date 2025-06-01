@@ -1,79 +1,83 @@
-Return-Path: <linux-watchdog+bounces-3599-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3600-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76FEAAC9F47
-	for <lists+linux-watchdog@lfdr.de>; Sun,  1 Jun 2025 18:05:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63945ACA063
+	for <lists+linux-watchdog@lfdr.de>; Sun,  1 Jun 2025 22:17:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3F9571747F7
-	for <lists+linux-watchdog@lfdr.de>; Sun,  1 Jun 2025 16:05:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 938EB188D8D9
+	for <lists+linux-watchdog@lfdr.de>; Sun,  1 Jun 2025 20:17:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A69241F9EC0;
-	Sun,  1 Jun 2025 16:05:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DPlu6OG7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A4D27DA95;
+	Sun,  1 Jun 2025 20:17:03 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fgw20-7.mail.saunalahti.fi (fgw20-7.mail.saunalahti.fi [62.142.5.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D5761EF38E;
-	Sun,  1 Jun 2025 16:05:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93888A923
+	for <linux-watchdog@vger.kernel.org>; Sun,  1 Jun 2025 20:17:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748793917; cv=none; b=GgA4MTyFOK+f2nSlCmSkIz6/HKAYtTKlHbJFjj9ZpVce7fWRIEmhNfPTgIDPGS1rbPdn0EolFkgDGR5wPLj1qXt3BhYpjTfs5eg7vsvZklFoVpzz0xzhndnZHxELOsffZo0CC8WRRJ2sacg1jkv2F3ki1X6ob+q8fWK5q147U20=
+	t=1748809023; cv=none; b=Wo4IIZvleXFzhGCxsFlRA9ylWwPxFk7uc3IIbBf0rhgSJHm3nfT01vxoXz8C72N+wOmzZngd5P/GY0wScdHJl4gcKsaPiWLHlNT2nXwUYGAiaV2b2c/0VzyfPicDwH/YS+aT3QQI6m4jYy74HCeZ0piplRfIZB30hlbschnN6fg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748793917; c=relaxed/simple;
-	bh=ian1KcyTAW2sh2M3PcioRz3ECkzQ3T5m+5eQ2TnuKWA=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=Keji0IhEp8+THtIwE1hKexgTRDifi94H06Tb0krFO5vmf43nkcUbHQil0J8iYiPW98+YidZChLzRgLxvRYNgZAxOkebCrtGg1pRG27T1TDC86eJxEYSxhX4Lo5ypv6Og9NtFmb53mYqAG+AY0NzD7nym5NHnmsEzi1ZM+SoUuvo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DPlu6OG7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E4FEC4CEE7;
-	Sun,  1 Jun 2025 16:05:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748793917;
-	bh=ian1KcyTAW2sh2M3PcioRz3ECkzQ3T5m+5eQ2TnuKWA=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=DPlu6OG7215QpXeu2iHKiT+7etmsDwu4bMnBITpKCZXbNEWwB75F3A9Sq6wBrpeC4
-	 Ft0zKOiMM59xDZludm0LO0DyMEqq53BlAdtMDqmS9EK1u9A9hCfekrUHr8A7sv2dFo
-	 VA0vebA8OXQJGKVJRDsKVMNh4vQmPTSWvsgUShVAh3IQ61YviCL5jBQrF5lBHUWVLv
-	 t8o1O1CD8j2fZTYSUXIo4TLF1Lh3aEEIraPJPer48sPUYlmDvpJwQfW0VgvJOdUHsU
-	 PYvB1RRR9tt0X4UfdABdqoqcWi8pGbgAFsIYiPc1MuuwsTOvSGfTvlvz+HWNxUJ/I7
-	 lduD0juWS+F4Q==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70F05380AA7C;
-	Sun,  1 Jun 2025 16:05:51 +0000 (UTC)
-Subject: Re: [GIT PULL REQUEST] watchdog - v6.16 release cycle.
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <20250601112900.GA6378@www.linux-watchdog.org>
-References: <20250601112900.GA6378@www.linux-watchdog.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20250601112900.GA6378@www.linux-watchdog.org>
-X-PR-Tracked-Remote: git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.16-rc1
-X-PR-Tracked-Commit-Id: 158f9f2f71523bab787f4fa7a7a1f390524350ca
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: bb1556ec94647060c6b52bf434b9fd824724a6f4
-Message-Id: <174879395005.436212.3560969600818646414.pr-tracker-bot@kernel.org>
-Date: Sun, 01 Jun 2025 16:05:50 +0000
-To: Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>, LKML <linux-kernel@vger.kernel.org>, Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>, Guenter Roeck <linux@roeck-us.net>, Antonio Borneo <antonio.borneo@foss.st.com>, Daniel Lezcano <daniel.lezcano@linaro.org>, Diogo Ivo <diogo.ivo@siemens.com>, Florian Klink <flokli@flokli.de>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, Henry Martin <bsdhenrymartin@gmail.com>, Igor Belwon <igor.belwon@mentallysanemainliners.org>, Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>, Kever Yang <kever.yang@rock-chips.com>, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, Marcus Folkesson <marcus.folkesson@gmail.com>, Thomas Richard <thomas.richard@bootlin.com>, Ziyan Fu <fuzy5@lenovo.com>
+	s=arc-20240116; t=1748809023; c=relaxed/simple;
+	bh=8PKyOPYnfNSjR7FPJGszGOBmLeOkqRohGMI593pMfuo=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BlODko2+gpOvehRag6s6p/P2M8lzBccRi8R7EdBjJ+PpCffYCrCZc4Fe3k6kUcRdCt9wEUFBg+YqgeoB1nVOJ4HaqWlrIzmUyUZNTIWmrfk1SFHGXkTaCYjrM5dY4FFrhK5rqBfU6xDb8z2JyKq+0CKKXHsKr8mhX3V+qEy59QE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=62.142.5.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
+Received: from localhost (88-113-26-232.elisa-laajakaista.fi [88.113.26.232])
+	by fgw21.mail.saunalahti.fi (Halon) with ESMTP
+	id 35cea866-3f25-11f0-9706-005056bdd08f;
+	Sun, 01 Jun 2025 23:15:50 +0300 (EEST)
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Sun, 1 Jun 2025 23:15:49 +0300
+To: Diogo Ivo <diogo.ivo@siemens.com>, mika.westerberg@linux.intel.com
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, linux-kernel@vger.kernel.org,
+	linux-acpi@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	jan.kiszka@siemens.com, benedikt.niedermayr@siemens.com
+Subject: Re: [PATCH v3 0/2] Add driver for Intel Over-Clocking Watchdog
+Message-ID: <aDy09SFPkzr2AJnr@surfacebook.localdomain>
+References: <20250317-ivo-intel_oc_wdt-v3-0-32c396f4eefd@siemens.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250317-ivo-intel_oc_wdt-v3-0-32c396f4eefd@siemens.com>
 
-The pull request you sent on Sun, 1 Jun 2025 13:29:00 +0200:
+Mon, Mar 17, 2025 at 10:55:05AM +0000, Diogo Ivo kirjoitti:
 
-> git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.16-rc1
++ Mika
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/bb1556ec94647060c6b52bf434b9fd824724a6f4
+> This series adds a driver for the Intel Over-Clocking Watchdog found in
+> the Intel Platform Controller Hub (PCH).
+> 
+> This watchdog is controlled via a simple single-register interface and
+> would otherwise be standard except for the presence of a LOCK bit that
+> can only be set once per power cycle, needing extra handling around it.
+> 
+> Due to the way these devices are described in ACPI tables with both the
+> generic PNP0C02 CID and a more detailed ACPI HID we also need to add
+> their HIDs to the list of known non-PNP devices. As there are several HIDs
+> for what seems to be essentially the same hardware but I don't know all
+> the possible HIDs this series does not include an exhaustive list of all
+> such HIDs, only those that I could personally test.
 
-Thank you!
+This doesn't describe why we need the driver. We have established ACPI WDAT
+table. Can't you utilise it by providing in the firmware?
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+With Best Regards,
+Andy Shevchenko
+
+
 
