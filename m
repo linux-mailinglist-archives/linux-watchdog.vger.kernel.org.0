@@ -1,193 +1,174 @@
-Return-Path: <linux-watchdog+bounces-3603-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3604-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C3FCACB01F
-	for <lists+linux-watchdog@lfdr.de>; Mon,  2 Jun 2025 16:00:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DA93ACB20C
+	for <lists+linux-watchdog@lfdr.de>; Mon,  2 Jun 2025 16:27:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE61B17A012
-	for <lists+linux-watchdog@lfdr.de>; Mon,  2 Jun 2025 14:00:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 072754076F3
+	for <lists+linux-watchdog@lfdr.de>; Mon,  2 Jun 2025 14:21:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC7AA221DAE;
-	Mon,  2 Jun 2025 14:00:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0E5023C4EA;
+	Mon,  2 Jun 2025 14:11:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="I7MGl85P"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E0y9cyjr"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010002.outbound.protection.outlook.com [52.101.69.2])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E25911DED64;
-	Mon,  2 Jun 2025 14:00:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.2
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748872812; cv=fail; b=ZjW+4LUVo3XwFTceC9B7RLudoggCMQCUKEDGdIIEJVWaXwzdZv1r2EHUV0yS8gy2G5nOkHR7hi6lcNNNFxibBhXSSBLyXZCKe1gtoXnIkjyuaydgGqssrLEC9hPv1Q/CHEt/H0GSnuHrN05Mhpc3ZKLLOp/vYZnOtUPE8j6YhEg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748872812; c=relaxed/simple;
-	bh=P8F+nZ/io3tldaCivKDT2d33y1hE1BMa7NwaeTEqSAM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=ITYXzDH97YsVWPDQj2sMCd+9qovh6aIpBGZrC+xKNVSPkr/oookMNhOUxfqGidVrqv6yhtb+2UjGtiy2ULzlsJgSSumE759vyhd4POi5fgT0tq92FBEC7pvtM9spbi0pNCvQXO5xchhdNFUOPpfl6dBoCO7tgjaCf2v3GlsxFO0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=I7MGl85P; arc=fail smtp.client-ip=52.101.69.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=OmY7sV0HTpteviKLy3jTpToI0lNFHqTUB/Ijg0QG56dWmnnUhj8HvP+l8F4lk8vcVc3A4aQJZFPF0JuQa4FlWjUEsjJPXdWmk8LFMNtRp4qV89gnXi4njMtrFd71ijmEyL8DyemCWxu+prxQ8kpdV6K/PMwlfH8IKMG/whaKsBqzBolMtR8O8knT+50c1uWEREVaDxlTnW1kosMzJUx3vit0z0XPutV50D6Qe+WXPB6UBP84t8PxUetwNxs6iVpIMRAj3ISC6g61t6vooYSsGjsqArh5QUcptRD2YeMlqwOEPEG2cZ9bdOq3yTwoBGR2xIrFc5VhyEaDC0lKBcJE7Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ubuq1oWGFPygU9+kkJnXTyW8EJ9fbDciR1svnYc67NI=;
- b=Lo4rUYs8VlELqT5yO7av6bw9P9AWT2IAHFrHLpNpypWgqCooff55Khb9+oehjQy6XzhJ7G/6ON8RUBky4BVOB0HBOwo0iio2C4nF259k8bAIJNKsvaSdlHDThFWh4GPCTakFgczTUfarBR2bitoqQfQ/Iy4Fc94KArc0S8jc76FsNcBw1rs0x7kgmPQfdtCb340e3maDqHgj792D9oJUZfaF96QG5VAMuj3Pp8RmbtCtnBSwQU5p78SUjGoCfAr0A0JRQoasjSziXxeAVIj0TaAqxbA+0lkcuvLAVBcuq8GkEL/NJz2Qp3qa2QOnSObYRweCBx0JnBdXxfOjkCNvgA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ubuq1oWGFPygU9+kkJnXTyW8EJ9fbDciR1svnYc67NI=;
- b=I7MGl85PfUZjtW8sg/YgCx/YBrfdmSohvg+gaWfELVnc2XyFm8Lw6myct3bWR2ZJVVQIQtM6DiXTfqq17cI4O7rBVEdPJ5B8i9j1ONrWdJdkaLscso4JlAyKFRgrFw3QYhNtkuNfjGgxzd3Uze1nukOKfal6/NjNP9uZxpP9f85LjHXqzS2K7yji4jKOlwd30Zu3+HOx6hJUOo1rIOSqgakh0qOX/EGfexRF9ZFt6j5oIKCNjIJMq3kgx3ptS9lsaIEBiyKr6F4vAGVx7Ulfk5Ishfzui8VYBuVIOEg2XsxVKn/MxnTSg8FaThZtpsEoHOhabsaAFzldQPGpakOXzA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
- by VI2PR04MB10761.eurprd04.prod.outlook.com (2603:10a6:800:27e::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8769.37; Mon, 2 Jun
- 2025 14:00:06 +0000
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06%6]) with mapi id 15.20.8769.025; Mon, 2 Jun 2025
- 14:00:06 +0000
-Date: Mon, 2 Jun 2025 09:59:57 -0400
-From: Frank Li <Frank.li@nxp.com>
-To: Meng Li <Meng.Li@windriver.com>
-Cc: imx@lists.linux.dev, linux-watchdog@vger.kernel.org, festevam@gmail.com,
-	kernel@pengutronix.de, s.hauer@pengutronix.de,
-	wim@linux-watchdog.org, linux@roeck-us.net, shawnguo@kernel.org,
-	robh@kernel.org, conor+dt@kernel.org,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [v2 PATCH 2/3] arm64: dts: layerscape: add platform special
- compatible string for watchdog
-Message-ID: <aD2uXSJV9vc0azRi@lizhi-Precision-Tower-5810>
-References: <20250531040213.2589292-1-Meng.Li@windriver.com>
- <20250531040213.2589292-3-Meng.Li@windriver.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250531040213.2589292-3-Meng.Li@windriver.com>
-X-ClientProxiedBy: LO2P123CA0002.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:a6::14) To PAXPR04MB9642.eurprd04.prod.outlook.com
- (2603:10a6:102:240::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03C8023BD1A;
+	Mon,  2 Jun 2025 14:11:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1748873499; cv=none; b=AZPLAyoWNSa3pzmEoWJEWBb4l50hOII+B9AvIKwCiNBe2y/q5cbqtF27mlIoprRQd7TBSHoEZqytwtEqY3/SKXbIRieJVktfLpWh1rG5ARTEPUs5TuMgR4G5imH9gzLnJBHlcXhSxXqqB91+LKHNBvh6BKTiy8R+FysAS0+SGS4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1748873499; c=relaxed/simple;
+	bh=Oqi/dneJGeyGAoSf6jrH1IEST05UFsco/17naRZEefA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=P0LrPhrnwLRpMjvwP9+TcndCY5TTaxYJEy6ZXII8P/Rq2Cq+fRUoXx1kMLfBUBqzxB18vXlB3/ASBElZ5s3u8AHF5jQi7TaohhQ25032OaD0ITvcnf6KH6FPqSGncmMgh+izrJ8WFJH3sWehBfklEVIiEI79FAi8b7u1/h5TelU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E0y9cyjr; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-231e8553248so42062745ad.1;
+        Mon, 02 Jun 2025 07:11:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1748873497; x=1749478297; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=RQuw7/TJU1j7Z0HT/rwULfCMawLOPYNu/pS+8IoIehM=;
+        b=E0y9cyjrFqE5kZOVtO3IbxxEBuWzbKOQVvfXEXPIHyH6jjBL/NSg2EYOR5RU1V/Aea
+         MuuRGtTExKuyru9o9vhz89ocmDXdhaVCtOJEm+2sYM8Q3sRMWJJcJZ1763Grk+pCSBRW
+         3mNJdd+NHseiAkk3VJRAuSdthpa+/ob9K0Fw+Z83SlTRMWOCX/TbFJwfhpwmBgspjfWR
+         U/bBgcVXkKTuuHCOf3KYhGQJhN7d3tw0Jlget6ydRoOXadzW107FIl7GYlcTGrFwzTYn
+         P8PJ/UqE0Ap96hoahsB6jCE+WlB5d2fhuvyOeNIrf8blCR3MHuZHCaleu4jncTIfswD3
+         Hqrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748873497; x=1749478297;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RQuw7/TJU1j7Z0HT/rwULfCMawLOPYNu/pS+8IoIehM=;
+        b=Qj+yCGeNjTiyGGHx7Zd2U0hzceSy6GnhNCvmtzBitIexj9OqocIfPoIW/4P540LEV1
+         KlFHuc/ft8KHEcFmunh+GwUk19MiId+ykVSahVqQlarOodTTkJgQJIrUh53FpA6tR9g1
+         UGl0CDhdT+C/E8xBTLTFI8muPFi5jTJpmZqAlgbHZqgpFCNSYOwr9R5IhvQyFJhNw0kZ
+         HiIoH168NDhmK7CbKLurSkfESSgI7C2JbstGMHccA1dlSfvWGvJmJQ3ldnshqYcMuSOa
+         2834oZurEWRTGzeAZx+chREEEEt+6jcqyYJ9YfFFV8aGFqTGXsYa8RJiHZzqY/I4UWKO
+         r66w==
+X-Forwarded-Encrypted: i=1; AJvYcCWX2Q8DMF8y8tyPKESr9UxwBypW0ynvcLhs3Rl/6suTaiBcwQRRoawm7J0PIO8GhXpww2xZlRk6LtYQx04=@vger.kernel.org, AJvYcCXhgSBZRhNoaWrhbc9eVR4/bCS7yqBXljs22/JC4jXEMYhbP9xmurqHJigyxzfPhbAWkm8f44SHdk/cZKCbbQY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzeustUTIv2ntk+btT/rZqU/l5/p84oX243C8avWSjwBsnlHMAx
+	aOkyDoT+0IekTBBM+BQ+nYBoVQ5UUxE9RTkn+LUuQlHwbIPHzZuzcoPr8dLbqOFo
+X-Gm-Gg: ASbGncvfLgjRWVF2xN4FGdDO/VyWP08WgdwtSafvvVAwdLh4vZrD6VgqSvmr98qzHfO
+	6PEfto5VVX8g+NN0eFt0qNuAD/G9/ysZFJPBixQUQQoY47seO9zTg9zXDfchuVv1LkpGtREb/fQ
+	Ry07j/bjnLoktT+3Oaw1WRHBEiaWLx3/wGmtfB5rGDQ+Eg4DXUXBPLHX5WGkWOGQTc4Ap+kBWwh
+	xXhGs3fmEbCEeDVS6AlrxRSN3W5DoPilAqAR6V3TNTz6RdxkDwyPuHmhGZuXYXguJOwzk5EfuRb
+	yuPfbhygB+qgKa8rVhGpSKgKXXh+4AftsE0G2m1OOfTCbsvD8eCMbvojUzSfiFfklDvzWt+qGMP
+	iLAcclYXxzZwtrgNowwtgOXl/
+X-Google-Smtp-Source: AGHT+IFIMpWcEWdbPQ8RhkKRIxsANnzG7tpSbIsv99Ipr+jjFtQBzgn2lOu/+i10qxUsOx6xQeEHQw==
+X-Received: by 2002:a17:902:cf10:b0:234:aa9a:9e0f with SMTP id d9443c01a7336-235395c1ae0mr144531795ad.23.1748873497127;
+        Mon, 02 Jun 2025 07:11:37 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23506d21df0sm71361925ad.229.2025.06.02.07.11.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Jun 2025 07:11:36 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <e7c1cf7e-b007-49cb-9441-31ecdce3614c@roeck-us.net>
+Date: Mon, 2 Jun 2025 07:11:34 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|VI2PR04MB10761:EE_
-X-MS-Office365-Filtering-Correlation-Id: e265b823-69af-4506-0dfc-08dda1ddc6d2
-X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
- BCL:0;ARA:13230040|1800799024|366016|7416014|376014|52116014|38350700014|7053199007;
-X-Microsoft-Antispam-Message-Info:
- =?us-ascii?Q?pgSWBlKQagjcCnLVaTvJecIie2LKcQl4ehU8Xl8W3V/nqKylAs7jXOZ0DNXi?=
- =?us-ascii?Q?t1zSk715TyKtWNC8wb75JKCrh10YpWICsCrqM2C1dBhsCcJBY7TtKSb0WJ7/?=
- =?us-ascii?Q?AnwVTEjm3lvQCkStq5ABP03TeYWbXvxStaKctz9cYWVL4O+IkRTBvgXp7EeG?=
- =?us-ascii?Q?ZoBoyRahTOyi3+Tp+d73DbN3gB7XWDxqbuuiCp0hOUqbWmjx6Y/4pAi9ij3Z?=
- =?us-ascii?Q?/V6n0gQwLgiIWqSXzh5o7JHnNUv19vbUiXsDHKTdgSfrTqJMswvXAvtsTnOe?=
- =?us-ascii?Q?0SlgurIIsHa5XQqlbMagJJ1LBP9sMIHksZS9ADJtzckuW9EYavbN2WiGXS3C?=
- =?us-ascii?Q?Cu0VMNMxqipcg7/FwiKJYqImKOiiIO50IxOVEXZFxe/b1bkKI3UIbpvABsiN?=
- =?us-ascii?Q?y9euyk5jBCIJsntVSwBCXNkzH9tX8xUovk3Pga9B69FdhV2+m1C7TgFrx1tr?=
- =?us-ascii?Q?Yz3vXiOlWkXGrhK2kMigIe8yIVJs58AXXAHoR+TMDTmf3WsnGE4OKCb6PC6e?=
- =?us-ascii?Q?nB900pfEQ6QJOAIay4fssubZE2d8v8BuBLFnGO0JXSgwtJXweYFwVUTlfr8T?=
- =?us-ascii?Q?y80lE+oQMBYKmNrJWEqXAEXVWl3ek7rjo7J8HY69OuvsTDHM4GhSa+9+2vhK?=
- =?us-ascii?Q?m4R3tOEZsKDsX4Y+bJwiRQhJbMLRNZYw6iCzJab3bYjCGJvw+DDW67S9/MpR?=
- =?us-ascii?Q?Fzq24k2U3QKMcDD7IOl1hDGT+OeHRhMFsozDeBrA+/eFQNxv0P6d9zBrkHWZ?=
- =?us-ascii?Q?TFDeqfaZb4lANH6MDM6r1R6BzLZbnsfEcYyyM94is7G7I5zc4oBNvneJlFls?=
- =?us-ascii?Q?Lwr081GqneLHwAPx6bubtEwbtmgHA/OHCVOHMSDji+DbKhVKhsbJtXBQ8oAQ?=
- =?us-ascii?Q?42EaSYm4rcaoB9eQjATSgnJw9RWwb93F1ByYSwnt/Uly5pUBDQ56wygqlNIr?=
- =?us-ascii?Q?y06P6O5o7UgFVQX4EvLWwAwbGsGbHxDvv1uKwWICSC93FknFeV6ya7MjWxsE?=
- =?us-ascii?Q?bd80L93yi2DoFdbpLM3KNUqOQtNifl/vlf00J/Tu9QQmc3pN5V9LaPJ7O8dX?=
- =?us-ascii?Q?e17/btH4297RcxpsBWQE6wo35tAUv4uCHDL2h4XnTsng76oCorbTwN2EGYJw?=
- =?us-ascii?Q?JcBkVrpXcbrMpa3jcdAhA1gDqrwydysJAJboNY2FPlvRxEudz6+fwTyOCX70?=
- =?us-ascii?Q?pSG/htQjuUayzawLNimD0SRK0QPgfq/xrzs+fo7wPZ1LizPZA2uDD8vUEa+Y?=
- =?us-ascii?Q?WR1zd0aUDcaPcjv2qZVQKRf638i6AGHKFA13XQchRuGoTl84UiVK5nsYWGVy?=
- =?us-ascii?Q?YtVBuzZvRCwoQBE155XIUiKtBjGhVISpF1PI+n1sXWx4tlGkLZKbM5053XIn?=
- =?us-ascii?Q?eNg2XNzkFpqewkXlnQKi6Osv94/yp6aWdMX9jPKgqM+G5amzgfKbcXahgt1P?=
- =?us-ascii?Q?nnvlhByRUt9X61NpGYyodB8gOPXp8gsdaqTG4nBtFL3pdrJbfDs1Mg=3D=3D?=
-X-Forefront-Antispam-Report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(52116014)(38350700014)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
- =?us-ascii?Q?i5J/vjASgxFPDrigaEy7XOPWY6YGnpBR725KwDPx8KTyvCl/TWnbVyx7Upyt?=
- =?us-ascii?Q?heu4FytMaYe6TZ3nmRUaHGzu3H2CYMpQqdm2MVjcbb9YsZPLgyLEDqcJAa+h?=
- =?us-ascii?Q?N5jrV8tKxXar9XzIwRMEhXJzKlJHzhMJxSqBErrBXfjICjpVdlsSDVKiwjxU?=
- =?us-ascii?Q?2J0F8MVripT4zXImlNPTQ7nK6hUU2YD2YbWuJkC4R+l5/MBOb/seth5oh5Vn?=
- =?us-ascii?Q?Dz9gpMuRgw49FpmrUTIhlUUcK7mjIunS460moWzcvfZuS01wWahR/zrR2SL1?=
- =?us-ascii?Q?r25sYFgBZiYBxSx6ohf82Eht3hwNtHwwtIxiS9pLYL8gC5e1r8vi4Y6HXoE0?=
- =?us-ascii?Q?eFlZCi/XeXxf7YFE/gdh//yYwsl5BJDY6GzYOQgaVIcLeGd7C5ki4QoHKL65?=
- =?us-ascii?Q?yT9OiHceUjT7ptES0pLT1Pa/EiHF7X1hmwPINYKEHx7BrvKZVZ8xQxj6PqnE?=
- =?us-ascii?Q?c528TKHuVLDiiICZ49ZnXZAc/KYpI8sMDZemD0NQkMy9naXJgZ25bg0ZWiXj?=
- =?us-ascii?Q?vOKxqXCMzW9ZpSqKCsKV8+a9HD9TsVXeswgQT09pmkh/ATOVoLGsb7FEG9d5?=
- =?us-ascii?Q?DsVwXUP1Wr5Tq9rt1GGWkoMKOOOmtrbAM+xoxDtI0tdr4XGoOmyLzw/+IIdS?=
- =?us-ascii?Q?4PCNuhUrI2txnjPF1mtwZfr/7bqU/e1bHKp0/u3G8m+koxnS6CEu+iwDY5nQ?=
- =?us-ascii?Q?PJq9VMgS3XAq7bCn5oCTChaZfExEAvWtt3l7auVoK3GyTnyCraRMn2JVXUfJ?=
- =?us-ascii?Q?JCA4X6GDnjk6qmEy2I1hvFPNASx5eNuops4ITHz6YBU/U5/jLSNN6USBs8E1?=
- =?us-ascii?Q?9OPGd5nGRt3Eh2UcBbiS7Y3sC2sAl/FEve/ygfylTpcPMWpKA6+ohm65N/0A?=
- =?us-ascii?Q?gJsJ0k0HzbAFdBQVSvVsd1LzOdIf/9TnafUAdAwt4l1zCdOdhE3u+MSIg8W/?=
- =?us-ascii?Q?HphKL1/CcffjA2FwYOPwyqRe4CyYxvzgBVylQQmfWWgKJ9/GeoAtRj+rX54s?=
- =?us-ascii?Q?+osqU8V0g03SBLseSkAM8bq8pVhUDZH5qbTcHNVFY+ScCRepsgV+Fgh7Cmj2?=
- =?us-ascii?Q?N2cCGBdO7JRSlFSWP1BUPZgElbHUZWPMxNbdAj+VxD8AuQKgs0bFom9l5pKD?=
- =?us-ascii?Q?ejX3JN83n4yt4OpktLQCnZ/B/GuM1rR2ang4eVoaE4ISYPDE8lLWqdS7kh4t?=
- =?us-ascii?Q?a7iu3eULF/r+0whpqDwHePaLDfLvNwTtZ9zI1JmlTMfOksZ248I1TuPUF5BE?=
- =?us-ascii?Q?ZsJANVdXLoUfHD/HzKCVD6TQLKlstDZjwYqkVYZd0ZRBB8Xynd61GUsWTCsF?=
- =?us-ascii?Q?6X2qhn20iu9zHn3zHWYOdAmFoZnddQyehmyEWvb5GrItwI1ffhySsm2HglKi?=
- =?us-ascii?Q?x4ZptZ1h1H+BEebuQuvvGdLkorj3ZQuFAVptoisksVK6u3RkWeajmxEoLFaf?=
- =?us-ascii?Q?dO0Q3Lv8nm/5Kk0NPjYU8j0ZNFtCDOxhAR05zwYrY4obXcd8QFhzfxWE/uDV?=
- =?us-ascii?Q?1hWEaJUUhK8IA0A5tz7KhTtadXC8jKg1ExekWXtyMi+p0am9EU3skhS8jjOu?=
- =?us-ascii?Q?n4mTblSaQeNUC5BgPmvVGpCjf92kbRmHOrQnqsfE?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e265b823-69af-4506-0dfc-08dda1ddc6d2
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2025 14:00:05.8198
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kAau1zJ4tAgQo6YGYAchQiXNVaEkNPiANHZzGrQ0+xgmr4pqnlhMzQeacxA+xSWCOLClkdSJ8MZucZlRQjx+lw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI2PR04MB10761
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/3] watchdog: ziirave_wdt: check record length in
+ ziirave_firm_verify()
+To: Dan Carpenter <dan.carpenter@linaro.org>,
+ Enric Balletbo i Serra <eballetbo@kernel.org>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
+ linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1748463049.git.dan.carpenter@linaro.org>
+ <3b58b453f0faa8b968c90523f52c11908b56c346.1748463049.git.dan.carpenter@linaro.org>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <3b58b453f0faa8b968c90523f52c11908b56c346.1748463049.git.dan.carpenter@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sat, May 31, 2025 at 12:02:12PM +0800, Meng Li wrote:
-> Add "fsl,ls1046a-wdt" compatible string for watchdog node, and it will
-> be added into fsl-imx-wdt.yaml in next patch.
+On 5/28/25 13:22, Dan Carpenter wrote:
+> The "rec->len" value comes from the firmware.  We generally do
+> trust firmware, but it's always better to double check.  If
+> the length value is too large it would lead to memory corruption
+> when we set "data[i] = ret;"
+> 
+> Fixes: 217209db0204 ("watchdog: ziirave_wdt: Add support to upload the firmware.")
+> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
 
-This patch should merge to first one. And move binding doc patch to first
-one.
+Reviewed-by: Guenetr Roeck <linux@roeck-us.net>
 
-Frank
->
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Meng Li <Meng.Li@windriver.com>
 > ---
->  arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi
-> index d1c64d97bccd..983b2f0e8797 100644
-> --- a/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi
-> @@ -687,7 +687,7 @@ lpuart5: serial@29a0000 {
->  		};
->
->  		wdog0: watchdog@2ad0000 {
-> -			compatible = "fsl,imx21-wdt";
-> +			compatible = "fsl,ls1046a-wdt", "fsl,imx21-wdt";
->  			reg = <0x0 0x2ad0000 0x0 0x10000>;
->  			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
->  			clocks = <&clockgen QORIQ_CLK_PLATFORM_PLL
-> --
-> 2.34.1
->
+>   drivers/watchdog/ziirave_wdt.c | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/watchdog/ziirave_wdt.c b/drivers/watchdog/ziirave_wdt.c
+> index fcc1ba02e75b..5c6e3fa001d8 100644
+> --- a/drivers/watchdog/ziirave_wdt.c
+> +++ b/drivers/watchdog/ziirave_wdt.c
+> @@ -302,6 +302,9 @@ static int ziirave_firm_verify(struct watchdog_device *wdd,
+>   		const u16 len = be16_to_cpu(rec->len);
+>   		const u32 addr = be32_to_cpu(rec->addr);
+>   
+> +		if (len > sizeof(data))
+> +			return -EINVAL;
+> +
+>   		if (ziirave_firm_addr_readonly(addr))
+>   			continue;
+>   
+
 
