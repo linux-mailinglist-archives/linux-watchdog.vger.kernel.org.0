@@ -1,46 +1,45 @@
-Return-Path: <linux-watchdog+bounces-3630-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3631-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 105D6ACDD19
-	for <lists+linux-watchdog@lfdr.de>; Wed,  4 Jun 2025 13:51:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E905ACDD25
+	for <lists+linux-watchdog@lfdr.de>; Wed,  4 Jun 2025 13:51:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 791F318999E5
-	for <lists+linux-watchdog@lfdr.de>; Wed,  4 Jun 2025 11:51:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC03118997DC
+	for <lists+linux-watchdog@lfdr.de>; Wed,  4 Jun 2025 11:51:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 798E828E610;
-	Wed,  4 Jun 2025 11:50:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3388628F507;
+	Wed,  4 Jun 2025 11:50:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mSirCvAI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LOcSMxtX"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EABB24C664;
-	Wed,  4 Jun 2025 11:50:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09F6624C664;
+	Wed,  4 Jun 2025 11:50:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749037827; cv=none; b=eT3aEiwUO1dZ3ygMFTca+iQV7tP8YVsvHnF0Wzx6x9+VLdohpuxEaCplFEom/7GoaNGMIAZq4YRZ7yufVxe1NOiW5YvhTKeqS1nJw7HtSW8NL4frj7cX8OJFQjPdPjVNeALOi6Y13p1eFzI9Ab6LQgNALHncoFsH7UHIrgukZ8I=
+	t=1749037836; cv=none; b=X4HyfqfZFaxvM3mYP9Wx7/T0iteqLWl02Y5q3Gcoe0DdAw4DGx0aDRqrpfBY7o6PS3wx8I4xp+DMLQQmjozGimeexsBDoj5vli32ZPIJolpwf86W4CnSWujY7Q2HNoWjvWt+fUX7n47FAKw91fAwJux2u7Ltpu9v4dkwMkBjb6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749037827; c=relaxed/simple;
+	s=arc-20240116; t=1749037836; c=relaxed/simple;
 	bh=jdLZNyKBGTaIn+P61jqDvBxt+dL2n7upkzPJoXZZ2JQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KxIui7ylj0TylT4iK9BNbQ8ay7jEcYOZHFq4R6uowJYZX9KOv0gcBWai4cCZcJ1Bk7NKspQrR/vpko96PCahj4EK5o1DPMGxCim4lCnzupkQml+dSGITPhFVxCqRDRvIyHdJshWr+Gx1NPL6Mf4gGEV5Tj94qVMvn+GHkE0/hIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mSirCvAI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D23F5C4CEEF;
-	Wed,  4 Jun 2025 11:50:25 +0000 (UTC)
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=hk/xWBPFgJV2tPq3nzFhMlw2A0uWIPvpXkEI/DLdddJ7BlbeVLqPffeR8zKUD87zGhnVPhgfCt4FDj33wzxueqPY5xhvQlHwSHtmcCjG9Vn/FAgA77XM1OTgM8Sid9dKZa2G9CaRl/YQ4Zyykb5GrOuYmUpr2RElR0QSAvOLC54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LOcSMxtX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 912D9C4CEE7;
+	Wed,  4 Jun 2025 11:50:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749037826;
+	s=k20201202; t=1749037835;
 	bh=jdLZNyKBGTaIn+P61jqDvBxt+dL2n7upkzPJoXZZ2JQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mSirCvAI7fOD3yAH93liIqjZ/MhTL2XFNAokkjuRuVliNu8pegvvjlH7/eAyHHUEc
-	 iY1DBwcardqtR1cjTqGHiT4H9lrB4ipBPJp2vrKPMuf6SYzpW1V7b32hevUM3xLnde
-	 AxvTnQBB7y8L/yKM0Tq+X2HuD7Fs/LJXNgyL9WQaj17XjUSwUUA5UI73Wtu6F8oflB
-	 rJ4LtEyH8mrdlD0OoLiPUyEv6rL6RjzsSgHJcAXm0lcFpc6O8lXiBJSKoofpV31LqN
-	 QDHpYqVw/u5mdCfTJrAx4lJxd/Rr/7RzAx9N31uFVhQ2KFy8fPovunU/TC7ziIXEoe
-	 a9Xg5Vy+G9qKg==
+	h=From:To:Cc:Subject:Date:From;
+	b=LOcSMxtXbMGnGDng/2QAdDAyHm/tbj//15zcuJ0YezGvZtJL/5zLTWcA2IICgWtv3
+	 PTcmy16ZLT/cE9ubhcKtf4R3irK9KNwGXidtNMBLmGtlYdjIIq9xwjuDrMy+L0naRO
+	 07KRe1xGrdZUcsQ5wq5YM8VbllWPYLWPY/id/yml2JhpOF2OZgGkajH1IauvvnbvXV
+	 Min10ShNyqzFNObVHZjCzZ0tbzxthRCQDDpDO2DwndqmUO+RF6uESHxVLKZZlMiMLs
+	 r6fpyz/wXuFNMPH+3Qss0KISFgpVnjUdsRJXIZafrkKJ8S3FEsLqFTJePivv0jtM/D
+	 iZqO8BCILqWxQ==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
@@ -50,12 +49,10 @@ Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
 	Sasha Levin <sashal@kernel.org>,
 	support.opensource@diasemi.com,
 	linux-watchdog@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 2/6] watchdog: da9052_wdt: respect TWDMIN
-Date: Wed,  4 Jun 2025 07:50:17 -0400
-Message-Id: <20250604115022.209346-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 1/5] watchdog: da9052_wdt: respect TWDMIN
+Date: Wed,  4 Jun 2025 07:50:29 -0400
+Message-Id: <20250604115033.209492-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250604115022.209346-1-sashal@kernel.org>
-References: <20250604115022.209346-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -64,7 +61,7 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.140
+X-stable-base: Linux 5.15.184
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
