@@ -1,46 +1,46 @@
-Return-Path: <linux-watchdog+bounces-3629-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3630-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEE94ACDD0F
-	for <lists+linux-watchdog@lfdr.de>; Wed,  4 Jun 2025 13:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 105D6ACDD19
+	for <lists+linux-watchdog@lfdr.de>; Wed,  4 Jun 2025 13:51:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0FD80189971E
-	for <lists+linux-watchdog@lfdr.de>; Wed,  4 Jun 2025 11:50:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 791F318999E5
+	for <lists+linux-watchdog@lfdr.de>; Wed,  4 Jun 2025 11:51:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9291128ECE0;
-	Wed,  4 Jun 2025 11:50:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 798E828E610;
+	Wed,  4 Jun 2025 11:50:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NlhNf6vF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mSirCvAI"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 692C123A562;
-	Wed,  4 Jun 2025 11:50:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EABB24C664;
+	Wed,  4 Jun 2025 11:50:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749037815; cv=none; b=i2UAeeVPARp2avlXDODiu++J5P3OGGTfQavd9TAkysjUgLPHKRjY+7XPaTl6Mk7Yob5G+hWI3aBo7QzZnyAgv3+H0tD4J5rOuqYWC3WAy6vDyJ2QQdgKljKmij72Kk2a8UzTThPHJqt/tT5et260TzJvfL5e2oxYSejRelQtNgA=
+	t=1749037827; cv=none; b=eT3aEiwUO1dZ3ygMFTca+iQV7tP8YVsvHnF0Wzx6x9+VLdohpuxEaCplFEom/7GoaNGMIAZq4YRZ7yufVxe1NOiW5YvhTKeqS1nJw7HtSW8NL4frj7cX8OJFQjPdPjVNeALOi6Y13p1eFzI9Ab6LQgNALHncoFsH7UHIrgukZ8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749037815; c=relaxed/simple;
+	s=arc-20240116; t=1749037827; c=relaxed/simple;
 	bh=jdLZNyKBGTaIn+P61jqDvBxt+dL2n7upkzPJoXZZ2JQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PREvLLvvABPgMAX0Z5iu25gDbTMvmOH8p1Ol9JXHNmBdfuB9rE1QkwPY4Syx/nBu7SJZamkRw6Yiscf9gUkKSq3liTFS6NR0/xShvUN15K9njM7fX02IUJKiDOvM1RuyhPiXD2Ak18ULVgLZms1FxXYPeJcRgEq0a0ZZegN5uEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NlhNf6vF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EBFEC4CEF0;
-	Wed,  4 Jun 2025 11:50:14 +0000 (UTC)
+	 MIME-Version:Content-Type; b=KxIui7ylj0TylT4iK9BNbQ8ay7jEcYOZHFq4R6uowJYZX9KOv0gcBWai4cCZcJ1Bk7NKspQrR/vpko96PCahj4EK5o1DPMGxCim4lCnzupkQml+dSGITPhFVxCqRDRvIyHdJshWr+Gx1NPL6Mf4gGEV5Tj94qVMvn+GHkE0/hIY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mSirCvAI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D23F5C4CEEF;
+	Wed,  4 Jun 2025 11:50:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749037815;
+	s=k20201202; t=1749037826;
 	bh=jdLZNyKBGTaIn+P61jqDvBxt+dL2n7upkzPJoXZZ2JQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NlhNf6vF98uAGScwCpBqQXFAtKGoIUHjrR7zJyaDtL7QWGsTtjzI52t+yla5sJmzJ
-	 PG9NzMNGmEkYMpo2JPSx3R8AxhAUs48R1VPpXZ04yL9LP8zLZsfjago4hOWNtsVa4G
-	 qHRLecwrujsY5niliwtPzdjnnpfJg+/tptbmn9fgbIzq02AJ1Yo6TgmYk6hHir9Pz/
-	 cqKfEwKEBlOvcwsK+tZVHvJuIqeM/nliOp/Os4R0UKgvw8EDdTZ+msDBTJtO2IW/51
-	 pPpUBov+z9KcedNfippCTerCRuvhRnQh/7qhkSC0Ul2bB6etuJo8pDT7FgeiXOfP0T
-	 ararW/yDBkjvA==
+	b=mSirCvAI7fOD3yAH93liIqjZ/MhTL2XFNAokkjuRuVliNu8pegvvjlH7/eAyHHUEc
+	 iY1DBwcardqtR1cjTqGHiT4H9lrB4ipBPJp2vrKPMuf6SYzpW1V7b32hevUM3xLnde
+	 AxvTnQBB7y8L/yKM0Tq+X2HuD7Fs/LJXNgyL9WQaj17XjUSwUUA5UI73Wtu6F8oflB
+	 rJ4LtEyH8mrdlD0OoLiPUyEv6rL6RjzsSgHJcAXm0lcFpc6O8lXiBJSKoofpV31LqN
+	 QDHpYqVw/u5mdCfTJrAx4lJxd/Rr/7RzAx9N31uFVhQ2KFy8fPovunU/TC7ziIXEoe
+	 a9Xg5Vy+G9qKg==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
@@ -50,12 +50,12 @@ Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
 	Sasha Levin <sashal@kernel.org>,
 	support.opensource@diasemi.com,
 	linux-watchdog@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 2/6] watchdog: da9052_wdt: respect TWDMIN
-Date: Wed,  4 Jun 2025 07:50:06 -0400
-Message-Id: <20250604115011.209189-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 2/6] watchdog: da9052_wdt: respect TWDMIN
+Date: Wed,  4 Jun 2025 07:50:17 -0400
+Message-Id: <20250604115022.209346-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250604115011.209189-1-sashal@kernel.org>
-References: <20250604115011.209189-1-sashal@kernel.org>
+In-Reply-To: <20250604115022.209346-1-sashal@kernel.org>
+References: <20250604115022.209346-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -64,7 +64,7 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.92
+X-stable-base: Linux 6.1.140
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
