@@ -1,74 +1,74 @@
-Return-Path: <linux-watchdog+bounces-3655-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3656-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 579A7AD3F1B
-	for <lists+linux-watchdog@lfdr.de>; Tue, 10 Jun 2025 18:37:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00A37AD4190
+	for <lists+linux-watchdog@lfdr.de>; Tue, 10 Jun 2025 20:04:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F7A9189FD00
-	for <lists+linux-watchdog@lfdr.de>; Tue, 10 Jun 2025 16:37:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59E8A3A7DF2
+	for <lists+linux-watchdog@lfdr.de>; Tue, 10 Jun 2025 18:03:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00ED923C50E;
-	Tue, 10 Jun 2025 16:37:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15094245035;
+	Tue, 10 Jun 2025 18:03:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aWi+CfLE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GOUNcMY6"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD39223F43C;
-	Tue, 10 Jun 2025 16:37:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D277224502D;
+	Tue, 10 Jun 2025 18:03:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749573420; cv=none; b=mG4Z0CJVi+hR2W6TWOo2bxhhSWmkj4c+sZsguTNAGxBoQVEaWCI/DrBE8yPw1rkklVpjOxwfERvMJZlaL0Zajo8mAnjV0Vm9jfukk8dVitEEh2lz573Pdz9WaaGAKCKC/RowuXmYoiDmVxbzYGF1oM/Adq0erV1yVFr9wJ4Kl1k=
+	t=1749578631; cv=none; b=Osk/EyPU/PxPWQYwbliHJo4vNV9sn6rr4Lrdr/LTNDLKedta83rS4f4Bw4vpANnGhhrS1LUvmtdbzArhKNVPapRSKbZnoFmTOeMHhiGsP5mISfudVRocyuuKwGwFFM4He9CkXy4Qy3NOTWEiBpxm3jY0hpOnTlbVTBgBj00BpBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749573420; c=relaxed/simple;
-	bh=f1HEWtcz6cLIilhmgH3TVGeQxptqphtKL7MZkz99ysQ=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=O3oEWFQXoFLCqjZGsdWMBbtPFPZWle5vv+hZMhs/B3JR/C6zm8Ik2/xRfIF2WC54phuDbGllgfwYDy81biBaH8YWygv9BEFH9VwR1SFTnrax3LaZzIFS8clDdEk1KgjsF1mVCiNk8HcFZL+QipWhno8Ffoor0S5Ay/JGYUOFBFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aWi+CfLE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D6F4C4CEF0;
-	Tue, 10 Jun 2025 16:36:57 +0000 (UTC)
+	s=arc-20240116; t=1749578631; c=relaxed/simple;
+	bh=0FXesdT16ll5VQqpd28F2AInYnlkgcAfr92ynhKJufg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sfzJ4dVs/i7ob1DwFJRLPmlSNQ4SxAwqBqF2DE7gU9TJfOyz3Oa36mwrrSNFhCnzr7j9UjXYzkwHTwXtIVKou5QuzCTYGF3GsTMdDm+CKdOZf9GFxhWUbg9z8YXli/KWdpTxNkLepNXIUahyQ3aEqDFGRhLb1i5AObyso8mhfHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GOUNcMY6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62CD5C4CEED;
+	Tue, 10 Jun 2025 18:03:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749573420;
-	bh=f1HEWtcz6cLIilhmgH3TVGeQxptqphtKL7MZkz99ysQ=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=aWi+CfLEl5K5iNCqoCBYZ5KWDHWKGDC15Uk9VS0+Wggag8I11yDf9Xv39rdFvn560
-	 iFrCQjibCbkoA2nVRbKOGBnRBNBhrFqCXtlVEIpxkZbTkD7Hd8jx55wHMOq8gn8rxy
-	 w33Ih6YvNOD0TR7VjqO8/tAyRbY3oLmHHScycbMCxq0a0+Elp7CwfbEOJPO2MtjOCi
-	 bE35bz0YpPgmaxTHc9XEy/Udj/RZz3T32tjWycw2B5MSFWE3jof5NHfbhbVQw8QgPy
-	 BlX2egkHoeLgOuGBHocVv7Pk/ZAHzinGdbhNzomrLS1ktfbzOPoW4JvWZ/xsURYTgv
-	 n0J2Fkblo95MA==
-Date: Tue, 10 Jun 2025 11:36:53 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20201202; t=1749578630;
+	bh=0FXesdT16ll5VQqpd28F2AInYnlkgcAfr92ynhKJufg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GOUNcMY6omd0mtCJhwQ42RVrLJ2AJQcHKKDp9J+zSDTTqhTq+2TJI/ikHULQuSgee
+	 ExXK296xCTqwclHLkF56pS41NW3G+ph1ytOfJJXcMs/JZofmtIuxKwfhxS316Psc3V
+	 rAMwzl0x4/3KUs9VhNbhiIRwC8jBnSnDPWHk2blS2Limqp+3Hg3CNkIRe0a9qXsJyt
+	 pGtYmIrx1YLwoa825lK4JvnnrQCImI4TkePAw7e3ovdMHLv1BaetfG7WDnqTpTCIIX
+	 EDKe3s3OmIiXf6YL4GM+KO1UF5qJyMDtUlniKMGU08kcNRwyh+kNJFOwyoZgbrcfQT
+	 2WNOopJyqgvLQ==
+Date: Tue, 10 Jun 2025 13:03:45 -0500
+From: Rob Herring <robh@kernel.org>
+To: Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rajendra Nayak <quic_rjendra@quicinc.com>,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH v5 3/5] dt-bindings: watchdog: qcom-wdt: Document sram
+ property
+Message-ID: <20250610180345.GA2382213-robh@kernel.org>
+References: <20250610-wdt_reset_reason-v5-0-2d2835160ab5@oss.qualcomm.com>
+ <20250610-wdt_reset_reason-v5-3-2d2835160ab5@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Conor Dooley <conor+dt@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Wim Van Sebroeck <wim@linux-watchdog.org>, 
- Rajendra Nayak <quic_rjendra@quicinc.com>, linux-watchdog@vger.kernel.org, 
- linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
- Guenter Roeck <linux@roeck-us.net>, linux-kernel@vger.kernel.org, 
- Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konradybcio@kernel.org>
-To: Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <20250610-wdt_reset_reason-v5-3-2d2835160ab5@oss.qualcomm.com>
-References: <20250610-wdt_reset_reason-v5-0-2d2835160ab5@oss.qualcomm.com>
- <20250610-wdt_reset_reason-v5-3-2d2835160ab5@oss.qualcomm.com>
-Message-Id: <174957341305.1838109.10293724531904351374.robh@kernel.org>
-Subject: Re: [PATCH v5 3/5] dt-bindings: watchdog: qcom-wdt: Document sram
- property
 
-
-On Tue, 10 Jun 2025 19:15:19 +0530, Kathiravan Thirumoorthy wrote:
+On Tue, Jun 10, 2025 at 07:15:19PM +0530, Kathiravan Thirumoorthy wrote:
 > Document the "sram" property for the watchdog device on Qualcomm
 > IPQ platforms. Use this property to extract the restart reason from
 > IMEM, which is updated by XBL. Populate the watchdog's bootstatus sysFS
@@ -88,30 +88,28 @@ On Tue, 10 Jun 2025 19:15:19 +0530, Kathiravan Thirumoorthy wrote:
 >  .../devicetree/bindings/watchdog/qcom-wdt.yaml       | 20 ++++++++++++++++++++
 >  1 file changed, 20 insertions(+)
 > 
+> diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> index 49e2b807db0bc9d3edfc93ec41ad0df0b74ed032..74a09c391fd8e2befeac07f254ea16d0ca362248 100644
+> --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> @@ -81,6 +81,16 @@ properties:
+>      minItems: 1
+>      maxItems: 5
+>  
+> +  sram:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    description:
+> +      phandle to the IMEM syscon node that exposes the system restart reason
+> +    items:
+> +      - items:
+> +          - description: phandle of IMEM syscon
+> +          - description: offset of restart reason region
+> +          - description: value indicate that the watchdog timeout has occurred
 
-My bot found errors running 'make dt_binding_check' on your patch:
+A 'sram' property points to an SRAM region (see mmio-sram binding), not 
+a syscon and offset. 
 
-yamllint warnings/errors:
+The 'value' should be a separate property or implied by the compatible.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/dma/stericsson,dma40.example.dtb: dma-controller@801c0000 (stericsson,db8500-dma40): sram:0: [4294967295, 4294967295] is too long
-	from schema $id: http://devicetree.org/schemas/dma/stericsson,dma40.yaml#
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20250610-wdt_reset_reason-v5-3-2d2835160ab5@oss.qualcomm.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+Rob
 
