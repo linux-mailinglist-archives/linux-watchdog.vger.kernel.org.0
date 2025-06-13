@@ -1,204 +1,189 @@
-Return-Path: <linux-watchdog+bounces-3662-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3663-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB5ACAD8D10
-	for <lists+linux-watchdog@lfdr.de>; Fri, 13 Jun 2025 15:24:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6753AAD90D6
+	for <lists+linux-watchdog@lfdr.de>; Fri, 13 Jun 2025 17:09:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6D7A2189C5A2
-	for <lists+linux-watchdog@lfdr.de>; Fri, 13 Jun 2025 13:25:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D7761E37E7
+	for <lists+linux-watchdog@lfdr.de>; Fri, 13 Jun 2025 15:09:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A647214EC62;
-	Fri, 13 Jun 2025 13:24:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12B9F1E1DE7;
+	Fri, 13 Jun 2025 15:09:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KsCjCcCi"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ACT9Ctvy"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1F0B1E50E;
-	Fri, 13 Jun 2025 13:24:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A5EC1A5BBD;
+	Fri, 13 Jun 2025 15:09:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749821085; cv=none; b=TRy6j/zdNKc0ymd02hEN9tCwSWTus0pWwHmG6/M9G8aIETAMF8WUQZnul2riIm5NfzvaHUTuRwd+yZOSZiLXgNuXVmDpGh+TuZ7BbMkx7+qjKt9CnrNhwW/iiYK5YzH7McPJED/K24oBUHFBKjT0k/UZOK8Ycpj/hV8c3F9TZbo=
+	t=1749827380; cv=none; b=jlqr1y34+kAX4poxkZHPDI7eUYY7sQqXxtmswshQBlrppz4962D2ckys8wIqhKHuYT7C5IBMRf7cNFmhzIpzk9rYAuC9JHRpiH33NavR5mY++ErdWFv/vEJKD5lGI4mKYxggGwt3JdqDxrNWLqBt4FitEoiDKZG8Ksbv9li7hB8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749821085; c=relaxed/simple;
-	bh=tOkVEKEMXNclCaMtag04qkqt+z54h+ZwBX10cOKCP8A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W8RRnAvFzT0u8qrNCK42QX0vwe0UIHjVoIeCpAkmnSQOGb6F8YkAFGQ8EfK6GDZqN/v1l1vdR+RTZtM0f/zZxqqJM4i0KZqng/hoYCND5CCrpGUe3usVMl2yin1dor42sHDVUc+0asc+ihX7Gbh+hgm5hbFHX+2Fpm8cAU5eImo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KsCjCcCi; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1749827380; c=relaxed/simple;
+	bh=z/B4crK4//VWrh72iGUgU3FOvjCigqNKpzaJajGP9V8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tMYiq0Znnj1aTgvu2o3JOU+xMD+I6OKGAF/DWO61PoGOQ7Ovmhtn0pgZfGZuc9PBq9gmmKFGwVxqGsRoCEWTogvmOnUI7vnX7OqtOLJuFlOIwfKsreECOWWLfFjoYC7xBFSIie1Xr8wzL+f5uxNMqCef97QFnYEYH+yLdYNBqH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ACT9Ctvy; arc=none smtp.client-ip=209.85.128.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-313a001d781so1936564a91.3;
-        Fri, 13 Jun 2025 06:24:43 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-70e40e3f316so16288647b3.0;
+        Fri, 13 Jun 2025 08:09:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749821083; x=1750425883; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BP1QV4sUieItyspzf8jXfbznQKvpoMI7baHkbF85A7k=;
-        b=KsCjCcCiuBn9vBek5VNopz2n7N9UA4FcIFwB9EedMxeCS5+Ly5oFXR+hCKyCUlgBMU
-         lUDc/nidCO8Wz8ejRG6g7SGSsCgLL544fORFdMmlEOkTwRkPxHJPFXZbVL1C1STMgyMV
-         UPt3//U5Oe9rJN/8N6qbwJZlLovO9KN3HEUrxVsjBzxYTjvZEC07Cw08O4h62P948q6J
-         BBW8qqGDr+5lHuORzLHbUudBA3lXrbsTWZTacyReOQ9zQYhXsUNWZQt6lJ8KEB4kviHN
-         dvUCoG1JS0tScc4RG3Ku/N7N9j5QajunmK+Ck31DB7Uj27h8dRELbB+t15j+b6hUM3GQ
-         Q4Gg==
+        d=gmail.com; s=20230601; t=1749827378; x=1750432178; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XWqMgx2TvmM3ycijogqU+1oUaN+kSDJ1tpwyXgBX/1Q=;
+        b=ACT9CtvyPK9T8l9/nDC5wx19mATVqkBZitaPQ7wNcq2THXMTzIiDwGztTvnHomh2R4
+         C3Xsg4DgQmnv7RrLOoXUYjvmHXZx/Hj90CltaogJwPSrwpC5s/JRNwTSTqflRuBCX+EW
+         7MCcFb3uIaV5iCPTAVIFoPaV2oD7qpavVKYp/Aht5XDHrRhCLzs88Sb3+sCT+mD+wTqB
+         FKGNqDvWZfUFVBni35ikQvo8PTftCglZ6DM1xYWHuMNg0JwlDwlINytv5T5J4cZQLMwc
+         0NHXY2Z7H+z4Z9cjAXzu23urFbazHLssp2RbgFMbmExFcBEx8OBROAkX7sn54+rAjAd3
+         vA1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749821083; x=1750425883;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1749827378; x=1750432178;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BP1QV4sUieItyspzf8jXfbznQKvpoMI7baHkbF85A7k=;
-        b=t6gzvpNuIEN6m6QNJ5SOby7IjCY3R0/OzhaGvNDXNQgfd/WWO1vGe4jqIGgVJtto5x
-         Ps5voZO+3Btx10nHUN+iMApwuLyX4qBE5IzEqz5wgdrWIi4j6JVgZu6UKqZoRcQW/LAs
-         DRXefoapNEcXMnzN8hYCMas8W8Hk18Ta6077Esu+0HecwiPLeM2zCcV6HLawEWFAvuls
-         8xBnXU+eIzfhye2JYnnkFB0FM2JTsnSSTb5qgXQpKauk1qZfmQkgQEcwA9LBxS/2GAgK
-         oEo73HAlNcZbom8bsTb0HPEl0Wy9omnWtQ/Qs9cHjDFhqGaFkp1pQTRyFa6tHARIvgwt
-         FBEg==
-X-Forwarded-Encrypted: i=1; AJvYcCUmJmvNHdno4zZEVhEj5wh+Na9BiOoL+ed/zZCM4y42rt4paKyVfkqh1YTtz3qQqrfn0AJpgX9bT+vwBjHqIrw=@vger.kernel.org, AJvYcCXNZLRTrUO+SwMDpW+4HRoJTx5IvXBHAUNuvzHT3Dqip8ZNlKgdFVtH9hxKHvUWl2odpNg8A2mSHj5BjPM=@vger.kernel.org, AJvYcCXuqxhXwiMfeZx97g+SC1+a0skoWoXh0QjKJp+UH8ikzUbstLjtzV2qSHYvCwrHt/Wc3z4Gq+gCXXAl6II=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxwIH6eKArsM8fIMuifIzOws3uKc85AJOwWjkhbh3uzcZGn95Ls
-	SKJnciFLRBhwmmDlfaGPYgqqAEO/UBdsKlYuRZRbjKTBZIg+wnG6ZWP7yw/0p1X/
-X-Gm-Gg: ASbGnctI1l+ygpBCwtugh6ImwxuKsVbDThAsJGzEhPdzQ0QTDmsnmctTQw3nmB0n49o
-	eDqFnij05s7YoedJRDm4JIDjlIEaTfsUVCV0dqbqIpA3/9gyor2oMh6PutwwokUSFuXo7uyq6q6
-	btL8Xen+sKMJE5ttRAtk2SNljdOsFHiCryr0ch2o7XAhh29eFYNBS0bMXaEPgij6DkIFIIsk1OT
-	bZ0BOyJyvvD2A7HyyO9vYvXQcjV+HOEUOKSL2eB7rYP7mVzmr5OqsrF1WVVpoqdfsWzZjevatKM
-	+zxC+ozultyvR/0lxzvlDBnLrTjsRwzKDpX2Q30uAYMXRD8yGIvx9QIyjoo1olzUn8cx9Xzq9Us
-	=
-X-Google-Smtp-Source: AGHT+IGekiRSBJ+kbms44njHRzdmd7Q8ixErbibo4Dnrs3p9LH0tWKgyorpHc60qghBSU+Ldv9EaMA==
-X-Received: by 2002:a17:90b:38c7:b0:313:283e:e881 with SMTP id 98e67ed59e1d1-313d9d797c6mr4835640a91.11.1749821082701;
-        Fri, 13 Jun 2025 06:24:42 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2365de781dfsm13807225ad.131.2025.06.13.06.24.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jun 2025 06:24:42 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 13 Jun 2025 06:24:40 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Robert Lin <robelin@nvidia.com>
-Cc: thierry.reding@gmail.com, daniel.lezcano@linaro.org,
-	jonathanh@nvidia.com, tglx@linutronix.de, pohsuns@nvidia.com,
-	linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-	sumitg@nvidia.com, linux-watchdog@vger.kernel.org,
-	wim@linux-watchdog.org
-Subject: Re: [PATCH v8 1/3] clocksource/drivers/timer-tegra186: add
- WDIOC_GETTIMELEFT support
-Message-ID: <5c5ba239-f8e4-43b5-ab58-b3850c57d74b@roeck-us.net>
-References: <20250507044311.3751033-1-robelin@nvidia.com>
- <20250507044311.3751033-2-robelin@nvidia.com>
+        bh=XWqMgx2TvmM3ycijogqU+1oUaN+kSDJ1tpwyXgBX/1Q=;
+        b=rWm76/jfrIRtPPXBkEZBD7kirhG+xMRk6X7EcgZ3CFqgbRliFy6e4zNaPrG4pgmlqe
+         hPz4ql4wJSHueGsrSUTPt9/QEnrJddVuPqt536qSIQIk9enU8C1XQhnSt+cSqFQkhtUg
+         BsSFCT19fCw3i2DNpFVcQN5gDa1youf7kLsE/zVb3KimUWYqmngGdz4UrrwmL/NOUQtS
+         zJ2E2xWuGqzopL2zgDHX9YL3NmbCaz0R+8eq4tChU6sGjVw5aYQnhkGnFu14/wmmBnMx
+         9T7aQtqvzA71QPeOGRj/NuWiJcm9hsDgMC0o0lXlOs4uw21To+Q62SYPe+2uhAUbJPhp
+         3dyw==
+X-Forwarded-Encrypted: i=1; AJvYcCU0vnZonVlXO0LHRC6jSz6gYNPqGQytcqrQag2YLBVjclKJuLtPalr+7tDnqgRx1CmQ9cAAfpRpPgyMIA==@vger.kernel.org, AJvYcCUXkFGRSAxO53rVNUZzBO7sIY2qdoy15mt2RQ+bimQMhty4ByqVm2PPPG0N+aZftLWEyxEkknWosl3H/got@vger.kernel.org, AJvYcCUc5Fom9C5tBBdpqR61OYMLqQOqHe+fO2uyPDdHYs8oH3d+liyJp0uLbH5LH/MSTTN1TYTX2jeJwdDtQ7IWGng=@vger.kernel.org, AJvYcCUy6CZH/EzPRXqrLnmwZcURtknqByoNv5gSQ8PvM6ZOM9qH6TuSJUsZzAN80EsTW820db+EDUYy@vger.kernel.org, AJvYcCV2Iv0hjLoVizO4MRuHJ4Lq+DmOL3TLUNaR50K7qRsaqrw44p6hgK5fzcguS2+twUIhoOvb2K8+Gjgf@vger.kernel.org, AJvYcCVdKWgyJY0a8vj68k+NZ+UxCIU0KhZ5MjtFcLStV3Z5hRmONl3QMJ/+M8kk0f6zEzS2w2pt8Waw78M=@vger.kernel.org, AJvYcCXZ8/u9MRKgeh8+RgHjqMFJ1Z242R6eevyM0K8Sg9cpdD+c9rJdZGU04PYonCERdESKqEnw1vOKwYlAvuo=@vger.kernel.org, AJvYcCXc0ZAJxm08X16nAJUFlr0XiZJj4iDskQhX2ax48z4NLNZ0dnw3bd8SS2zxWId+LyCEe7JdiYoxATgA@vger.kernel.org, AJvYcCXoUuvAPGfwwRCfMdLHfmF1QC1xNpmC2RznnRwfW3aQ6IXfg+Is4+WX/OI2GXHdzo+no0mhbJb/ei6Y@vger.kernel.org
+X-Gm-Message-State: AOJu0YzfOsNHNGxfAUJhpnBkDUcsUiuW3V7YXy9emSKLzhM1Eoh4zmGk
+	aPzFbrFOc8kh+eu7RHv0Wyzz0ssBFP4mVgu5efh5y18SAZzZpNvaL8udlWbnNO+x5UqY43UGRJh
+	dHomxiI4LXHx5T0k3Uqby5Qc/C07HkqE=
+X-Gm-Gg: ASbGncvvjw2N2zsZL9ipEnakjN9kg6JMtFTcfavfkKre1EIDDYR/6z/6thr8rtsEMxx
+	hDfB7LKuD/q4b9AFrw0oocaTATvYjY0Za+BgkGpZjwKo/kIB9X09Dn/dZfPeW3k8RNFHlxv1Mc9
+	JOGT0jT/eV3uCi899Z51j76WtiTLOIPM3E3HPsggyguwk=
+X-Google-Smtp-Source: AGHT+IFEZW5Zweega7Vs4Va9mvrBEoLdKArCyxKoyJ0+pHn1zEerFQ5BhPKVvvzu3kXh6ZeNdgy1Z3Yu68TbnLlhnSk=
+X-Received: by 2002:a05:690c:fcb:b0:70d:f338:8333 with SMTP id
+ 00721157ae682-7116371fb14mr50260087b3.22.1749827373395; Fri, 13 Jun 2025
+ 08:09:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250507044311.3751033-2-robelin@nvidia.com>
+References: <20250604041418.1188792-1-tmyu0@nuvoton.com> <20250604041418.1188792-2-tmyu0@nuvoton.com>
+ <20250612140041.GF381401@google.com> <CAOoeyxVvZiD18qbGd5oUnqLNETKw50fJBjJO3vR50kon_a5_kA@mail.gmail.com>
+ <20250612152313.GP381401@google.com> <CAOoeyxV-E_HQOBu0Pzfy0b0yJ2qbrW_C8pATCTWE4+PXqvHL6g@mail.gmail.com>
+ <20250613131133.GR381401@google.com>
+In-Reply-To: <20250613131133.GR381401@google.com>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Fri, 13 Jun 2025 23:09:22 +0800
+X-Gm-Features: AX0GCFvsLelkG587zTzgv7nzzjr9mHXHWsTBgmTxfQezIbWJWpZn_6A6aO9a14A
+Message-ID: <CAOoeyxXftk9QX_REgeQhuXSc9rEguzXkKVKDQdawU=NzGbo9oA@mail.gmail.com>
+Subject: Re: [PATCH v12 1/7] mfd: Add core driver for Nuvoton NCT6694
+To: Lee Jones <lee@kernel.org>
+Cc: linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org, 
+	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org, 
+	Ming Yu <tmyu0@nuvoton.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B46=E6=9C=8813=E6=97=A5 =E9=
+=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=889:11=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On Fri, 13 Jun 2025, Ming Yu wrote:
+>
+> > Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B46=E6=9C=8812=E6=97=A5=
+ =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=8811:23=E5=AF=AB=E9=81=93=EF=BC=9A
+> > >
+> > > On Thu, 12 Jun 2025, Ming Yu wrote:
+> > >
+> > > > Dear Lee,
+> > > >
+> > > > Thank you for reviewing,
+> > > >
+> > > > Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B46=E6=9C=8812=E6=
+=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=8810:00=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+> > > > >
+> > > > ...
+> > > > > > +static const struct mfd_cell nct6694_devs[] =3D {
+> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 0),
+> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 1),
+> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 2),
+> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 3),
+> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 4),
+> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 5),
+> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 6),
+> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 7),
+> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 8),
+> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 9),
+> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 10),
+> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 11),
+> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 12),
+> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 13),
+> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 14),
+> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 15),
+> > > > > > +
+> > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 0),
+> > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 1),
+> > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 2),
+> > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 3),
+> > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 4),
+> > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 5),
+> > > > >
+> > > > > Why have we gone back to this silly numbering scheme?
+> > > > >
+> > > > > What happened to using IDA in the child driver?
+> > > > >
+> > > >
+> > > > In a previous version, I tried to maintain a static IDA in each
+> > > > sub-driver. However, I didn=E2=80=99t consider the case where multi=
+ple NCT6694
+> > > > devices are bound to the same driver =E2=80=94 in that case, the ID=
+s are not
+> > > > fixed and become unusable for my purpose.
+> > >
+> > > Not sure I understand.
+> > >
+> >
+> > As far as I know, if I maintain the IDA in the sub-drivers and use
+> > multiple MFD_CELL_NAME("nct6694-gpio") entries in the MFD, the first
+> > NCT6694 device bound to the GPIO driver will receive IDs 0~15.
+> > However, when a second NCT6694 device is connected to the system, it
+> > will receive IDs 16~31.
+> > Because of this behavior, I switched back to using platform_device->id.
+>
+> Each of the devices will probe once.
+>
+> The first one will be given 0, the second will be given 1, etc.
+>
+> Why would you give multiple IDs to a single device bound to a driver?
+>
 
-On Wed, May 07, 2025 at 12:43:09PM +0800, Robert Lin wrote:
-> From: Pohsun Su <pohsuns@nvidia.com>
-> 
-> This change adds support for WDIOC_GETTIMELEFT so userspace
-> programs can get the number of seconds before system reset by
-> the watchdog timer via ioctl.
-> 
-> Signed-off-by: Pohsun Su <pohsuns@nvidia.com>
-> Signed-off-by: Robert Lin <robelin@nvidia.com>
-> ---
->  drivers/clocksource/timer-tegra186.c | 64 +++++++++++++++++++++++++++-
->  1 file changed, 63 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/clocksource/timer-tegra186.c b/drivers/clocksource/timer-tegra186.c
-> index ea742889ee06..e3ea6110e6f5 100644
-> --- a/drivers/clocksource/timer-tegra186.c
-> +++ b/drivers/clocksource/timer-tegra186.c
-> @@ -1,8 +1,9 @@
->  // SPDX-License-Identifier: GPL-2.0-only
->  /*
-> - * Copyright (c) 2019-2020 NVIDIA Corporation. All rights reserved.
-> + * Copyright (c) 2019-2025 NVIDIA Corporation. All rights reserved.
->   */
->  
-> +#include <linux/bitfield.h>
->  #include <linux/clocksource.h>
->  #include <linux/module.h>
->  #include <linux/interrupt.h>
-> @@ -30,6 +31,7 @@
->  
->  #define TMRSR 0x004
->  #define  TMRSR_INTR_CLR BIT(30)
-> +#define  TMRSR_PCV GENMASK(28, 0)
->  
->  #define TMRCSSR 0x008
->  #define  TMRCSSR_SRC_USEC (0 << 0)
-> @@ -46,6 +48,9 @@
->  #define  WDTCR_TIMER_SOURCE_MASK 0xf
->  #define  WDTCR_TIMER_SOURCE(x) ((x) & 0xf)
->  
-> +#define WDTSR 0x004
-> +#define  WDTSR_CURRENT_EXPIRATION_COUNT GENMASK(14, 12)
-> +
->  #define WDTCMDR 0x008
->  #define  WDTCMDR_DISABLE_COUNTER BIT(1)
->  #define  WDTCMDR_START_COUNTER BIT(0)
-> @@ -235,12 +240,69 @@ static int tegra186_wdt_set_timeout(struct watchdog_device *wdd,
->  	return 0;
->  }
->  
-> +static unsigned int tegra186_wdt_get_timeleft(struct watchdog_device *wdd)
-> +{
-> +	struct tegra186_wdt *wdt = to_tegra186_wdt(wdd);
-> +	u32 expiration, val;
-> +	u64 timeleft;
-> +
-> +	if (!watchdog_active(&wdt->base)) {
-> +		/* return zero if the watchdog timer is not activated. */
-> +		return 0;
-> +	}
-> +
-> +	/*
-> +	 * Reset occurs on the fifth expiration of the
-> +	 * watchdog timer and so when the watchdog timer is configured,
-> +	 * the actual value programmed into the counter is 1/5 of the
-> +	 * timeout value. Once the counter reaches 0, expiration count
-> +	 * will be increased by 1 and the down counter restarts.
-> +	 * Hence to get the time left before system reset we must
-> +	 * combine 2 parts:
-> +	 * 1. value of the current down counter
-> +	 * 2. (number of counter expirations remaining) * (timeout/5)
-> +	 */
-> +
-> +	/* Get the current number of counter expirations. Should be a
-> +	 * value between 0 and 4
-> +	 */
-> +	val = readl_relaxed(wdt->regs + WDTSR);
-> +	expiration = FIELD_GET(WDTSR_CURRENT_EXPIRATION_COUNT, val);
-> +	if (WARN_ON_ONCE(expiration > 4))
-> +		return 0;
-> +
-> +	/* Get the current counter value in microsecond. */
-> +	val = readl_relaxed(wdt->tmr->regs + TMRSR);
-> +	timeleft = FIELD_GET(TMRSR_PCV, val);
-> +
-> +	/*
-> +	 * Calculate the time remaining by adding the time for the
-> +	 * counter value to the time of the counter expirations that
-> +	 * remain.
-> +	 */
-> +	timeleft += (((u64)wdt->base.timeout * USEC_PER_SEC) / 5) * (4 - expiration);
+The device exposes multiple peripherals =E2=80=94 16 GPIO controllers, 6 I2=
+C
+adapters, 2 CAN FD controllers, and 2 watchdog timers. Each peripheral
+is independently addressable, has its own register region, and can
+operate in isolation. The IDs are used to distinguish between these
+instances.
+For example, the GPIO driver will be probed 16 times, allocating 16
+separate gpio_chip instances to control 8 GPIO lines each.
 
-This results in
+If another device binds to this driver, it is expected to expose
+peripherals with the same structure and behavior.
 
-xtensa-linux-ld: drivers/clocksource/timer-tegra186.o: in function `tegra186_timer_remove':
-timer-tegra186.c:(.text+0x350): undefined reference to `__udivdi3'
-xtensa-linux-ld: drivers/clocksource/timer-tegra186.o: in function `tegra186_wdt_get_timeleft':
-timer-tegra186.c:(.text+0x52c): undefined reference to `__udivdi3'
 
-when trying to build xtensa:allmodconfig.
-
-Guenter
+Thanks,
+Ming
 
