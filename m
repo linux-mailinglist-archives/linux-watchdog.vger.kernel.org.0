@@ -1,239 +1,244 @@
-Return-Path: <linux-watchdog+bounces-3669-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3670-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C6D1ADFD34
-	for <lists+linux-watchdog@lfdr.de>; Thu, 19 Jun 2025 07:48:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF228AE0249
+	for <lists+linux-watchdog@lfdr.de>; Thu, 19 Jun 2025 12:03:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E7ECF176DED
-	for <lists+linux-watchdog@lfdr.de>; Thu, 19 Jun 2025 05:48:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3FD4D4A1A2A
+	for <lists+linux-watchdog@lfdr.de>; Thu, 19 Jun 2025 10:03:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F54B242D8A;
-	Thu, 19 Jun 2025 05:48:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE14C221546;
+	Thu, 19 Jun 2025 10:03:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="npWxBd4M"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f2v0YqdU"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 849E6242907
-	for <linux-watchdog@vger.kernel.org>; Thu, 19 Jun 2025 05:48:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C648C220F27;
+	Thu, 19 Jun 2025 10:03:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750312107; cv=none; b=oEsQ6IeDrI1e9MCuewbO+3Hl6AR5Pv/p8FR/neM+ouoL5rwOCibWzJPqMYfoulNA8ETeH4/PhKTN98frnjR60bj0WnSecU2EUHTsfx9ymOb2x74fTimyLcHSOzEC7mACEsHn3boH6XDaA/yS5nNlBJCi3Zo7BQpZOc8EfJOFN/s=
+	t=1750327409; cv=none; b=neQBGVvqzvogzGQQ1tK+1dnoOtANpTIhRCzz5PcABjKhkpT3lVQb7WhMDz2/oL7EoNh3ZfqxWqN/tsoMfgLzTf+0tevHiKx+8pAnKGvI4c1lez+Lo63ZIp0FUkHJ+NGTWkCWmJ4WinEvLEdnxyWLM7cB60mXNshQIKUCkZ3nDIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750312107; c=relaxed/simple;
-	bh=s3/gZi7BvAKq0izTDcQE28ZeRUR7J1PrwtDNYqPUSgA=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=RmYruVOG1cBpvm90TVU4sfw3PZlNd6e7Cg/VwhwAWnuK2xytTiU/HdJFUb3Qbrev5s6U91b3IdIrlCHFqIdfwpitd2QDPDz/kitIZkE6TqLDMTMY6La8vPfSghKmn5LRWIaPJHPTG6l2kUHfNFYr3gPNvRKCmKMmTJMJj6wfCMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=npWxBd4M; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55ILaSer024068
-	for <linux-watchdog@vger.kernel.org>; Thu, 19 Jun 2025 05:48:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	++vri0wmuq+S4bVhSg02YGKQx2ZXW1B1U4mXepw29zU=; b=npWxBd4MayFb4nAN
-	/pTreu4gx5S0HwfUjofGFdRcg7PWZ/IdNwJy/t6r1VKU8ZJPKUrJt8WIcg5gbOxE
-	2KNkun+XRJ7Km/7GNvHyF5z8IrQC8sJgY6wP5W6nDB32RiHHO/MdcqWKhyUG1jDB
-	OJbv7f8oFZYMpxBte8aESWlPzx0D7fRdZwDfhj/zFMOAo+llYuGjtv8iu/3T68Ac
-	sNZjZfevBJyNgV0tGuxkC2BOppFQU4H6sozS3M87b8ivK9jX26kPT0km5z26PAgi
-	65725JXp3LyS4E16qHsWSpIjC5lfnNDzCG1N2okQPSXgm2z3COimE/2cf9wx2iEQ
-	xiaIKg==
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47bw13ap2x-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-watchdog@vger.kernel.org>; Thu, 19 Jun 2025 05:48:24 +0000 (GMT)
-Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-742c03c0272so525913b3a.1
-        for <linux-watchdog@vger.kernel.org>; Wed, 18 Jun 2025 22:48:24 -0700 (PDT)
+	s=arc-20240116; t=1750327409; c=relaxed/simple;
+	bh=703KiELmDjP8Uw1qN8XJ8LZkYlIjoyRI6q6sVdlOWGM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oxweLC2WjyZ8Bu2yQCotgZK2/D9bhxZfKqEv9Y7K98X9c/xswfsIyProajflZjYUHl1BPUXlyR0UXDD7PFI2qv7NFZ53S4qGLdxjDaxk7AGwcFEz6mZMgKcshqOi0a+X4lLNsx4MXvNRm8FWm+gMndz+kejEaXaxpTY7NixpJKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f2v0YqdU; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-450cf214200so5225865e9.1;
+        Thu, 19 Jun 2025 03:03:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750327406; x=1750932206; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6cusTDU2sumyTVDYQ9G+PYn6zrx6R2pwR2MrJ1EXiEo=;
+        b=f2v0YqdU2nekC/dRFrqpKDvhsAfxbomcx5byp/ExSaLNkTToOsU7vKxqxFbrUJjcPz
+         UZgT7uek5NR8hmafHxszhe8XJFPwUSIxBaVj8AxdFef4IaTJfm091QVzfxOoc8ra9Okx
+         gaH19k3Bb+VNjPsN7yf+fU9QsMF4fEte1f/VPHnhoTvkLK8EvpDW0RI7X/rR8okdQhaY
+         GmNQ33PIAVszVmOSVEVOv8bSpH3q+Q4hH2YelM07ve7ZySys3GDiE1GUP06t2x62Kd+k
+         Ws7ubsQRMBqUsVp/YytuLQWzsmCagX7FleXYNblmnrTHXj21AC08Nv541VDxWJzgI2os
+         J6TQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750312104; x=1750916904;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=++vri0wmuq+S4bVhSg02YGKQx2ZXW1B1U4mXepw29zU=;
-        b=vjcsfk0qRl0XST+2wmuHQjxX4B2LKuLcXUjWDcrLNGpeDuOBFFV315n3QH5daPBe4A
-         GmKSuBUbUnWx8EFrr3N+bgcEJX5v0zgwUFT7QlRGYySelVNfu9FS85UFpbIH5E3EcZMu
-         vsZSnGgpAtlqVxxuX7bti810zwcLwI0F2BQ+9TXW6+BvQGVaKNHmkm6xekPX+Hj80i2+
-         yyDFFWSWLVL2FWbzu7gqyq448y8wHRCCWH/H78XRr68JmIXQWW+ru/DwEkLpJkWnNtC5
-         Comltd+Bfy+qbAOolsvMXHuWmDDH7h+7vACRLAiGGd5Z/I4qH2+/JsCyGBIBD7/JtlAn
-         SCeg==
-X-Forwarded-Encrypted: i=1; AJvYcCVKmlXtEtwDZCnWpDeXkqHg7+uts91qHCvEpndPyghdqBFszswLBiqO27z8P+mN1G8r4kcJ3VRRdLTSaQ0Rnw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyXbKVB1QheYTSlL0B1XVvZ2W4jwy6CK4YIujIpUsfKCWgJwllb
-	t36n8UtwhNzR244kGKPIifpL67UZB/JBQhaVfy6B44g/7mCyYkbV+H9TWDfzzX9rmpM03MbvdCz
-	N4/GtDI+NKGLRZUd/klOdsHPqFXV5RMAGPG0GF4J+sNxYcEdf9L2Unljfg1YPSfo3ZZZIPA==
-X-Gm-Gg: ASbGncsvA8kCuD251b9X/Cs8iC7X8Dha+SLCOWHUNnjzQf391GZ5zDfkjwy6+1BlRTj
-	yYOIJQqdzlnpDpcfyekHdB8VYRiBaXsTWlmU/8Q84aTpJXLYI1Uf6wVYKjDANdG0fcnuGOluEHj
-	g61cpl0L9Y/UcdfpBJHdq5UWxyEFt3wD8ZRLJNxMPtDjPW5TWqo+wzMUcDcJ1TYMR+e/PtxDEPK
-	KEjEwyTiXENPuoz7ZyGokRWdGdiBM50Lm5XgsYbGkbnnQBy+YgjUUQLA/0wfN2WgTo5uzrMVMYW
-	/NGaUU+cdKwDKaSsULg586wnpeYJxiE8z5v+X2AILiEbkGRvfX8B32OWfa7cI+4=
-X-Received: by 2002:a05:6a00:10cf:b0:748:e585:3c42 with SMTP id d2e1a72fcca58-748e5853f7amr7330816b3a.15.1750312103690;
-        Wed, 18 Jun 2025 22:48:23 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGtxbSYLcz+kWJraK0awdmVZZ0F++vhAr9IPxIQoqQJlXVvdgdCjVBs460bnIYuvcegcI88ww==
-X-Received: by 2002:a05:6a00:10cf:b0:748:e585:3c42 with SMTP id d2e1a72fcca58-748e5853f7amr7330796b3a.15.1750312103305;
-        Wed, 18 Jun 2025 22:48:23 -0700 (PDT)
-Received: from [10.151.37.217] ([202.46.23.19])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7488ffeccfcsm12279470b3a.4.2025.06.18.22.48.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jun 2025 22:48:22 -0700 (PDT)
-Message-ID: <073480a2-0b6f-4dc0-b7eb-eec500b3106e@oss.qualcomm.com>
-Date: Thu, 19 Jun 2025 11:18:17 +0530
+        d=1e100.net; s=20230601; t=1750327406; x=1750932206;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6cusTDU2sumyTVDYQ9G+PYn6zrx6R2pwR2MrJ1EXiEo=;
+        b=RnfHp3gPE2jpx6kiM3y3jadAGzeORPn1w4tFhpPv/NsszVzDW2IJLZDkX2GtYKoQaZ
+         XwokU62A1K0zEscPz/sbghMpYqBl8RKTUn+QkO6pBBCjRmJgHbVndy7uproM93PWU14U
+         et55GnRLD5O6g0dfWrToGeMEGDlvv42EN7T1Hka9FaJpxkpe268eY2mAGS9a0X4/wWrY
+         durxVVd9VOVuCR1jH+6TIcS0JZq9gWfEbP8Dauc/IwV2fMt9GoNTRA6PFq43ALIVqZ6Z
+         2RAzPoRNqgBsWDttveAP6GUfC3WMG1BKq9t9IZk/zrWGYAAT0z0UqD2j95U44WGai4T1
+         1kXQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU3jSGukzTqdF+C7HXN7RfrqolTtKMtUTpUaZFz1uCKM7qbzlh0y3eE7N5XnSpW3wpMM5Mbxt45GRCshj0=@vger.kernel.org, AJvYcCVRStXsQIcm7tu+Q5YQhER/QPJIqvONSGenuDMhrAFJolInTLu6CBdV6kLgdPvXIGVFh3SHpbj/rmwcIu93Cw4=@vger.kernel.org, AJvYcCVkoCu0qUHLGc61IUebQQrn8+kDnpCLrlvOKEc+6425i9d2pAhcrFWQbp0atfJaiViVSzDHcvnssv8eHWA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxP6WPVxh+8fSiFWC4+7HMGLwiSY/w8/CEgQuESrLLz/ZDcmND4
+	6iGC8zUEU3okxxX1kiZUXf/Qzcp8AK+aZBWkXTJFV6Ha5ghDjHQjlAW9
+X-Gm-Gg: ASbGnct5vym5ua4Y41ptCxhMXVuW7R++1u0xrnN8DvUraSwZanNyKJL6iFdf70d+CS2
+	PH9+BEkrY979HNcvtkp/RhIYxE6BisnoThl0hckxZCn4k+a8BLl9jmjhm1t5wVTEhKyoROH9YzA
+	60R1rS+rgmKpMBpkyYCnMAnmTjuCeKMeDmhfH1GuBgRPiZT/wzmPuwb0qm3eU51uY0Ukr+N7XS+
+	mSA/98bQpViF1cFUKphup8P24r2XH/KQ2/mVCQeKNVMd+Y3IV9sNFa/1YR3JyiL0fbtm5S2rnQc
+	GngC/V5YY3TPUhNahwAxYGtMMo8vqL5ivFxrp+hjxscE+TO57Ani9JMbNihkLLlDQhvwi6GxHYK
+	NKWQQo7ugqymrtTqxGy28+BgX0JBKnoV64Y9DtFW/smCG3xbh
+X-Google-Smtp-Source: AGHT+IFei2sv4Is4eRKDMO6SQ5KWPDd3+hXWSApQVxlUQKGGKcBG83g5eVrYF8DApk8Damil4kEEGw==
+X-Received: by 2002:a05:6000:288a:b0:3a5:27ba:47d0 with SMTP id ffacd0b85a97d-3a572e5737bmr17084853f8f.56.1750327405682;
+        Thu, 19 Jun 2025 03:03:25 -0700 (PDT)
+Received: from orome (p200300e41f4e9b00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f4e:9b00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a568b08c99sm19311952f8f.63.2025.06.19.03.03.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jun 2025 03:03:23 -0700 (PDT)
+Date: Thu, 19 Jun 2025 12:03:21 +0200
+From: Thierry Reding <thierry.reding@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Robert Lin <robelin@nvidia.com>, daniel.lezcano@linaro.org, 
+	jonathanh@nvidia.com, tglx@linutronix.de, pohsuns@nvidia.com, 
+	linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org, sumitg@nvidia.com, 
+	linux-watchdog@vger.kernel.org, wim@linux-watchdog.org
+Subject: Re: [PATCH v8 1/3] clocksource/drivers/timer-tegra186: add
+ WDIOC_GETTIMELEFT support
+Message-ID: <nzuhltjezafyjekctgdazcfayxa2jyk3k2qhfssxfqtmce2nor@sd2s7hvjdpqr>
+References: <20250507044311.3751033-1-robelin@nvidia.com>
+ <20250507044311.3751033-2-robelin@nvidia.com>
+ <5c5ba239-f8e4-43b5-ab58-b3850c57d74b@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 3/5] dt-bindings: watchdog: qcom-wdt: Document sram
- property
-Content-Language: en-US
-From: Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>
-To: Rob Herring <robh@kernel.org>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck
- <linux@roeck-us.net>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
-References: <20250610-wdt_reset_reason-v5-0-2d2835160ab5@oss.qualcomm.com>
- <20250610-wdt_reset_reason-v5-3-2d2835160ab5@oss.qualcomm.com>
- <20250610180345.GA2382213-robh@kernel.org>
- <a8b33510-c010-452f-9177-ce743b732d21@oss.qualcomm.com>
-In-Reply-To: <a8b33510-c010-452f-9177-ce743b732d21@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Authority-Analysis: v=2.4 cv=QbBmvtbv c=1 sm=1 tr=0 ts=6853a4a8 cx=c_pps
- a=WW5sKcV1LcKqjgzy2JUPuA==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17
- a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
- a=NzB-Z5k-UKuyH_SqCfoA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=OpyuDcXvxspvyRM73sMx:22
-X-Proofpoint-ORIG-GUID: Cp3LQQVrVleqyI8VnYsHf1jMHSa4pLiR
-X-Proofpoint-GUID: Cp3LQQVrVleqyI8VnYsHf1jMHSa4pLiR
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjE5MDA0NyBTYWx0ZWRfX0tNYEIhnRJWK
- sqUIr5xCRPq1nS+4inexooOUt7lifXm1XKNiQxo5+QszxL7cQQrntNBPi/0MkVh9oohxsSU4Onq
- hf7cMdxnvZZoc84k6/1OqtmwOf2WhYjUFlgQ79TkyRcAuGawsWF7p2n2Q7tdSLxuwLuq1hm3c/4
- aWbwE6NQThIUBYv0g80T5lmdyVLbKT5yzGShazREtPFBo8fm7uyz0h483CstqAQJPL4VeQYKnIR
- A9XbcCgeRLye+3NHm9emSPsUoghVRKAQV6KxoZJmD1gIjxnEUtUn/jcy9zj/nhaDwtMnxzphDdn
- B3Qkmnk86C9aG0niSduF0GUzJ82tMm5ONXQr32J0oAXg/FhwdOGAsOHUPC/f1XyTo4ROLnITeKY
- xt3mIOQ0ioD6HJ87YXHX06NTgLWg9nArvltLd8uBvgzNp3kRLEBzalsAWgATNB/iNNMmANu0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-19_02,2025-06-18_03,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 spamscore=0 malwarescore=0 mlxlogscore=999 bulkscore=0
- adultscore=0 phishscore=0 clxscore=1015 suspectscore=0 lowpriorityscore=0
- mlxscore=0 impostorscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2506190047
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="zc6ugy6dzkprjq5r"
+Content-Disposition: inline
+In-Reply-To: <5c5ba239-f8e4-43b5-ab58-b3850c57d74b@roeck-us.net>
 
 
-On 6/16/2025 10:48 AM, Kathiravan Thirumoorthy wrote:
-> Thanks Rob for the review comments!
->
-> On 6/10/2025 11:33 PM, Rob Herring wrote:
->> On Tue, Jun 10, 2025 at 07:15:19PM +0530, Kathiravan Thirumoorthy wrote:
->>> Document the "sram" property for the watchdog device on Qualcomm
->>> IPQ platforms. Use this property to extract the restart reason from
->>> IMEM, which is updated by XBL. Populate the watchdog's bootstatus sysFS
->>> entry with this information, when the system reboots due to a watchdog
->>> timeout.
->>>
->>> Describe this property for the IPQ5424 watchdog device and extend 
->>> support
->>> to other targets subsequently.
->>>
->>> Signed-off-by: Kathiravan Thirumoorthy 
->>> <kathiravan.thirumoorthy@oss.qualcomm.com>
->>> ---
->>> Changes in v5:
->>>     - Rename the property 'qcom,imem' to 'sram'
->>> Changes in v4:
->>>     - New patch
->>> ---
->>>   .../devicetree/bindings/watchdog/qcom-wdt.yaml       | 20 
->>> ++++++++++++++++++++
->>>   1 file changed, 20 insertions(+)
->>>
->>> diff --git 
->>> a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml 
->>> b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
->>> index 
->>> 49e2b807db0bc9d3edfc93ec41ad0df0b74ed032..74a09c391fd8e2befeac07f254ea16d0ca362248 
->>> 100644
->>> --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
->>> +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
->>> @@ -81,6 +81,16 @@ properties:
->>>       minItems: 1
->>>       maxItems: 5
->>>   +  sram:
->>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->>> +    description:
->>> +      phandle to the IMEM syscon node that exposes the system 
->>> restart reason
->>> +    items:
->>> +      - items:
->>> +          - description: phandle of IMEM syscon
->>> +          - description: offset of restart reason region
->>> +          - description: value indicate that the watchdog timeout 
->>> has occurred
->> A 'sram' property points to an SRAM region (see mmio-sram binding), not
->> a syscon and offset.
->>
->> The 'value' should be a separate property or implied by the compatible.
->
-> Sorry for the delay. It was a long weekend here!
->
-> Let me start with the requirement (Please feel free to skip it). When 
-> the system goes for reboot, Xtensible Boot loader (XBL) find the cause 
-> and update the particular offset (in this case it is 0x7b0) in the 
-> IMEM region with the known values. On the next boot, if the system is 
-> rebooted due to  watchdog timeout, watchdog's bootstatus is updated 
-> accordingly, which this series tries to address it.
->
-> Based on the previous review comments / discussions [1], it is decided 
-> to go with the above approach, i.e., name the property to 'sram' and 
-> let it points to the syscon region (IMEM) along with the offset to 
-> read and what value to expect. So that we don't have to touch the 
-> driver if either of the offset or the value changes across the platforms.
->
-> Currently, IMEM region (which is a on-chip SRAM) in the most of the 
-> QCOM platforms are modeled as 'syscon' [2]. So I have followed the 
-> same approach here as well. Should I describe the IMEM region as 
-> "sram" (mmio-sram)  instead of the "syscon" (existing approach) and 
-> retrieve the offset and desired value from the compatible? or stick 
-> with existing approach and name the property to something else? Could 
-> you guide me here to proceed further?
->
-> [1] 
-> https://lore.kernel.org/linux-arm-msm/20250519-wdt_reset_reason-v4-3-d59d21275c75@oss.qualcomm.com/#t
->
-> [2] 
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/Documentation/devicetree/bindings/sram/qcom,imem.yaml
+--zc6ugy6dzkprjq5r
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v8 1/3] clocksource/drivers/timer-tegra186: add
+ WDIOC_GETTIMELEFT support
+MIME-Version: 1.0
 
-Konrad,
+On Fri, Jun 13, 2025 at 06:24:40AM -0700, Guenter Roeck wrote:
+> Hi,
+>=20
+> On Wed, May 07, 2025 at 12:43:09PM +0800, Robert Lin wrote:
+> > From: Pohsun Su <pohsuns@nvidia.com>
+> >=20
+> > This change adds support for WDIOC_GETTIMELEFT so userspace
+> > programs can get the number of seconds before system reset by
+> > the watchdog timer via ioctl.
+> >=20
+> > Signed-off-by: Pohsun Su <pohsuns@nvidia.com>
+> > Signed-off-by: Robert Lin <robelin@nvidia.com>
+> > ---
+> >  drivers/clocksource/timer-tegra186.c | 64 +++++++++++++++++++++++++++-
+> >  1 file changed, 63 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/clocksource/timer-tegra186.c b/drivers/clocksource=
+/timer-tegra186.c
+> > index ea742889ee06..e3ea6110e6f5 100644
+> > --- a/drivers/clocksource/timer-tegra186.c
+> > +++ b/drivers/clocksource/timer-tegra186.c
+> > @@ -1,8 +1,9 @@
+> >  // SPDX-License-Identifier: GPL-2.0-only
+> >  /*
+> > - * Copyright (c) 2019-2020 NVIDIA Corporation. All rights reserved.
+> > + * Copyright (c) 2019-2025 NVIDIA Corporation. All rights reserved.
+> >   */
+> > =20
+> > +#include <linux/bitfield.h>
+> >  #include <linux/clocksource.h>
+> >  #include <linux/module.h>
+> >  #include <linux/interrupt.h>
+> > @@ -30,6 +31,7 @@
+> > =20
+> >  #define TMRSR 0x004
+> >  #define  TMRSR_INTR_CLR BIT(30)
+> > +#define  TMRSR_PCV GENMASK(28, 0)
+> > =20
+> >  #define TMRCSSR 0x008
+> >  #define  TMRCSSR_SRC_USEC (0 << 0)
+> > @@ -46,6 +48,9 @@
+> >  #define  WDTCR_TIMER_SOURCE_MASK 0xf
+> >  #define  WDTCR_TIMER_SOURCE(x) ((x) & 0xf)
+> > =20
+> > +#define WDTSR 0x004
+> > +#define  WDTSR_CURRENT_EXPIRATION_COUNT GENMASK(14, 12)
+> > +
+> >  #define WDTCMDR 0x008
+> >  #define  WDTCMDR_DISABLE_COUNTER BIT(1)
+> >  #define  WDTCMDR_START_COUNTER BIT(0)
+> > @@ -235,12 +240,69 @@ static int tegra186_wdt_set_timeout(struct watchd=
+og_device *wdd,
+> >  	return 0;
+> >  }
+> > =20
+> > +static unsigned int tegra186_wdt_get_timeleft(struct watchdog_device *=
+wdd)
+> > +{
+> > +	struct tegra186_wdt *wdt =3D to_tegra186_wdt(wdd);
+> > +	u32 expiration, val;
+> > +	u64 timeleft;
+> > +
+> > +	if (!watchdog_active(&wdt->base)) {
+> > +		/* return zero if the watchdog timer is not activated. */
+> > +		return 0;
+> > +	}
+> > +
+> > +	/*
+> > +	 * Reset occurs on the fifth expiration of the
+> > +	 * watchdog timer and so when the watchdog timer is configured,
+> > +	 * the actual value programmed into the counter is 1/5 of the
+> > +	 * timeout value. Once the counter reaches 0, expiration count
+> > +	 * will be increased by 1 and the down counter restarts.
+> > +	 * Hence to get the time left before system reset we must
+> > +	 * combine 2 parts:
+> > +	 * 1. value of the current down counter
+> > +	 * 2. (number of counter expirations remaining) * (timeout/5)
+> > +	 */
+> > +
+> > +	/* Get the current number of counter expirations. Should be a
+> > +	 * value between 0 and 4
+> > +	 */
+> > +	val =3D readl_relaxed(wdt->regs + WDTSR);
+> > +	expiration =3D FIELD_GET(WDTSR_CURRENT_EXPIRATION_COUNT, val);
+> > +	if (WARN_ON_ONCE(expiration > 4))
+> > +		return 0;
+> > +
+> > +	/* Get the current counter value in microsecond. */
+> > +	val =3D readl_relaxed(wdt->tmr->regs + TMRSR);
+> > +	timeleft =3D FIELD_GET(TMRSR_PCV, val);
+> > +
+> > +	/*
+> > +	 * Calculate the time remaining by adding the time for the
+> > +	 * counter value to the time of the counter expirations that
+> > +	 * remain.
+> > +	 */
+> > +	timeleft +=3D (((u64)wdt->base.timeout * USEC_PER_SEC) / 5) * (4 - ex=
+piration);
+>=20
+> This results in
+>=20
+> xtensa-linux-ld: drivers/clocksource/timer-tegra186.o: in function `tegra=
+186_timer_remove':
+> timer-tegra186.c:(.text+0x350): undefined reference to `__udivdi3'
+> xtensa-linux-ld: drivers/clocksource/timer-tegra186.o: in function `tegra=
+186_wdt_get_timeleft':
+> timer-tegra186.c:(.text+0x52c): undefined reference to `__udivdi3'
 
-The bootloader team confirmed that the IMEM offset and restart reason 
-value are fixed for the SoC's lifetime. Based on Rob’s suggestion, let’s 
-pull these values from the device data using the compatible string. Let 
-me know your thoughts.
+I'm unable to reproduce this. I wonder if maybe I have a different
+toolchain that doesn't have this issue? Do you have a link so I can try
+to get closer to the setup you have?
 
-Kathiravan T.
+Thanks,
+Thierry
 
->
->
-> Thanks,
->
-> Kathiravan T.
->
->>
->> Rob
+--zc6ugy6dzkprjq5r
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmhT4GkACgkQ3SOs138+
+s6G35Q/+OscriuS9td/FzsgIvIf5uyQsg8UDu9ZMHYSd65WppQmg4rENctRq3+oH
+1Sbytk8z2Hl6putu7F8uQRO477ps2n1EeJ7+3bGO2fnOMNMns3IIV8yHBjsKGrpM
+RKNho5Z42xTcavdrLTzNQMG0ZRpEGGFZKn+mo2aPqA6nTiJtap7q95m2Yh2P7CgV
+K4YpbcmKi7QufChQXnGUMdsLTK4ahKrBkBSC78w7oCnW/tywWTgi9ESx2kRTHLL0
+3Dl4/dnWnEWkqeM7Y6mMQlar1qYW+4hjXjBlrvbMBms9W+hvoF4FNKQ5v/mFE2WB
+et4bMjhHe9jMacG4ZZN2//mbSw8jHKmZ0/JYp244/xo97Dawpkgy59auHEjj7Zs9
+h2f3yrw+HUgbumNAuRzkS8TUwvHAcg3MlaZXZB5qIdP0dhryhRTqBvfLTfQQfI3p
+DyNibyuu0XGmgNaW//UhAR5LnQIJ+Q6161gd7TKSgYLCep+ABu4RmV8agerRxa28
+HDvFEKE/dxmUSOTSyeSljckseB7vEnxd8IMeD2VLWdTXY+WO9uHqEhsoRvh5rWYU
+iHwK6gasv9Zrk6rpY/77+o+FR31FPl56N6N95f+jdEdtGDld45LS7MSRF5+N+cfh
+iAqZLBUQlSEP1mVmbXKSz5vRSBMP1wuWy9vdR4cHG5cVLyDhzH0=
+=CR/o
+-----END PGP SIGNATURE-----
+
+--zc6ugy6dzkprjq5r--
 
