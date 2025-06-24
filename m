@@ -1,262 +1,103 @@
-Return-Path: <linux-watchdog+bounces-3706-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3709-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA8ABAE3B21
-	for <lists+linux-watchdog@lfdr.de>; Mon, 23 Jun 2025 11:51:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B02A2AE7010
+	for <lists+linux-watchdog@lfdr.de>; Tue, 24 Jun 2025 21:47:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7ACF13A6B77
-	for <lists+linux-watchdog@lfdr.de>; Mon, 23 Jun 2025 09:50:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1131A17C210
+	for <lists+linux-watchdog@lfdr.de>; Tue, 24 Jun 2025 19:47:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CF0E235360;
-	Mon, 23 Jun 2025 09:50:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EBEE2EF9CB;
+	Tue, 24 Jun 2025 19:45:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="E8POB4Dv"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="adsYaD+H"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-24427.protonmail.ch (mail-24427.protonmail.ch [109.224.244.27])
+Received: from lelvem-ot02.ext.ti.com (lelvem-ot02.ext.ti.com [198.47.23.235])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54C2522DA0C;
-	Mon, 23 Jun 2025 09:50:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.27
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71FC92ECD14;
+	Tue, 24 Jun 2025 19:45:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.235
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750672216; cv=none; b=E+d3i7oF3EF+zVUq4gmYccSGS7pnkgCHgDCu1bMjOnx9/DtGUnYBbYl4J703jy3TJj7bl9QkOX9ghMOuNptDvwpwRAW0uSCoFqIIqtA2P7HXcfAAoR4CLPCOS60sDTsCobCAL2c8VS1oPqWtbofUf56KQ7JFf1xDT7i7njOODJc=
+	t=1750794329; cv=none; b=LeoVdg7vLUC7c2eBTVlCIO6hXMxwuYbf1VzoakzBSnK4V/rhBMqMPXJhoJzQbAHPHQpAVbp2FpOpXBWAfPIcS4ct9k3CixmtYei0sq7fFuE+F9+HaZenfdU4NltS0+0ZBnmw3+1qkg0SI8Hn0R5TJSa4ynI3HbArVmZcWpy90AY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750672216; c=relaxed/simple;
-	bh=2qh1CJjO8c2zLPbBAKpH3KGrCB+i0u1GVzjXdu6Efzw=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UIczler/bOI62Q6mJbHTx5hyb7JXrbGuHkxcZN/QhgAogaoc2j2wLivL3qYv0xSOlUGrM2Va9YGc6OaXVcKtJRXL6OFG9fUipkrgUbOrCIb/w7YdAz/sLRvdnlWDscichgyToHyXiigSOhufESGnzyf58rh2yVWs5xXzQ/wgX44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=E8POB4Dv; arc=none smtp.client-ip=109.224.244.27
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=protonmail; t=1750672205; x=1750931405;
-	bh=2qh1CJjO8c2zLPbBAKpH3KGrCB+i0u1GVzjXdu6Efzw=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=E8POB4Dv/lqhX+/sJjDZa0/eRygsCa8wa0bD650TGPocFSrQmngVcmH1D3sAxuPA+
-	 LW1kx1i/1pOmqd1rUMvyIAhqBWl1APVUa8m9mGWcG7GKTjZYT6pcqc9TgtP7e47tmX
-	 qniN6zrdbbESjD1VetTautbvt1mkQo6xrcZtlg2bNE8ZxjqWMJH+FOeC792/ZFCjA2
-	 cJYsbS5g0TjVCk8W/p8chAN4R8U7yoOff0HvBQ2Nd5H/49aF46mWlAnjhafpzeMz3Z
-	 K47KMGRf+oZnnk9ahBhiWXKdU8vibpziYrRLgevjgfQ3LlNNNuqTpqC9bZtwqcdO9a
-	 e7L6adwy/WWKQ==
-Date: Mon, 23 Jun 2025 09:49:59 +0000
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-From: Max Shevchenko <wctrl@proton.me>
-Cc: "conor+dt@kernel.org" <conor+dt@kernel.org>, "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>, "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, "jirislaby@kernel.org" <jirislaby@kernel.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>, "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>, "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>, "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>, "linux@armlinux.org.uk" <linux@armlinux.org.uk>, "linux@roeck-us.net" <linux@roeck-us.net>, "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>, "robh@kernel.org" <robh@kernel.org>, "sean.wang@mediatek.com" <sean.wang@mediatek.com>, "tglx@linutronix.de" <tglx@linutronix.de>, "wctrl@proton.me" <wctrl@proton.me>, "wim@linux-watchdog.org"
-	<wim@linux-watchdog.org>
-Subject: Re: [PATCH 09/11] ARM: dts: mediatek: add basic support for MT6572 SoC
-Message-ID: <kZ6sH6-8EHhW5FtsAmo9HXndj7D1jFyW0cv0A4KDO3i5SS9JiGEZNTd1gbMXizu4vI0M0hjROLK5DEnKbB36jWUKUPRKukq5IRK9Tz2qz7k=@proton.me>
-In-Reply-To: <94fd71e6-0f09-42d0-94ef-1ff111daac9f@collabora.com>
-References: <20250620-mt6572-v1-0-e2d47820f042@proton.me> <20250620-mt6572-v1-9-e2d47820f042@proton.me> <94fd71e6-0f09-42d0-94ef-1ff111daac9f@collabora.com>
-Feedback-ID: 131238559:user:proton
-X-Pm-Message-ID: 776204d2426614811a793f4a9aa639b87ffcd972
+	s=arc-20240116; t=1750794329; c=relaxed/simple;
+	bh=ZqjDB2Afh1JOEWZ27VXE6hu4Cb49XT7xWl99zNUIbMI=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=aFqCzTQRcmeMpxfjjHDOtfS8srQTt1O3jISh0GMa6IoHS81XJzPBp15XTu/Rc0K6I3XXOcUevzuQ+yIvivvkEyiH5UgTx4j91jJ2N1RQHmW7eWIFmDhWyAccaduhHGKSeltHIcMcxvQVea9sMylBxFwNG2tIGjFsyKApvk69h/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=adsYaD+H; arc=none smtp.client-ip=198.47.23.235
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllvem-sh04.itg.ti.com ([10.64.41.54])
+	by lelvem-ot02.ext.ti.com (8.15.2/8.15.2) with ESMTP id 55OJj9dD1903653;
+	Tue, 24 Jun 2025 14:45:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1750794309;
+	bh=DiIFhqT5jW8AL/wFzN9Rpyuf9ZhlNrg18hXKR9LbMhg=;
+	h=From:To:CC:Subject:Date;
+	b=adsYaD+HSv/RKyG89ljvD7giZYLAGExFwWPbENMLWI34k2CY9Owd4JUp7Li+jfj9d
+	 C+q1TR00/PKNBfKpEidlpXoYu7hCNKmE1OQFfXtTApME40WY2eqRwFvyJ55Aex7OOR
+	 qoMHKmBJ5/T6S9B3y4/lKPHi4fyRRq8ZmKAO3TVw=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+	by fllvem-sh04.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 55OJj9j8562423
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
+	Tue, 24 Jun 2025 14:45:09 -0500
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Tue, 24
+ Jun 2025 14:45:09 -0500
+Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55 via
+ Frontend Transport; Tue, 24 Jun 2025 14:45:09 -0500
+Received: from judy-hp.dhcp.ti.com (judy-hp.dhcp.ti.com [128.247.81.105])
+	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 55OJj92a2326408;
+	Tue, 24 Jun 2025 14:45:09 -0500
+From: Judith Mendez <jm@ti.com>
+To: Judith Mendez <jm@ti.com>, Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+        "Krzysztof
+ Kozlowski" <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>
+CC: Tero Kristo <t-kristo@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+        <linux-watchdog@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/2] Add reaction control in rti
+Date: Tue, 24 Jun 2025 14:45:07 -0500
+Message-ID: <20250624194509.1314095-1-jm@ti.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
+This allows for reaction control in rti driver. Since AM62L SoC [0]
+does not have WWD reset output routed to a ESM module like all other
+K3 SoC's and has a reset signal routed to the reset HW block, add a new
+compatible for AM62L and configure reset reaction for AM62L SoC instead
+of NMI.
 
-On Monday, June 23rd, 2025 at 11:35 AM, AngeloGioacchino Del Regno <angelog=
-ioacchino.delregno@collabora.com> wrote:
+This patch has been tested on AM62L EVM [1].
 
-> Il 20/06/25 17:40, Max Shevchenko via B4 Relay ha scritto:
->
-> > From: Max Shevchenko wctrl@proton.me
-> >
-> > Add basic support for the MediaTek MT6572 SoC.
-> >
-> > Signed-off-by: Max Shevchenko wctrl@proton.me
-> > ---
-> > arch/arm/boot/dts/mediatek/mt6572.dtsi | 105 ++++++++++++++++++++++++++=
-+++++++
-> > 1 file changed, 105 insertions(+)
-> >
-> > diff --git a/arch/arm/boot/dts/mediatek/mt6572.dtsi b/arch/arm/boot/dts=
-/mediatek/mt6572.dtsi
-> > new file mode 100644
-> > index 0000000000000000000000000000000000000000..dd12231ca745be7455e9939=
-1abd2d708f2f1a8a9
-> > --- /dev/null
-> > +++ b/arch/arm/boot/dts/mediatek/mt6572.dtsi
-> > @@ -0,0 +1,105 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Copyright (c) 2025 Max Shevchenko wctrl@proton.me
-> > + */
-> > +
-> > +#include <dt-bindings/interrupt-controller/irq.h>
-> > +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +
-> > +/ {
-> > + #address-cells =3D <1>;
-> > + #size-cells =3D <1>;
-> > + compatible =3D "mediatek,mt6572";
-> > + interrupt-parent =3D <&sysirq>;
-> > +
-> > + cpus {
-> > + #address-cells =3D <1>;
-> > + #size-cells =3D <0>;
-> > + enable-method =3D "mediatek,mt6589-smp";
-> > +
-> > + cpu@0 {
-> > + device_type =3D "cpu";
-> > + compatible =3D "arm,cortex-a7";
-> > + reg =3D <0x0>;
-> > + };
-> > + cpu@1 {
-> > + device_type =3D "cpu";
-> > + compatible =3D "arm,cortex-a7";
-> > + reg =3D <0x1>;
-> > + };
-> > + };
-> > +
-> > + system_clk: dummy13m {
-> > + compatible =3D "fixed-clock";
-> > + clock-frequency =3D <13000000>;
-> > + #clock-cells =3D <0>;
-> > + };
-> > +
-> > + rtc_clk: dummy32k {
-> > + compatible =3D "fixed-clock";
-> > + clock-frequency =3D <32000>;
-> > + #clock-cells =3D <0>;
-> > + };
-> > +
-> > + uart_clk: dummy26m {
-> > + compatible =3D "fixed-clock";
-> > + clock-frequency =3D <26000000>;
-> > + #clock-cells =3D <0>;
-> > + };
-> > +
->
->
-> Anything that has an MMIO address shall be child of "soc".
->
-> soc {
-> watchdog@....
->
-> timer@....
->
-> etc.
-> };
->
-> > + watchdog: watchdog@10007000 {
-> > + compatible =3D "mediatek,mt6572-wdt",
-> > + "mediatek,mt6589-wdt";
->
->
-> those fit in one line:
->
-> compatible =3D "mediatek,mt6572-wdt", "mediatek,mt6589-wdt";
->
-> > + reg =3D <0x10007000 0x100>;
-> > + interrupts =3D <GIC_SPI 126 IRQ_TYPE_LEVEL_LOW>;
-> > + timeout-sec =3D <15>;
-> > + #reset-cells =3D <1>;
-> > + };
-> > +
-> > + timer: timer@10008000 {
-> > + compatible =3D "mediatek,mt6572-timer",
-> > + "mediatek,mt6577-timer";
->
->
-> same
->
-> > + reg =3D <0x10008000 0x80>;
-> > + interrupts =3D <GIC_SPI 74 IRQ_TYPE_LEVEL_LOW>;
-> > + clocks =3D <&system_clk>, <&rtc_clk>;
-> > + clock-names =3D "system-clk", "rtc-clk";
-> > + };
-> > +
-> > + sysirq: interrupt-controller@10200100 {
-> > + compatible =3D "mediatek,mt6572-sysirq",
-> > + "mediatek,mt6577-sysirq";
->
->
-> same; and reg goes after compatible.
->
-> > + interrupt-controller;
-> > + #interrupt-cells =3D <3>;
-> > + interrupt-parent =3D <&gic>;
->
->
-> are you sure that interrupt-parent is gic?
+[0] https://www.ti.com/product/AM62L
+[1] https://www.ti.com/tool/TMDS62LEVM
 
-Other MT65xx devicetrees have GIC as parent for itself and SYSIRQ, so I ass=
-ume.
+Judith Mendez (2):
+  dt-bindings: watchdog: ti,rti-wdt: Add ti,am62l-rti-wdt compatible
+  watchdog: rti_wdt: Add reaction control to rti
 
->
-> > + reg =3D <0x10200100 0x1c>;
-> > + };
-> > +
-> > + gic: interrupt-controller@10211000 {
-> > + compatible =3D "arm,cortex-a7-gic";
->
->
-> reg here.
->
-> > + interrupt-controller;
-> > + #interrupt-cells =3D <3>;
-> > + interrupt-parent =3D <&gic>;
->
->
-> are you sure that the interrupt parent isn't sysirq here? :-)
+ .../bindings/watchdog/ti,rti-wdt.yaml         |  1 +
+ drivers/watchdog/rti_wdt.c                    | 31 ++++++++++++++++---
+ 2 files changed, 28 insertions(+), 4 deletions(-)
 
-not really, downstream has no mentions about SYSIRQ or its' address
+-- 
+2.49.0
 
->
-> > + reg =3D <0x10211000 0x1000>,
-> > + <0x10212000 0x2000>,
-> > + <0x10214000 0x2000>,
-> > + <0x10216000 0x2000>;
-> > + };
-> > +
-> > + uart0: serial@11005000 {
-> > + compatible =3D "mediatek,mt6572-uart",
-> > + "mediatek,mt6577-uart";
->
->
-> fits in one line
->
-> > + reg =3D <0x11005000 0x400>;
-> > + interrupts =3D <GIC_SPI 31 IRQ_TYPE_LEVEL_LOW>;
-> > + clocks =3D <&uart_clk>;
->
->
-> clock-names =3D .....
->
-> > + status =3D "disabled";
-> > + };
-> > +
-> > + uart1: serial@11006000 {
-> > + compatible =3D "mediatek,mt6572-uart",
->
->
-> ...again.
->
-> > + "mediatek,mt6577-uart";
-> > + reg =3D <0x11006000 0x400>;
-> > + interrupts =3D <GIC_SPI 32 IRQ_TYPE_LEVEL_LOW>;
-> > + clocks =3D <&uart_clk>;
-> > + status =3D "disabled";
-> > + };
-> > +};
->
->
-> Cheers,
-> Angelo
-
-thanks for suggestions, applied.
-
-
-Sincerely,
-Max
 
