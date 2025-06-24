@@ -1,59 +1,60 @@
-Return-Path: <linux-watchdog+bounces-3709-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3707-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B02A2AE7010
-	for <lists+linux-watchdog@lfdr.de>; Tue, 24 Jun 2025 21:47:23 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BE62AE7024
+	for <lists+linux-watchdog@lfdr.de>; Tue, 24 Jun 2025 21:49:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1131A17C210
-	for <lists+linux-watchdog@lfdr.de>; Tue, 24 Jun 2025 19:47:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8DE227B48B3
+	for <lists+linux-watchdog@lfdr.de>; Tue, 24 Jun 2025 19:45:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EBEE2EF9CB;
-	Tue, 24 Jun 2025 19:45:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4880F2EE5ED;
+	Tue, 24 Jun 2025 19:45:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="adsYaD+H"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="W2tQr+wx"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from lelvem-ot02.ext.ti.com (lelvem-ot02.ext.ti.com [198.47.23.235])
+Received: from fllvem-ot04.ext.ti.com (fllvem-ot04.ext.ti.com [198.47.19.246])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71FC92ECD14;
-	Tue, 24 Jun 2025 19:45:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.235
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70AF32EBDC8;
+	Tue, 24 Jun 2025 19:45:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.246
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750794329; cv=none; b=LeoVdg7vLUC7c2eBTVlCIO6hXMxwuYbf1VzoakzBSnK4V/rhBMqMPXJhoJzQbAHPHQpAVbp2FpOpXBWAfPIcS4ct9k3CixmtYei0sq7fFuE+F9+HaZenfdU4NltS0+0ZBnmw3+1qkg0SI8Hn0R5TJSa4ynI3HbArVmZcWpy90AY=
+	t=1750794328; cv=none; b=jJhZK6Rd6T+dx6SU+SVMMYpNkfl3gTEbU9v1toKzmKkx+x28D1JzBYjN439yBYaTeJu+Z/O0wM9Oy1aYU/ygzZ5tlP8tBJ9sonOICPqVjuOxT4yNyneVKdJ2iqUKq5LsFnPo3zYUemeoWrfZ+i+nwsBSjjHnm56W5v6rs5pwd2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750794329; c=relaxed/simple;
-	bh=ZqjDB2Afh1JOEWZ27VXE6hu4Cb49XT7xWl99zNUIbMI=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=aFqCzTQRcmeMpxfjjHDOtfS8srQTt1O3jISh0GMa6IoHS81XJzPBp15XTu/Rc0K6I3XXOcUevzuQ+yIvivvkEyiH5UgTx4j91jJ2N1RQHmW7eWIFmDhWyAccaduhHGKSeltHIcMcxvQVea9sMylBxFwNG2tIGjFsyKApvk69h/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=adsYaD+H; arc=none smtp.client-ip=198.47.23.235
+	s=arc-20240116; t=1750794328; c=relaxed/simple;
+	bh=nVtjFLsYqac80kauKYUyPSrHZSE3qmCX34aBfTJr+Wk=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=DtGg0hzvEqbkEsXkNdQ6/zbs+lkxSIxZHvx0NPUimEZ6zgtl2eosI3GS4VtW90LozWAuD8A16XsEz4ii/PH2qd6BSE14zm44+XRsIdnQXGwxbcUbRTXSnzFXCh/pesHOpnPpsQNvihO5NLjFLGEQXZ+d5nUuYRj7B6UgGW+jE4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=W2tQr+wx; arc=none smtp.client-ip=198.47.19.246
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Received: from fllvem-sh04.itg.ti.com ([10.64.41.54])
-	by lelvem-ot02.ext.ti.com (8.15.2/8.15.2) with ESMTP id 55OJj9dD1903653;
+	by fllvem-ot04.ext.ti.com (8.15.2/8.15.2) with ESMTP id 55OJj9it1945029;
 	Tue, 24 Jun 2025 14:45:09 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
 	s=ti-com-17Q1; t=1750794309;
-	bh=DiIFhqT5jW8AL/wFzN9Rpyuf9ZhlNrg18hXKR9LbMhg=;
-	h=From:To:CC:Subject:Date;
-	b=adsYaD+HSv/RKyG89ljvD7giZYLAGExFwWPbENMLWI34k2CY9Owd4JUp7Li+jfj9d
-	 C+q1TR00/PKNBfKpEidlpXoYu7hCNKmE1OQFfXtTApME40WY2eqRwFvyJ55Aex7OOR
-	 qoMHKmBJ5/T6S9B3y4/lKPHi4fyRRq8ZmKAO3TVw=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-	by fllvem-sh04.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 55OJj9j8562423
+	bh=O+dohNIF9NWYZKLUHqPZXLCGqouvSJpVjlA8CWcfu0I=;
+	h=From:To:CC:Subject:Date:In-Reply-To:References;
+	b=W2tQr+wx5PTcaG5BxlKKAxKKtl6NI2oS2TF6AAdW/18IzGK+t4JA8cv370TzgBuim
+	 XoJozmBBHbHyTpPiDuxHTz60A3g2Vg5uuEsBQHX4brwB2ScdfEblQajnudI01ZWKQs
+	 3HCHMowet8UtRtTOyrnbVktdBUbiS6GtAptna/B4=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+	by fllvem-sh04.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 55OJj9Bc562424
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
 	Tue, 24 Jun 2025 14:45:09 -0500
-Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Tue, 24
  Jun 2025 14:45:09 -0500
-Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55 via
  Frontend Transport; Tue, 24 Jun 2025 14:45:09 -0500
 Received: from judy-hp.dhcp.ti.com (judy-hp.dhcp.ti.com [128.247.81.105])
-	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 55OJj92a2326408;
+	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 55OJj92b2326408;
 	Tue, 24 Jun 2025 14:45:09 -0500
 From: Judith Mendez <jm@ti.com>
 To: Judith Mendez <jm@ti.com>, Wim Van Sebroeck <wim@linux-watchdog.org>,
@@ -64,10 +65,12 @@ To: Judith Mendez <jm@ti.com>, Wim Van Sebroeck <wim@linux-watchdog.org>,
 CC: Tero Kristo <t-kristo@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
         <linux-watchdog@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH 0/2] Add reaction control in rti
-Date: Tue, 24 Jun 2025 14:45:07 -0500
-Message-ID: <20250624194509.1314095-1-jm@ti.com>
+Subject: [PATCH 1/2] dt-bindings: watchdog: ti,rti-wdt: Add ti,am62l-rti-wdt compatible
+Date: Tue, 24 Jun 2025 14:45:08 -0500
+Message-ID: <20250624194509.1314095-2-jm@ti.com>
 X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250624194509.1314095-1-jm@ti.com>
+References: <20250624194509.1314095-1-jm@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -78,25 +81,26 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-This allows for reaction control in rti driver. Since AM62L SoC [0]
-does not have WWD reset output routed to a ESM module like all other
-K3 SoC's and has a reset signal routed to the reset HW block, add a new
-compatible for AM62L and configure reset reaction for AM62L SoC instead
-of NMI.
-
-This patch has been tested on AM62L EVM [1].
+Add a new compatible ti,am62l-rti-wdt for am62l SoC [0].
 
 [0] https://www.ti.com/product/AM62L
-[1] https://www.ti.com/tool/TMDS62LEVM
+Signed-off-by: Judith Mendez <jm@ti.com>
+---
+ Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-Judith Mendez (2):
-  dt-bindings: watchdog: ti,rti-wdt: Add ti,am62l-rti-wdt compatible
-  watchdog: rti_wdt: Add reaction control to rti
-
- .../bindings/watchdog/ti,rti-wdt.yaml         |  1 +
- drivers/watchdog/rti_wdt.c                    | 31 ++++++++++++++++---
- 2 files changed, 28 insertions(+), 4 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml b/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
+index 62ddc284a524..f57d5c2b8024 100644
+--- a/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
+@@ -24,6 +24,7 @@ properties:
+   compatible:
+     enum:
+       - ti,j7-rti-wdt
++      - ti,am62l-rti-wdt
+ 
+   reg:
+     maxItems: 1
 -- 
 2.49.0
 
