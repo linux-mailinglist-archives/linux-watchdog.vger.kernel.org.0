@@ -1,191 +1,200 @@
-Return-Path: <linux-watchdog+bounces-3723-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3724-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F78DAE869A
-	for <lists+linux-watchdog@lfdr.de>; Wed, 25 Jun 2025 16:34:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFFC9AE8724
+	for <lists+linux-watchdog@lfdr.de>; Wed, 25 Jun 2025 16:53:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2DC501896207
-	for <lists+linux-watchdog@lfdr.de>; Wed, 25 Jun 2025 14:34:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 014411644A0
+	for <lists+linux-watchdog@lfdr.de>; Wed, 25 Jun 2025 14:53:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5895D269D06;
-	Wed, 25 Jun 2025 14:33:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ED4125DD15;
+	Wed, 25 Jun 2025 14:53:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="TeQIkKdQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vEVPBNft"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from lelvem-ot01.ext.ti.com (lelvem-ot01.ext.ti.com [198.47.23.234])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2EBA2686A0;
-	Wed, 25 Jun 2025 14:33:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.234
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6D1F1D5165;
+	Wed, 25 Jun 2025 14:53:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750862038; cv=none; b=nBFUOtFJSSh4ZUu6g1hD75siOvyX+eqCPQZSBaEwGQeewLJOH4+Ng0ihE7CKZCU/13o2bc2GPtg5bBcNO68AuR+LeB3DREr/Gzh9AydgeRyIXAutHdjvY2fkG8h9uauGslGmhcXUa/6HScYtrxYmJl0b7ylfJphKr3p00W3BGnA=
+	t=1750863209; cv=none; b=kU4zPKBm8njAFWmdB2XmLsZyVnDL64sEsZxyfZZONdNCOP+884WlIyUS1DpXY+2YdN7THbmsxabFVj3eV92/K/gQkJWEhZouk7iLCp+4zUPFt67K1Nta41DuogIXy/S7ZKTWN9ZOItIZczy6vWHo58kR5AMO9hykH0lxsokxsK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750862038; c=relaxed/simple;
-	bh=kQ7HcopwAvd+1DfEiqpINyGl6QY1J0L14xhjyAXrLrA=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=u5KzzLZAZq4oMifQWWcqQPAS6SA8xm4DE3hnGc/2W/h9RXvJtcqO711+3HXZxRpeMGcHTz6xYvmpaKtNtW4siG9T90YTHmIM6rwhS9UU6ABSmAxQCaSIV+nQrlr0IlVE1zucm7o2fBuHH/J+2fzfr80Owbi+8QxvxYCYZzfbLpo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=TeQIkKdQ; arc=none smtp.client-ip=198.47.23.234
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllvem-sh03.itg.ti.com ([10.64.41.86])
-	by lelvem-ot01.ext.ti.com (8.15.2/8.15.2) with ESMTP id 55PEXdKG1479925;
-	Wed, 25 Jun 2025 09:33:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1750862019;
-	bh=qnpxRjv/UYQnJpJGafGpdC2NiDlk6JmsWkDSwjy9X9Y=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=TeQIkKdQaOr6epG/hRCorGEbCFILPdUOIH+DyraPk1us/qjlmhZjoQh9c27ZqwzcK
-	 8grCAM6C6k0iNJ5mu74585jzoiSKvKeXytny8DPjmJ5g2l4CyziWwvWe/x+xus/6aQ
-	 AmPwQUK4gksX42lOFwnybL8nJsvoqUUzBHvD3twA=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-	by fllvem-sh03.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 55PEXd9e1077390
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
-	Wed, 25 Jun 2025 09:33:39 -0500
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Wed, 25
- Jun 2025 09:33:38 -0500
-Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55 via
- Frontend Transport; Wed, 25 Jun 2025 09:33:38 -0500
-Received: from judy-hp.dhcp.ti.com (judy-hp.dhcp.ti.com [128.247.81.105])
-	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 55PEXco33804070;
-	Wed, 25 Jun 2025 09:33:39 -0500
-From: Judith Mendez <jm@ti.com>
-To: Judith Mendez <jm@ti.com>, Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-        Krzysztof
- Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>
-CC: Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>,
-        <linux-watchdog@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 2/2] watchdog: rti_wdt: Add reaction control
-Date: Wed, 25 Jun 2025 09:33:38 -0500
-Message-ID: <20250625143338.2381726-3-jm@ti.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250625143338.2381726-1-jm@ti.com>
-References: <20250625143338.2381726-1-jm@ti.com>
+	s=arc-20240116; t=1750863209; c=relaxed/simple;
+	bh=IJe6mOkdno5hFkqOuZzP6lWj3MzgBpaudeFCugaeW5w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nAt1tjPIzZkIJoIYkr0k3ztq16seMjP5OlFLwx5w6umNWdUV9k5Ks5ogMJWUTHt8beFoObIk1koseH25F2THMP2hqTb2m0V2ukh0WTZvtrdgqs3nWzP068ylvqTKb0036VMZg2aN7V23ciQOH1RtEjaY1k/a7J2ClgAslOUnkqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vEVPBNft; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ECC9C4CEEA;
+	Wed, 25 Jun 2025 14:53:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750863208;
+	bh=IJe6mOkdno5hFkqOuZzP6lWj3MzgBpaudeFCugaeW5w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=vEVPBNft67yFnyq10OuAhQPYNrznG7vdFztn5fo09zOvfI1ukOyexva0fcqBcgH1+
+	 Poc+Rb0Q5wYPAF/RBKgwIjSfT2BhCBTKF+H8lEqIVVYj1XhQ6eqImEr0zIkf9KMqw7
+	 wiDedspcBMpswvzBkjaXn7mWBDM8TOacEww3P7XsmLAiB3sIDsxxwTjSwKOjvnR7Q1
+	 1NxF/XUkzI+5ZbrxOPPItZejLHz6Wxesu97Cz+s5IctHQ6Mtt4IqKBjldDxRny3SM9
+	 0ysMFTmtKsCs2h7HEwnIh6QfiPwtGQI/kkcruqpQN+baPGTpL/7UmgHyPI+QBY9a7o
+	 2QdK6TZwf1GhQ==
+Date: Wed, 25 Jun 2025 15:53:21 +0100
+From: Lee Jones <lee@kernel.org>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
+	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
+	linux@roeck-us.net, jdelvare@suse.com,
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org, netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
+	Ming Yu <tmyu0@nuvoton.com>
+Subject: Re: [PATCH v12 1/7] mfd: Add core driver for Nuvoton NCT6694
+Message-ID: <20250625145321.GZ795775@google.com>
+References: <20250613131133.GR381401@google.com>
+ <CAOoeyxXftk9QX_REgeQhuXSc9rEguzXkKVKDQdawU=NzGbo9oA@mail.gmail.com>
+ <20250619115345.GL587864@google.com>
+ <CAOoeyxXSTeypv2qQjcK1cSPtjch=gJGYzqoMsLQ-LJZ8Kwgd=w@mail.gmail.com>
+ <20250619152814.GK795775@google.com>
+ <CAOoeyxU7eQneBuxbBqepta29q_OHPzrkN4SKmj6RX72L3Euw5A@mail.gmail.com>
+ <20250625090133.GP795775@google.com>
+ <CAOoeyxWoxC-n3JjjFe8Ruq_VydXk=jev=mopKfL5B7gsaSg=Ag@mail.gmail.com>
+ <20250625134634.GY795775@google.com>
+ <CAOoeyxVuu-kKoQa84mGOX=thAc0hnzQU8L=MnycoRRhzoZMnNw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+In-Reply-To: <CAOoeyxVuu-kKoQa84mGOX=thAc0hnzQU8L=MnycoRRhzoZMnNw@mail.gmail.com>
 
-This allows to configure reaction between NMI and reset for WWD.
+[...]
 
-On K3 SoC's other than AM62L SoC [0], watchdog reset output is routed
-to the ESM module which can subsequently route the signal to safety
-master or SoC reset. On AM62L, the watchdog reset output is routed
-to the SoC HW reset block. So, add a new compatible for AM62l to add
-SoC data and configure reaction to reset instead of NMI.
+> > > > > > In the code above you register 6 I2C devices.  Each device will be
+> > > > > > assigned a platform ID 0 through 5. The .probe() function in the I2C
+> > > > > > driver will be executed 6 times.  In each of those calls to .probe(),
+> > > > > > instead of pre-allocating a contiguous assignment of IDs here, you
+> > > > > > should be able to use IDA in .probe() to allocate those same device IDs
+> > > > > > 0 through 5.
+> > > > > >
+> > > > > > What am I missing here?
+> > > > > >
+> > > > >
+> > > > > You're absolutely right in the scenario where a single NCT6694 device
+> > > > > is present. However, I’m wondering how we should handle the case where
+> > > > > a second or even third NCT6694 device is bound to the same MFD driver.
+> > > > > In that situation, the sub-drivers using a static IDA will continue
+> > > > > allocating increasing IDs, rather than restarting from 0 for each
+> > > > > device. How should this be handled?
+> > > >
+> > > > I'd like to see the implementation of this before advising.
+> > > >
+> > > > In such a case, I assume there would be a differentiating factor between
+> > > > the two (or three) devices.  You would then use that to decide which IDA
+> > > > would need to be incremented.
+> > > >
+> > > > However, Greg is correct.  Hard-coding look-ups for userspace to use
+> > > > sounds like a terrible idea.
+> > > >
+> > >
+> > > I understand.
+> > > Do you think it would be better to pass the index via platform_data
+> > > and use PLATFORM_DEVID_AUTO together with mfd_add_hotplug_devices()
+> > > instead?
+> > > For example:
+> > > struct nct6694_platform_data {
+> > >     int index;
+> > > };
+> > >
+> > > static struct nct6694_platform_data i2c_data[] = {
+> > >     { .index = 0 }, { .index = 1 }, { .index = 2 }, { .index = 3 }, {
+> > > .index = 4 }, { .index = 5 },
+> > > };
+> > >
+> > > static const struct mfd_cell nct6694_devs[] = {
+> > >     MFD_CELL_BASIC("nct6694-i2c", NULL, &i2c_data[0], sizeof(struct
+> > > nct6694_platform_data), 0),
+> > >     MFD_CELL_BASIC("nct6694-i2c", NULL, &i2c_data[1], sizeof(struct
+> > > nct6694_platform_data), 0),
+> > >     MFD_CELL_BASIC("nct6694-i2c", NULL, &i2c_data[2], sizeof(struct
+> > > nct6694_platform_data), 0),
+> > >     MFD_CELL_BASIC("nct6694-i2c", NULL, &i2c_data[3], sizeof(struct
+> > > nct6694_platform_data), 0),
+> > >     MFD_CELL_BASIC("nct6694-i2c", NULL, &i2c_data[4], sizeof(struct
+> > > nct6694_platform_data), 0),
+> > >     MFD_CELL_BASIC("nct6694-i2c", NULL, &i2c_data[5], sizeof(struct
+> > > nct6694_platform_data), 0),
+> > > };
+> > > ...
+> > > mfd_add_hotplug_devices(dev, nct6694_devs, ARRAY_SIZE(nct6694_devs));
+> > > ...
+> >
+> > No, that's clearly way worse.  =:-)
+> >
+> > The clean-up that this provides is probably not worth all of this
+> > discussion.  I _still_ think this enumeration should be done in the
+> > driver.  But if you really can't make it work, I'll accept the .id
+> > patch.
+> >
+> 
+> Okay, I would like to ask for your advice regarding the implementation of IDA.
+> 
+> Using a global IDA in the sub-driver like this:
+> (in i2c-nct6694.c)
+> static DEFINE_IDA(nct6694_i2c_ida);
+> 
+> static int nct6694_i2c_probe(struct platform_device *pdev)
+> {
+>     ida_alloc(&nct6694_i2c_ida, GFP_KERNEL);
+>     ...
+> }
+> 
+> causes IDs to be globally incremented across all devices. For example,
+> the first NCT6694 device gets probed 6 times and receives IDs 0–5, but
+> when a second NCT6694 device is added, it receives IDs starting from
+> 6, rather than starting again from 0. This makes per-device ID mapping
+> unreliable.
+> 
+> To solve this, I believe the right approach is to have each NCT6694
+> instance maintain its own IDA, managed by the MFD driver's private
+> data. As mentioned earlier, for example:
+> (in nct6694.c)
+> struct nct6694 {
+>     struct device *dev;
+>     struct ida i2c_ida;
+> };
+> 
+> static int nct6694_probe(struct platform_device *pdev)
+> {
+>     ...
+>     ida_init(&nct6694->i2c_ida);
+>     ...
+> }
+> 
+> (in i2c-nct6694.c)
+> static int nct6694_i2c_probe(struct platform_device *pdev)
+> {
+>     id = ida_alloc(&nct6694->i2c_ida, GFP_KERNEL);
+> }
+> 
+> This way, each device allocates IDs independently, and each set of
+> I2C/GPIO instances gets predictable IDs starting from 0 per device. I
+> think this resolves the original issue without relying on hardcoded
+> platform IDs.
+> Please let me know if this implementation aligns with what you had in mind.
 
-[0] https://www.ti.com/product/AM62L
-Signed-off-by: Judith Mendez <jm@ti.com>
----
-Changes since v1-resend:
-- no change
----
- drivers/watchdog/rti_wdt.c | 31 +++++++++++++++++++++++++++----
- 1 file changed, 27 insertions(+), 4 deletions(-)
+This sounds like an acceptable way forward.
 
-diff --git a/drivers/watchdog/rti_wdt.c b/drivers/watchdog/rti_wdt.c
-index d1f9ce4100a8..d419884c86c4 100644
---- a/drivers/watchdog/rti_wdt.c
-+++ b/drivers/watchdog/rti_wdt.c
-@@ -35,7 +35,8 @@
- #define RTIWWDRXCTRL	0xa4
- #define RTIWWDSIZECTRL	0xa8
- 
--#define RTIWWDRX_NMI	0xa
-+#define RTIWWDRXN_RST	0x5
-+#define RTIWWDRXN_NMI	0xa
- 
- #define RTIWWDSIZE_50P		0x50
- #define RTIWWDSIZE_25P		0x500
-@@ -63,22 +64,29 @@
- 
- static int heartbeat;
- 
-+struct rti_wdt_data {
-+	bool reset;
-+};
-+
- /*
-  * struct to hold data for each WDT device
-  * @base - base io address of WD device
-  * @freq - source clock frequency of WDT
-  * @wdd  - hold watchdog device as is in WDT core
-+ * @data - hold configuration data
-  */
- struct rti_wdt_device {
- 	void __iomem		*base;
- 	unsigned long		freq;
- 	struct watchdog_device	wdd;
-+	const struct rti_wdt_data *data;
- };
- 
- static int rti_wdt_start(struct watchdog_device *wdd)
- {
- 	u32 timer_margin;
- 	struct rti_wdt_device *wdt = watchdog_get_drvdata(wdd);
-+	u8 reaction;
- 	int ret;
- 
- 	ret = pm_runtime_resume_and_get(wdd->parent);
-@@ -101,8 +109,12 @@ static int rti_wdt_start(struct watchdog_device *wdd)
- 	 */
- 	wdd->min_hw_heartbeat_ms = 520 * wdd->timeout + MAX_HW_ERROR;
- 
--	/* Generate NMI when wdt expires */
--	writel_relaxed(RTIWWDRX_NMI, wdt->base + RTIWWDRXCTRL);
-+	/* Generate reset or NMI when timer expires/serviced outside of window */
-+	reaction = RTIWWDRXN_NMI;
-+	if (wdt->data->reset)
-+		reaction = RTIWWDRXN_RST;
-+
-+	writel_relaxed(reaction, wdt->base + RTIWWDRXCTRL);
- 
- 	/* Open window size 50%; this is the largest window size available */
- 	writel_relaxed(RTIWWDSIZE_50P, wdt->base + RTIWWDSIZECTRL);
-@@ -255,6 +267,8 @@ static int rti_wdt_probe(struct platform_device *pdev)
- 	wdd->timeout = DEFAULT_HEARTBEAT;
- 	wdd->parent = dev;
- 
-+	wdt->data = of_device_get_match_data(dev);
-+
- 	watchdog_set_drvdata(wdd, wdt);
- 	watchdog_set_nowayout(wdd, 1);
- 	watchdog_set_restart_priority(wdd, 128);
-@@ -369,8 +383,17 @@ static void rti_wdt_remove(struct platform_device *pdev)
- 	pm_runtime_disable(&pdev->dev);
- }
- 
-+static struct rti_wdt_data j7_wdt = {
-+	.reset = false,
-+};
-+
-+static struct rti_wdt_data am62l_wdt = {
-+	.reset = true,
-+};
-+
- static const struct of_device_id rti_wdt_of_match[] = {
--	{ .compatible = "ti,j7-rti-wdt", },
-+	{ .compatible = "ti,j7-rti-wdt", .data = &j7_wdt },
-+	{ .compatible = "ti,am62l-rti-wdt", .data = &am62l_wdt },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, rti_wdt_of_match);
 -- 
-2.49.0
-
+Lee Jones [李琼斯]
 
