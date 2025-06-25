@@ -1,113 +1,212 @@
-Return-Path: <linux-watchdog+bounces-3715-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3716-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE217AE7634
-	for <lists+linux-watchdog@lfdr.de>; Wed, 25 Jun 2025 06:54:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04B40AE7B56
+	for <lists+linux-watchdog@lfdr.de>; Wed, 25 Jun 2025 11:03:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 214233A5C11
-	for <lists+linux-watchdog@lfdr.de>; Wed, 25 Jun 2025 04:53:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE74E3ABD1A
+	for <lists+linux-watchdog@lfdr.de>; Wed, 25 Jun 2025 09:02:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A48D01D432D;
-	Wed, 25 Jun 2025 04:54:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F56B2882C8;
+	Wed, 25 Jun 2025 09:01:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="aVnTZh+G"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kmWaOFjU"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from fllvem-ot04.ext.ti.com (fllvem-ot04.ext.ti.com [198.47.19.246])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D8F035280;
-	Wed, 25 Jun 2025 04:54:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.246
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD9A37E792;
+	Wed, 25 Jun 2025 09:01:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750827253; cv=none; b=rk65lLH37A9DodROpjiZ4yfd4HFNlRsc9Wt90MpJ6uzrxCKMBRIiz6ijt0A4Is5zS9xI+dq0mAE1TX9rfvRwAgRdq9woeT/yuvFp8ZgjhngGuhkzymtGMM2r5VgR/0vmhrxA5S3wOgS4X+b8dRj0/GOovzcMqw+CjEyPJFBOa0s=
+	t=1750842101; cv=none; b=ifo9NZ2Ng0YW2qk8Owyqx6J+gehrvQyVukJc3hsLXulN1vO33RoBJ9nmxIT6Q8bKGrpBjaaYIMtSkS3shjfg2mqRcrPkoJzULyfQ8DfkRS2iTRcgJrEgNisq5pJLWed9r9Ghk+lE2YruFP6vuwPOGGDKKzrRn+gxgpvV81+19dA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750827253; c=relaxed/simple;
-	bh=T4oMS/UYHhH2kSrrHCVM15xoOnQaU/C+jWcr+Vc0gwE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Jd3vReB0y7T+F5SLLja2c6UJBdkQE0vhqfLr5+JgUdHFJ+3RUXq4dCj2NAz5fK/aBCTP0w8W2wK6FpPZVVAB+FdwI/tz+5wXWeWRJ7VTOBKnrJx79Yn8Kb+Ty/nydSGakmTgdaUbDwYV0sCYgrPAptWKcQn9W/bCQmzTbO/Ux20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=aVnTZh+G; arc=none smtp.client-ip=198.47.19.246
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllvem-sh04.itg.ti.com ([10.64.41.54])
-	by fllvem-ot04.ext.ti.com (8.15.2/8.15.2) with ESMTP id 55P4rstu2040833;
-	Tue, 24 Jun 2025 23:53:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1750827234;
-	bh=b3no2NG3xR2a4DyD5qkF1Cq3m2ljBEdtB02js9lWzpw=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=aVnTZh+Ga6t6mDrInar6pb/lpqQtkW2FDxI30dmIQgzq0CMel0xhRgpvcEeXRseEc
-	 V9g8H0Se/hBSGVOUagSf9EsS7D9iQd9jNeh6dMyJOw75Qflko2vGBxF5VTDOIMsNvW
-	 vfAVYyoI8cyFvH+PiKR5vWpt/4iuoSxEq56bIZoA=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-	by fllvem-sh04.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 55P4rsk9928730
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
-	Tue, 24 Jun 2025 23:53:54 -0500
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Tue, 24
- Jun 2025 23:53:53 -0500
-Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55 via
- Frontend Transport; Tue, 24 Jun 2025 23:53:53 -0500
-Received: from [10.249.142.58] ([10.249.142.58])
-	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 55P4rn5G2993802;
-	Tue, 24 Jun 2025 23:53:50 -0500
-Message-ID: <4b91a211-9e97-4431-8b42-4817fd17e1e1@ti.com>
-Date: Wed, 25 Jun 2025 10:23:49 +0530
+	s=arc-20240116; t=1750842101; c=relaxed/simple;
+	bh=OhdgF55PyBEbfC8aXgc9N1rHxO4doVes6/sM5CeG1ZU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=teMKDJDYBYBSDjpcayoA+WGPjv6AhAG0e6k1aHafTrr4D4gh5JAr953xLw6VLB0xuPVSLSovBLdYyJwf18FbI6xlKh8eS+UIr3ptSG9lX2SntSZnzk4zFEHXvkoP/u/es2kKujeL4AJUdQ4kPa8si5vG1llI7iHcXmPcI7g4Uok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kmWaOFjU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA9ADC4CEEA;
+	Wed, 25 Jun 2025 09:01:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750842100;
+	bh=OhdgF55PyBEbfC8aXgc9N1rHxO4doVes6/sM5CeG1ZU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kmWaOFjUT1wMib2gJdif3D7Ejx4H1upQdwnyg4IgRfaVtd5UkCyhMfOC76/FUKCgd
+	 vxAHh5XhTgPH4e9ON+kNB4QIpDFQ/8mWmCl83/GHhLyyjDp1vZvkEaecgSx8QtvX+a
+	 Sb6medYCTIPOU5fcM/Ff+yprIo/QdiK0Mjr3VOBABQvUXWYbkQksv7UAhdXb0ianvJ
+	 BRt0NEUZp8EKImSvLzdWddbpxzJqOo0edMBk+gtjyzAoRVhtTQMPeV+i6TGDdniD03
+	 uFi8a7/s5Fa5nOtywCjlBDJwWxf2Gmh8lUCG9O7yMGxOobFxqR4FXbXy6nSJAlQVcO
+	 wJyii3Wxvv+JA==
+Date: Wed, 25 Jun 2025 10:01:33 +0100
+From: Lee Jones <lee@kernel.org>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
+	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
+	linux@roeck-us.net, jdelvare@suse.com,
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org, netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
+	Ming Yu <tmyu0@nuvoton.com>
+Subject: Re: [PATCH v12 1/7] mfd: Add core driver for Nuvoton NCT6694
+Message-ID: <20250625090133.GP795775@google.com>
+References: <20250612140041.GF381401@google.com>
+ <CAOoeyxVvZiD18qbGd5oUnqLNETKw50fJBjJO3vR50kon_a5_kA@mail.gmail.com>
+ <20250612152313.GP381401@google.com>
+ <CAOoeyxV-E_HQOBu0Pzfy0b0yJ2qbrW_C8pATCTWE4+PXqvHL6g@mail.gmail.com>
+ <20250613131133.GR381401@google.com>
+ <CAOoeyxXftk9QX_REgeQhuXSc9rEguzXkKVKDQdawU=NzGbo9oA@mail.gmail.com>
+ <20250619115345.GL587864@google.com>
+ <CAOoeyxXSTeypv2qQjcK1cSPtjch=gJGYzqoMsLQ-LJZ8Kwgd=w@mail.gmail.com>
+ <20250619152814.GK795775@google.com>
+ <CAOoeyxU7eQneBuxbBqepta29q_OHPzrkN4SKmj6RX72L3Euw5A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Betterbird (Windows)
-Subject: Re: [PATCH RESEND 1/2] dt-bindings: watchdog: ti,rti-wdt: Add
- ti,am62l-rti-wdt compatible
-To: Judith Mendez <jm@ti.com>, Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-        Krzysztof
- Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>
-CC: Tero Kristo <kristo@kernel.org>, <linux-watchdog@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20250624202605.1333645-1-jm@ti.com>
- <20250624202605.1333645-2-jm@ti.com>
-From: "Raghavendra, Vignesh" <vigneshr@ti.com>
-Content-Language: en-US
-In-Reply-To: <20250624202605.1333645-2-jm@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOoeyxU7eQneBuxbBqepta29q_OHPzrkN4SKmj6RX72L3Euw5A@mail.gmail.com>
 
+On Fri, 20 Jun 2025, Ming Yu wrote:
 
-
-On 6/25/2025 1:56 AM, Judith Mendez wrote:
-> Add a new compatible ti,am62l-rti-wdt for am62l SoC [0].
+> Lee Jones <lee@kernel.org> 於 2025年6月19日 週四 下午11:28寫道：
+> >
+> > On Thu, 19 Jun 2025, Ming Yu wrote:
+> >
+> > > Lee Jones <lee@kernel.org> 於 2025年6月19日 週四 下午7:53寫道：
+> > > >
+> > > > On Fri, 13 Jun 2025, Ming Yu wrote:
+> > > >
+> > > > > Lee Jones <lee@kernel.org> 於 2025年6月13日 週五 下午9:11寫道：
+> > > > > >
+> > > > > > On Fri, 13 Jun 2025, Ming Yu wrote:
+> > > > > >
+> > > > > > > Lee Jones <lee@kernel.org> 於 2025年6月12日 週四 下午11:23寫道：
+> > > > > > > >
+> > > > > > > > On Thu, 12 Jun 2025, Ming Yu wrote:
+> > > > > > > >
+> > > > > > > > > Dear Lee,
+> > > > > > > > >
+> > > > > > > > > Thank you for reviewing,
+> > > > > > > > >
+> > > > > > > > > Lee Jones <lee@kernel.org> 於 2025年6月12日 週四 下午10:00寫道：
+> > > > > > > > > >
+> > > > > > > > > ...
+> > > > > > > > > > > +static const struct mfd_cell nct6694_devs[] = {
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 0),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 1),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 2),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 3),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 4),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 5),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 6),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 7),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 8),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 9),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 10),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 11),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 12),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 13),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 14),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 15),
+> > > > > > > > > > > +
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 0),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 1),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 2),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 3),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 4),
+> > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 5),
+> > > > > > > > > >
+> > > > > > > > > > Why have we gone back to this silly numbering scheme?
+> > > > > > > > > >
+> > > > > > > > > > What happened to using IDA in the child driver?
+> > > > > > > > > >
+> > > > > > > > >
+> > > > > > > > > In a previous version, I tried to maintain a static IDA in each
+> > > > > > > > > sub-driver. However, I didn’t consider the case where multiple NCT6694
+> > > > > > > > > devices are bound to the same driver — in that case, the IDs are not
+> > > > > > > > > fixed and become unusable for my purpose.
+> > > > > > > >
+> > > > > > > > Not sure I understand.
+> > > > > > > >
+> > > > > > >
+> > > > > > > As far as I know, if I maintain the IDA in the sub-drivers and use
+> > > > > > > multiple MFD_CELL_NAME("nct6694-gpio") entries in the MFD, the first
+> > > > > > > NCT6694 device bound to the GPIO driver will receive IDs 0~15.
+> > > > > > > However, when a second NCT6694 device is connected to the system, it
+> > > > > > > will receive IDs 16~31.
+> > > > > > > Because of this behavior, I switched back to using platform_device->id.
+> > > > > >
+> > > > > > Each of the devices will probe once.
+> > > > > >
+> > > > > > The first one will be given 0, the second will be given 1, etc.
+> > > > > >
+> > > > > > Why would you give multiple IDs to a single device bound to a driver?
+> > > > > >
+> > > > >
+> > > > > The device exposes multiple peripherals — 16 GPIO controllers, 6 I2C
+> > > > > adapters, 2 CAN FD controllers, and 2 watchdog timers. Each peripheral
+> > > > > is independently addressable, has its own register region, and can
+> > > > > operate in isolation. The IDs are used to distinguish between these
+> > > > > instances.
+> > > > > For example, the GPIO driver will be probed 16 times, allocating 16
+> > > > > separate gpio_chip instances to control 8 GPIO lines each.
+> > > > >
+> > > > > If another device binds to this driver, it is expected to expose
+> > > > > peripherals with the same structure and behavior.
+> > > >
+> > > > I still don't see why having a per-device IDA wouldn't render each
+> > > > probed device with its own ID.  Just as you have above.
+> > > >
+> > >
+> > > For example, when the MFD driver and the I2C sub-driver are loaded,
+> > > connecting the first NCT6694 USB device to the system results in 6
+> > > nct6694-i2c platform devices being created and bound to the
+> > > i2c-nct6694 driver. These devices receive IDs 0 through 5 via the IDA.
+> > >
+> > > However, when a second NCT6694 USB device is connected, its
+> > > corresponding nct6694-i2c platform devices receive IDs 6 through 11 —
+> > > instead of 0 through 5 as I originally expected.
+> > >
+> > > If I've misunderstood something, please feel free to correct me. Thank you!
+> >
+> > In the code above you register 6 I2C devices.  Each device will be
+> > assigned a platform ID 0 through 5. The .probe() function in the I2C
+> > driver will be executed 6 times.  In each of those calls to .probe(),
+> > instead of pre-allocating a contiguous assignment of IDs here, you
+> > should be able to use IDA in .probe() to allocate those same device IDs
+> > 0 through 5.
+> >
+> > What am I missing here?
+> >
 > 
-> [0] https://www.ti.com/product/AM62L
-> Signed-off-by: Judith Mendez <jm@ti.com>
-> ---
->  Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml b/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
-> index 62ddc284a524..f57d5c2b8024 100644
-> --- a/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
-> @@ -24,6 +24,7 @@ properties:
->    compatible:
->      enum:
->        - ti,j7-rti-wdt
-> +      - ti,am62l-rti-wdt
->  
+> You're absolutely right in the scenario where a single NCT6694 device
+> is present. However, I’m wondering how we should handle the case where
+> a second or even third NCT6694 device is bound to the same MFD driver.
+> In that situation, the sub-drivers using a static IDA will continue
+> allocating increasing IDs, rather than restarting from 0 for each
+> device. How should this be handled?
 
-Would be good to keep this sorted alphabetically.
+I'd like to see the implementation of this before advising.
 
->    reg:
->      maxItems: 1
+In such a case, I assume there would be a differentiating factor between
+the two (or three) devices.  You would then use that to decide which IDA
+would need to be incremented.
 
+However, Greg is correct.  Hard-coding look-ups for userspace to use
+sounds like a terrible idea.
+
+-- 
+Lee Jones [李琼斯]
 
