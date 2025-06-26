@@ -1,181 +1,121 @@
-Return-Path: <linux-watchdog+bounces-3734-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3738-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 471C6AE992D
-	for <lists+linux-watchdog@lfdr.de>; Thu, 26 Jun 2025 10:54:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65B99AEA3E0
+	for <lists+linux-watchdog@lfdr.de>; Thu, 26 Jun 2025 18:56:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2B1AD1893C6F
-	for <lists+linux-watchdog@lfdr.de>; Thu, 26 Jun 2025 08:54:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 098AB4E4774
+	for <lists+linux-watchdog@lfdr.de>; Thu, 26 Jun 2025 16:56:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0E9B2C08BB;
-	Thu, 26 Jun 2025 08:53:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45E4D2ECEA6;
+	Thu, 26 Jun 2025 16:51:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bNf0qHuz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PXqY4ne+"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9ECB2BF012;
-	Thu, 26 Jun 2025 08:53:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B59402E4262;
+	Thu, 26 Jun 2025 16:51:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750928038; cv=none; b=dwUIb5kKQZovqQWv46hadGl/3SZ54m6iy2o/fVtYp6l7LAvA+yRZnmOzaeyKq/PjRxus084IdNPno2gdl8//Lt6YYwzIP7tHV9WFYAxyE04tg2DBix5fBcAH/C/4jFF4W5B6y72em/ni20P/OZCtSAOWUJ0fFGpZwHqqyLroMQk=
+	t=1750956711; cv=none; b=nrjlVa99rzsADl8Jl5jt+16/L630SDidnmi/SmORms0L2ryZ97rd9a0VVhEexX6j50fPffJ2SDD/UJglQId4Momp75rj8PUvzQ1WmSH/y+O7r7B4wAf01PAJh/1VGbFKA+VEFBoHE1QGDFOcuAPIxTvgqVbzMIriTzbK7djL0cQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750928038; c=relaxed/simple;
-	bh=AUPv/TDoKd6ieMqlLaY3QqCSEU6AU3dk77+aCznD0MM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=V3GjfvD3OH5VIWgO7Mi8ZVS58+3KsEJtBMnkaos0E8CZ3vpxmR0p5rpu8K1Fe7ymXEO8q+JbU4MyyiEncSOURxJo83VPvMVbiBDsFJkGNUQkeW+2jhhzfeTniJq0wQqHJOaxlhwrQWpZCgbJwAO/AP4eItdoHW64ujtcPvb2wU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bNf0qHuz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8559CC4CEEF;
-	Thu, 26 Jun 2025 08:53:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750928038;
-	bh=AUPv/TDoKd6ieMqlLaY3QqCSEU6AU3dk77+aCznD0MM=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=bNf0qHuzlOTME1/ZyXjCOKVbVbEwW4ZIxWyH8XRH0GWib2bAXYlKHU+YBlLhbJl/y
-	 mCxaoHpN8Dc0D4V0LHXvD2WCQnZ3GTGsAsNQtOgOtpxw0fq/jXSvRdbe1KHGg7VNXL
-	 6O7UXVAKO5zqNgxzq1uzXG2V5S2v6vdIfA6IzWVSk3qlqWZH/5xd/9deWSBriK8/QP
-	 Kyp+F4Qqv2hHE/6i0YXZYX1V9HyTn8rQV/y30L+JsHkT6bWDkUJb+0K54qeQ+XRSYj
-	 208RgUMlWa9NovWKRI/6hCWm871a5uPO4CfQKqg45b/aH+fwm2Vto+jbDfxLYKaIcS
-	 5U7cle6hlq90g==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B4B2C7EE32;
-	Thu, 26 Jun 2025 08:53:58 +0000 (UTC)
-From: Max Shevchenko via B4 Relay <devnull+wctrl.proton.me@kernel.org>
-Date: Thu, 26 Jun 2025 11:54:04 +0300
-Subject: [PATCH v2 11/11] ARM: dts: mediatek: add basic support for Lenovo
- A369i board
+	s=arc-20240116; t=1750956711; c=relaxed/simple;
+	bh=wqBh7X5xKktV9DzTlUGgy5dCWpsRDu8oey1YYIW7dXQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qY3d0Ro402I3FzuahmnsxeVAgwFPRCEieiCS3EjdsDTalFUVYrSmBKjtJBJair8mORGEqYSRET53oSMvU859d6S17XiOeow+CK1TuaPr+hVtM25y12GVI0ptX2ywxl8PYTj3RdaPi1bEHgIsxr3qOwHi0oUg5zeuWYmlzak2QGc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PXqY4ne+; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750956710; x=1782492710;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=wqBh7X5xKktV9DzTlUGgy5dCWpsRDu8oey1YYIW7dXQ=;
+  b=PXqY4ne+TDNdRdp5QiTGV/1d0V5pRiObolwyAfM4wvBe97yX7i8Fws77
+   If/Fot0NLlplG+D6daHksS1e3Xq+/zu145YbZ10Bkn0cUrgx4CxcCIlgO
+   BHJWqX0LM9S9ygjT4FDlWFodyK+MIxubs//l7jlJndi+1sfFq/wTd9//M
+   dALcT3xS+YxOqJsTeOXkCkX17tjkrdikgU/D8x94nTPLmTPhWXK/WtGOd
+   X5O+GbXDAm6Yf0UWvG91eM+d2wTOgzFWwPQHfCDx3A12fTEn7/PmRWt+b
+   5H1RqKbrfysWMyewGS8w7Dx/LfvIiIy0l+4m6SJ+MOYIxGoAQihsVUDUv
+   w==;
+X-CSE-ConnectionGUID: JXcIeWEzTqG/+e2gpLXU/w==
+X-CSE-MsgGUID: lrMFUO+aQ12uI5mihCAK/g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11476"; a="53126376"
+X-IronPort-AV: E=Sophos;i="6.16,268,1744095600"; 
+   d="scan'208";a="53126376"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2025 09:51:50 -0700
+X-CSE-ConnectionGUID: 2uH59PzYQKiYi3aXAPTtrw==
+X-CSE-MsgGUID: ST9AsRyOTL6uXjlTB3Tz7A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,268,1744095600"; 
+   d="scan'208";a="152673554"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa006.fm.intel.com with ESMTP; 26 Jun 2025 09:51:47 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id 96CF42AD; Thu, 26 Jun 2025 19:51:46 +0300 (EEST)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-watchdog@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v1 1/1] watchdog: Don't use "proxy" headers
+Date: Thu, 26 Jun 2025 19:51:45 +0300
+Message-ID: <20250626165145.327685-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250626-mt6572-v2-11-f7f842196986@proton.me>
-References: <20250626-mt6572-v2-0-f7f842196986@proton.me>
-In-Reply-To: <20250626-mt6572-v2-0-f7f842196986@proton.me>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Jiri Slaby <jirislaby@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Thomas Gleixner <tglx@linutronix.de>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, 
- Wim Van Sebroeck <wim@linux-watchdog.org>, 
- Guenter Roeck <linux@roeck-us.net>, Sean Wang <sean.wang@mediatek.com>, 
- Russell King <linux@armlinux.org.uk>
-Cc: linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-mediatek@lists.infradead.org, linux-watchdog@vger.kernel.org, 
- Max Shevchenko <wctrl@proton.me>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1750928035; l=2277;
- i=wctrl@proton.me; s=20250603; h=from:subject:message-id;
- bh=4u8PvwUsCoKzaBq7UBptniJ7BDz8n6fIUr+Q5q3mwbA=;
- b=6BJCGc3Gmadj8FKTlSidHgR6LDm1JQJ/jIN9Jxg9QoZsRESehd/TP2FEDngEU+/DeEuAB1dAR
- Jo7d1iH5euHDHqA9HYXYhU+TtU9YnbApJ0MU+NUKwkWHPiiOyPDWo5A
-X-Developer-Key: i=wctrl@proton.me; a=ed25519;
- pk=JXUx3mL/OrnRvbK57HXgugBjEBKq4QgDKJqp7BALm74=
-X-Endpoint-Received: by B4 Relay for wctrl@proton.me/20250603 with
- auth_id=421
-X-Original-From: Max Shevchenko <wctrl@proton.me>
-Reply-To: wctrl@proton.me
+Content-Transfer-Encoding: 8bit
 
-From: Max Shevchenko <wctrl@proton.me>
+Update header inclusions to follow IWYU (Include What You Use)
+principle.
 
-This smartphone uses a MediaTek MT6572 system-on-chip with 512MB of RAM.
-It can currently boot into initramfs with a working UART and
-Simple Framebuffer using already initialized panel by the bootloader.
+Note that kernel.h is discouraged to be included as it's written
+at the top of that file.
 
-Signed-off-by: Max Shevchenko <wctrl@proton.me>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- arch/arm/boot/dts/mediatek/Makefile                |  1 +
- arch/arm/boot/dts/mediatek/mt6572-lenovo-a369i.dts | 56 ++++++++++++++++++++++
- 2 files changed, 57 insertions(+)
+ include/linux/watchdog.h | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm/boot/dts/mediatek/Makefile b/arch/arm/boot/dts/mediatek/Makefile
-index cb869a1aaec21a1d99f7f2a829b84672a3f52726..e48de3efeb3b9ab00108cc28afa8da525d0ec14a 100644
---- a/arch/arm/boot/dts/mediatek/Makefile
-+++ b/arch/arm/boot/dts/mediatek/Makefile
-@@ -2,6 +2,7 @@
- dtb-$(CONFIG_ARCH_MEDIATEK) += \
- 	mt2701-evb.dtb \
- 	mt6572-jty-d101.dtb \
-+	mt6572-lenovo-a369i.dtb \
- 	mt6580-evbp1.dtb \
- 	mt6582-prestigio-pmt5008-3g.dtb \
- 	mt6589-aquaris5.dtb \
-diff --git a/arch/arm/boot/dts/mediatek/mt6572-lenovo-a369i.dts b/arch/arm/boot/dts/mediatek/mt6572-lenovo-a369i.dts
-new file mode 100644
-index 0000000000000000000000000000000000000000..523e93647fdcf564404b720abe35ec7322cffa1e
---- /dev/null
-+++ b/arch/arm/boot/dts/mediatek/mt6572-lenovo-a369i.dts
-@@ -0,0 +1,56 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2025 Max Shevchenko <wctrl@proton.me>
-+ */
+diff --git a/include/linux/watchdog.h b/include/linux/watchdog.h
+index 99660197a36c..8c60687a3e55 100644
+--- a/include/linux/watchdog.h
++++ b/include/linux/watchdog.h
+@@ -9,14 +9,18 @@
+ #ifndef _LINUX_WATCHDOG_H
+ #define _LINUX_WATCHDOG_H
+ 
+-
+ #include <linux/bitops.h>
+-#include <linux/cdev.h>
+-#include <linux/device.h>
+-#include <linux/kernel.h>
++#include <linux/limits.h>
+ #include <linux/notifier.h>
++#include <linux/printk.h>
++#include <linux/types.h>
 +
-+/dts-v1/;
-+#include "mt6572.dtsi"
+ #include <uapi/linux/watchdog.h>
+ 
++struct attribute_group;
++struct device;
++struct module;
 +
-+/ {
-+	model = "Lenovo A369i";
-+	compatible = "lenovo,a369i", "mediatek,mt6572";
-+
-+	aliases {
-+		serial0 = &uart0;
-+	};
-+
-+	chosen {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		stdout-path = "serial0:921600n8";
-+
-+		framebuffer: framebuffer@9fa00000 {
-+			compatible = "simple-framebuffer";
-+			memory-region = <&framebuffer_reserved>;
-+			width = <480>;
-+			height = <800>;
-+			stride = <(480 * 2)>;
-+			format = "r5g6b5";
-+		};
-+	};
-+
-+	memory {
-+		device_type = "memory";
-+		reg = <0x80000000 0x20000000>;
-+	};
-+
-+	reserved-memory {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+
-+		connsys@80000000 {
-+			reg = <0x80000000 0x100000>;
-+			no-map;
-+		};
-+
-+		framebuffer_reserved: framebuffer@9fa00000 {
-+			reg = <0x9fa00000 0x600000>;
-+			no-map;
-+		};
-+	};
-+};
-+
-+&uart0 {
-+	status = "okay";
-+};
-
+ struct watchdog_ops;
+ struct watchdog_device;
+ struct watchdog_core_data;
 -- 
-2.50.0
-
+2.47.2
 
 
