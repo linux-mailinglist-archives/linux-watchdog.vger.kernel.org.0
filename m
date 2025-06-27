@@ -1,170 +1,164 @@
-Return-Path: <linux-watchdog+bounces-3740-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3741-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A106AEA765
-	for <lists+linux-watchdog@lfdr.de>; Thu, 26 Jun 2025 21:53:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FA96AEABA0
+	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Jun 2025 02:15:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F217F7AC864
-	for <lists+linux-watchdog@lfdr.de>; Thu, 26 Jun 2025 19:52:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C35E3AA9F8
+	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Jun 2025 00:14:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 590F02EF676;
-	Thu, 26 Jun 2025 19:53:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3327EC2FB;
+	Fri, 27 Jun 2025 00:15:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mdJgSNJl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E0qpAtRg"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27D5E2EAB7F;
-	Thu, 26 Jun 2025 19:53:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B8DB881E;
+	Fri, 27 Jun 2025 00:15:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750967601; cv=none; b=mCwlP8UTw+ekl/E9ov8OIyCNs72QP01/is4Tw8pOuLMGBd70+X/K3ZEQAhL9iY+r2YUc+kscOMch5kikEj2grYx8kOuwpgfnACBd66OfWy46wFZHyfBE3oMn1zspfqgvw0i/U2S0kspUUGiIeEcBfrj5EqBnsj2t5pUZqseM3lQ=
+	t=1750983317; cv=none; b=OpISUui+mF1vfYg/5jLTwQBkXGnjBeIwn1+Gsd/I3nt0vmDDAW+Z7hJpF73Zhm7vspENnR8KkcFVYAirvzNQ47zLwsMnT9xQJcHjEl102zDp7/WaqUG9vh/0wHxdfZC64kFHQT+vXPPlykT4JhmGmqKi85cXmqen1loD6CKMJt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750967601; c=relaxed/simple;
-	bh=gP/lLAielMQ0FzJZoQVZVvW32nn5aVh+e1xIp7tL+5Y=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=Zm0ZzXauQTv6slLo+WkEDYmJg4vhBR7BBXtuAYpGhAgDY+NmwHliBSz7n69VehgyUJYAhpsiQhKoDWVXcaUTMZD2zDOPa5jS5EQC53reLlWm/c5RXzrU4EYm0D2ICbgDlhZSSrg+H3tNnbPraLBV05DYVdN/zzpn5YAjDK2oEHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mdJgSNJl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93113C4CEEB;
-	Thu, 26 Jun 2025 19:53:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750967600;
-	bh=gP/lLAielMQ0FzJZoQVZVvW32nn5aVh+e1xIp7tL+5Y=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=mdJgSNJlTCiBsgp1QvD08F4fcua2wPsC395F4cWUyYK5vhobW4WMrk+HNckMyVVnv
-	 SyBNxW8pmK1kHZyq62uSz+dqrTw1gWvGDX0uHKIZ95/VXLbqpGGbwJG74X91Vnjsi9
-	 +lQzSu24MxCmAgiA8BskBo3XspT8PnF1p1j3naF6V3QQpXBRto/8rg8B0pXSV1nxy/
-	 PS9dPFp7nBnSwxPAIaY4YnH4KsI93PilBkhbzyeokHcCVyvvCaYEyHKzk5JbxcnpQU
-	 w7YqCokzH58UfMS+MSYQhnF//W+DCn8cHiJPcbX/eUqFZ0koRzligdhE7BpIk9cWlA
-	 nEVqcKieCsypQ==
-Date: Thu, 26 Jun 2025 14:53:19 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1750983317; c=relaxed/simple;
+	bh=gCyXOke57+BxAShs118VGPgYYRq7KdvEvh5GWrAhI/M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EJNI/qiItjicBS1i3pGupmK3Sc9xdd483Cg9+vozLwC569MQ9tRNZX191OK0fCHx66PBYsMegmHQZ3mkqF/IVhmsiugfeQc/2QTQcGlz5DRc0V9xjt1u20hhIexGye2uu5IwbEhjDKoZ+8xRo7cM970H3ERDrN0ipV2lXMLO5aM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E0qpAtRg; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750983315; x=1782519315;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gCyXOke57+BxAShs118VGPgYYRq7KdvEvh5GWrAhI/M=;
+  b=E0qpAtRgQYrTT+AS7iRokLLILWJgfyd24YSb+mVFovfbNAb0seDw/quP
+   NdQOFbsO7xV5rzFg9+qvpHtfSgzWV1bbC22MyB/EZDkB8k9kyKZUpCcSU
+   50bdAyK4Cde6sDgTk8Tq5TakYWnWEqdr3jq2Up0utPYKjxinvOe+IM2dZ
+   jJXAx0dtQbwRl3XqhJgVs5OzwA9Spxl9e+1ZQiXuGiAcoUca403biGYrf
+   JexkD0AV6feavGtWD/CBR8oCSCIZMr+vBCh2I4prQ6z2ASRpo0i6ReG6W
+   qcLE1iZTV4OHuIpt9MvIYQBePG0GJP5ipBPH+p976mIEieVNyUKavDHNa
+   Q==;
+X-CSE-ConnectionGUID: c1RelHlgQGGjRGtMPbPpiQ==
+X-CSE-MsgGUID: WeMpluWJRUqpGUOLbil0GQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11476"; a="63893994"
+X-IronPort-AV: E=Sophos;i="6.16,268,1744095600"; 
+   d="scan'208";a="63893994"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2025 17:15:14 -0700
+X-CSE-ConnectionGUID: soCn9GgnQ1uou8sDA9yEUQ==
+X-CSE-MsgGUID: W+VubARHSsulYQMEq7olvw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,268,1744095600"; 
+   d="scan'208";a="156695906"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 26 Jun 2025 17:15:13 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uUwkJ-000Vem-0J;
+	Fri, 27 Jun 2025 00:15:11 +0000
+Date: Fri, 27 Jun 2025 08:14:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v1 1/1] watchdog: Don't use "proxy" headers
+Message-ID: <202506270716.ol1Llg7E-lkp@intel.com>
+References: <20250626165145.327685-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, devicetree@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- linux-mediatek@lists.infradead.org, Guenter Roeck <linux@roeck-us.net>, 
- linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- Conor Dooley <conor+dt@kernel.org>, Sean Wang <sean.wang@mediatek.com>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
- Russell King <linux@armlinux.org.uk>, Thomas Gleixner <tglx@linutronix.de>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org, 
- Wim Van Sebroeck <wim@linux-watchdog.org>
-To: Max Shevchenko <wctrl@proton.me>
-In-Reply-To: <20250626-mt6572-v2-0-f7f842196986@proton.me>
-References: <20250626-mt6572-v2-0-f7f842196986@proton.me>
-Message-Id: <175096753913.717927.14601371478727547482.robh@kernel.org>
-Subject: Re: [PATCH v2 00/11] ARM: Add support for MediaTek MT6572 SoC
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250626165145.327685-1-andriy.shevchenko@linux.intel.com>
+
+Hi Andy,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on linus/master v6.16-rc3 next-20250626]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/watchdog-Don-t-use-proxy-headers/20250627-005755
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20250626165145.327685-1-andriy.shevchenko%40linux.intel.com
+patch subject: [PATCH v1 1/1] watchdog: Don't use "proxy" headers
+config: arc-randconfig-001-20250627 (https://download.01.org/0day-ci/archive/20250627/202506270716.ol1Llg7E-lkp@intel.com/config)
+compiler: arc-linux-gcc (GCC) 8.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250627/202506270716.ol1Llg7E-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506270716.ol1Llg7E-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/watchdog/watchdog_pretimeout.c:12:
+>> drivers/watchdog/watchdog_core.h:41:16: error: field 'dev' has incomplete type
+     struct device dev;
+                   ^~~
+   drivers/watchdog/watchdog_core.h:42:14: error: field 'cdev' has incomplete type
+     struct cdev cdev;
+                 ^~~~
+   drivers/watchdog/watchdog_pretimeout.c: In function 'watchdog_pretimeout_available_governors_get':
+>> drivers/watchdog/watchdog_pretimeout.c:59:12: error: implicit declaration of function 'sysfs_emit_at'; did you mean 'sysfs_streq'? [-Werror=implicit-function-declaration]
+      count += sysfs_emit_at(buf, count, "%s\n", priv->gov->name);
+               ^~~~~~~~~~~~~
+               sysfs_streq
+   drivers/watchdog/watchdog_pretimeout.c: In function 'watchdog_pretimeout_governor_get':
+>> drivers/watchdog/watchdog_pretimeout.c:72:11: error: implicit declaration of function 'sysfs_emit'; did you mean 'sysfs_streq'? [-Werror=implicit-function-declaration]
+      count = sysfs_emit(buf, "%s\n", wdd->gov->name);
+              ^~~~~~~~~~
+              sysfs_streq
+   cc1: some warnings being treated as errors
 
 
-On Thu, 26 Jun 2025 11:53:53 +0300, Max Shevchenko wrote:
-> This series of patches adds support for the MT6572 SoC and
-> the JTY D101 tablet and Lenovo A369i smartphone based on it.
-> 
-> Signed-off-by: Max Shevchenko <wctrl@proton.me>
-> ---
-> Changes in v2:
-> - Drop the status property for the board devicetrees
-> - Add an soc node for the MT6572 and reorder the nodes and properties
-> - Change the commit title to a more descriptive one
-> - Change the cover title to the correct one
-> - Link to v1: https://lore.kernel.org/r/20250620-mt6572-v1-0-e2d47820f042@proton.me
-> 
-> ---
-> Max Shevchenko (11):
->       dt-bindings: serial: mediatek,uart: add MT6572
->       dt-bindings: interrupt-controller: mediatek,mt6577-sysirq: add MT6572
->       dt-bindings: timer: mediatek: add MT6572
->       dt-bindings: watchdog: mediatek,mtk-wdt: add MT6572
->       dt-bindings: vendor-prefixes: add JTY
->       dt-bindings: arm: mediatek: add boards based on the MT6572 SoC
->       ARM: mediatek: add board_dt_compat entry for the MT6572 SoC
->       ARM: mediatek: add MT6572 smp bring up code
->       ARM: dts: mediatek: add basic support for MT6572 SoC
->       ARM: dts: mediatek: add basic support for JTY D101 board
->       ARM: dts: mediatek: add basic support for Lenovo A369i board
-> 
->  .../devicetree/bindings/arm/mediatek.yaml          |   5 +
->  .../mediatek,mt6577-sysirq.yaml                    |   1 +
->  .../devicetree/bindings/serial/mediatek,uart.yaml  |   1 +
->  .../devicetree/bindings/timer/mediatek,timer.yaml  |   1 +
->  .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
->  .../bindings/watchdog/mediatek,mtk-wdt.yaml        |   1 +
->  arch/arm/boot/dts/mediatek/Makefile                |   2 +
->  arch/arm/boot/dts/mediatek/mt6572-jty-d101.dts     |  61 ++++++++++++
->  arch/arm/boot/dts/mediatek/mt6572-lenovo-a369i.dts |  56 +++++++++++
->  arch/arm/boot/dts/mediatek/mt6572.dtsi             | 109 +++++++++++++++++++++
->  arch/arm/mach-mediatek/Kconfig                     |   4 +
->  arch/arm/mach-mediatek/mediatek.c                  |   1 +
->  arch/arm/mach-mediatek/platsmp.c                   |   7 ++
->  13 files changed, 251 insertions(+)
-> ---
-> base-commit: 0ff41df1cb268fc69e703a08a57ee14ae967d0ca
-> change-id: 20250619-mt6572-ef78a3d45168
-> 
-> Best regards,
-> --
-> Max Shevchenko <wctrl@proton.me>
-> 
-> 
-> 
+vim +/dev +41 drivers/watchdog/watchdog_core.h
 
+45f5fed30a6460e Alan Cox     2012-05-10  31  
+7b7d2fdc8c3e3f9 Curtis Klein 2021-02-03  32  /*
+7b7d2fdc8c3e3f9 Curtis Klein 2021-02-03  33   * struct watchdog_core_data - watchdog core internal data
+7b7d2fdc8c3e3f9 Curtis Klein 2021-02-03  34   * @dev:	The watchdog's internal device
+7b7d2fdc8c3e3f9 Curtis Klein 2021-02-03  35   * @cdev:	The watchdog's Character device.
+7b7d2fdc8c3e3f9 Curtis Klein 2021-02-03  36   * @wdd:	Pointer to watchdog device.
+7b7d2fdc8c3e3f9 Curtis Klein 2021-02-03  37   * @lock:	Lock for watchdog core.
+7b7d2fdc8c3e3f9 Curtis Klein 2021-02-03  38   * @status:	Watchdog core internal status bits.
+7b7d2fdc8c3e3f9 Curtis Klein 2021-02-03  39   */
+7b7d2fdc8c3e3f9 Curtis Klein 2021-02-03  40  struct watchdog_core_data {
+7b7d2fdc8c3e3f9 Curtis Klein 2021-02-03 @41  	struct device dev;
+7b7d2fdc8c3e3f9 Curtis Klein 2021-02-03  42  	struct cdev cdev;
+7b7d2fdc8c3e3f9 Curtis Klein 2021-02-03  43  	struct watchdog_device *wdd;
+7b7d2fdc8c3e3f9 Curtis Klein 2021-02-03  44  	struct mutex lock;
+7b7d2fdc8c3e3f9 Curtis Klein 2021-02-03  45  	ktime_t last_keepalive;
+7b7d2fdc8c3e3f9 Curtis Klein 2021-02-03  46  	ktime_t last_hw_keepalive;
+7b7d2fdc8c3e3f9 Curtis Klein 2021-02-03  47  	ktime_t open_deadline;
+7b7d2fdc8c3e3f9 Curtis Klein 2021-02-03  48  	struct hrtimer timer;
+7b7d2fdc8c3e3f9 Curtis Klein 2021-02-03  49  	struct kthread_work work;
+7b7d2fdc8c3e3f9 Curtis Klein 2021-02-03  50  #if IS_ENABLED(CONFIG_WATCHDOG_HRTIMER_PRETIMEOUT)
+7b7d2fdc8c3e3f9 Curtis Klein 2021-02-03  51  	struct hrtimer pretimeout_timer;
+7b7d2fdc8c3e3f9 Curtis Klein 2021-02-03  52  #endif
+7b7d2fdc8c3e3f9 Curtis Klein 2021-02-03  53  	unsigned long status;		/* Internal status bits */
+7b7d2fdc8c3e3f9 Curtis Klein 2021-02-03  54  #define _WDOG_DEV_OPEN		0	/* Opened ? */
+7b7d2fdc8c3e3f9 Curtis Klein 2021-02-03  55  #define _WDOG_ALLOW_RELEASE	1	/* Did we receive the magic char ? */
+7b7d2fdc8c3e3f9 Curtis Klein 2021-02-03  56  #define _WDOG_KEEPALIVE		2	/* Did we receive a keepalive ? */
+7b7d2fdc8c3e3f9 Curtis Klein 2021-02-03  57  };
+7b7d2fdc8c3e3f9 Curtis Klein 2021-02-03  58  
 
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
-
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
-
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
-
-  pip3 install dtschema --upgrade
-
-
-This patch series was applied (using b4) to base:
- Base: using specified base-commit 0ff41df1cb268fc69e703a08a57ee14ae967d0ca
-
-If this is not the correct base, please add 'base-commit' tag
-(or use b4 which does this automatically)
-
-New warnings running 'make CHECK_DTBS=y for arch/arm/boot/dts/mediatek/' for 20250626-mt6572-v2-0-f7f842196986@proton.me:
-
-arch/arm/boot/dts/mediatek/mt6572-lenovo-a369i.dtb: / (lenovo,a369i): memory: False schema does not allow {'device_type': ['memory'], 'reg': [[2147483648, 536870912]]}
-	from schema $id: http://devicetree.org/schemas/root-node.yaml#
-arch/arm/boot/dts/mediatek/mt6572-jty-d101.dtb: / (jty,d101): memory: False schema does not allow {'device_type': ['memory'], 'reg': [[2147483648, 1073741824]]}
-	from schema $id: http://devicetree.org/schemas/root-node.yaml#
-arch/arm/boot/dts/mediatek/mt7623a-rfb-nand.dtb: spi@1100a000 (mediatek,mt7623-spi): compatible: 'oneOf' conditional failed, one must be fixed:
-	['mediatek,mt7623-spi', 'mediatek,mt2701-spi'] is too long
-	'mediatek,mt7623-spi' is not one of ['mediatek,mt7629-spi', 'mediatek,mt8365-spi']
-	'mediatek,mt7623-spi' is not one of ['mediatek,mt8516-spi']
-	'mediatek,mt7623-spi' is not one of ['mediatek,mt6779-spi', 'mediatek,mt8186-spi', 'mediatek,mt8192-spi', 'mediatek,mt8195-spi']
-	'mediatek,mt7623-spi' is not one of ['mediatek,mt7981-spi-ipm', 'mediatek,mt7986-spi-ipm', 'mediatek,mt7988-spi-quad', 'mediatek,mt7988-spi-single', 'mediatek,mt8188-spi-ipm']
-	'mediatek,mt7623-spi' is not one of ['mediatek,mt2701-spi', 'mediatek,mt2712-spi', 'mediatek,mt6589-spi', 'mediatek,mt6765-spi', 'mediatek,mt6893-spi', 'mediatek,mt7622-spi', 'mediatek,mt8135-spi', 'mediatek,mt8173-spi', 'mediatek,mt8183-spi']
-	'mediatek,mt7622-spi' was expected
-	'mediatek,mt2712-spi' was expected
-	'mediatek,mt6765-spi' was expected
-	'mediatek,spi-ipm' was expected
-	from schema $id: http://devicetree.org/schemas/spi/mediatek,spi-mt65xx.yaml#
-
-
-
-
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
