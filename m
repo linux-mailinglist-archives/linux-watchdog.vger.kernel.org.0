@@ -1,89 +1,118 @@
-Return-Path: <linux-watchdog+bounces-3763-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3764-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D7BBAED30A
-	for <lists+linux-watchdog@lfdr.de>; Mon, 30 Jun 2025 05:48:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 012E1AED5EF
+	for <lists+linux-watchdog@lfdr.de>; Mon, 30 Jun 2025 09:40:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F43D16CB5B
-	for <lists+linux-watchdog@lfdr.de>; Mon, 30 Jun 2025 03:48:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3FE927AA19C
+	for <lists+linux-watchdog@lfdr.de>; Mon, 30 Jun 2025 07:39:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29DCB1A5B8B;
-	Mon, 30 Jun 2025 03:48:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99F12223715;
+	Mon, 30 Jun 2025 07:40:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="N7aGd5qd"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="dTyzqLGs"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-m16.yeah.net (mail-m16.yeah.net [1.95.21.14])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBCE818B464;
-	Mon, 30 Jun 2025 03:48:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=1.95.21.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B5A8221F1A;
+	Mon, 30 Jun 2025 07:40:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751255299; cv=none; b=h6YqXfWHWLCQaLrtmDBeq1w/y1T+te7CbdcdbHn7ReSqwh4mQWdZggzJK8j6igedmaA7Voc7u1y+HWMqElBqD0F8IcZrIzHAZ6fOR0cXjJyl6RS1tFavc3mO5cb5QFPO6PJTGG8Tmd4bvziEh0OcHSq3IQzqTKB5ByS0PwWOUIo=
+	t=1751269207; cv=none; b=cSKZ35ppbv+h6XO2hSAjEZYt+sqOLKs57COKEFJUNzz1fp0Mg25k0Ubd0nEGt/fJeS8oo6s8Z3RsAZJ3BPUlSeAL7vqceWP1pfIh2km4kX1cOWTtAGtkr3s8T+TNHcyHprPQAQn2yDinoowRCn/vVb8CAV+kb1UpH9GRScf0iJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751255299; c=relaxed/simple;
-	bh=+t1jPnYCOVF0SdtSuEp+RHL45lFV8uYHWwhOlZuzCAA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CCLoWloTgoI5rlXMVWmpyBaDGz3oOSd2Qkf25l5XSJWGPfgOPjpjXmGNzC1zw0K0YroImK+8Q6qwN7b4dm/RGlwV1AJiUoJ56G+tUEUMymI1TGGkTW3ypcXc+BJePuI0se+cyZU5k0fH46QsR7egdE7IUh6coBEpbAlkjOk1Q+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net; spf=pass smtp.mailfrom=yeah.net; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=N7aGd5qd; arc=none smtp.client-ip=1.95.21.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yeah.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
-	s=s110527; h=Date:From:To:Subject:Message-ID:MIME-Version:
-	Content-Type; bh=MC3PpwZilNiTUO9T3N1jve3LMEKnZfHx+jcycfs6XYI=;
-	b=N7aGd5qdzoWWFzieN9fkXxNetlhygQmqSIiZToazHyALyoSFCZESx52z1V66gK
-	he+efT+cy3t+JM44yyIZ1CTxwW+7NzuhOgh7GjvyyP4uUqUrhvLUVSGjCMIC25R9
-	WEszdsj3W6LW0hwHdc3I75YNpYnSDAJ5041WHQNkaTzUM=
-Received: from dragon (unknown [])
-	by gzsmtp3 (Coremail) with SMTP id M88vCgD3nzjFCGJoEjPOAQ--.37623S3;
-	Mon, 30 Jun 2025 11:47:19 +0800 (CST)
-Date: Mon, 30 Jun 2025 11:47:17 +0800
-From: Shawn Guo <shawnguo2@yeah.net>
-To: Meng Li <Meng.Li@windriver.com>
-Cc: krzk+dt@kernel.org, linux@roeck-us.net, s.hauer@pengutronix.de,
-	kernel@pengutronix.de, linux-watchdog@vger.kernel.org,
-	imx@lists.linux.dev, shawnguo@kernel.org, robh@kernel.org,
-	conor+dt@kernel.org, Frank.Li@nxp.com,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [v4 PATCH 2/2] arch: arm64: dts: add big-endian property back
- into watchdog node
-Message-ID: <aGIIxTjmpPPhhtpN@dragon>
-References: <20250608030616.3874517-1-Meng.Li@windriver.com>
- <20250608030616.3874517-3-Meng.Li@windriver.com>
+	s=arc-20240116; t=1751269207; c=relaxed/simple;
+	bh=v6IcimvUqsuVHvRdLPcpsC2EKecm3HZpeFUwlP6K4sQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VwnBZfOTKiMkHCy++YZ6iFQuXkE8sgzmROCBfijUJVkELK5WjTK15Jdb9OEL33f2WM9fz8tpURQ5pBwS8VfCne+DfInZipyKphfxj6rpo7J/rNEmV5JthExjPBbN0RRGXiYmxMAnzfih8IfUH3LKLr68fPNyLToXHW8eBUh2tLs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=dTyzqLGs; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1751269203;
+	bh=v6IcimvUqsuVHvRdLPcpsC2EKecm3HZpeFUwlP6K4sQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=dTyzqLGsVn0DnQHTwBQEs5oxtpykR3tEtnwoiIdWWf8XTiXNMwdhQYgaOkJGXSihR
+	 UA5b+jxKoUW5gn+ZGGTuIARnXFv3jT7BzFAgTLIQgvOOctw3F27yh3pfMfmELEn49S
+	 sVbF9uq77LjjNngUCi5JyYSXzmX+SY8JrZZETTo+1dKzMY56rvfBV2GfONMUuoEKbE
+	 198BJ7ihPIoV5Rd8DWN3fHZ4ZXJAMxGmkzHR4xOr2vGordA/We74ERc0STAlyoOON/
+	 Lc/a0ZXs19DZYsLOoECc6RHbFnoMAOLHeflHtFVaDczAkUWoWsC7luiLi8YiNmGBlp
+	 1f4qmzhhySbFg==
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 5FDF317E0342;
+	Mon, 30 Jun 2025 09:40:02 +0200 (CEST)
+Message-ID: <3fc71a09-8a09-4305-bd4d-3f157bb0ed3a@collabora.com>
+Date: Mon, 30 Jun 2025 09:40:01 +0200
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250608030616.3874517-3-Meng.Li@windriver.com>
-X-CM-TRANSID:M88vCgD3nzjFCGJoEjPOAQ--.37623S3
-X-Coremail-Antispam: 1Uf129KBjvdXoWrZF1fXw1DZw47CFy3Gr4Uurg_yoWxAFgE9F
-	15Cry8WF9xJa4jyws0yan3Zr9YgF4UCrWrG3WrCay3Aa93JFn5JF4ayFsYqa1fAanxZr98
-	Aan5ZFZaqr48CjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU1D73JUUUUU==
-X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiCQ98ZWhh4l2X2QACsl
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 09/11] ARM: dts: mediatek: add basic support for MT6572
+ SoC
+To: wctrl@proton.me, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jiri Slaby <jirislaby@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
+ Thomas Gleixner <tglx@linutronix.de>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
+ <linux@roeck-us.net>, Sean Wang <sean.wang@mediatek.com>,
+ Russell King <linux@armlinux.org.uk>
+Cc: linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, linux-watchdog@vger.kernel.org
+References: <20250626-mt6572-v2-0-f7f842196986@proton.me>
+ <20250626-mt6572-v2-9-f7f842196986@proton.me>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <20250626-mt6572-v2-9-f7f842196986@proton.me>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sun, Jun 08, 2025 at 11:06:16AM +0800, Meng Li wrote:
-> Watchdog doesn't work on NXP ls1046ardb board because in commit
-> 7c8ffc5555cb("arm64: dts: layerscape: remove big-endian for mmc nodes"),
-> it intended to remove the big-endian from mmc node, but the big-endian of
-> watchdog node is also removed by accident. So, add watchdog big-endian
-> property back.
+Il 26/06/25 10:54, Max Shevchenko via B4 Relay ha scritto:
+> From: Max Shevchenko <wctrl@proton.me>
 > 
-> In addition, add compatible string fsl,ls1046a-wdt, which allow big-endian
-> property.
+> Add basic support for the MediaTek MT6572 SoC.
 > 
-> Fixes: 7c8ffc5555cb ("arm64: dts: layerscape: remove big-endian for mmc nodes")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Meng Li <Meng.Li@windriver.com>
+> Signed-off-by: Max Shevchenko <wctrl@proton.me>
+> ---
+>   arch/arm/boot/dts/mediatek/mt6572.dtsi | 109 +++++++++++++++++++++++++++++++++
+>   1 file changed, 109 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/mediatek/mt6572.dtsi b/arch/arm/boot/dts/mediatek/mt6572.dtsi
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..b4fa376619a58cacd33ef556f80c1a4f7126c4f5
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/mediatek/mt6572.dtsi
+> @@ -0,0 +1,109 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2025 Max Shevchenko <wctrl@proton.me>
+> + */
+> +
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +/ {
+> +	#address-cells = <1>;
+> +	#size-cells = <1>;
+> +	compatible = "mediatek,mt6572";
 
-Applied this one, thanks!
+Please, remove this compatible as it's anyway going to be overridden in all of the
+board specific devicetrees; after which:
 
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+Cheers!
+Angelo
 
