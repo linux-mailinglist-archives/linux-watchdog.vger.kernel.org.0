@@ -1,52 +1,53 @@
-Return-Path: <linux-watchdog+bounces-3772-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3778-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 086A8AEEE3B
-	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Jul 2025 08:07:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84702AEEE3E
+	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Jul 2025 08:07:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3D30B3E0577
-	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Jul 2025 06:07:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E0ED23E0AA9
+	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Jul 2025 06:07:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F63525A351;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEC1925C708;
 	Tue,  1 Jul 2025 06:06:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hH8VpUaC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZVh8fn3T"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 324BB248866;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D244259CB6;
 	Tue,  1 Jul 2025 06:06:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751350019; cv=none; b=C2IKziftJkgDNXauxDjjluZPLCkIc+jM5HhFgkAw3XRc2+AS+jqlMCTDdomX0JwEaQR3qBbum3QEhGtDFvTcdzatGb28PoJCxjq8PTzl868cKWowWStsyQVKS5PN2Rq4KOeaaufjc6SCFzE5b3po+6tO0Io1Cp2c88pR4jYDdGM=
+	t=1751350019; cv=none; b=mob5yJv/JB8nzAkofmDVItwDjxEpdb46VTHO6wcUMw/Ms1gQjgbWtT70TfIWXCIy4U8ca4cdO65SW0lsX0h/aFzrmh8fR7K68zcJZfbbkPfbTS7/svHD76js6ypJOmrBbFzWGG4f0HN3bNG99V9rhGHE7dNaj6t+E/wzp/ucIgs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1751350019; c=relaxed/simple;
-	bh=pUnXGCRHe1PAu0P7R3hbtfyW7147Oqq1sb7DvZqbUgg=;
+	bh=5Pav8V9VB0A2Evtx5YnrsDuOOf1sUe6+PqhJkZFypT4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=sUAqS12+3d2goswGCKQiZWdFgFulnBRa2Zi6iGlrXm1iV6wcm8dsyZ1IK2Tsb8MIhQjzBt+BWlBkq7JhwsPk20Nq/uma9QqexbXJjzQOKavZVS7hQdGYrA2Sbu3uWVpXf0DY0M/pdGS5xs33JMl0q7acPSueXfBwKzJvMrqssJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hH8VpUaC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C4B91C4AF0D;
+	 In-Reply-To:To:Cc; b=p9j0HObrvO8ygvwbeZBOcuJgF7iwABvEFI8LTJLgd0pUuaQjA2SxI9FCA8wQ4Hge/RNQQ9ma/uHah322sjP1LfrX75gE0vn9lhM6PvTvfV1jwQorSdYuu8ZQ/yaw7FnPXMryan1l57iYRBKB9HDLc3aNvXWjeBp4d1dcIvikQ5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZVh8fn3T; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D0FF4C4CEFC;
 	Tue,  1 Jul 2025 06:06:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1751350018;
-	bh=pUnXGCRHe1PAu0P7R3hbtfyW7147Oqq1sb7DvZqbUgg=;
+	bh=5Pav8V9VB0A2Evtx5YnrsDuOOf1sUe6+PqhJkZFypT4=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=hH8VpUaCkMKyW9pDPAszC89p+2uaxKWyhuAEAa0qzlKzCTRqbDsq8opeNR1ahR6d3
-	 PhYoVBhKAk+ZbPjF5iSkf8VYD/Ehv3+2fY2Ks0lwvpxfWJjHZARywDQwPBbRHJTRsh
-	 jQ9GkTNHtXVfmRquCqM2qW7VBL2a/Cn1wxuqFw/szTJ+NmauSA9vrsnUrHFDZmel0A
-	 EvuYKB54SYKwmhjEI4+a1es/jUCO2InLHi5O5iBiPn9nknbsEb+7T7z1NirWBeGSYh
-	 SDU7XLyLGyLVR/i8ySQ1g8tuW2dzFOpzmiJzpU3vQ81gPOgLpN8KERHAWo40gvQPV5
-	 IydaisVN33WgA==
+	b=ZVh8fn3T4zW6iHuT8wRYnefd9cyhL7yiljwZDUoJv0xsJ+4Q0cvkb2xcM9K3mgoEw
+	 YlkT3HP7nlPpIK0qf6oLJl6sMZgtSpmmJd+mlc8MHU6DoE3UNEp/MFmDIiFV0zVt/9
+	 AVSP8EVfpOEFtpn42rK6UP/y8Ty0a+mF7ipxyWqE3jwuVUQEfN4/WczpoIImig9YI6
+	 9sFkSdfIWXRlnM73XyYNcrc3Won3W4yJteQYZR+Dl2qIGF7Ehr7JN9v+FDrZ7KIRak
+	 ibFwQOkSOu3C9Bhle0nnzso7l+dDsr5g7Q3ij7/BWbQG1KuU3yPjydnpTvyiIDulyX
+	 ZOWo5DE8jUmig==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB28DC8303C;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8D62C7EE30;
 	Tue,  1 Jul 2025 06:06:58 +0000 (UTC)
 From: Max Shevchenko via B4 Relay <devnull+wctrl.proton.me@kernel.org>
-Date: Tue, 01 Jul 2025 09:06:59 +0300
-Subject: [PATCH v3 05/11] dt-bindings: vendor-prefixes: add JTY
+Date: Tue, 01 Jul 2025 09:07:00 +0300
+Subject: [PATCH v3 06/11] dt-bindings: arm: mediatek: add boards based on
+ the MT6572 SoC
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -55,7 +56,7 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250701-mt6572-v3-5-8937cfa33f95@proton.me>
+Message-Id: <20250701-mt6572-v3-6-8937cfa33f95@proton.me>
 References: <20250701-mt6572-v3-0-8937cfa33f95@proton.me>
 In-Reply-To: <20250701-mt6572-v3-0-8937cfa33f95@proton.me>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
@@ -74,11 +75,11 @@ Cc: linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
  linux-mediatek@lists.infradead.org, linux-watchdog@vger.kernel.org, 
  Max Shevchenko <wctrl@proton.me>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1751350015; l=984;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1751350015; l=1042;
  i=wctrl@proton.me; s=20250603; h=from:subject:message-id;
- bh=szH3lFOduJEY4mq69Ikm7Luzlgze9u32D6UzfN8hmck=;
- b=KlWi/u1OEZ6NUMG56rOUWo/GTXVtXy1dVK8IsC4DSD0BMzEyuyOLcrKnrUIyx5PW93Pmo1SUj
- 2Kj5iPOQw0mAaG4r7TbQEalf8Utut1jaMwQ6Sq6J20bFFDCw9grUIyT
+ bh=aasPAy4R2Eyq141uUK+jisQoQdVg2nuqlXN6Ma5cC9E=;
+ b=fZeS3RZRC3LKqShMbyogasQH0ojFa++T6EM2RautMix1AyZiphvIcq1+Yvo4Jzz42x7uZeH9h
+ 8Tq65Nc76eSDGFAMAh62Gn1En1ctyXy9CsTxPjhmctYHB76qjRvVkVO
 X-Developer-Key: i=wctrl@proton.me; a=ed25519;
  pk=JXUx3mL/OrnRvbK57HXgugBjEBKq4QgDKJqp7BALm74=
 X-Endpoint-Received: by B4 Relay for wctrl@proton.me/20250603 with
@@ -88,30 +89,31 @@ Reply-To: wctrl@proton.me
 
 From: Max Shevchenko <wctrl@proton.me>
 
-JTY produced low-cost Android tablets based on various
-MediaTek MT65xx SoCs.
+Add entries for the JTY D101 tablet and the Lenovo A369i smartphone.
 
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Acked-by: Rob Herring (Arm) <robh@kernel.org>
-Acked-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Max Shevchenko <wctrl@proton.me>
 ---
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ Documentation/devicetree/bindings/arm/mediatek.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 86f6a19b28ae217643bf7a63a471f74819d18238..517bd129288c96483ffe358127ce8e16f60d902b 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -782,6 +782,8 @@ patternProperties:
-     description: Jide Tech
-   "^joz,.*":
-     description: JOZ BV
-+  "^jty,.*":
-+    description: JTY
-   "^kam,.*":
-     description: Kamstrup A/S
-   "^karo,.*":
+diff --git a/Documentation/devicetree/bindings/arm/mediatek.yaml b/Documentation/devicetree/bindings/arm/mediatek.yaml
+index 108ae5e0185d93976556a03768595961961bcc33..d5cb133b8a75fb5325f201f10c83bbe434a1da89 100644
+--- a/Documentation/devicetree/bindings/arm/mediatek.yaml
++++ b/Documentation/devicetree/bindings/arm/mediatek.yaml
+@@ -27,6 +27,11 @@ properties:
+           - enum:
+               - mediatek,mt2712-evb
+           - const: mediatek,mt2712
++      - items:
++          - enum:
++              - jty,d101
++              - lenovo,a369i
++          - const: mediatek,mt6572
+       - items:
+           - enum:
+               - mediatek,mt6580-evbp1
 
 -- 
 2.50.0
