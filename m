@@ -1,52 +1,53 @@
-Return-Path: <linux-watchdog+bounces-3773-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3771-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C39BCAEEE38
-	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Jul 2025 08:07:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56A8AAEEE33
+	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Jul 2025 08:07:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 032AA3BD419
-	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Jul 2025 06:07:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F10071BC430B
+	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Jul 2025 06:07:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8793825A655;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7562125A2DA;
 	Tue,  1 Jul 2025 06:06:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F6Cwxjt3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KoIoAACE"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32558248F42;
-	Tue,  1 Jul 2025 06:06:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3245A2475CB;
+	Tue,  1 Jul 2025 06:06:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751350019; cv=none; b=ArLY//5ZOPmHJJwRIRQTaqnPFQ+RJ/hGbUHTSAQaQA6Ece8tFTgJSPVrD5BuPoO2mQge7Gc5ZPGZiqQBxQiRUgQn/7KqJ/039KV+4HrG1aLdctEyvVCrkxOn3DVv0lOZU4QcrRkxLUAcpvbA4okNO1F7+VF7vhM/ppUtn5ERCeI=
+	t=1751350019; cv=none; b=n709p8FgaERitYD/LNykD3Lbra2Dyj6iLz66qhzAFtWZNDPyzXAfHmBhrMYOrSFr9R3q6T/cZaQBY2QkF6KSLELszjuQ/4RiKh5824nvJOrYStxka786FGkdGRtLUfyKALwIe/v+7KwZ39gr0Pg5nmZWkeuCXWMKz9K5lfKlu94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1751350019; c=relaxed/simple;
-	bh=+qw9STpx921ZvRbNnhmcwiGWbXEwmuoqRUHJicA/m+o=;
+	bh=DxOrqNd9oLxm5FY8Ovl6KbdgdkoW49USz3S5Sld0MXQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=OTZemxwhTYN98zhoF3+LkewphRXeA4v3v3RAcO5Qq/Jn94F1dv1Z70j7PaszcujhSRoJSF9Wu8Gl4BJJN0mksdOap81qUgwRw/uphoueK1X4r8LoA6394416rrii7+NwrGEOrhRAoU8cQgl0gmVAsyHr/p1n9zYRoi1OobuPSMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F6Cwxjt3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AADDAC4CEF1;
+	 In-Reply-To:To:Cc; b=BVWSfjjRdgu03h7mvW50T+5haHtfNMHuYh5T+CfaQ5FzOaYoAn/dL7/WZO3O0EUj7L/ItSHVKOsHfJvbZV7oQAaN6L/2h7oONJnTnrtNMCT15l5Kg7Gjg1fIdEx1NmhFLsg6KKJkCDb7ccTUlhFRFENNDixgGDTFiOUZeudN8YA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KoIoAACE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B9C21C4CEFA;
 	Tue,  1 Jul 2025 06:06:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1751350018;
-	bh=+qw9STpx921ZvRbNnhmcwiGWbXEwmuoqRUHJicA/m+o=;
+	bh=DxOrqNd9oLxm5FY8Ovl6KbdgdkoW49USz3S5Sld0MXQ=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=F6Cwxjt316ZGig1tlGw7ch9m216TRj+9exZ9GVKgPHfddW6UpBwgZLffWnV6DSW0C
-	 y7q9AdXkpNjPMMii+5mYDR1bH3SJ3sUHogrnOLGzRNxZddKRuY+pCJy60J1mu6DRhI
-	 pE/NuSPIQkiUVjwGrHFYfQlSgjz46NOYwAxJi9pXO7OypiDixVuOtnzhkCtqI1jQ5V
-	 uxXyc0gNig0+0sXwI3k64F1EYFOfQpxdoo7vKUivK3a63CKLHXecikpYakhvAg1axj
-	 GLQItRIOUyJWmNseOqgO0i7qYR/cuF6D9F5Aa6UnC0Wi7FhYEs72Ub8yEVtGU2zGg0
-	 yBpX3ZawhRR2g==
+	b=KoIoAACEUXdwHKdrGfMsfgDhsxk87V+G9Gp1Sw7U6SBEa9Qujq/sI0YJ3+AOfXz9H
+	 DLFGNw9p5V99YZj1gJUM2NUl4qHrnTZ4g4arZP0GD+7lvetf+R6su8JsGJwgljGhR5
+	 7ckT0lbZrJuTxyH2QbHyQ5T1anm5PdqBLG4j59eL0F7dudNxp/e+y82/DOWBUaeJjz
+	 mh6w/AiC6766gyFRv3XwnVcO+/AqcmNuIjXKfqyTSE+0o7nM68YIOpdrOe43d9s59R
+	 e4xpBw3RUmOU7DlfhSIuEr0uEToQqJkIR+3GBiT40KR20qq0jUHgFjVXGgDsv2ZY/n
+	 MpArcaT/dYcZQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1233C8303B;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE534C83039;
 	Tue,  1 Jul 2025 06:06:58 +0000 (UTC)
 From: Max Shevchenko via B4 Relay <devnull+wctrl.proton.me@kernel.org>
-Date: Tue, 01 Jul 2025 09:06:57 +0300
-Subject: [PATCH v3 03/11] dt-bindings: timer: mediatek: add MT6572
+Date: Tue, 01 Jul 2025 09:06:58 +0300
+Subject: [PATCH v3 04/11] dt-bindings: watchdog: mediatek,mtk-wdt: add
+ MT6572
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -55,7 +56,7 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250701-mt6572-v3-3-8937cfa33f95@proton.me>
+Message-Id: <20250701-mt6572-v3-4-8937cfa33f95@proton.me>
 References: <20250701-mt6572-v3-0-8937cfa33f95@proton.me>
 In-Reply-To: <20250701-mt6572-v3-0-8937cfa33f95@proton.me>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
@@ -74,11 +75,11 @@ Cc: linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
  linux-mediatek@lists.infradead.org, linux-watchdog@vger.kernel.org, 
  Max Shevchenko <wctrl@proton.me>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1751350015; l=993;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1751350015; l=1060;
  i=wctrl@proton.me; s=20250603; h=from:subject:message-id;
- bh=o0ix7fgxDyGX/dNwoXME14P/IebZ5vKxE9iUMbF1tQw=;
- b=bMmAZgKeoncqK29G1cdfBQz+qO+g6RH0tldg21aARRClvtL9nleKHUfrB5cL3Q/BqgD7NqkNf
- W4HhlKJOZsBDd6Sbx3fQbfEqixpfbnaUIw3APZAoQ63fuJDz7OQxwW6
+ bh=Kx6Ejx/Cft8/1a8kT4GCe+0clOZmBvvSMcY6Pz+w9ns=;
+ b=w/ZSBp4OkkN0nA2Q0i61ITfsGFxbNPPxmrLjw5wEKf3qNaoCx+rLVOLcwmNSb1iBJIjfQMX/O
+ 5pCk6TOcU2QB8JWmWdQ5LPXXnvNAZb5nnEGmOkkjd3vjk6Kr3UzRS3A
 X-Developer-Key: i=wctrl@proton.me; a=ed25519;
  pk=JXUx3mL/OrnRvbK57HXgugBjEBKq4QgDKJqp7BALm74=
 X-Endpoint-Received: by B4 Relay for wctrl@proton.me/20250603 with
@@ -88,27 +89,28 @@ Reply-To: wctrl@proton.me
 
 From: Max Shevchenko <wctrl@proton.me>
 
-Add a compatible string for timer on the MT6572 SoC.
+Add a compatible string for watchdog on the MT6572 SoC.
 
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Acked-by: Rob Herring (Arm) <robh@kernel.org>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Max Shevchenko <wctrl@proton.me>
 ---
- Documentation/devicetree/bindings/timer/mediatek,timer.yaml | 1 +
+ Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/timer/mediatek,timer.yaml b/Documentation/devicetree/bindings/timer/mediatek,timer.yaml
-index f68fc7050c5687930e2ca6b6fa8f0b7a208803da..d5b574bfd2caad1bc54ef6bd1768d94055383727 100644
---- a/Documentation/devicetree/bindings/timer/mediatek,timer.yaml
-+++ b/Documentation/devicetree/bindings/timer/mediatek,timer.yaml
-@@ -26,6 +26,7 @@ properties:
+diff --git a/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml b/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
+index 8d2520241e37f0e8a7526cbc99d5aa0d4edc9a55..ba0bfd73ab62a86befead007d4b7d2a870b81a0c 100644
+--- a/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
+@@ -34,6 +34,7 @@ properties:
        - items:
            - enum:
-               - mediatek,mt2701-timer
-+              - mediatek,mt6572-timer
-               - mediatek,mt6580-timer
-               - mediatek,mt6582-timer
-               - mediatek,mt6589-timer
+               - mediatek,mt2701-wdt
++              - mediatek,mt6572-wdt
+               - mediatek,mt6582-wdt
+               - mediatek,mt6797-wdt
+               - mediatek,mt7622-wdt
 
 -- 
 2.50.0
