@@ -1,52 +1,53 @@
-Return-Path: <linux-watchdog+bounces-3774-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3776-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49B17AEEE39
-	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Jul 2025 08:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A159AEEE44
+	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Jul 2025 08:07:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 46BEB3BD4C6
-	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Jul 2025 06:07:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0CC7D441D9C
+	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Jul 2025 06:07:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8948E25B1C5;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C24125B31D;
 	Tue,  1 Jul 2025 06:06:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l6Lm+TbJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TIH/O6Hv"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49923253944;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6154C2580E7;
 	Tue,  1 Jul 2025 06:06:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751350019; cv=none; b=Mdr3RIFeskrnI2uSt1g7O4pLq1/wizZ8YKyTZiJ4ikJH/bFZL2CcqofUXJ8J2gkYbFRxFvXm54bPBf1R1JPEGPhjzQcV3BblKTB5/IHS5PjLM4ZhHY3PB2SfEZTOxJfMdyd0/wEiNezUM6bK3RgBkEWaT39RWsrySyE5XvBxBqU=
+	t=1751350019; cv=none; b=HT+XDJjwgSc0U2VWTcUJ9k0WyAPe8ayPONIbWXRsa3m/XRMc0UlTXBfYRHYgfS32cTgWs5meggqTiq+V+Hw0cbQPlQS1yAfF+vd3wXErcofdrcmPbU9PdRaC+TkJtkHv9yPaXUyakeS8xPl4ss33lLCYJPuNuRqHWlHAYv0YQK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1751350019; c=relaxed/simple;
-	bh=yl69ujOKudAoxb7BsY6W6/j+nW0EaIsBsX9NLiSjkC4=;
+	bh=xF9OJWGVVMiNOy5F5fuhXYNqCNOpvXwuxrNpQnAjFoA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=t1a+E2GlzH5zwG6uGcwq3gLc7cV0chE8iOU+PNbEOwOy2OWaje2Tzu18vk7gi/ZF/pwWbOfkk5fBAfGpbVNipT+wImH/sZ3hHBEWzmLVSVcdN1rkecguX5dnvXFLSHly1xvbgLjdXLnyfXA38S2xpxft+3L/Dds0aS8/BHIHZbg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l6Lm+TbJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E9DB2C4CEFE;
-	Tue,  1 Jul 2025 06:06:58 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=SiZch+7QEwfvyKmUkSL7TZoOq/wyV6ITZwhc4KWQT7GM6NFn9Aihri/e99TwundncYk8DAnLutpb+6C+fx2O5uoPFNdZxaSwq3EbKV8bWW5ygLIC3ZD0gzTmmG5f4xGEHAY3pJ0WjC5xLLuc2HSOTtMZlfCyToIsX/PmJx0J3Rc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TIH/O6Hv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 026EBC19422;
+	Tue,  1 Jul 2025 06:06:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1751350019;
-	bh=yl69ujOKudAoxb7BsY6W6/j+nW0EaIsBsX9NLiSjkC4=;
+	bh=xF9OJWGVVMiNOy5F5fuhXYNqCNOpvXwuxrNpQnAjFoA=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=l6Lm+TbJXFCiOILQRwUqwcYAkDVVqX9rLNJfjuN4dNYpfvuDL2c+yZZqu+3hInd6O
-	 jdJsap77kzAiDtOnlXC9/rzjnMBEhcty/3PV9ncwJaTR52pmB4QoUfi5vV5cs27eT0
-	 3gL4wCFS6GQgapZLHZoL9WA4O7f4ZtSKzK84eLImxYmEFEZ/F5k2CSXkiSv5TPgH4H
-	 CEUY5DgJKU9pzAUFfbV2EQQEhKRQ4MDd7Z901HUdzm9MoEr+b6IG9ZWcHRBeXueN8t
-	 bf4rdo95E7rz/ngXqMuBzyQlbi76Cq95bhGFzOBQggW848l2Ei7ZFMpKzjgKvZHe6s
-	 n55sGlXoGJ1+w==
+	b=TIH/O6Hv3bRtf9iDuDtLMrXuPgvcgW0PgvJAz3hOHC7iOWqaYwnMsWFEH8qQn9/OK
+	 vCKxorkkdHNNjDYoOGoo8GrTOkPu4lte9YL+fVTbgXOZuh0kok2BCXTLVf/RRJ5Xx7
+	 Pdsc/vZ3ncDcfMLNzc3DIY3qwl0Uot/C0/k6eR/DqgFuoqj2okbS2gCo0O8CawTk6C
+	 KYcbgzV6BxvbJb3ch1lNjaBLG5094XKbRmYMx8xf1U2RCNr3/zqbu0JsCzRDFRtaxn
+	 JulEZ2LMtaH0A9lpJt/Q1DF8zL1+oxSUIVpO4HGjYGkmfQeGQNMvo1eRpew8heMPsQ
+	 Bas7kS3VBnOgQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1BFDC8303B;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0233C83038;
 	Tue,  1 Jul 2025 06:06:58 +0000 (UTC)
 From: Max Shevchenko via B4 Relay <devnull+wctrl.proton.me@kernel.org>
-Date: Tue, 01 Jul 2025 09:07:02 +0300
-Subject: [PATCH v3 08/11] ARM: mediatek: add MT6572 smp bring up code
+Date: Tue, 01 Jul 2025 09:07:03 +0300
+Subject: [PATCH v3 09/11] ARM: dts: mediatek: add basic support for MT6572
+ SoC
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -55,7 +56,7 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250701-mt6572-v3-8-8937cfa33f95@proton.me>
+Message-Id: <20250701-mt6572-v3-9-8937cfa33f95@proton.me>
 References: <20250701-mt6572-v3-0-8937cfa33f95@proton.me>
 In-Reply-To: <20250701-mt6572-v3-0-8937cfa33f95@proton.me>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
@@ -74,11 +75,11 @@ Cc: linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
  linux-mediatek@lists.infradead.org, linux-watchdog@vger.kernel.org, 
  Max Shevchenko <wctrl@proton.me>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1751350015; l=1940;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1751350015; l=3300;
  i=wctrl@proton.me; s=20250603; h=from:subject:message-id;
- bh=PSE9MkQgZmOqgXgkbRv8mf/3whMKOtrk3zwWFrj3c7Q=;
- b=KWkSJeZfxusTPI4uIF19+84KsqxhE+OptOVcoVaBekTd7CikI1o6vPYPps+1GacT+silks3LQ
- BSELHxQkamLDGKlPj47Gk1eMmDJifYWAVEE0Mesd6OyTvUm/ufnjYfT
+ bh=Xzi5mW5J7bGwfKfJ6p/3cXr1VKlZLnEwbR0SOET4e6Y=;
+ b=0G8DqWEYuBOAPFdLOj5IjWqVIBjAFf5/xN5AVTTv3FczGTbIm+7XxyC0yMxXD9FHOSExDxrFt
+ t/22ZkyhrT1DNjxLmtX4ge5oDfFi9ztC81IZe/dMZK4AGa+Yv6SzRiK
 X-Developer-Key: i=wctrl@proton.me; a=ed25519;
  pk=JXUx3mL/OrnRvbK57HXgugBjEBKq4QgDKJqp7BALm74=
 X-Endpoint-Received: by B4 Relay for wctrl@proton.me/20250603 with
@@ -88,55 +89,128 @@ Reply-To: wctrl@proton.me
 
 From: Max Shevchenko <wctrl@proton.me>
 
-Add support for booting the secondary CPU on the MT6572 SoC.
+Add basic support for the MediaTek MT6572 SoC.
 
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Signed-off-by: Max Shevchenko <wctrl@proton.me>
 ---
- arch/arm/mach-mediatek/Kconfig   | 4 ++++
- arch/arm/mach-mediatek/platsmp.c | 7 +++++++
- 2 files changed, 11 insertions(+)
+ arch/arm/boot/dts/mediatek/mt6572.dtsi | 108 +++++++++++++++++++++++++++++++++
+ 1 file changed, 108 insertions(+)
 
-diff --git a/arch/arm/mach-mediatek/Kconfig b/arch/arm/mach-mediatek/Kconfig
-index 35a3430c7942d897106bb32916df78347113798a..638eabad2dd37ee56244fc036cb76af135aee416 100644
---- a/arch/arm/mach-mediatek/Kconfig
-+++ b/arch/arm/mach-mediatek/Kconfig
-@@ -15,6 +15,10 @@ config MACH_MT2701
- 	bool "MediaTek MT2701 SoCs support"
- 	default ARCH_MEDIATEK
- 
-+config MACH_MT6572
-+	bool "MediaTek MT6572 SoCs support"
-+	default ARCH_MEDIATEK
+diff --git a/arch/arm/boot/dts/mediatek/mt6572.dtsi b/arch/arm/boot/dts/mediatek/mt6572.dtsi
+new file mode 100644
+index 0000000000000000000000000000000000000000..ac70f266d698d3dafb51b22021bd6615124a7416
+--- /dev/null
++++ b/arch/arm/boot/dts/mediatek/mt6572.dtsi
+@@ -0,0 +1,108 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2025 Max Shevchenko <wctrl@proton.me>
++ */
 +
- config MACH_MT6589
- 	bool "MediaTek MT6589 SoCs support"
- 	default ARCH_MEDIATEK
-diff --git a/arch/arm/mach-mediatek/platsmp.c b/arch/arm/mach-mediatek/platsmp.c
-index 16a4ee6c959050474c5535ac6a65d92b29482d53..bbd26d423bdef23629ec5ca9d9c61903748988b7 100644
---- a/arch/arm/mach-mediatek/platsmp.c
-+++ b/arch/arm/mach-mediatek/platsmp.c
-@@ -29,6 +29,12 @@ static const struct mtk_smp_boot_info mtk_mt8135_tz_boot = {
- 	{ 0x3f8, 0x3f8, 0x3f8 },
- };
- 
-+static const struct mtk_smp_boot_info mtk_mt6572_boot = {
-+	0x10001400, 0x08,
-+	{ 0x534c4131 },
-+	{ 0x0c },
++#include <dt-bindings/interrupt-controller/irq.h>
++#include <dt-bindings/interrupt-controller/arm-gic.h>
++
++/ {
++	#address-cells = <1>;
++	#size-cells = <1>;
++	interrupt-parent = <&sysirq>;
++
++	cpus {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		enable-method = "mediatek,mt6589-smp";
++
++		cpu@0 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a7";
++			reg = <0x0>;
++		};
++		cpu@1 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a7";
++			reg = <0x1>;
++		};
++	};
++
++	uart_clk: dummy26m {
++		compatible = "fixed-clock";
++		clock-frequency = <26000000>;
++		#clock-cells = <0>;
++	};
++
++	system_clk: dummy13m {
++		compatible = "fixed-clock";
++		clock-frequency = <13000000>;
++		#clock-cells = <0>;
++	};
++
++	rtc_clk: dummy32k {
++		compatible = "fixed-clock";
++		clock-frequency = <32000>;
++		#clock-cells = <0>;
++	};
++
++	soc {
++		#address-cells = <1>;
++		#size-cells = <1>;
++		compatible = "simple-bus";
++		ranges;
++
++		watchdog: watchdog@10007000 {
++			compatible = "mediatek,mt6572-wdt", "mediatek,mt6589-wdt";
++			reg = <0x10007000 0x100>;
++			interrupts = <GIC_SPI 126 IRQ_TYPE_LEVEL_LOW>;
++			timeout-sec = <15>;
++			#reset-cells = <1>;
++		};
++
++		timer: timer@10008000 {
++			compatible = "mediatek,mt6572-timer", "mediatek,mt6577-timer";
++			reg = <0x10008000 0x80>;
++			interrupts = <GIC_SPI 74 IRQ_TYPE_LEVEL_LOW>;
++			clocks = <&system_clk>, <&rtc_clk>;
++			clock-names = "system-clk", "rtc-clk";
++		};
++
++		sysirq: interrupt-controller@10200100 {
++			compatible = "mediatek,mt6572-sysirq", "mediatek,mt6577-sysirq";
++			reg = <0x10200100 0x1c>;
++			interrupt-controller;
++			#interrupt-cells = <3>;
++			interrupt-parent = <&gic>;
++		};
++
++		gic: interrupt-controller@10211000 {
++			compatible = "arm,cortex-a7-gic";
++			reg = <0x10211000 0x1000>,
++			      <0x10212000 0x2000>,
++			      <0x10214000 0x2000>,
++			      <0x10216000 0x2000>;
++			interrupt-controller;
++			#interrupt-cells = <3>;
++			interrupt-parent = <&gic>;
++		};
++
++		uart0: serial@11005000 {
++			compatible = "mediatek,mt6572-uart", "mediatek,mt6577-uart";
++			reg = <0x11005000 0x400>;
++			interrupts = <GIC_SPI 31 IRQ_TYPE_LEVEL_LOW>;
++			clocks = <&uart_clk>;
++			clock-names = "baud";
++			status = "disabled";
++		};
++
++		uart1: serial@11006000 {
++			compatible = "mediatek,mt6572-uart", "mediatek,mt6577-uart";
++			reg = <0x11006000 0x400>;
++			interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_LOW>;
++			clocks = <&uart_clk>;
++			clock-names = "baud";
++			status = "disabled";
++		};
++	};
 +};
-+
- static const struct mtk_smp_boot_info mtk_mt6589_boot = {
- 	0x10002000, 0x34,
- 	{ 0x534c4131, 0x4c415332, 0x41534c33 },
-@@ -49,6 +55,7 @@ static const struct of_device_id mtk_tz_smp_boot_infos[] __initconst = {
- };
- 
- static const struct of_device_id mtk_smp_boot_infos[] __initconst = {
-+	{ .compatible   = "mediatek,mt6572", .data = &mtk_mt6572_boot },
- 	{ .compatible   = "mediatek,mt6589", .data = &mtk_mt6589_boot },
- 	{ .compatible   = "mediatek,mt7623", .data = &mtk_mt7623_boot },
- 	{ .compatible   = "mediatek,mt7629", .data = &mtk_mt7623_boot },
 
 -- 
 2.50.0
