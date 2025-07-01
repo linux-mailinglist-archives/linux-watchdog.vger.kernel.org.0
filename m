@@ -1,180 +1,152 @@
-Return-Path: <linux-watchdog+bounces-3793-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3794-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18E5DAEFE7D
-	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Jul 2025 17:38:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C0F75AF031B
+	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Jul 2025 20:46:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F1FC4188717E
-	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Jul 2025 15:33:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C87401C021C2
+	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Jul 2025 18:46:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1354278170;
-	Tue,  1 Jul 2025 15:32:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86C2D148832;
+	Tue,  1 Jul 2025 18:46:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="HfYb6PGW"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="D1Uf3taY";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ZIvdQSLt"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from fout-b1-smtp.messagingengine.com (fout-b1-smtp.messagingengine.com [202.12.124.144])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B00C1D5CC6;
-	Tue,  1 Jul 2025 15:32:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1716A3596B;
+	Tue,  1 Jul 2025 18:46:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751383962; cv=none; b=MUO7Fc6DISJIsHtxPnI0QAwQSC03lfmNAWa/urtNyups5tb1v+CNjCpxrt4yUTP+gDnuFBhgcPBZoAjflwgVs4OfF+4yolrigveFGTpmLdM64VoSkPzFJW8I7zHD7hz4x6tap3Q68WEA52kCZZ8mzY6sWTRvoqootyblpIPUSUQ=
+	t=1751395566; cv=none; b=fWSnN560gxdKoPf7ZCSI1sPsHwrZX/4TfskjsRPm22jxnv0aOIfUPGAi+jBZSl+WJiAuoykfzXb1D5OqUTIMPuXcdWjMEglM/OvnmKKtDZy2W7n0+UgTVtc0tq4SZC7LmZwSPSA92kQpiDnjvf0RH4X5XNGI3YIZFw0ymnADPZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751383962; c=relaxed/simple;
-	bh=+SSFv0hwrDzIL/TT/dGM60enfkAii5FwDqdxefO91yY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=a3vTznd6UOjeU5FiLEu0/8aRgiAyahP9Q6HnzCk/PwV9a3qi7t2HqHYMY6s/e/Askwl/XjEcwpe7TMdRPTt2C3YQsJ8USj7nezfer3U3B5Wniuye6O5+xATPjbWoSqGN2EYRMI00UUcac2y+x2OUkFP9777HZzggwOWeA5dwhvE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=HfYb6PGW; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1751383958;
-	bh=+SSFv0hwrDzIL/TT/dGM60enfkAii5FwDqdxefO91yY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=HfYb6PGWldbXX1aRGd+H5pCPI32KVnpcDanYeWZMC81I/jN5ytDsWRV0QksB5Hd4/
-	 vEMqWef8J5FWfY3cbCrXDKtLMON6urTZAYuX5bYXkRLpp5aJwQWxiSdaYxeFEIL8DN
-	 v+nJiUMMJLAh3kudkqHU+mZXVfCGt4+c+0tGY9E6Q5zokoGApTAzr+wf88NIfGrwOD
-	 jvitwM0jIPqotjIhd7m7XKkEpZ2BzGe54aug9AQKTEJT6XucaCStDteDTq+xlPQo96
-	 mdF3aKM5lV2klIMwyhAy/waH9tFiXIyYobQW9+MFkXqFovdIcrbXPDRoJfuzp8g5h+
-	 W/wQHIwVg42zA==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 8386B17E03A5;
-	Tue,  1 Jul 2025 17:32:37 +0200 (CEST)
-Message-ID: <c7f00050-dc56-4ac7-b89d-5f315cef2aa5@collabora.com>
-Date: Tue, 1 Jul 2025 17:32:36 +0200
+	s=arc-20240116; t=1751395566; c=relaxed/simple;
+	bh=Up8UX9H+7ZUNNfLzmgCkSVCiNokRtIVixpAx52BVJbs=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=Cl6jYQWHzYlONmmZ9eWxWjtPycYTb2RSJ+4Pk9k8KC3TFX0pRZdqOQQUTkIHEDTt2EwYvGPiVPNTO/A4Uy3rCbAdmMkWapfEQJUDbYJGaJaw+a9z7jKXPWDtK/GriZpS2WqOf4wjBDnhy7UG031F+RzlVQ9tvWC8/anilPZMeW4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=D1Uf3taY; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ZIvdQSLt; arc=none smtp.client-ip=202.12.124.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfout.stl.internal (Postfix) with ESMTP id 9F1A71D00173;
+	Tue,  1 Jul 2025 14:46:00 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Tue, 01 Jul 2025 14:46:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1751395560;
+	 x=1751481960; bh=Xr0RFbgZjw3WqPK6EkRfzHhNY8eU/QZTAElNC/U09to=; b=
+	D1Uf3taYrE5w0UnL6DcoEa7HwVFgpUTDGrzCxPGFaKNHtdGYR1F97wy93u8XIoPt
+	mNJBW4+/DtKHzbMSjEdi0OfGxtfM6RiEjKHPSSzKJ05w68+o5VR6y7twzdTja+3E
+	t5Peml3llHhbh7YF0hIF5wHxz/rodSLiFBspyf8sZSaA9A0VZQdXcslALDiF3q34
+	04gLPJ+vvqcTRgzj8XM8QtpjoQSSMuCmlTjx6CC7J4lkfUe0FRSlJtk3YIXQsW42
+	Kqsit5SxnPbInu8xfuRdLa7Yko8r+eNBK0vGWG/9zCSeto33mhepVMvE5yMtBrXi
+	1Tp5D8Cnbw0H2eQG9XbAXA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1751395560; x=
+	1751481960; bh=Xr0RFbgZjw3WqPK6EkRfzHhNY8eU/QZTAElNC/U09to=; b=Z
+	IvdQSLt59/Zx0zQNJkNAsZdPsDu+v7Q73LSOfim4Gwgb5tXctxUl5gKidJ7FR1mZ
+	kvrX6bhd2yJyXNOd009Oo4ZnHNOwGZd6acX0u+bkY5PJuVPEnsbXPuw+fWms+OSy
+	0A7kRNSKylEnDErVfCPUo/AJD3yL0IKpWGe9yoGl7ZVq1n/J9DZV4AOSS8Jebarm
+	iLBUWHRxds2ryRm6mwu0ZCL4da0j51OfWCcrEFGsvdR76tSNZLKwoIupfLN2IfJJ
+	4in6JoBQ+6arKYMRdOVQgobACfxrhXnWlAj8xNCyjWtIzR0Dpzco2vFjZ+D+NMQl
+	JbmV/487+Yc+9eNx+2aog==
+X-ME-Sender: <xms:5ixkaGYpeVbjrrhnc5zoVB_3wLv0mONBIlHrLqP41QNaWfz0MK2OLQ>
+    <xme:5ixkaJZgxpK8fWWl29KH40EOX-MmDFZNTKGgViPP2nb0xkDmsE3fHWJyF-Q6o8NOb
+    NSpeAed5qNkH7rOvLk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduhedvjecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffgvedugeduveelvdekhfdvieen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
+    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopedujedpmhhouggvpehsmhhtphhouhht
+    pdhrtghpthhtoheprhdrmhgrrhgvkhesrghsshgvmhgslhgvrhdrtgiipdhrtghpthhtoh
+    epuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtthhopegrnhgurhgvrghs
+    sehgrghishhlvghrrdgtohhmpdhrtghpthhtohepuggvlhhlvghrsehgmhigrdguvgdprh
+    gtphhtthhopehjrghmvghsrdgsohhtthhomhhlvgihsehhrghnshgvnhhprghrthhnvghr
+    shhhihhprdgtohhmpdhrtghpthhtohepiihijhhunhgphhhusehitghlohhuugdrtghomh
+    dprhgtphhtthhopegtrghstggrrhguohesihhgrghlihgrrdgtohhmpdhrtghpthhtohep
+    fihimheslhhinhhugidqfigrthgthhguohhgrdhorhhgpdhrtghpthhtohepghhrvghgkh
+    hhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhg
+X-ME-Proxy: <xmx:5ixkaA885s52W79Hch3_FsaKKkYuCwCxYa_PtrpS2dVsBDEnyOacbQ>
+    <xmx:5ixkaIp4tJa7_5udgLIsoEQ4PLK88TLX9JHpYicsWCb4wecrTXK5xg>
+    <xmx:5ixkaBoTn1Yr9PN6E_LE1tPeZBSEi8D__0SE6eDlzFPQpRZlIcWiqg>
+    <xmx:5ixkaGQaw3X9gLjRwo-XuNrzgtkZ_m8wdzoKYSH_6ISHbW0MT1OvNQ>
+    <xmx:6CxkaG8Fpv1MWbPVQ-pQazPgaQc4udQhnrHm3ZhUP5_gXySaAPmXccaD>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 27BD8700065; Tue,  1 Jul 2025 14:45:58 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 00/11] ARM: Add support for MediaTek MT6572 SoC
-To: Rob Herring <robh@kernel.org>, Max Shevchenko <wctrl@proton.me>
-Cc: linux-watchdog@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
- Jiri Slaby <jirislaby@kernel.org>, Russell King <linux@armlinux.org.uk>,
- devicetree@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-mediatek@lists.infradead.org,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Matthias Brugger <matthias.bgg@gmail.com>, Sean Wang
- <sean.wang@mediatek.com>, linux-arm-kernel@lists.infradead.org,
- Guenter Roeck <linux@roeck-us.net>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Thomas Gleixner <tglx@linutronix.de>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, linux-serial@vger.kernel.org,
- linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>
-References: <20250701-mt6572-v3-0-8937cfa33f95@proton.me>
- <175138000372.1627755.5505703571113478205.robh@kernel.org>
- <CAL_JsqLSa+1MYR6f6NcApGFdjCL0dDXSzpntVHCPGmKgytVfdQ@mail.gmail.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <CAL_JsqLSa+1MYR6f6NcApGFdjCL0dDXSzpntVHCPGmKgytVfdQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-ThreadId: T7fb883a34eda41ad
+Date: Tue, 01 Jul 2025 20:45:27 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Zijun Hu" <zijun_hu@icloud.com>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ "Jean Delvare" <jdelvare@suse.com>, "Guenter Roeck" <linux@roeck-us.net>,
+ "Rudolf Marek" <r.marek@assembler.cz>,
+ "Wim Van Sebroeck" <wim@linux-watchdog.org>,
+ "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+ "Helge Deller" <deller@gmx.de>, "David S . Miller" <davem@davemloft.net>,
+ "Andreas Larsson" <andreas@gaisler.com>
+Cc: "Thadeu Lima de Souza Cascardo" <cascardo@igalia.com>,
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-watchdog@vger.kernel.org, linux-parisc@vger.kernel.org,
+ sparclinux@vger.kernel.org, "Zijun Hu" <zijun.hu@oss.qualcomm.com>
+Message-Id: <ad90af20-33f4-40e3-b08a-ce34437174db@app.fastmail.com>
+In-Reply-To: <20250701-rfc_miscdev-v2-7-3eb22bf533be@oss.qualcomm.com>
+References: <20250701-rfc_miscdev-v2-0-3eb22bf533be@oss.qualcomm.com>
+ <20250701-rfc_miscdev-v2-7-3eb22bf533be@oss.qualcomm.com>
+Subject: Re: [PATCH v2 7/9] char: misc: Allocate 4 more fixed minors for watchdog
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Il 01/07/25 17:30, Rob Herring ha scritto:
-> On Tue, Jul 1, 2025 at 10:27 AM Rob Herring (Arm) <robh@kernel.org> wrote:
->>
->>
->> On Tue, 01 Jul 2025 09:06:54 +0300, Max Shevchenko wrote:
->>> This series of patches adds support for the MT6572 SoC and
->>> the JTY D101 tablet and Lenovo A369i smartphone based on it.
->>>
->>> Signed-off-by: Max Shevchenko <wctrl@proton.me>
->>> ---
->>> Changes in v3:
->>> - Remove the compatible property from the SoC devicetree
->>> - Link to v2: https://lore.kernel.org/r/20250626-mt6572-v2-0-f7f842196986@proton.me
->>>
->>> Changes in v2:
->>> - Drop the status property for the board devicetrees
->>> - Add an soc node for the MT6572 and reorder the nodes and properties
->>> - Change the commit title to a more descriptive one
->>> - Change the cover title to the correct one
->>> - Link to v1: https://lore.kernel.org/r/20250620-mt6572-v1-0-e2d47820f042@proton.me
->>>
->>> ---
->>> Max Shevchenko (11):
->>>        dt-bindings: serial: mediatek,uart: add MT6572
->>>        dt-bindings: interrupt-controller: mediatek,mt6577-sysirq: add MT6572
->>>        dt-bindings: timer: mediatek: add MT6572
->>>        dt-bindings: watchdog: mediatek,mtk-wdt: add MT6572
->>>        dt-bindings: vendor-prefixes: add JTY
->>>        dt-bindings: arm: mediatek: add boards based on the MT6572 SoC
->>>        ARM: mediatek: add board_dt_compat entry for the MT6572 SoC
->>>        ARM: mediatek: add MT6572 smp bring up code
->>>        ARM: dts: mediatek: add basic support for MT6572 SoC
->>>        ARM: dts: mediatek: add basic support for JTY D101 board
->>>        ARM: dts: mediatek: add basic support for Lenovo A369i board
->>>
->>>   .../devicetree/bindings/arm/mediatek.yaml          |   5 +
->>>   .../mediatek,mt6577-sysirq.yaml                    |   1 +
->>>   .../devicetree/bindings/serial/mediatek,uart.yaml  |   1 +
->>>   .../devicetree/bindings/timer/mediatek,timer.yaml  |   1 +
->>>   .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
->>>   .../bindings/watchdog/mediatek,mtk-wdt.yaml        |   1 +
->>>   arch/arm/boot/dts/mediatek/Makefile                |   2 +
->>>   arch/arm/boot/dts/mediatek/mt6572-jty-d101.dts     |  61 ++++++++++++
->>>   arch/arm/boot/dts/mediatek/mt6572-lenovo-a369i.dts |  56 +++++++++++
->>>   arch/arm/boot/dts/mediatek/mt6572.dtsi             | 108 +++++++++++++++++++++
->>>   arch/arm/mach-mediatek/Kconfig                     |   4 +
->>>   arch/arm/mach-mediatek/mediatek.c                  |   1 +
->>>   arch/arm/mach-mediatek/platsmp.c                   |   7 ++
->>>   13 files changed, 250 insertions(+)
->>> ---
->>> base-commit: 0ff41df1cb268fc69e703a08a57ee14ae967d0ca
->>> change-id: 20250619-mt6572-ef78a3d45168
->>>
->>> Best regards,
->>> --
->>> Max Shevchenko <wctrl@proton.me>
->>>
->>>
->>>
->>
->>
->> My bot found new DTB warnings on the .dts files added or changed in this
->> series.
->>
->> Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
->> are fixed by another series. Ultimately, it is up to the platform
->> maintainer whether these warnings are acceptable or not. No need to reply
->> unless the platform maintainer has comments.
->>
->> If you already ran DT checks and didn't see these error(s), then
->> make sure dt-schema is up to date:
->>
->>    pip3 install dtschema --upgrade
->>
->>
->> This patch series was applied (using b4) to base:
->>   Base: using specified base-commit 0ff41df1cb268fc69e703a08a57ee14ae967d0ca
->>
->> If this is not the correct base, please add 'base-commit' tag
->> (or use b4 which does this automatically)
->>
->> New warnings running 'make CHECK_DTBS=y for arch/arm/boot/dts/mediatek/' for 20250701-mt6572-v3-0-8937cfa33f95@proton.me:
->>
->> arch/arm/boot/dts/mediatek/mt6572-lenovo-a369i.dtb: / (lenovo,a369i): memory: False schema does not allow {'device_type': ['memory'], 'reg': [[2147483648, 536870912]]}
->>          from schema $id: http://devicetree.org/schemas/root-node.yaml#
->> arch/arm/boot/dts/mediatek/mt6572-jty-d101.dtb: / (jty,d101): memory: False schema does not allow {'device_type': ['memory'], 'reg': [[2147483648, 1073741824]]}
->>          from schema $id: http://devicetree.org/schemas/root-node.yaml#
-> 
-> 'memory' node without a unit-address has long been deprecated. Please
-> don't add more cases.
-> 
+On Tue, Jul 1, 2025, at 17:24, Zijun Hu wrote:
+> From: Zijun Hu <zijun.hu@oss.qualcomm.com>
+>
+> There are drivers which needs more fixed minors for watchdog, but
+> watchdog only has one fixed minor currently, it causes hardcoded and
+> unregistered fixed minors are used by these drivers.
+>
+> Allocate 4 more fixed minors and apply for these drivers.
 
-Agreed.
+Missing signoff?
 
-Cheers,
-Angelo
 
+I don't think this is the right fix here, these drivers implement
+the normal watchdog API, so they should not even call misc_register
+but should instead call watchdog_dev_register().
+
+Obviously doing this right is a bigger change, so maybe the simpler
+answer is to use dynamic minors instead of the nonstandard ones.
+
+FWIW, I double-checked to see whether there are any in-tree
+references to these two drivers, and there is one each:
+
+drivers/i2c/busses/i2c-i801.c:	{ "Hermes", DMI_DEV_TYPE_OTHER, 0x73, "fscher" },
+drivers/i2c/busses/i2c-i801.c:	{ "Hades",  DMI_DEV_TYPE_OTHER, 0x73, "fschds" },
+drivers/i2c/busses/i2c-i801.c:	{ "Syleus", DMI_DEV_TYPE_OTHER, 0x73, "fscsyl" },
+arch/powerpc/boot/dts/fsl/t4240rdb.dts:                         compatible = "winbond,w83793";
+
+These were added in 2009 and 2016, respectively, so the hardware
+is probably around somewhere but quite hard to find.
+
+    Arnd
 
