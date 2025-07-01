@@ -1,88 +1,135 @@
-Return-Path: <linux-watchdog+bounces-3780-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3781-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E7ABAEFBE7
-	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Jul 2025 16:18:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08881AEFE0E
+	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Jul 2025 17:25:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 077231C0480A
-	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Jul 2025 14:16:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 93C714A42F2
+	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Jul 2025 15:25:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2177527979C;
-	Tue,  1 Jul 2025 14:14:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AF9E27933A;
+	Tue,  1 Jul 2025 15:25:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="gFuevKNR"
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="e0VpmjOK"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-m16.yeah.net (mail-m16.yeah.net [1.95.21.16])
+Received: from outbound.pv.icloud.com (p-west1-cluster2-host9-snip4-4.eps.apple.com [57.103.64.135])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 410B8277CBB;
-	Tue,  1 Jul 2025 14:14:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=1.95.21.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B27882777FC
+	for <linux-watchdog@vger.kernel.org>; Tue,  1 Jul 2025 15:25:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.64.135
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751379277; cv=none; b=hRMNx2Ysgp59nWQuk0IRgeOdlKxXdvzgkbBorTbUqJ7LbISUIWIu6Saw+cLBfmSwMbhbvcKK0mx7gywfce0CE1xe7lMtg8/tmi4becKiexaY4Uakkulv3LP4TULQobyjcndDfAyiiIFBys7vh8e5WY/BoY3nXPjdUJBnEtZn2Yw=
+	t=1751383539; cv=none; b=dSki1MrsasUbB/epF/YLtyToa4y0r0uDBdi/OP59H/yviDYI0+1WxPeSgrPdp7EgvxazVoqL7rjw/EFZIIqxQuiztiLZhXOy3kTbCX1to+xfuKLFUCNWCtBpVBIVTCRoL5VQPLQceIx9sTgjW5gXBd3bNUd+eZwnE1hBROeydx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751379277; c=relaxed/simple;
-	bh=INugTqBVM7fToZCIvxlUMkZxsPpLlqW6VEdnb21T200=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F3lYn5ck32XB0N2q/qVP7s3mf+DcQvIwIAExbLGdoqmbmlv/qWvjsDEJtr2vZq0Kv4buUGLf2WJu6tNKznWqm1gQIvC3ZWyj2/iK9Q2oNajrm1MZexAC3R6fS0s0p4vF8DZ3sHe92hoPI/rLBaYHZk9whZW/on4tyPj/ag6Avbg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net; spf=pass smtp.mailfrom=yeah.net; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=gFuevKNR; arc=none smtp.client-ip=1.95.21.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yeah.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
-	s=s110527; h=Date:From:To:Subject:Message-ID:MIME-Version:
-	Content-Type; bh=UgVcaTMaZwQKG0vFQL59Zz76XRt+0Z5vWGwWG9Mrcpw=;
-	b=gFuevKNRJo4o54DWHlJLiUMQBuWMzoWzwImK/JXY8XYu7CrEvAqhSaeQ8LYDTX
-	50TbYpj26O6tdp9RbFri9qZ+zKFzLkXuEySPe85cbSIB2mxygYXOX9Uh2T4jnZb7
-	ZbtHQDkaQPu+H898TFGKZAj/2iOFtPypm+GE5pdUFUuxA=
-Received: from dragon (unknown [])
-	by gzsmtp3 (Coremail) with SMTP id M88vCgD3l9r37GNoUbwBAA--.4338S3;
-	Tue, 01 Jul 2025 22:13:13 +0800 (CST)
-Date: Tue, 1 Jul 2025 22:13:11 +0800
-From: Shawn Guo <shawnguo2@yeah.net>
-To: Thomas Richard <thomas.richard@bootlin.com>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Dong Aisheng <aisheng.dong@nxp.com>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	Oliver Graute <oliver.graute@kococonnector.com>,
-	Frank Li <Frank.Li@nxp.com>
-Subject: Re: [PATCH v3] arm64: dts: imx8qm: add system controller watchdog
- support
-Message-ID: <aGPs9wGBLKGiTdVq@dragon>
-References: <20250609-imx8qm-watchdog-v3-1-5c22618606c8@bootlin.com>
+	s=arc-20240116; t=1751383539; c=relaxed/simple;
+	bh=/xiHoEfuz6/cTN5j+brnwCFPrNkucrnRkZA7gLvrw18=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=K+gaOkTpfoz+aqLBD6zB+leQ7sOQyUOfYIRyS7t/YZHSoZMqXxJSNzQyxoTn1E+truKm+7fvqn/cUKqMDd11k4g1U6MEC7Yudpdl7EujFyD5QUi2wpZoK1Zpmrm6n9GUD0y4szhhO/5jhjQggODIxl+KX/TvKevcJi9zS7DzMgs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=e0VpmjOK; arc=none smtp.client-ip=57.103.64.135
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
+	s=1a1hai; bh=3+n81dwkBafL//lMPlx4ETy4nA09EkZFH9IrMca4OF8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:x-icloud-hme;
+	b=e0VpmjOKWR/TtEwXMHglg+hPYtMAtkte96QbOmQI7JhVo0wEHenyk1SpZjEg5Vvs0
+	 VVdyrjCvjvLFDHaQdsHdUrsDYJEBH/Yp8uFUVK/fhZL0z8srsTnfkbXpReP3EsPDK+
+	 WQKSAdntCSlUBP90IUPpJi4NMEf5A8h17DiVmj4t3NnEzBwogHAH8J2itNh5y8EzTY
+	 9GLQYJJpgchEVmliGVkbA9SMaJgBbVOB9tBpvaJLGfydhe63kPXAbCQzISWDi2pA1k
+	 T2q8w/jM0SQVsx0gOVvW0ZijwSOdd6eXUb0SYxQMc5q5UPjmvO7/K7QSm5NIwd9mue
+	 wYiW1zGjIuCJg==
+Received: from outbound.pv.icloud.com (unknown [127.0.0.2])
+	by outbound.pv.icloud.com (Postfix) with ESMTPS id B4A001800310;
+	Tue,  1 Jul 2025 15:25:32 +0000 (UTC)
+Received: from [192.168.1.26] (pv-asmtp-me-k8s.p00.prod.me.com [17.56.9.36])
+	by outbound.pv.icloud.com (Postfix) with ESMTPSA id E3D9D180017B;
+	Tue,  1 Jul 2025 15:25:17 +0000 (UTC)
+From: Zijun Hu <zijun_hu@icloud.com>
+Subject: [PATCH v2 0/9] char: misc: Various cleanup for miscdevice
+Date: Tue, 01 Jul 2025 23:24:38 +0800
+Message-Id: <20250701-rfc_miscdev-v2-0-3eb22bf533be@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250609-imx8qm-watchdog-v3-1-5c22618606c8@bootlin.com>
-X-CM-TRANSID:M88vCgD3l9r37GNoUbwBAA--.4338S3
-X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-	VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxUw-eOUUUUU
-X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiIRls0Whj7Pkt0wAA3l
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALf9Y2gC/1XMQQrCMBCF4auUWZsySYgFV95DRMLMxAZMo4kGo
+ fTuBjfi5sG3eP8KVUqUCodhhSIt1piXDrMbgGa/XEVF7gaDxuGEWpVAlxQrsTRlHbO1GmkihP6
+ 4Fwnx/a2dzt2h5KSecxH/a+wN/jWaVloF9saxQ+PtdMy1jo+Xv1FOaewD2/YBPLFDtacAAAA=
+X-Change-ID: 20250701-rfc_miscdev-35dd3310c7c0
+To: Arnd Bergmann <arnd@arndb.de>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Rudolf Marek <r.marek@assembler.cz>, 
+ Wim Van Sebroeck <wim@linux-watchdog.org>, 
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
+ Helge Deller <deller@gmx.de>, "David S. Miller" <davem@davemloft.net>, 
+ Andreas Larsson <andreas@gaisler.com>
+Cc: Thadeu Lima de Souza Cascardo <cascardo@igalia.com>, 
+ Zijun Hu <zijun_hu@icloud.com>, linux-kernel@vger.kernel.org, 
+ linux-hwmon@vger.kernel.org, linux-watchdog@vger.kernel.org, 
+ linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org, 
+ Zijun Hu <zijun.hu@oss.qualcomm.com>
+X-Mailer: b4 0.14.2
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzAxMDEwMyBTYWx0ZWRfXw3vmlR/rz6EC
+ J7f+eSwcTCRJ3b44G6xnwHtcacUqVQgzWrLye/CE8vICli6tMq7httcE9yAVb2kmevlk56H2WOu
+ p3MrzrhJFQmQSSgBqutCO+8DMSPF9+WpWOP4FJgbtJwuDAzxcVKiiAibP5GUOF+B0L0fm2kJzlr
+ mnLOX1p1hPNYIIXUpiv1PbdH9p/KC+YROHpwiEhR5aIP3YcExOV9y54etMetqguF7DaYGGxsbcp
+ Ii3eIEuONZX+NaOIvaLood8HIbPUH8dEhlTL3ScS4XPhd3PIE3keDc+NjpmjgMY6Z9Q0QHLxI=
+X-Proofpoint-GUID: TAZS-eDz8OnWu2xISqFutSn1uKq1H9Li
+X-Proofpoint-ORIG-GUID: TAZS-eDz8OnWu2xISqFutSn1uKq1H9Li
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-07-01_02,2025-06-27_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0
+ spamscore=0 suspectscore=0 malwarescore=0 bulkscore=0 adultscore=0
+ phishscore=0 clxscore=1011 mlxlogscore=973 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2506060001 definitions=main-2507010103
 
-On Mon, Jun 09, 2025 at 02:02:34PM +0200, Thomas Richard wrote:
-> Add system controller watchdog support for i.MX8QM.
-> 
-> Acked-by: Oliver Graute <oliver.graute@kococonnector.com>
-> Reviewed-by: Frank Li <Frank.Li@nxp.com>
-> Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
+This patch series is to do cleanup for:
 
-Applied, thanks!
+- Miscdevice APIs
+- Miscdevice kunit test cases
+- Drivers which use miscdevice APIs
+
+Signed-off-by: Zijun Hu <zijun.hu@oss.qualcomm.com>
+---
+Previous discussion link:
+https://lore.kernel.org/all/20250620-rfc_miscdev-v1-1-fda25d502a37@oss.qualcomm.com
+
+---
+Zijun Hu (9):
+      char: misc: Move drivers/misc/misc_minor_kunit.c to drivers/char/
+      char: misc: Adapt and add test cases for simple minor space division
+      char: misc: Disallow registering miscdevice whose minor > MISC_DYNAMIC_MINOR
+      char: misc: Add a reentry test case for dynamic minor request
+      char: misc: Make registering dynamic device reentry
+      char: misc: Does not request module for miscdevice with dynamic minor
+      char: misc: Allocate 4 more fixed minors for watchdog
+      char: misc: Define fixed minor EISA_EEPROM_MINOR in linux/miscdevice.h
+      sparc: kernel: apc: Remove macro APC_MINOR defination
+
+ arch/sparc/kernel/apc.c                   |  3 +-
+ drivers/char/Makefile                     |  1 +
+ drivers/char/misc.c                       | 16 +++++-
+ drivers/{misc => char}/misc_minor_kunit.c | 95 +++++++++++++++++++++----------
+ drivers/hwmon/fschmd.c                    |  3 +-
+ drivers/hwmon/w83793.c                    |  3 +-
+ drivers/misc/Makefile                     |  1 -
+ drivers/parisc/eisa_eeprom.c              |  2 -
+ drivers/watchdog/cpwd.c                   |  6 +-
+ include/linux/miscdevice.h                | 13 +++++
+ 10 files changed, 100 insertions(+), 43 deletions(-)
+---
+base-commit: 626e89412dfb88766d90d842af4d9ec432d8526f
+change-id: 20250701-rfc_miscdev-35dd3310c7c0
+
+Best regards,
+-- 
+Zijun Hu <zijun.hu@oss.qualcomm.com>
 
 
