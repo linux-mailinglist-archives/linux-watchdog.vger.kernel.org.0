@@ -1,181 +1,143 @@
-Return-Path: <linux-watchdog+bounces-3807-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3808-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 088E7AF1284
-	for <lists+linux-watchdog@lfdr.de>; Wed,  2 Jul 2025 12:51:55 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB37DAF1547
+	for <lists+linux-watchdog@lfdr.de>; Wed,  2 Jul 2025 14:18:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4FA63172EE7
-	for <lists+linux-watchdog@lfdr.de>; Wed,  2 Jul 2025 10:51:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F24F57AF0E1
+	for <lists+linux-watchdog@lfdr.de>; Wed,  2 Jul 2025 12:14:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA6F22620D5;
-	Wed,  2 Jul 2025 10:51:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00D1D26E713;
+	Wed,  2 Jul 2025 12:13:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RGpiaEQL"
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="y6w8RrXR"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from outbound.pv.icloud.com (p-west1-cluster5-host2-snip4-4.eps.apple.com [57.103.66.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 941FE25E817;
-	Wed,  2 Jul 2025 10:51:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85F1823D2A3
+	for <linux-watchdog@vger.kernel.org>; Wed,  2 Jul 2025 12:13:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.66.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751453488; cv=none; b=kPSA1PUNlpKrxlJGKglkVaMcKHUiH3LHgcETvRcZGbKlzVCpcpdgdP6qFYVQz1AjoPlHDgzLE+TSbOxvNn3PhKr/SHOUP7IAX3Nl0Tc3ApytIBW1NtdDfGX+b5clmNi8X2VRq523raoM9d9miRdkgfmLUDktmAdsq6JSUSrVsZ0=
+	t=1751458436; cv=none; b=deYB7lKMllfbtCahgDTdrPQvmu6UE//8z+/oHY15cjETFi+P0BbepqebjCDG70b23Oa78LI3Wx8+WP+cU3kBFJfNuuHOg844yeVSoai4MDSYHIBgiWUxvGNOSzx7hbwiV4ze/T257+GrCH0OxjQx2MEyEDsDMTtM5MLjcM2q1sU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751453488; c=relaxed/simple;
-	bh=bYnxcYigwW1jh8IHlbwiN0cEWWvV/TsKQlKUrg5GZ/s=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=XQvN7Shd0oX6lXdZibMWKRgRHqtio0FzACEKw8blRAyjCp0WjbC4SUfTgy8Z85YoD++TmMWHqJ2f2KXp1GjszK+7Ybr7UbruFYA+JuY76pTIpYgk/jsTokrU/bsETUkxU+PknCT1XtDqMSoJdRdLlgk5q4GoFVBkxok3jgbpqB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RGpiaEQL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 723C9C4AF0C;
-	Wed,  2 Jul 2025 10:51:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751453488;
-	bh=bYnxcYigwW1jh8IHlbwiN0cEWWvV/TsKQlKUrg5GZ/s=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=RGpiaEQLrwv6OoOu3ZCxZDDL+BfBpcMTHcOeJ5r8PQLizWyO/vCTGyAOx+iJvwkgJ
-	 FFQTpTJvaPM9UATdJ3x1BLCzXM7FkNcroH95QBXUhS/4e09OdKnkZ5ePZBvxCE1zDA
-	 1wepElWGKRei8jtJHAxhYUTpCh4HHRCpcbCu6mvzmVY5nv9Ue/NHWcV9XnTKZmA7qv
-	 4ig6SWsqn/ot2uJV6vwbSPVu/z6yWDpSU/fjikxCQSrgpFnXr7bxry4LNV0qSg4Rek
-	 MW70q+o0TKb0qrkpzTm6lkDxrXMZ4VYQmFnNCPi5Zsg0I2FWZYu49ZRLnlwAn+S5j0
-	 lp50rXbHkYCeQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69A29C83F04;
-	Wed,  2 Jul 2025 10:51:28 +0000 (UTC)
-From: Max Shevchenko via B4 Relay <devnull+wctrl.proton.me@kernel.org>
-Date: Wed, 02 Jul 2025 13:50:48 +0300
-Subject: [PATCH v4 11/11] ARM: dts: mediatek: add basic support for Lenovo
- A369i board
+	s=arc-20240116; t=1751458436; c=relaxed/simple;
+	bh=z5r5omQDIB75IOb6AfWP+DA0/YsBNTo3kExon87ZnIA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Su2gwER9HuBRD7JpUW0pLQNcsHiZR36sFzZzm3/iwdd54Gg5anlCxU0JqCV2fDc8CN+Io/PVCGEv8xNMgHJfzAOojNZ4Gm1s8lgT6DpwIfJXgv3g/Jv81/hhzCnhgHR+3TULKW7T86OxQzepm8Tn5kjCrWaJUhH7OcgHKdQ/ST4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=y6w8RrXR; arc=none smtp.client-ip=57.103.66.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
+	s=1a1hai; bh=nx1rqPjRDWMcBL6mO8RCi2ZS4yd6jmTSXbCncrmU2H0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:x-icloud-hme;
+	b=y6w8RrXReeMtQhrhFjNfW05uzIPf2utTIyzOEOH3R3cO6WY5zD6Hh3FvuqXRIN+JI
+	 exVO6nLmJVunBKlZTZA+j377t6Q6/9g8FOH5ac2USnCUCCJ4R2boAGvsVaN3rd3gOV
+	 xhkYWzHfTQCe5PYq6tEW5NG7oEhHEpnInw/A35x/bCBqYEuoFCRt7veNYN2OfsEJ3r
+	 BkomBIwUJ1k3SnGgnsdUOttTISOifp494zHLolInjHzqs9rG6DC4++1Lf9uZpuQSHr
+	 uXyponpA5KV6XFDX9zShshyzGEzGcv2aBYOoKZvUWZzCFeSs4lIZP7Sdq3gmb2K9zN
+	 YbziWUTXr3OkA==
+Received: from outbound.pv.icloud.com (unknown [127.0.0.2])
+	by outbound.pv.icloud.com (Postfix) with ESMTPS id 9CC7418000A5;
+	Wed,  2 Jul 2025 12:13:50 +0000 (UTC)
+Received: from [192.168.1.26] (pv-asmtp-me-k8s.p00.prod.me.com [17.56.9.36])
+	by outbound.pv.icloud.com (Postfix) with ESMTPSA id A9F4618006CA;
+	Wed,  2 Jul 2025 12:13:46 +0000 (UTC)
+Message-ID: <684f00b4-9161-4bca-a94c-8c44577bafca@icloud.com>
+Date: Wed, 2 Jul 2025 20:13:43 +0800
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 7/9] char: misc: Allocate 4 more fixed minors for
+ watchdog
+To: Arnd Bergmann <arnd@arndb.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ Rudolf Marek <r.marek@assembler.cz>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>,
+ "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+ Helge Deller <deller@gmx.de>, "David S . Miller" <davem@davemloft.net>,
+ Andreas Larsson <andreas@gaisler.com>
+Cc: Thadeu Lima de Souza Cascardo <cascardo@igalia.com>,
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-watchdog@vger.kernel.org, linux-parisc@vger.kernel.org,
+ sparclinux@vger.kernel.org, Zijun Hu <zijun.hu@oss.qualcomm.com>
+References: <20250701-rfc_miscdev-v2-0-3eb22bf533be@oss.qualcomm.com>
+ <20250701-rfc_miscdev-v2-7-3eb22bf533be@oss.qualcomm.com>
+ <ad90af20-33f4-40e3-b08a-ce34437174db@app.fastmail.com>
+Content-Language: en-US
+From: Zijun Hu <zijun_hu@icloud.com>
+In-Reply-To: <ad90af20-33f4-40e3-b08a-ce34437174db@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250702-mt6572-v4-11-bde75b7ed445@proton.me>
-References: <20250702-mt6572-v4-0-bde75b7ed445@proton.me>
-In-Reply-To: <20250702-mt6572-v4-0-bde75b7ed445@proton.me>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Jiri Slaby <jirislaby@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Thomas Gleixner <tglx@linutronix.de>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, 
- Wim Van Sebroeck <wim@linux-watchdog.org>, 
- Guenter Roeck <linux@roeck-us.net>, Sean Wang <sean.wang@mediatek.com>, 
- Russell King <linux@armlinux.org.uk>
-Cc: linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-mediatek@lists.infradead.org, linux-watchdog@vger.kernel.org, 
- Max Shevchenko <wctrl@proton.me>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1751453439; l=2286;
- i=wctrl@proton.me; s=20250603; h=from:subject:message-id;
- bh=cSF9eZIt0ahAcZ8kbC8s+MIavsF7xQD8XUFp0/jFhXo=;
- b=/UEsSb1IOhetvvsPFiJD6SfiHCFEL5djSc+n11Xf9gq2rvx8j5dJmu1ik2vqtj1UdXXa8DQAn
- g9TCyjSOuNqD1AI+7FERwQAMV0ja031hm52qk8N5Q4BSid9bsMLWMPn
-X-Developer-Key: i=wctrl@proton.me; a=ed25519;
- pk=JXUx3mL/OrnRvbK57HXgugBjEBKq4QgDKJqp7BALm74=
-X-Endpoint-Received: by B4 Relay for wctrl@proton.me/20250603 with
- auth_id=421
-X-Original-From: Max Shevchenko <wctrl@proton.me>
-Reply-To: wctrl@proton.me
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzAyMDA5OSBTYWx0ZWRfX1kiPS+dNVdGx
+ 3C3DRPeKtRehbDIou2UVMmBzxTBjC0iBR43rQMQkeMK0d15Zmnc77Nr61h9JkRCTu99D8bcRslW
+ GJmv4GAVisICrObsAbk0StQs0vpzTgDOlYdaYBHhVj0G1mCyvHmKBvYHD8ZMsurhzYNMmiJCYB2
+ jgQagR7dW3XsmnUpi+2/fpP9RSPjDc6D1Qdu/MpGHpVAoWt/rmFhVOLpM/JWNH9HoUbjnuly/ov
+ QHb4lUN92FcJv/Pv9Z1NlEbDQjwO82OzwgzrL36Rs/sstgCRjIO85OPIHt/1mJ/3beUxZKt4E=
+X-Proofpoint-GUID: p6hyq69xJcvGXaISkohW_VeIJaHzQU0r
+X-Proofpoint-ORIG-GUID: p6hyq69xJcvGXaISkohW_VeIJaHzQU0r
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-07-02_01,2025-06-27_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0
+ spamscore=0 mlxlogscore=999 malwarescore=0 suspectscore=0 mlxscore=0
+ adultscore=0 phishscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.22.0-2506060001 definitions=main-2507020099
 
-From: Max Shevchenko <wctrl@proton.me>
+On 2025/7/2 02:45, Arnd Bergmann wrote:
+> On Tue, Jul 1, 2025, at 17:24, Zijun Hu wrote:
+>> From: Zijun Hu <zijun.hu@oss.qualcomm.com>
+>>
+>> There are drivers which needs more fixed minors for watchdog, but
+>> watchdog only has one fixed minor currently, it causes hardcoded and
+>> unregistered fixed minors are used by these drivers.
+>>
+>> Allocate 4 more fixed minors and apply for these drivers.
+> 
+> Missing signoff?
 
-This smartphone uses a MediaTek MT6572 system-on-chip with 512MB of RAM.
-It can currently boot into initramfs with a working UART and
-Simple Framebuffer using already initialized panel by the bootloader.
+my mistake. thank you for pointing out.
 
-Signed-off-by: Max Shevchenko <wctrl@proton.me>
----
- arch/arm/boot/dts/mediatek/Makefile                |  1 +
- arch/arm/boot/dts/mediatek/mt6572-lenovo-a369i.dts | 56 ++++++++++++++++++++++
- 2 files changed, 57 insertions(+)
+> 
+> 
+> I don't think this is the right fix here, these drivers implement
+> the normal watchdog API, so they should not even call misc_register
+> but should instead call watchdog_dev_register().
+> 
 
-diff --git a/arch/arm/boot/dts/mediatek/Makefile b/arch/arm/boot/dts/mediatek/Makefile
-index cb869a1aaec21a1d99f7f2a829b84672a3f52726..e48de3efeb3b9ab00108cc28afa8da525d0ec14a 100644
---- a/arch/arm/boot/dts/mediatek/Makefile
-+++ b/arch/arm/boot/dts/mediatek/Makefile
-@@ -2,6 +2,7 @@
- dtb-$(CONFIG_ARCH_MEDIATEK) += \
- 	mt2701-evb.dtb \
- 	mt6572-jty-d101.dtb \
-+	mt6572-lenovo-a369i.dtb \
- 	mt6580-evbp1.dtb \
- 	mt6582-prestigio-pmt5008-3g.dtb \
- 	mt6589-aquaris5.dtb \
-diff --git a/arch/arm/boot/dts/mediatek/mt6572-lenovo-a369i.dts b/arch/arm/boot/dts/mediatek/mt6572-lenovo-a369i.dts
-new file mode 100644
-index 0000000000000000000000000000000000000000..c2f0c60ea777432f19d51ec7d0038bfa05d7170f
---- /dev/null
-+++ b/arch/arm/boot/dts/mediatek/mt6572-lenovo-a369i.dts
-@@ -0,0 +1,56 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2025 Max Shevchenko <wctrl@proton.me>
-+ */
-+
-+/dts-v1/;
-+#include "mt6572.dtsi"
-+
-+/ {
-+	model = "Lenovo A369i";
-+	compatible = "lenovo,a369i", "mediatek,mt6572";
-+
-+	aliases {
-+		serial0 = &uart0;
-+	};
-+
-+	chosen {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		stdout-path = "serial0:921600n8";
-+
-+		framebuffer: framebuffer@9fa00000 {
-+			compatible = "simple-framebuffer";
-+			memory-region = <&framebuffer_reserved>;
-+			width = <480>;
-+			height = <800>;
-+			stride = <(480 * 2)>;
-+			format = "r5g6b5";
-+		};
-+	};
-+
-+	memory@80000000 {
-+		device_type = "memory";
-+		reg = <0x80000000 0x20000000>;
-+	};
-+
-+	reserved-memory {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+
-+		connsys@80000000 {
-+			reg = <0x80000000 0x100000>;
-+			no-map;
-+		};
-+
-+		framebuffer_reserved: framebuffer@9fa00000 {
-+			reg = <0x9fa00000 0x600000>;
-+			no-map;
-+		};
-+	};
-+};
-+
-+&uart0 {
-+	status = "okay";
-+};
+agree
 
--- 
-2.50.0
+Documentation/watchdog/convert_drivers_to_kernel_api.rst indeed suggests
+convert old watchdog implementation to new one using watchdog framework.
 
+> Obviously doing this right is a bigger change, so maybe the simpler
+> answer is to use dynamic minors instead of the nonstandard ones.
+> 
+yes. it is feasible.
+
+> FWIW, I double-checked to see whether there are any in-tree
+> references to these two drivers, and there is one each:
+> 
+> drivers/i2c/busses/i2c-i801.c:	{ "Hermes", DMI_DEV_TYPE_OTHER, 0x73, "fscher" },
+> drivers/i2c/busses/i2c-i801.c:	{ "Hades",  DMI_DEV_TYPE_OTHER, 0x73, "fschds" },
+> drivers/i2c/busses/i2c-i801.c:	{ "Syleus", DMI_DEV_TYPE_OTHER, 0x73, "fscsyl" },
+> arch/powerpc/boot/dts/fsl/t4240rdb.dts:                         compatible = "winbond,w83793";
+> 
+> These were added in 2009 and 2016, respectively, so the hardware
+> is probably around somewhere but quite hard to find.
+> 
+
+let me drop this change in next revision.
+may try to convert them by following the guidance at my spare time.
+
+>     Arnd
 
 
