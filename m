@@ -1,150 +1,111 @@
-Return-Path: <linux-watchdog+bounces-3818-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3819-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CF37AFA821
-	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Jul 2025 00:15:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DBED3AFB009
+	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Jul 2025 11:46:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B4B8E3B733C
-	for <lists+linux-watchdog@lfdr.de>; Sun,  6 Jul 2025 22:14:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 297293BDA48
+	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Jul 2025 09:45:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2C2E288531;
-	Sun,  6 Jul 2025 22:14:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 417731BCA0E;
+	Mon,  7 Jul 2025 09:46:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U5T+ifr1"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="YraI6P48"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AB50202F70;
-	Sun,  6 Jul 2025 22:14:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4894E2AD14;
+	Mon,  7 Jul 2025 09:46:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751840095; cv=none; b=Cod6/9WAKX6QdZcnlDD13fFVEloI4jsy844Q9xPdWQbU7cA6v09U+dk2aqgQ0OjEP9a8kvNxa4+VjJ/qYYaKAEIFufVkhIf2KDpPwrt8UAWfMqcIEDlXG7fFJAp9jKgNgm8IUb5rqT1ol+QSJx8TGnv315rUTtNldR8cuTbBExg=
+	t=1751881574; cv=none; b=TCqz4ETc19MFSQXp90rpF1R/6ZcZwl7/r0yp/Kq7rbyGfy7JreTboQa/wV53YVEt6kiu14APNlt99UuobYYQYK5GWpdUQHibpCu1yEnx+Uf+rmcybsuNEympBInjTzB86FVL0WT8ylKRW69bjZ8Vn313DD3GZncJF60vp2IUQ9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751840095; c=relaxed/simple;
-	bh=hmEXNIJmR0D3RDDCbO8lUZB66YQ9TLzRBzv6R4R6YlU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ncOfSIm9YByWPLESHnk1uTKeNKAuPCgcufrGomuR3QBlmwnXl7okU8zLiB+z19HIGv0UZrkf32ad5z2PYuA04DLdJlkbGpCvRD9ZuRj+SjxeoPkno5FHRCgr4wn5Pxpxse6eajiKznvMLQzihzzZOHMUB9UDTRf30pZyg3vLczc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U5T+ifr1; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751840094; x=1783376094;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hmEXNIJmR0D3RDDCbO8lUZB66YQ9TLzRBzv6R4R6YlU=;
-  b=U5T+ifr1LNXiCDsGsnqeFW6LemVIElJSaWpIXpZVaKiTkBBcRstcOCww
-   nq+pMffT4Ouwm4QxjiqriBKZU7Ks6XCQmVX/C+spxokYJs0VPHCHJ37iD
-   yAkopBKn6fv87qKSlrmPW2HlYuV8MoOi7v5Vs0WC58oaemHXHXNCaP9yR
-   VAe9f2A/ZCy2AsFCXh7pMvbzAoq4G0V8iWUC6jlDQHijCf1ZoCmd6loWH
-   uEqqee5Vge0q5oz/QRQzRrnYkOZtpiWUlcUtT4AGY4jLBSmL1mLD/NRd4
-   mWJVka2lcpzEbfw4xhzAUpkM/HL+Ju2ZTbex6x/3DGMU9s0B8wAupkG9P
-   A==;
-X-CSE-ConnectionGUID: 1HDULRR4S7qoEF24ewBlyw==
-X-CSE-MsgGUID: 4knCR9Z+S1OAojjejI1xig==
-X-IronPort-AV: E=McAfee;i="6800,10657,11486"; a="65123389"
-X-IronPort-AV: E=Sophos;i="6.16,292,1744095600"; 
-   d="scan'208";a="65123389"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2025 15:14:52 -0700
-X-CSE-ConnectionGUID: lZON38qeQimdCh/Ao2QCUw==
-X-CSE-MsgGUID: lapjV7n8RzS9ZyZMsn4OuA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,292,1744095600"; 
-   d="scan'208";a="154802322"
-Received: from lkp-server01.sh.intel.com (HELO def1aeed4587) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 06 Jul 2025 15:14:49 -0700
-Received: from kbuild by def1aeed4587 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uYXdH-00001A-2k;
-	Sun, 06 Jul 2025 22:14:47 +0000
-Date: Mon, 7 Jul 2025 06:13:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 1/1] watchdog: Don't use "proxy" headers
-Message-ID: <202507070407.CE8Utfgk-lkp@intel.com>
-References: <20250627073753.589509-1-andriy.shevchenko@linux.intel.com>
+	s=arc-20240116; t=1751881574; c=relaxed/simple;
+	bh=53Gq0bPO8TQdrskZuLSfMBb8Flq3ZNsUzD9zOfGkHMk=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=iPCcptZEmdLc7YXB+Ix8xjzBRGN9Kg7CcbTvLS/mk8qKbM5+DKpcTTyZTkwj1LqbsILq+QN8oL0dU8tDwKgzpy+uNdgYvHFdtaUJV22uO8FAI8rpZyKdtEO6CDwdagLzghN4xqno5akAGb8hJhIGqOuOCDiMVSO+gDH6ok4IRz0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=YraI6P48; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1751881570;
+	bh=53Gq0bPO8TQdrskZuLSfMBb8Flq3ZNsUzD9zOfGkHMk=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=YraI6P4805tpiyc2sfEVxGMVhcPWRB2cnHx2GxtIlonVmtxrqWPUgNt5MSSkfaHdp
+	 Kf/3J9gHVtYsUAErEA7J4flZfJ8x7kzgALduReSP7EETzUJOTofQ19Q22I1yvoGGMO
+	 vh1BFGM8oMEpz6VwmGRAFcqNxZznINPDj38KPbfZ7ORmZ0tkXCpkMALzgvHKxXVKA6
+	 9yuSuUOq4++DIHLtyxzOx6Dh+WJ1XP+lXTbwjNEeHnZyohUArNiaO82mSQ93/GUb5K
+	 Jr515AdH/dQ4vMjgLcfUdSQVhvdg4EfxYyoW+NzRud2px2/nyP6K+OavGBL2wVpyKl
+	 CTjQZM2rDV+BQ==
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 7967317E07C9;
+	Mon,  7 Jul 2025 11:46:09 +0200 (CEST)
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Jiri Slaby <jirislaby@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ Thomas Gleixner <tglx@linutronix.de>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, 
+ Wim Van Sebroeck <wim@linux-watchdog.org>, 
+ Guenter Roeck <linux@roeck-us.net>, Sean Wang <sean.wang@mediatek.com>, 
+ Russell King <linux@armlinux.org.uk>, Max Shevchenko <wctrl@proton.me>
+Cc: linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-mediatek@lists.infradead.org, linux-watchdog@vger.kernel.org, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20250702-mt6572-v4-0-bde75b7ed445@proton.me>
+References: <20250702-mt6572-v4-0-bde75b7ed445@proton.me>
+Subject: Re: (subset) [PATCH v4 00/11] ARM: Add support for MediaTek MT6572
+ SoC
+Message-Id: <175188156942.75673.6578470598593432446.b4-ty@collabora.com>
+Date: Mon, 07 Jul 2025 11:46:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250627073753.589509-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.2
 
-Hi Andy,
+On Wed, 02 Jul 2025 13:50:37 +0300, Max Shevchenko wrote:
+> This series of patches adds support for the MT6572 SoC and
+> the JTY D101 tablet and Lenovo A369i smartphone based on it.
+> 
+> 
 
-kernel test robot noticed the following build errors:
+Applied to v6.16-next/dts32, thanks!
 
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on linus/master v6.16-rc4 next-20250704]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[02/11] dt-bindings: interrupt-controller: mediatek,mt6577-sysirq: add MT6572
+        commit: b5ae84ea536e6814f0f25bfd647e66a319b8a7fe
+[03/11] dt-bindings: timer: mediatek: add MT6572
+        commit: 7827b0ff3bb3cdd79e2a44a9e62b4437c9b13f0a
+[04/11] dt-bindings: watchdog: mediatek,mtk-wdt: add MT6572
+        commit: a79e5369cfd78d450e47eec1bc20672ea3494982
+[05/11] dt-bindings: vendor-prefixes: add JTY
+        commit: 1b301b7e2843f8ae8761fa57eac94439f4748e6f
+[06/11] dt-bindings: arm: mediatek: add boards based on the MT6572 SoC
+        commit: 5215cdb013954c0f166795cf77fe80cb08b8a32e
+[09/11] ARM: dts: mediatek: add basic support for MT6572 SoC
+        commit: 2a64fc95eb43640482dd4a011ec2170d4ac38fb4
+[10/11] ARM: dts: mediatek: add basic support for JTY D101 board
+        commit: 3b192aa9c28234f93ac926d4f885d8c02df2f35e
+[11/11] ARM: dts: mediatek: add basic support for Lenovo A369i board
+        commit: 2dab43dbceab83faf967202c67fbabc4685d482c
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/watchdog-Don-t-use-proxy-headers/20250627-153933
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20250627073753.589509-1-andriy.shevchenko%40linux.intel.com
-patch subject: [PATCH v2 1/1] watchdog: Don't use "proxy" headers
-config: i386-randconfig-052-20250706 (https://download.01.org/0day-ci/archive/20250707/202507070407.CE8Utfgk-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14+deb12u1) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250707/202507070407.CE8Utfgk-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507070407.CE8Utfgk-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/watchdog/it87_wdt.c: In function 'superio_enter':
->> drivers/watchdog/it87_wdt.c:121:14: error: implicit declaration of function 'request_muxed_region' [-Werror=implicit-function-declaration]
-     121 |         if (!request_muxed_region(REG, 2, WATCHDOG_NAME))
-         |              ^~~~~~~~~~~~~~~~~~~~
-   drivers/watchdog/it87_wdt.c: In function 'superio_exit':
->> drivers/watchdog/it87_wdt.c:135:9: error: implicit declaration of function 'release_region' [-Werror=implicit-function-declaration]
-     135 |         release_region(REG, 2);
-         |         ^~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+Cheers,
+Angelo
 
 
-vim +/request_muxed_region +121 drivers/watchdog/it87_wdt.c
-
-e1fee94f346387 Oliver Schuster 2008-03-05  115  
-a134b825608df6 Nat Gurumoorthy 2011-05-09  116  static inline int superio_enter(void)
-e1fee94f346387 Oliver Schuster 2008-03-05  117  {
-a134b825608df6 Nat Gurumoorthy 2011-05-09  118  	/*
-a134b825608df6 Nat Gurumoorthy 2011-05-09  119  	 * Try to reserve REG and REG + 1 for exclusive access.
-a134b825608df6 Nat Gurumoorthy 2011-05-09  120  	 */
-a134b825608df6 Nat Gurumoorthy 2011-05-09 @121  	if (!request_muxed_region(REG, 2, WATCHDOG_NAME))
-a134b825608df6 Nat Gurumoorthy 2011-05-09  122  		return -EBUSY;
-a134b825608df6 Nat Gurumoorthy 2011-05-09  123  
-e1fee94f346387 Oliver Schuster 2008-03-05  124  	outb(0x87, REG);
-e1fee94f346387 Oliver Schuster 2008-03-05  125  	outb(0x01, REG);
-e1fee94f346387 Oliver Schuster 2008-03-05  126  	outb(0x55, REG);
-e1fee94f346387 Oliver Schuster 2008-03-05  127  	outb(0x55, REG);
-a134b825608df6 Nat Gurumoorthy 2011-05-09  128  	return 0;
-e1fee94f346387 Oliver Schuster 2008-03-05  129  }
-e1fee94f346387 Oliver Schuster 2008-03-05  130  
-e1fee94f346387 Oliver Schuster 2008-03-05  131  static inline void superio_exit(void)
-e1fee94f346387 Oliver Schuster 2008-03-05  132  {
-e1fee94f346387 Oliver Schuster 2008-03-05  133  	outb(0x02, REG);
-e1fee94f346387 Oliver Schuster 2008-03-05  134  	outb(0x02, VAL);
-a134b825608df6 Nat Gurumoorthy 2011-05-09 @135  	release_region(REG, 2);
-e1fee94f346387 Oliver Schuster 2008-03-05  136  }
-e1fee94f346387 Oliver Schuster 2008-03-05  137  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
