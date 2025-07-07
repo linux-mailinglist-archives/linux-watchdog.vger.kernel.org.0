@@ -1,131 +1,116 @@
-Return-Path: <linux-watchdog+bounces-3822-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3823-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14A57AFB0C1
-	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Jul 2025 12:08:11 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F140AFB722
+	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Jul 2025 17:20:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E0C1C7A37EC
-	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Jul 2025 10:06:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 903857AD685
+	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Jul 2025 15:19:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0407B293C4D;
-	Mon,  7 Jul 2025 10:07:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F00A228F94E;
+	Mon,  7 Jul 2025 15:20:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HGMLmkC3"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 767CF295530
-	for <linux-watchdog@vger.kernel.org>; Mon,  7 Jul 2025 10:07:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18E9E2D9785;
+	Mon,  7 Jul 2025 15:20:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751882868; cv=none; b=SgO8O/1aarRXGYH3zzc4WlpKvCsLlV4xiAaVZ63Xx1EzCVnX1NJGa2CB1k5/1iQn1thfLspUaJODLzDoX98OGj04Qs5YUxQXIrcOwFdUDQXpDiMluYpe0Ox3uJs8TYFPmXVve/kRLxfJBeg3YGDiYKAoIIB55Nelb9voaGwRolU=
+	t=1751901624; cv=none; b=Y0l6Xd4YjRBzs/qPxkTOeJrZEmWuqS0qtLMz3sWazMm2yVQFJ+QYBH3JuJWW92+8TOb++j1LjzkwK/9stLLlARbeUD121/95u+bwI3U4hFg03Y6EreQz85vUN0l+qRKMDukhKIPqUZxj5C4IPnAEM84Z4Yvqde9MXMsOxRCInlU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751882868; c=relaxed/simple;
-	bh=FtQESEScKEGm4ZZCj0RN7mGsIyE/eoEObXJoSKFHpWQ=;
+	s=arc-20240116; t=1751901624; c=relaxed/simple;
+	bh=5UEyGDGNHUh6RZqadrlKQCu6X7b9GWVQD6GpVxDY4ys=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RKu1qxN1+ADraT/wEyLgFBfJX/m+8xbvZxbrvFLpWfBsRN9LaeQf2N7qkAZpwenj9j0Wda20dFnFZSRZv4O4lD7OQSpXJeyNzlkgiIikRzEQRdqbL/Q/C2L+SNL49Sg6ivVXq0PKVYjaK9+NOoCl6L9BvVSMlCcH5DRR/kFbEBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1uYikg-00055p-AG; Mon, 07 Jul 2025 12:07:10 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1uYikc-007EDt-2n;
-	Mon, 07 Jul 2025 12:07:06 +0200
-Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 6B531439509;
-	Mon, 07 Jul 2025 10:07:06 +0000 (UTC)
-Date: Mon, 7 Jul 2025 12:07:05 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: Ming Yu <a0282524688@gmail.com>, Lee Jones <lee@kernel.org>, 
-	tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v13 1/7] mfd: Add core driver for Nuvoton NCT6694
-Message-ID: <20250707-new-psychedelic-termite-a309d3-mkl@pengutronix.de>
-References: <20250627102730.71222-1-a0282524688@gmail.com>
- <20250627102730.71222-2-a0282524688@gmail.com>
- <20250702161513.GX10134@google.com>
- <CAOoeyxXWbjWvOgsSvXb9u2y6yFExq347ceZe96bm9w+GQAp2Rg@mail.gmail.com>
- <0360d2e0-e071-4259-a7c7-23c31e52e563@wanadoo.fr>
+	 Content-Type:Content-Disposition:In-Reply-To; b=drB5jqLKsClXa9WDtbXDLwsH8ex+bNcRz1coLu2i/Pt75tfyMrDhEefzt8tWcuLjKiexukpawGlXDb6H0tE6NWKHNtxT2QiUDzNdI90OL7xaVgfZncOWpUWp2Ais4qR2vGFcvXVLQsyNcEZu6kzENbgbyjpAtV7vQ47n4wBUSZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HGMLmkC3; arc=none smtp.client-ip=209.85.215.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-b34a8f69862so2569423a12.2;
+        Mon, 07 Jul 2025 08:20:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751901622; x=1752506422; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jAPqu21NTo8BYyCnSmBn0KSAk3v+gE45TqPe3FODGXc=;
+        b=HGMLmkC36XYL5ZEROpmkhJi8eb9tNpoz3GEHx2zeLzUKvwJZjbG9t8nc9bFSUy7oGj
+         XvXIIFFBrOfp6y9LU9Y5qgId/AoA45oM+kdc1QoGpNU7nexve324NAFpVN0/v6OSPG1B
+         uzLg9VQiK5GGjL+U62L+I2DRHcK58lm4ChLCCX0dLqGO3sMspzSsGBys9ZHEv9vPaSJw
+         sw8pm4yORqdsezunfO6WNE9a3JRTJEPdmfWwnx2wwMJYn/XfKULq42hqvR66hZrp0D+1
+         neRZKe3cp9SkajeuGl0AIThqSJAzQUGQgAB7esBSC/900zO26nB/OUEqOBn01gkGC/Cn
+         lFNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751901622; x=1752506422;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jAPqu21NTo8BYyCnSmBn0KSAk3v+gE45TqPe3FODGXc=;
+        b=HfWqBsBLai1hrmc14B6Sm/88ULW/vGUTdjwc0p6FMCop2bOfgN6tjHObzpcjhyq1M1
+         euWLd2JYvftQikltbEmGqpqeXDZWBcoAY3U7f0LnISNDqEXqY7YmkAW5jMtjRq+twzlj
+         IvevWqVFrujbuYlN7fyNRDRMunu0RCMqOajYq7TA8dabeiy4VhjdTgPwm1ZXYgl2cf0b
+         8PNAZ3YakxLfheiYAywKQ6v/bjkt1F9S3pj2gK7B/lao1SJhtgkDnSbhzlKbHs0bpXBb
+         /UT9tXQkd9FaDju3e+dmTR1vx/hdb6uDYvW+htAE+kfGmGdaxusqADZUXhyAzq5u4sSA
+         ZHCg==
+X-Forwarded-Encrypted: i=1; AJvYcCWK0rCPnwdk+jRHXSc5oYIPnPer08Bo6zc6BJnvYZRxgQ9Rz8wee+Sx1hYAAT01S7QyzvQjdaEOs4lVdfg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxQd6z/FTGtoyRgdJpKMHKtJyM2/gjcp5KhUTD6Zmi2ydQqAbJQ
+	oHhqTACrTaTz8E8YhEonBC8PHqTV0L5uDTgGCuFdhEjPYGAqtJlnTL9CgmgucA==
+X-Gm-Gg: ASbGncvU8WY0t2LR+JSLF53xD30g0z9vFUOIqcBWOaJtF/YGQv+pT7JkPOVWiq6GTuI
+	cKugkwHXnXPvRKicmTUA8/e/A2up3Ju+R+EI0vN6lHHV9e0MJo+Y0uM/MZohWFTTfAJa1hM4UmI
+	tdVUqrsaqbBcSq0x2tZH0rZAn0FjAYeCZ/pgEol//FOCDcPCG+0I8bXpS9SV0TD9HeCnNk4F958
+	ZiYt9LnOhPFojxS8sN9GA6Tia3gogUgCGNeW2UQdZU6P0ZwufXZBTv6tevSQYulL/7sTFJf9srC
+	TNOm+dZZ3CMnaaPnP09i7oZLfuPmDZBB0jjZfbaSF7JYqHbFJITcPxuXnvQ6gxfsPtA9G8/PAws
+	=
+X-Google-Smtp-Source: AGHT+IGnizYunFpSenPdVyJrCiuFufKGWT/loCBTenordDF8T4xZtxQ0l3MyreeYUCJDwjygnsUYzQ==
+X-Received: by 2002:a17:90b:3f48:b0:312:b4a:6342 with SMTP id 98e67ed59e1d1-31aaddfc24amr21116327a91.33.1751901622140;
+        Mon, 07 Jul 2025 08:20:22 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23c8459737csm91801415ad.220.2025.07.07.08.20.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Jul 2025 08:20:21 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Mon, 7 Jul 2025 08:20:20 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Wim Van Sebroeck <wim@linux-watchdog.org>
+Subject: Re: [PATCH v2 1/1] watchdog: Don't use "proxy" headers
+Message-ID: <94695f5a-3a92-421e-8dfd-6cee13343a3f@roeck-us.net>
+References: <20250627073753.589509-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="kr6nkexyn6izj5au"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0360d2e0-e071-4259-a7c7-23c31e52e563@wanadoo.fr>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
+In-Reply-To: <20250627073753.589509-1-andriy.shevchenko@linux.intel.com>
 
+On Fri, Jun 27, 2025 at 10:37:22AM +0300, Andy Shevchenko wrote:
+> Update header inclusions to follow IWYU (Include What You Use)
+> principle.
+> 
+> Note that kernel.h is discouraged to be included as it's written
+> at the top of that file.
+> 
 
---kr6nkexyn6izj5au
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v13 1/7] mfd: Add core driver for Nuvoton NCT6694
-MIME-Version: 1.0
+0-day still reports:
 
-On 03.07.2025 11:44:27, Vincent Mailhol wrote:
-> On 03/07/2025 =C3=A0 11:39, Ming Yu wrote:
-> > Dear Lee,
-> >=20
-> > Thanks for your feedback and review.
-> > Currently, the status of the sub-device drivers is as follows (A/R/T):
-> >     [v13,1/7] mfd: Add core driver for Nuvoton NCT6694 (- - -)
-> >     [v13,2/7] gpio: Add Nuvoton NCT6694 GPIO support (1 1 -)
-> >     [v13,3/7] i2c: Add Nuvoton NCT6694 I2C support (1 - -)
-> >     [v13,4/7] can: Add Nuvoton NCT6694 CANFD support (- 2 -)
->=20
-> For the CAN driver, my Reviewed-by can be interpreted as an Acked-by :)
+All errors (new ones prefixed by >>):
 
-Feel free to interpret my my Reviewed-by as an Acked-by, too.
+   drivers/watchdog/it87_wdt.c: In function 'superio_enter':
+>> drivers/watchdog/it87_wdt.c:121:14: error: implicit declaration of function 'request_muxed_region' [-Werror=implicit-function-declaration]
+     121 |         if (!request_muxed_region(REG, 2, WATCHDOG_NAME))
+         |              ^~~~~~~~~~~~~~~~~~~~
+   drivers/watchdog/it87_wdt.c: In function 'superio_exit':
+>> drivers/watchdog/it87_wdt.c:135:9: error: implicit declaration of function 'release_region' [-Werror=implicit-function-declaration]
+     135 |         release_region(REG, 2);
 
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---kr6nkexyn6izj5au
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmhrnEYACgkQDHRl3/mQ
-kZz+HAgAo6jP3UtNysl6cnqkkovHfol1pDeGThMia/s6eTksN4DY0u5zqdBI03dN
-dXpm+0P8HVf83Alft8JysqSicG3HxMbdHs8En1RAlkkWYlr/kkL8zfEM06mFYVdL
-6EqNun8pwyIg9PrvRFwslkSTu6zKfqhafW8ouC9+65btTk0MG/AgbUgCLX2fe14v
-5jBv/B8OS97ARLf8pGTDQDqO6vXO2imOkP3Td+Ik61oUgLiQhUxLQVR8RvDKbuEA
-+iyqwWyWKsyoiF+0sU+mGLy0ejmuzh+PSvo19hzEE7ic08gZYvB4BA5pxljMiGAR
-1NJdMVxN2BILPjtt1d6e95y9ZqFOiA==
-=dD5C
------END PGP SIGNATURE-----
-
---kr6nkexyn6izj5au--
+Guenter
 
