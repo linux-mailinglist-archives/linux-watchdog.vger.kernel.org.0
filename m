@@ -1,156 +1,213 @@
-Return-Path: <linux-watchdog+bounces-3835-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3837-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00CAFAFBC35
-	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Jul 2025 22:03:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 94491AFBCF9
+	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Jul 2025 22:58:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 75B79165B67
-	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Jul 2025 20:03:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DA63A16C214
+	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Jul 2025 20:58:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61F4726981C;
-	Mon,  7 Jul 2025 20:01:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC1F32264B2;
+	Mon,  7 Jul 2025 20:58:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H4rbsVh7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b1qfPnAl"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99807268FF1;
-	Mon,  7 Jul 2025 20:01:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DC6333086;
+	Mon,  7 Jul 2025 20:58:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751918490; cv=none; b=H+n8WV+D+utcd1JI2pE14MjbhGhhJV2s3zG6luut9+0gSF6hiD6HzOTkjGROOI8GrO/4MtFq7BCizUH3DEV1gAOIkt6jbSiqDHOKjHtpwTzaEAgDfD+VJOgdkSg7oLzWjwjCuSjKz0HS0OPKgga6DYQxBi50rQEwtaLa4b4FtOo=
+	t=1751921895; cv=none; b=c4Sks5+xpdHd4BnHPwYADuqJn/QIjXj8m72n6hYhersKx6wk0nHnjWf3tfHcYvTEp2xEVVB2RITE87e60ipguybij6cocfmO2G2OorcDNILpQszOtatfTnldHwBCJngzv5dPY/R/8+6j7jz5pebIVy28V8mIW/NUnt6pbejauAo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751918490; c=relaxed/simple;
-	bh=qCgV8OST611D59NkSzc/EwdIYtLmNBOrjzx63kXgCD4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bwQ/IhW4cn/abrIRuToyF5vjo6czzOFy1IZerFNRPNyIzZdZJKnkMjVJb0jnOVVHM50kOLZnvFN95JReg7ZHJ10X+mne3zopR2mWpihza6c+Te4562K4O23JtX2K38cqFq7Lx2sZLrqzZhqMmDZp0nsSa30/8HWlci2FJsV0jc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H4rbsVh7; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1751921895; c=relaxed/simple;
+	bh=1yfgLOFQaiPln+5UECEysOSL8yOtlnqkjI3h5BWsKRs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=T+eCy7mD6nfbsbGZMkTl+gcf3lZDdklIVp3HJHLSOee3cpmUDV9DnyNP8bisbu6reRPq0etPj7XCobQewlegNG4OSUat8Uaxsz3ha8MbL5pUwVsJ/Jrvzr5aQ9+0g0Vjm9ITW9i8ciTj1hO/bd9q6Kl4vzcm/S5QR9RkXR2NfiQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b1qfPnAl; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-451dbe494d6so40170955e9.1;
-        Mon, 07 Jul 2025 13:01:28 -0700 (PDT)
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-74ce477af25so2152211b3a.3;
+        Mon, 07 Jul 2025 13:58:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751918487; x=1752523287; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZZrpm9nJM06WerhRVJGiNfhVOSjxE8zl1qw3t/9H9SI=;
-        b=H4rbsVh7OPqOv8bwjUX51Ug2Hb2w+00ayDgpLTk8Yw3muP25/jbGrV65+EInG545vu
-         Ucph4hHU+W+CgDUaIW7Kg6o25fFsaGDXKNNYc7xdMbPXg7fIyHZItWcJ8eztmMjoWJl8
-         a61zKCb/3j2UTbcCMSxH+NqG4hVxR5I9PL/GHISWJCIA01Wgk0LOuYl7EebrwrtanzDJ
-         7HFDDJQ5+Z8PoGVxFTZhkG1nLyCwVNNLiR06FkUnkOldvqRTpYjzXmlPvXWnePzg0AOL
-         HQQ9uHx5kXV4uItDor9sY/lxTCiEDvOe8oWcYLTu7iVnInUYdWpMCnlKaLBhE3gYh7hQ
-         eyWQ==
+        d=gmail.com; s=20230601; t=1751921893; x=1752526693; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vdtzQHXmDsLgtDJHYdjLmDT6a/R1cKsr1fz9USt0LtY=;
+        b=b1qfPnAlL7t0zfzOx34Qu8w0ym21NtTaw1IUEa8fNLWXVg/Uz+K3/hWqDgOhw2f0F8
+         oB2RBKkjrasSaQEiSSIj6LPBxMENc/r9HBRc6IxByxOSVu8UBdN7bkAEuHSJNtYPzSma
+         tX5aG30wyPDUEryajB7UZls3b6basaP3DFRRnuFf6onLc2Re6/rQVj/kICWuISUE2ZM9
+         1YF5TexXJYNycoUafxhN5vLumxsv7jBQkJf3LHhQpvFRh4akyY8wP0G5PTw940TLpiqM
+         A0u4UIo6AuvTyWZlkB2/84JO+1LeDI6NVzkAsD6juSaqtLhiyGTXt9elt15pbNV7IjgX
+         0z0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751918487; x=1752523287;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1751921893; x=1752526693;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZZrpm9nJM06WerhRVJGiNfhVOSjxE8zl1qw3t/9H9SI=;
-        b=IJ7UyCyiOlcIxtlzpEf2Ait+/PboyyxLa7ZxSpP7IDMxrX6nVylGrvfDgwUOo6hzvI
-         wsyutNvPdYpUUha2pLP9Yx2+8P0GXC+XAXpJsRUoc9v11fFk223NJOREDrdQ4IlEdu96
-         SkKBS2nJEsPTLcK3vSR35FbIqf6WOfMKdfqPo61b/P/nIJRcy991i9JR3B5Cio6uHzOr
-         AnbxaQMhngpSbHkPJ2TC3Rl3dTaoSS57BPo0FkcQE0IvvGWmRqUrFP2AHl8FIlrd/Po1
-         5az1d1mwvShzR+gWe43RcBa//jB3pFytd/8FoRxUUnsFnY+JTyfBXaBS+QWgUVOuhW8l
-         wiHw==
-X-Forwarded-Encrypted: i=1; AJvYcCUuaktf6t4NVSoZU3zqmR3siPduC6M8Kkf+Z1Dc6LiwRlR4e5sR94t7QtMYPZT5uKASEGmlxW4y9aaPBM8=@vger.kernel.org, AJvYcCWKYVQCV+QgEOQf7NQum+ylxWC4ySgAQTRcF4YsvsYktTPZihg2P+ZlQYVb2Y01VWJ0hxY5QQxAPPuSAe8imQnkzvM=@vger.kernel.org, AJvYcCXDJQYrWB8OhdOSgUwNBNzAP26qkQD/snFL2ofiNTvm+ctXOKvKresxpCtGVyua68cTRjWr6JnoiWnFs01ugaE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx15QS7XnckJ13n6xqJJ3Dp0qcvdPsuAkaWLhNdo8J7kIcuSIAP
-	loq1Ny53mcdMFxfZphVZHb+TorStWkuMYg6wQoNWaN7tUfIM1xT6yC3dLEvb7w==
-X-Gm-Gg: ASbGncsmfjvkFJzeaIakyxWeSkdBYPdULKxTAj3awOVQpwcZG2cd0gcbmyUUrwF7GWW
-	d8ltML5F0xWMixwtq53oVJBa2ko6DpdxRiEwMplFavBn5m7wWEvS66JSZ6WKNYxp8kHajf7i9HC
-	AkjOl9cYxfAgwu7i0H2O5PJYKKNpW1ISVvhb4OgqOGQYPdMgu9w4yPtY1xhHx/wvAeAqQe/K7p0
-	OH45ngj3Rim+0THBY+OhHArIb790l/BmwkP1HgVdBWhQzYfmd+COggyMrTo5zQWM+layASzfj72
-	XNeQ8jKvQkF4kglkAUymDqwcnQtMfyc5UmPVJmnsR5PLJvev+J8bSOXc2m2sdMFUbYJ2QpH+hP8
-	MDlTyIoMBs5SOofNs6p4=
-X-Google-Smtp-Source: AGHT+IHY/v+RTL08PLy6womTLLxmQhluTTjkkedNBxyHc/zF4l2YyC6M/aeDVLyO9W9pfxaF8QBdeA==
-X-Received: by 2002:a05:600c:a104:b0:453:7713:539f with SMTP id 5b1f17b1804b1-454b4eb8afdmr90464455e9.26.1751918486617;
-        Mon, 07 Jul 2025 13:01:26 -0700 (PDT)
-Received: from iku.example.org ([2a06:5906:61b:2d00:d418:e5eb:1bc:30dd])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b471b97376sm11268995f8f.61.2025.07.07.13.01.25
+        bh=vdtzQHXmDsLgtDJHYdjLmDT6a/R1cKsr1fz9USt0LtY=;
+        b=Ck85/tkxKjeX9kHUlnxdk8pJSLpXb4o/4e6xG7opEXJMagolWZmUwUWklhEnDF4SDG
+         DrU0st/5NxG5IZY/PNF7TdIg0arBY2buajc/Q6Uqct4oK5bJeiPTfk5+3BH+DdIuWdwc
+         e4xzsTQCKrpfRMIED8SFgxSBoSjRwarQ1bjjlmLcTdKroArqsJHWHIolJC6fGIcyEO3O
+         YO8q+hS4IkrYsk+8k85mM5uZq9vHMXoxUl+jZlT5XCv1TOYNDYlr6cqgj4bsoTNg4kxC
+         +uQiIPgkulJ9tTJTB45XNgfOCms+5I0VDOwrPQhP+HB689O/5eFPswzQFxkkJCNgKrEi
+         DV0w==
+X-Forwarded-Encrypted: i=1; AJvYcCWLZkm3/Axs8DFmtteZ+nWLU8h5RsjeaysrzJClCcUO6gS9rYaQ+GHEbg5aiWCqJmtFvcX7EyeyWXaz@vger.kernel.org, AJvYcCXdDWgGBeggjPfBQFICZc47PoqmY7T9iWbSjPwOUKX/oC3SBryvycW+vn+5QyvCoJ1MAXjL5eU1tfz5b94eo9s=@vger.kernel.org, AJvYcCXrAOob/FSCzpNEQrD3nsGGcwOzLlTPh/tNoxV1atiZxKEI8iyLZHJofEcedkJzPPs4bB3bY8q9ymm4tR4c@vger.kernel.org
+X-Gm-Message-State: AOJu0Yys/8sev21paLo+xdj2f88IFwZcMVdvHzuJwkn4ztConxpNqxWc
+	WHZ8b/BXSUJjvkMgQMDx3GgTCfneek54hoDCSMqd1tCa7NQy+m/tiiZf7J1mFg==
+X-Gm-Gg: ASbGncvjDuoc6fBk528UbnvWQSMrj4XeYgwd4kL1Pee79m16Wc65scJGhoiAj4TJkm+
+	6H+LvYbcVIIUVX4t4FmO1laYTf6oW06njwKHFv9MjODWPwo7KFQuQVTzKtVex28k5Y6rsOIjg0z
+	f5EhWzCDnUl1Bf1DoQyKIagVvDlBgUzaPg7WFzC0MvUz/j9JmFU7XgaKLG5MNyMYd8UhfyUQXr4
+	aQ6sS49lgz+iN3WeQa3qrYncE94tI2RLZfrD+7rysu62v8BJTbN3HbJOUHH8mxmRLHV7CHHil+Y
+	AMWvDo+kd9yP8jgoMTrmObc3US+Fw+IUvlZKEtHB78kQKw1vstm/EEVyn8436OIaZPD6mQTDglE
+	QmIikrzUYiw==
+X-Google-Smtp-Source: AGHT+IHa33IoJDkkiAUXOiNtnScGLdwFfsOuTvhHokB8mo7xs2anSqK5WIaSd1T5qMmvoHWiD9OYSg==
+X-Received: by 2002:a05:6a00:1910:b0:736:4d05:2e2e with SMTP id d2e1a72fcca58-74ce6417d49mr19430623b3a.6.1751921893287;
+        Mon, 07 Jul 2025 13:58:13 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74ce35cc72dsm9826565b3a.42.2025.07.07.13.58.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Jul 2025 13:01:25 -0700 (PDT)
-From: Prabhakar <prabhakar.csengg@gmail.com>
-X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To: Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
+        Mon, 07 Jul 2025 13:58:12 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Mon, 7 Jul 2025 13:58:12 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Judith Mendez <jm@ti.com>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
 	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	linux-watchdog@vger.kernel.org
-Cc: devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	Prabhakar <prabhakar.csengg@gmail.com>,
-	Biju Das <biju.das.jz@bp.renesas.com>,
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH 9/9] watchdog: rzv2h_wdt: Improve error strings and add newlines
-Date: Mon,  7 Jul 2025 21:01:11 +0100
-Message-ID: <20250707200111.329663-10-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250707200111.329663-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20250707200111.329663-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Tero Kristo <kristo@kernel.org>, linux-watchdog@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Andrew Davis <afd@ti.com>
+Subject: Re: [PATCH v3 2/2] watchdog: rti_wdt: Add reaction control
+Message-ID: <cc37e797-d3e5-444d-8016-c437a0534001@roeck-us.net>
+References: <20250707180002.3918865-1-jm@ti.com>
+ <20250707180002.3918865-3-jm@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250707180002.3918865-3-jm@ti.com>
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On Mon, Jul 07, 2025 at 01:00:02PM -0500, Judith Mendez wrote:
+> This allows to configure reaction between NMI and reset for WWD.
+> 
+> On K3 SoC's other than AM62L SoC [0], watchdog reset output is routed
+> to the ESM module which can subsequently route the signal to safety
+> master or SoC reset. On AM62L, the watchdog reset output is routed
+> to the SoC HW reset block. So, add a new compatible for AM62l to add
+> SoC data and configure reaction to reset instead of NMI.
+> 
+> [0] https://www.ti.com/product/AM62L
+> Signed-off-by: Judith Mendez <jm@ti.com>
+> ---
+>  drivers/watchdog/rti_wdt.c | 32 ++++++++++++++++++++++++++++----
+>  1 file changed, 28 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/watchdog/rti_wdt.c b/drivers/watchdog/rti_wdt.c
+> index d1f9ce4100a8..c9ee443c70af 100644
+> --- a/drivers/watchdog/rti_wdt.c
+> +++ b/drivers/watchdog/rti_wdt.c
+> @@ -35,7 +35,8 @@
+>  #define RTIWWDRXCTRL	0xa4
+>  #define RTIWWDSIZECTRL	0xa8
+>  
+> -#define RTIWWDRX_NMI	0xa
+> +#define RTIWWDRXN_RST	0x5
+> +#define RTIWWDRXN_NMI	0xa
+>  
+>  #define RTIWWDSIZE_50P		0x50
+>  #define RTIWWDSIZE_25P		0x500
+> @@ -63,22 +64,29 @@
+>  
+>  static int heartbeat;
+>  
+> +struct rti_wdt_data {
+> +	bool reset;
+> +};
+> +
+>  /*
+>   * struct to hold data for each WDT device
+>   * @base - base io address of WD device
+>   * @freq - source clock frequency of WDT
+>   * @wdd  - hold watchdog device as is in WDT core
+> + * @data - hold configuration data
+>   */
+>  struct rti_wdt_device {
+>  	void __iomem		*base;
+>  	unsigned long		freq;
+>  	struct watchdog_device	wdd;
+> +	const struct rti_wdt_data *data;
+>  };
+>  
+>  static int rti_wdt_start(struct watchdog_device *wdd)
+>  {
+>  	u32 timer_margin;
+>  	struct rti_wdt_device *wdt = watchdog_get_drvdata(wdd);
+> +	u8 reaction;
+>  	int ret;
+>  
+>  	ret = pm_runtime_resume_and_get(wdd->parent);
+> @@ -101,8 +109,13 @@ static int rti_wdt_start(struct watchdog_device *wdd)
+>  	 */
+>  	wdd->min_hw_heartbeat_ms = 520 * wdd->timeout + MAX_HW_ERROR;
+>  
+> -	/* Generate NMI when wdt expires */
+> -	writel_relaxed(RTIWWDRX_NMI, wdt->base + RTIWWDRXCTRL);
+> +	/* Reset device if wdt serviced outside of window or generate NMI if available */
 
-Update rzv2h_wdt_probe() to provide clearer error strings when retrieving
-the pclk, oscclk, and reset controller, and append missing newline
-characters to dev_err_probe() and dev_warn() calls for proper log
-formatting.
+Shouldn't that be "or generate NMI if _not_ available" ?
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
- drivers/watchdog/rzv2h_wdt.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Guenter
 
-diff --git a/drivers/watchdog/rzv2h_wdt.c b/drivers/watchdog/rzv2h_wdt.c
-index 1b32bab87d67..db76a7c0e1d6 100644
---- a/drivers/watchdog/rzv2h_wdt.c
-+++ b/drivers/watchdog/rzv2h_wdt.c
-@@ -292,16 +292,16 @@ static int rzv2h_wdt_probe(struct platform_device *pdev)
- 
- 	priv->pclk = devm_clk_get_prepared(dev, "pclk");
- 	if (IS_ERR(priv->pclk))
--		return dev_err_probe(dev, PTR_ERR(priv->pclk), "no pclk");
-+		return dev_err_probe(dev, PTR_ERR(priv->pclk), "Failed to get pclk\n");
- 
- 	priv->oscclk = devm_clk_get_optional_prepared(dev, "oscclk");
- 	if (IS_ERR(priv->oscclk))
--		return dev_err_probe(dev, PTR_ERR(priv->oscclk), "no oscclk");
-+		return dev_err_probe(dev, PTR_ERR(priv->oscclk), "Failed to get oscclk\n");
- 
- 	priv->rstc = devm_reset_control_get_optional_exclusive(dev, NULL);
- 	if (IS_ERR(priv->rstc))
- 		return dev_err_probe(dev, PTR_ERR(priv->rstc),
--				     "failed to get cpg reset");
-+				     "Failed to get cpg reset\n");
- 
- 	switch (priv->of_data->count_source) {
- 	case COUNT_SOURCE_LOCO:
-@@ -338,7 +338,7 @@ static int rzv2h_wdt_probe(struct platform_device *pdev)
- 
- 	ret = watchdog_init_timeout(&priv->wdev, 0, dev);
- 	if (ret)
--		dev_warn(dev, "Specified timeout invalid, using default");
-+		dev_warn(dev, "Specified timeout invalid, using default\n");
- 
- 	return devm_watchdog_register_device(dev, &priv->wdev);
- }
--- 
-2.49.0
-
+> +	if (wdt->data->reset)
+> +		reaction = RTIWWDRXN_RST;
+> +	else
+> +		reaction = RTIWWDRXN_NMI;
+> +
+> +	writel_relaxed(reaction, wdt->base + RTIWWDRXCTRL);
+>  
+>  	/* Open window size 50%; this is the largest window size available */
+>  	writel_relaxed(RTIWWDSIZE_50P, wdt->base + RTIWWDSIZECTRL);
+> @@ -255,6 +268,8 @@ static int rti_wdt_probe(struct platform_device *pdev)
+>  	wdd->timeout = DEFAULT_HEARTBEAT;
+>  	wdd->parent = dev;
+>  
+> +	wdt->data = device_get_match_data(dev);
+> +
+>  	watchdog_set_drvdata(wdd, wdt);
+>  	watchdog_set_nowayout(wdd, 1);
+>  	watchdog_set_restart_priority(wdd, 128);
+> @@ -369,8 +384,17 @@ static void rti_wdt_remove(struct platform_device *pdev)
+>  	pm_runtime_disable(&pdev->dev);
+>  }
+>  
+> +static struct rti_wdt_data j7_wdt = {
+> +	.reset = false,
+> +};
+> +
+> +static struct rti_wdt_data am62l_wdt = {
+> +	.reset = true,
+> +};
+> +
+>  static const struct of_device_id rti_wdt_of_match[] = {
+> -	{ .compatible = "ti,j7-rti-wdt", },
+> +	{ .compatible = "ti,j7-rti-wdt", .data = &j7_wdt },
+> +	{ .compatible = "ti,am62l-rti-wdt", .data = &am62l_wdt },
+>  	{},
+>  };
+>  MODULE_DEVICE_TABLE(of, rti_wdt_of_match);
+> -- 
+> 2.49.0
+> 
 
