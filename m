@@ -1,78 +1,78 @@
-Return-Path: <linux-watchdog+bounces-3833-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3834-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E809AFBC2C
-	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Jul 2025 22:02:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FB55AFBC31
+	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Jul 2025 22:02:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 832C54A1508
-	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Jul 2025 20:02:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A46F24A5D29
+	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Jul 2025 20:02:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64D57264F81;
-	Mon,  7 Jul 2025 20:01:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08CAE267F53;
+	Mon,  7 Jul 2025 20:01:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H+kzxn50"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bb0lJNnL"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFEE9219A9E;
-	Mon,  7 Jul 2025 20:01:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E044262FCC;
+	Mon,  7 Jul 2025 20:01:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751918486; cv=none; b=E0daLg5pfKJxDrO4Nqo4WC4B+7GUBK04yiwIQ7h65+BnKg4zH++g+vZmSOiIHAAJxX3wJW1BQYgpL7unv6RzIoIfo7rJsOybQqKg/+eSEhIS8LaRoVYNcQiCMqWBFxVj2GaRxh6x9SmrT0gkQKV9qtdlP3BiTRExWowXIw3AlrU=
+	t=1751918487; cv=none; b=iK4Rce+5LI+2q7prZY6Ug5QxhExfsoQeZPB2/j2N4dnHobjP6TtulhRnSLZciasoQIfnsLVmN6WYjEToiEQF1WNV5nJwkVZDILEQjxnZDe5VjtMo+521bXpUK69RnRV7Gg3ZxauR6NqQB2WaZdcTYROcZ0uOqia+g26IVF7IGlU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751918486; c=relaxed/simple;
-	bh=a9gV4/x5WR7owAGGWjd2L3oOQiFwyR+RxwADdjljzdA=;
+	s=arc-20240116; t=1751918487; c=relaxed/simple;
+	bh=qPF8NkTpUfftF7708X9YTMkZKg++XbeTAf2HLX5+1CY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lThY8X32u5EOz4yMqBn72Z8CGfShJwOY+ZzxGibVpYXhitxjcAIpRbwEoPu8ItxhMMlqvBfb02CSOIM+exuBjPvDob1qLSbMwQffWTLXKC8w8IMpaytXXoutzoriRvViSoUFopvbAh4m/SX/0uHY+TWzsGOHcdwFEYVe2FyPduo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H+kzxn50; arc=none smtp.client-ip=209.85.221.46
+	 MIME-Version; b=oub0P79k9MJO9XqN0tDk3w8BiXSHXwd+L744OKfTvkH+bXMxUQpQug8IHCQflE8mhfvzyZjOl9bC4rt+1+smIhZSzXCUMX6ZUCSIYqgsw5byjYYjEahD++ROyiloAjhOEv0OfA0m02YIKr+9UW2xOgvnPFZPyBPx23arFa8HOvw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bb0lJNnL; arc=none smtp.client-ip=209.85.221.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-3a5257748e1so2958053f8f.2;
-        Mon, 07 Jul 2025 13:01:24 -0700 (PDT)
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-3a588da60dfso2401419f8f.1;
+        Mon, 07 Jul 2025 13:01:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751918483; x=1752523283; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1751918484; x=1752523284; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=msAgLL0y2lo6QCVAd1jQcAowaRieaZMHAfnPdkFo6ro=;
-        b=H+kzxn50O1QGK7Ia6zSBcuCo0QyAzP3lExLCDYsTussQPgQr0sn/L810dJTum1VTXW
-         c1EuodkOz7UGXf7ebNsVHcPtiE35dnMxwZNvQwbrlHq6Az8kSbpEF/nz7sLtoEjn5zQ2
-         dizJ6AFsElytO7SQyOfbs1tu9PQIhQyqnC1YrLriTE6MjfzGiqloUdyCchON4wz1SUpH
-         K3IMxz+fQDzGqHvWXemQjIkkjfY/qCJ9VfxTWtJZbOm6YJCEJMjFMGKzsLcIXPidUtfP
-         hkGykxjG1DsmOPDKJn5NzoV+i3uFP+QhByorSUMwTwthHZhPI85Il/Zm2POXYuns4doy
-         P1Fw==
+        bh=7URniZWoEjaf+i2BnbaXXfBg+hacJuWnRqQYJeUW7ng=;
+        b=bb0lJNnLAL2WwOP2s0KYSsWLIDrlIDcTmJDa/6a3GE7fCRuzCLIGRm84CHmistUc97
+         npa2h7OpJrRlG7079EcsxYyGaPTm5lQLNv8yEhbLWjBz44NHYzEFPXmpSafZOuMaqxAx
+         17He0AgZxds1bBIgIVCiD+Xyfo9JtHD06xA96fzsfy/XuJrhyRYf2BNQdsQ/xklu7W6W
+         DsjPsRL2lk6tbcB+KRffE/ASB1t6z72MCT6WwpEbNqdh429LFGYgg1ovTfcv/Ef7XtzX
+         g7cwrQ8nGA3k8MNpy7+xW04sCzQVvoK/3SmW0cfjyfgnV0I78FvIkv/kOU6kfmJ9IbAu
+         6P0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751918483; x=1752523283;
+        d=1e100.net; s=20230601; t=1751918484; x=1752523284;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=msAgLL0y2lo6QCVAd1jQcAowaRieaZMHAfnPdkFo6ro=;
-        b=EAUhhjJ8TF93PUx3PEKAxHYbPoN1PCnTcR9qcNJru/Hd0F//WO9c6/6vUpfROqC2Vt
-         S08xBhRvVMTW/JgUR4Itz2T9mXiQEllu8Ba9jnybpqbtR86A5PMf2ffYsKF4d8xCfRfN
-         O2RIfV+TZaZqspihGw80PJtpMXCi1pU+jtPNIMYMLrAtCsiPeULPZl4Xls1+6qI5AfrE
-         x7/qKM3XyRXkU8E4lGffv828fWjtBEWkb83SUpD3GMDzxbmfSMcESYqEyHO/gM9dVsiL
-         ZFkrIjVNgMKJE479dv7g3lFb0shS6dQUpV7FVJL7+qkbkZCFuNkcXb3GHs7B+AtZqn7D
-         oDZg==
-X-Forwarded-Encrypted: i=1; AJvYcCUSIcnl0Czgu5311l/vPBzxXEC7C1WlxSnH5CeGs+STS5WWgfXckYrKubHIXMjj202SOGG5yyjWHEsyf4g=@vger.kernel.org, AJvYcCVeO9qT04Rbb2YEUzTgk4vqoBXssRgUKqsFHAiNM4iWers3UM+EupnxHvsnGWEUjPUadk7h4TiZfRqhgJpbrYPJuGk=@vger.kernel.org, AJvYcCWYA+ZQP5bTeV0uk+TcLJeGkPbVawNfXG/zM7zct4Wcqgsmw0O7wvkF4NJPu5BGtGLCXNDJRrgE+K0bjz26ANo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwaI2lJ+UdganCaQXCtM8ZhTLM8KXYZ/Ka3KJBIjXdnQZ3M0Kz8
-	k6rCVAjM/P1zjkqariG2vFZxQRKOKD17h/FZVT5wn4SrvkJxbnx9eSpn
-X-Gm-Gg: ASbGncvlIpIvwoEFxpbSa9fC1zSbqUivv0N9Rr+PbV1MjszRXUDLrCdp1tW6+eLlWQM
-	rrmrFIhgwg3C4By0frAsrMYcF9acu4VJSGOn2R1gH3SGJZIev4ylBnG9Ut+RubRBGtQY9XzK+NO
-	rvV9/OU15fADT47y+pWcVHmqGqB4ahO2StWwRVBHBAvYVMY4qo+miMd0/PXqtWrpiiLiSld/Zu+
-	IDmXvRZm9goWNe5H8L10T6liYxWZgdg7J3k60pwl4qck0EfkDbRxyaLKxsroVBVOvSzCWmiUnfX
-	B06rGbx8kbqIbUybEAcsI88/0eWHgektBBFE3xwciL3ShTR/EZPHKy+Mx+19Pi8UE++x1jQqDtJ
-	fEXYLXISA3r/XN3Fwaqo=
-X-Google-Smtp-Source: AGHT+IELYB5O/cKYUGRln/ShcDYmm0RWIjhL2uNzE0qqkD5+GYtqnTZTI0Fz1UPcATF1Rlf9Pfy/rA==
-X-Received: by 2002:a5d:5d0e:0:b0:3a4:f35b:d016 with SMTP id ffacd0b85a97d-3b497011a15mr11623488f8f.11.1751918482935;
-        Mon, 07 Jul 2025 13:01:22 -0700 (PDT)
+        bh=7URniZWoEjaf+i2BnbaXXfBg+hacJuWnRqQYJeUW7ng=;
+        b=iA6ktSl7aXzbdCys6qtmP4e3Mx5wKYYWJCYalUJcPfqSRrtVSDNCbF5KT8x1Iassx4
+         Bm6ghtquiEU/JBWnu3yws/D+Bc26n212Xshcz5TenqLW+8PeGObc33u3ubzFYflUYDW8
+         2GMns1kv9nq3q9YuMebymXfhf6WNdalIQAkcgTVQLdsxauOQXPuGeEjroaJxPLpL7oad
+         lRAWFBzKunoBS5zmVcTYyUMz/VxVeT37uC5rEcXQPRWZcRuaQqr0SEmFrvWYnI43B15A
+         /5VN9SvDdYQXucS5eyReD6XgGE09rHpLq7PlhoU59wiJ+oPID9WRkIKzILzQSd7JmU1m
+         700Q==
+X-Forwarded-Encrypted: i=1; AJvYcCV+BzqO27RUXgeTHmFVeGizQwTyHDLnaFgp9pQ4Zw5hCxvDAKUku2h5jD/JFle40zR7i56p40Gb7M0Onwg=@vger.kernel.org, AJvYcCWeIyYDPkWjLo1aoIvhYGoRNHmbqxHrSmEeOzG60LMWF/aI/zbszXXCg7xB+oI44M6dz3sKRfljopmJ87HUZTPvWfs=@vger.kernel.org, AJvYcCXJwqhzV2BoM8E/bceWEZCFfhL6d8S3bPd4+vmf/GWT9KkxkY1wl5invN3w/9Oa+g0KR3/NHZnjkNNwnkDxsJM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyu4tTLYsuD9IbpJZz3lGENUTB2eueSc2VycUvyoX70wc9y9kmv
+	JkeG4EaNWJxO3U7chhoTQyZByWU2NEhmI0a06JiKWVIlegxxPUWAR3e3
+X-Gm-Gg: ASbGncstxmYQ7G3Q39zKhrXtIRthRXCr48elZV3uG1Px1Nw8nqza9NJYuEL9Jv1MIn3
+	7IvhZqf8VtKXMoKjbDGCSZLmz9/b173C4GgwoeLB7xwWVjkucGaDfyuFClM4h361xsSIHIh5PHX
+	aiaWl5D5GlFTpXB5gcrL0te630DuIE6Cia+/RAvHOOvjLCExsuwd+LaObMW+lmFuB+0lMno2hrz
+	m+xAPn4cbR6zhUAT7EJUD0xXwhkUhgQCvlJtDilGwew3DPFuSKNkUxe8LmDWU0vcotCEQ+PFyLJ
+	A2mrdeSqLltd1eP+PbaND9AYM23AaFukX8rN23F/0gJiuIOggWe9NiF99tyMRvNu/96/qwtCSG0
+	pctvDJBsoX6w+iLTbyUQ=
+X-Google-Smtp-Source: AGHT+IHa1b3cujQAtRtLcYgxYEbxpp2/kxF3qBDklt7lTsFCz5uioodOQyVSNohIJ+voKNe5wjEVDA==
+X-Received: by 2002:a05:6000:4112:b0:3b5:dc2e:3cd6 with SMTP id ffacd0b85a97d-3b5dc2e3cfamr634259f8f.13.1751918484075;
+        Mon, 07 Jul 2025 13:01:24 -0700 (PDT)
 Received: from iku.example.org ([2a06:5906:61b:2d00:d418:e5eb:1bc:30dd])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b471b97376sm11268995f8f.61.2025.07.07.13.01.21
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b471b97376sm11268995f8f.61.2025.07.07.13.01.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Jul 2025 13:01:22 -0700 (PDT)
+        Mon, 07 Jul 2025 13:01:23 -0700 (PDT)
 From: Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To: Wim Van Sebroeck <wim@linux-watchdog.org>,
@@ -91,9 +91,9 @@ Cc: devicetree@vger.kernel.org,
 	Biju Das <biju.das.jz@bp.renesas.com>,
 	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
 	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH 6/9] watchdog: rzv2h_wdt: Make reset controller optional
-Date: Mon,  7 Jul 2025 21:01:08 +0100
-Message-ID: <20250707200111.329663-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH 7/9] watchdog: rzv2h: Set min_timeout based on max_hw_heartbeat_ms
+Date: Mon,  7 Jul 2025 21:01:09 +0100
+Message-ID: <20250707200111.329663-8-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250707200111.329663-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20250707200111.329663-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -107,12 +107,14 @@ Content-Transfer-Encoding: 8bit
 
 From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Use devm_reset_control_get_optional_exclusive() instead of
-devm_reset_control_get_exclusive() to allow the driver to operate
-on platforms where a reset controller is not present.
+Update the watchdog minimum timeout value to be derived from
+`max_hw_heartbeat_ms` using `DIV_ROUND_UP()` to ensure a valid and
+consistent minimum timeout in seconds.
 
-This change is in preparation for supporting the RZ/T2H SoC, which
-does not have reset.
+This avoids hardcoding a value of `1` second and allows the driver to
+adapt correctly to different hardware configurations that may set
+`max_hw_heartbeat_ms` differently (e.g., based on the SoC clock source
+and divider).
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Reviewed-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
@@ -121,18 +123,18 @@ Reviewed-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/watchdog/rzv2h_wdt.c b/drivers/watchdog/rzv2h_wdt.c
-index cb584ac5860f..f0e2bf786acc 100644
+index f0e2bf786acc..9c11ce323c16 100644
 --- a/drivers/watchdog/rzv2h_wdt.c
 +++ b/drivers/watchdog/rzv2h_wdt.c
-@@ -240,7 +240,7 @@ static int rzv2h_wdt_probe(struct platform_device *pdev)
- 	if (IS_ERR(priv->oscclk))
- 		return dev_err_probe(dev, PTR_ERR(priv->oscclk), "no oscclk");
+@@ -263,7 +263,7 @@ static int rzv2h_wdt_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
  
--	priv->rstc = devm_reset_control_get_exclusive(dev, NULL);
-+	priv->rstc = devm_reset_control_get_optional_exclusive(dev, NULL);
- 	if (IS_ERR(priv->rstc))
- 		return dev_err_probe(dev, PTR_ERR(priv->rstc),
- 				     "failed to get cpg reset");
+-	priv->wdev.min_timeout = 1;
++	priv->wdev.min_timeout = DIV_ROUND_UP(priv->wdev.max_hw_heartbeat_ms, MSEC_PER_SEC);
+ 	priv->wdev.timeout = WDT_DEFAULT_TIMEOUT;
+ 	priv->wdev.info = &rzv2h_wdt_ident;
+ 	priv->wdev.ops = &rzv2h_wdt_ops;
 -- 
 2.49.0
 
