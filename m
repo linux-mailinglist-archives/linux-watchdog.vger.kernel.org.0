@@ -1,78 +1,78 @@
-Return-Path: <linux-watchdog+bounces-3828-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3829-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3D36AFBC18
-	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Jul 2025 22:01:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C30D8AFBC1B
+	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Jul 2025 22:01:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F0A84A12A0
-	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Jul 2025 20:01:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C7ECD3A8DC8
+	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Jul 2025 20:01:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F16D21C167;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CAF121C9F9;
 	Mon,  7 Jul 2025 20:01:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e/KYcZbr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dH8lqmC6"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 526531FBE8B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5A581F3BB5;
 	Mon,  7 Jul 2025 20:01:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751918482; cv=none; b=F36oVnVvPU9W3JOo6uN1Hjoy0ubz/EreTOEcLGIOXXtf0RXz2cMcf05+NlPPciegxLQgxlc4BEHoa0YBQfbaNZdb6HBVSzzhdetBjjkGT5gFClLQm21JwnsLfmPamKtBrVHY+JqjZ56KS9z7WloFaCVhqYIooojNQDpI3foTqdM=
+	t=1751918482; cv=none; b=mfijwAy5okZRtLMzmT75FGWepsgI/xqSF++7Xof/RjLqO18d6WsGWKAECva3tBw4JgGw8ckh5sDIS0yIlQhjv0pofbtGfomumOaKkowFUnu/N9uPqalHajmfXb7LQi73CCPa018yZBhZVvrNe3YX4D78ehyrdMvsK8ul/kERzKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1751918482; c=relaxed/simple;
-	bh=zGKV4TwmffsXGBRMR3PvlsnxcqwJncNj70mdpBwnyPQ=;
+	bh=V6IQ2gg8theLQKhy0pSAfQIVT4+2x1DClOMYvHnbKTw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nROiJgGznyk/SeRaOD+zJahH8UdnpFdKU6Z4DNZi1PkA9riyUhgbt5V18t+XN+FYFWVtNtHgCJSo+0czBhSAno48YMhkyGY6RvABfBR4S1F03GkOcVhxBD8rAIeasnSxU0lc7m8y61a+hc1bli592XZj4pVQRykOQXGNpUfV66w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e/KYcZbr; arc=none smtp.client-ip=209.85.221.50
+	 MIME-Version; b=ugn7t77eBlqpKoZWQ2WzITQDeNn7UxwNTNNtmUFu5FdnQi3FeqfdFBuPzhJsrtGRwJAu1sQP2StmgGgyUQCiOoBUoDBtlf3mzU3dnL5N8Af7BgxEekPd71Ham9ouEcOQ6/1BBCMzJqL7r9AF3JhyZUrSbx4cyHJT18uY/U/44mc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dH8lqmC6; arc=none smtp.client-ip=209.85.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3a525eee2e3so2292338f8f.2;
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-454ac069223so22865075e9.1;
         Mon, 07 Jul 2025 13:01:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751918478; x=1752523278; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1751918479; x=1752523279; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cABofFObtx+y5oVEMq6EwPs/kt7P1VPzpWliJASsVxE=;
-        b=e/KYcZbrANpHwzdfSOwATIoDrD0nSiQGjRRTnFImylJHM7V1D3/T8ou9kMF/jguz6E
-         IIBAXgw2fbpSHzY/v3lovBhKWucaHkYMTLJWefW60QNalBxWckw0QLTjoRTIzwZ+xfw5
-         hpe7oyo24ytBFuP81t7zMR+Z4gqpVBYf7Q8492pGR/t3Bi9SmbOgRS4ESwHH8R6TnTUA
-         1/kIb1R6Xwo2Bfj4b2xQl9sBnL7VBafzV1T7Fr60OUDvFuvGynTwNHkVCKg8UAb+YrXZ
-         FTs7mMvey6edl5kK9jY/Q1QCYMJAp9xvyXnMONYcsAo2dtKw9EaxMbmiBvHpzTxLpkEo
-         PvLQ==
+        bh=LP8bmMp57OA6IhQ6YmNAhKyLYtPMaSr+eZSmls4pM8M=;
+        b=dH8lqmC6soXAKbaBmdXG5iOa8BVf0+egejy30Y8E0xIxvarm4a1Jt04VGYNpiUTZuy
+         YrdyscwmSZoE4Zc3L8EQlbeHGpw1X/irsSgJcXr3ve/S3R0ud3hui9oepNLK/F7agyJp
+         Mz2odF2iyy7ThVV5aEVbE4y4MQC1JKtCjDvTU70FrcowEPjKDOS+6eiJQf6/fG9b3rp+
+         npiKlXKbSXcUMuEBtEnzUmxUrOo7fOauI5Qiv58kMWKQ2t0+gNtUz/JAt+3dG0rFf0JI
+         6ArRaG7MCeXxwwh393b9jx4ASJRE2OhnQxyz8rbZAP4gefMHx4ZKfzLYwUIbKut0OGtQ
+         WAxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751918478; x=1752523278;
+        d=1e100.net; s=20230601; t=1751918479; x=1752523279;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cABofFObtx+y5oVEMq6EwPs/kt7P1VPzpWliJASsVxE=;
-        b=nEMiJHzx7WZ/1of8+RpMnK0OFku1MC9DxrMySngwwiZZNUt85+M0V5k7UltEEX9hhe
-         0UYYG68OP3exykUvFhWZNLHijL/uT+vKxpmstZoUkCCpkc+ERbyaf5YIeKrmnpIuWES7
-         t7GvXF9TTJdVdQqAZwYI14vq6qXTXuceD/zLg8d5nO9QRABxu4JBnSjNncsd3E6JrTgX
-         ADprE3bkVHXGG4ESahJG6M9Wrxb3DtigswOuhBUbLMgVvkImJyTNAGMPJQLqpWI/kWah
-         hNKkLyZKIgGH426BCn4joOisRGgQP54OnaNFT/LNFRT9ZXMRvnwwGSAk913nmZOZy/lp
-         0X6w==
-X-Forwarded-Encrypted: i=1; AJvYcCUvIrkiyZdih1iHDI1I+JhyK3VAatZtUWmSR4t27OXoow26YryRL8M/58ZKGwMCx1b/0HKi0ahhpXZnu8fusFjMPMo=@vger.kernel.org, AJvYcCXiipc1s9or1D4Es5iZW/LGolqNxnlF2xP9w7e8nxOojmenoGBG4fAmkfSzvSIA415aFRVHdFFQNUEfVChU22Y=@vger.kernel.org, AJvYcCXmazvCySGSycbQ0JOvf7Z/t2KQMATeZQpgjTVN/2/eQo2J/97JfYsljazn1lDgWokQ3pu5zxCzXmAZLbA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyGdXkTSwBk0TKctImuhelPQRm8rVPA4gszAsY8+4S9MA2OgvrM
-	sYbzjeXYiZY9J80KWV7+HpbauPqUNKVZAgdwyjoHQWJclzya8vjILwCV
-X-Gm-Gg: ASbGncsrPjG4czq00BFTjSffi73Y3y4C6CWYN8DTgjiYqrz+PB0a0omTTanjAug7tej
-	eGzCmQ741mcu+qrRW+tbvZX9JF+jJCi70D5X6xtZYdtvNoaT9Rd5tn+aEXSsn1dYFCQFOfFiKqa
-	Mfc3JmoU6UkLFg3RtOs9i7ySRRG+l7CNuvK5topqXWjm67JcMsx08ikG22BcR8PRTdn0IwdomBO
-	w4w3VGAJ5M9RLMYX14Vee7fRpgAE5n4sa7o7SfO0saGCvCMxsdGdcjFQUITLh90eYCcWtaoa+cc
-	vCZwrVEMrK8D7HLaHQ1dv88hBnHqbL2WvrK4SsGi6wnuh6jhrn6yx/Dpxjz60z5WzeObpQMNW0J
-	QhQAYuldBNjyMQfy6xEE=
-X-Google-Smtp-Source: AGHT+IFE/Ft4DBmWyWWjCBFV/SYDTTq4qLNkAzzM1a8qBGgTDH87LKKWzzV+YEL2RXuX+KNTaYgZhg==
-X-Received: by 2002:a05:6000:288e:b0:3a4:d274:1d9b with SMTP id ffacd0b85a97d-3b5dde928a2mr109505f8f.25.1751918477743;
-        Mon, 07 Jul 2025 13:01:17 -0700 (PDT)
+        bh=LP8bmMp57OA6IhQ6YmNAhKyLYtPMaSr+eZSmls4pM8M=;
+        b=wLeMAK9jbcKvKME0fynd5LCSIAAWIdb9oR6mGshyID72SONHXiKNkTAiuiREW5eB8H
+         ARZu2kH0Dy+HNuVc+2qF7CRxzugAea157j0aB8zFPqtOC1Q8EFSwmfiOU1NG29gStY/B
+         ilTYVwzs4r5gdlkQ2Z+X+cUpPbG7KC9jbX67gkxyFakqCo0yJ7vsClaVbWwYgE7LnCeM
+         dYcTIp9A7fyqQNiSMywNA3o+M7N3TZMSIUpKAmIc9g+X4Tzb5rFTj9xU4LOTBkhwKvVb
+         R5L8GUKFCuAFcAcYJcASgpHO1XA0UvGd3LCwbnQO0SWz1qo5RS1J9YMo8llqCskLnmuL
+         WtGA==
+X-Forwarded-Encrypted: i=1; AJvYcCUIBzOU4G8e7cskC7BlCt7mC05HJFD4OZVCaY2z1ne0kPjXH4PPSoNPrzTt+sx2wo2RWokcWQpv3blcQ+WHPKS/vRg=@vger.kernel.org, AJvYcCVOgsSKkOqxEZprvwaUqN1atgTzuEPftSBUwm3OYaSZBLqF4OK1iL2M3Fm7IJ0Bk5vx1b5p5LU75ywP92JV+L0=@vger.kernel.org, AJvYcCWniAtRQZDHnwTikOqb96/+Vd5zHd9uwTsZR3W4r5bFvAkhWw/St2Xu47cvwjGCxiUOjgPooYOrBQarHuk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZCac2z4I5qm+X7pxv26JO6umAFbhlzj2dKYQciSUxQiom7HjI
+	WtbZ7S9xHy8+14JVSdUm6KE3TWv9j7YlIRP0WOZQoegItQUKnIuBKrPl
+X-Gm-Gg: ASbGnctTlN+ouhusG3ySU1n+J0mDCoxVmlMOEdghPifATpF4lQvSPqGXor+u4JGnIBh
+	nTkPpePbNPR95+cxDZ1wQfnrWiUANmlv5f+CQYI2B6AiBPdy0idXlYusXygSrPKMNHrS5Axu5jq
+	lByho50vCuAnLnvnab1xIu1A4mGy6KpY957hlvQh2ImZbsGGLG5T7l1uOD8iCH284BN9GVtlSPe
+	oFlrZJ/LE2avJ/P3u+a1tLcelvkNnOIficmbN548Yeyz46itSei0a8riq9i+XTMtB0iLPlk+GfK
+	EZo3KXgRcbEsS+bNMVgwozXjv7/YV55wJrKka3ETo1HSv4lkhltzlkPalVTuSVSTmne/fe/o0tU
+	hfvEp02ROb0+jmllhIkc=
+X-Google-Smtp-Source: AGHT+IErr9J27PXfYeZhimqyOaDoekqacPSEV+vEQRLL/v5ULwP2Kxqx3EaJZU6S+5WtEKbFalI82Q==
+X-Received: by 2002:a05:600c:3e85:b0:43c:f3e1:a729 with SMTP id 5b1f17b1804b1-454cd691516mr225575e9.12.1751918478674;
+        Mon, 07 Jul 2025 13:01:18 -0700 (PDT)
 Received: from iku.example.org ([2a06:5906:61b:2d00:d418:e5eb:1bc:30dd])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b471b97376sm11268995f8f.61.2025.07.07.13.01.16
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b471b97376sm11268995f8f.61.2025.07.07.13.01.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Jul 2025 13:01:17 -0700 (PDT)
+        Mon, 07 Jul 2025 13:01:18 -0700 (PDT)
 From: Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To: Wim Van Sebroeck <wim@linux-watchdog.org>,
@@ -91,9 +91,9 @@ Cc: devicetree@vger.kernel.org,
 	Biju Das <biju.das.jz@bp.renesas.com>,
 	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
 	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH 1/9] dt-bindings: watchdog: renesas,wdt: Add support for RZ/T2H and RZ/N2H
-Date: Mon,  7 Jul 2025 21:01:03 +0100
-Message-ID: <20250707200111.329663-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH 2/9] watchdog: rzv2h_wdt: Obtain clock-divider ranges from OF match data
+Date: Mon,  7 Jul 2025 21:01:04 +0100
+Message-ID: <20250707200111.329663-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250707200111.329663-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20250707200111.329663-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -107,100 +107,86 @@ Content-Transfer-Encoding: 8bit
 
 From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Extend the Renesas WDT device tree bindings to support the watchdog timer
-found on the RZ/T2H (R9A09G077) and RZ/N2H (R9A09G087) SoCs.
+Move the clock division ratio values into OF match data instead of
+hardcoding them in the driver. Introduce `rzv2h_of_data` to hold `cks_min`
+and `cks_max`, populated via the device tree match table. In probe, call
+`of_device_get_match_data()` to retrieve these values for setting up the
+watchdog.
 
-The RZ/T2H WDT is mostly compatible with the one found on the RZ/V2H(P),
-but includes an additional register and differs in the clock division
-ratio settings for the WDTCR[CKS] field. To reflect these differences,
-introduce a new compatible string, "renesas,r9a09g077-wdt".
-
-The binding schema is updated accordingly. On RZ/T2H, the WDT does not
-require the "resets" property. It also requires two register regions and
-the presence of a "power-domains" property. The "clock-names" property is
-limited to a single entry, "pclk", for this SoC.
-
-The RZ/N2H SoC uses the same WDT IP as the RZ/T2H. It is supported by
-using "renesas,r9a09g087-wdt" as the primary compatible string, with
-"renesas,r9a09g077-wdt" listed as a fallback to describe the shared
-hardware features.
+This refactoring is transparent for existing RZ/V2H(P) usage and
+facilitates adding RZ/T2H support with different divider ranges.
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Reviewed-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
 ---
- .../bindings/watchdog/renesas,wdt.yaml        | 37 +++++++++++++++++--
- 1 file changed, 34 insertions(+), 3 deletions(-)
+ drivers/watchdog/rzv2h_wdt.c | 19 ++++++++++++++++---
+ 1 file changed, 16 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
-index 78874b90c88c..ce439a401c12 100644
---- a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
-@@ -81,10 +81,17 @@ properties:
-               - renesas,r9a09g056-wdt # RZ/V2N
-           - const: renesas,r9a09g057-wdt # RZ/V2H(P)
+diff --git a/drivers/watchdog/rzv2h_wdt.c b/drivers/watchdog/rzv2h_wdt.c
+index 8defd0241213..d64d29709160 100644
+--- a/drivers/watchdog/rzv2h_wdt.c
++++ b/drivers/watchdog/rzv2h_wdt.c
+@@ -45,12 +45,18 @@ module_param(nowayout, bool, 0);
+ MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
+ 		 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
  
--      - const: renesas,r9a09g057-wdt       # RZ/V2H(P)
-+      - enum:
-+          - renesas,r9a09g057-wdt    # RZ/V2H(P)
-+          - renesas,r9a09g077-wdt    # RZ/T2H
++struct rzv2h_of_data {
++	u8 cks_min;
++	u8 cks_max;
++};
 +
-+      - items:
-+          - const: renesas,r9a09g087-wdt # RZ/N2H
-+          - const: renesas,r9a09g077-wdt # RZ/T2H
+ struct rzv2h_wdt_priv {
+ 	void __iomem *base;
+ 	struct clk *pclk;
+ 	struct clk *oscclk;
+ 	struct reset_control *rstc;
+ 	struct watchdog_device wdev;
++	const struct rzv2h_of_data *of_data;
+ };
  
-   reg:
--    maxItems: 1
-+    minItems: 1
-+    maxItems: 2
+ static int rzv2h_wdt_ping(struct watchdog_device *wdev)
+@@ -106,7 +112,7 @@ static int rzv2h_wdt_start(struct watchdog_device *wdev)
+ 	 * - RPES[9:8] - Window End Position Select - 11b: 0%
+ 	 * - TOPS[1:0] - Timeout Period Select - 11b: 16384 cycles (3FFFh)
+ 	 */
+-	rzv2h_wdt_setup(wdev, WDTCR_CKS_CLK_256 | WDTCR_RPSS_100 |
++	rzv2h_wdt_setup(wdev, priv->of_data->cks_max | WDTCR_RPSS_100 |
+ 			WDTCR_RPES_0 | WDTCR_TOPS_16384);
  
-   interrupts:
-     minItems: 1
-@@ -132,6 +139,7 @@ allOf:
-           compatible:
-             contains:
-               enum:
-+                - renesas,r9a09g077-wdt
-                 - renesas,rza-wdt
-                 - renesas,rzn1-wdt
-     then:
-@@ -183,7 +191,9 @@ allOf:
-       properties:
-         compatible:
-           contains:
--            const: renesas,r9a09g057-wdt
-+            enum:
-+              - renesas,r9a09g057-wdt
-+              - renesas,r9a09g077-wdt
-     then:
-       properties:
-         interrupts: false
-@@ -192,6 +202,27 @@ allOf:
-       required:
-         - interrupts
+ 	/*
+@@ -184,7 +190,7 @@ static int rzv2h_wdt_restart(struct watchdog_device *wdev,
+ 	 * - RPES[9:8] - Window End Position Select - 00b: 75%
+ 	 * - TOPS[1:0] - Timeout Period Select - 00b: 1024 cycles (03FFh)
+ 	 */
+-	rzv2h_wdt_setup(wdev, WDTCR_CKS_CLK_1 | WDTCR_RPSS_25 |
++	rzv2h_wdt_setup(wdev, priv->of_data->cks_min | WDTCR_RPSS_25 |
+ 			WDTCR_RPES_75 | WDTCR_TOPS_1024);
  
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: renesas,r9a09g077-wdt
-+    then:
-+      properties:
-+        resets: false
-+        clock-names:
-+          items:
-+            - const: pclk
-+        reg:
-+          minItems: 2
-+      required:
-+        - clock-names
-+        - power-domains
-+    else:
-+      properties:
-+        reg:
-+          maxItems: 1
+ 	rzv2h_wdt_ping(wdev);
+@@ -213,6 +219,8 @@ static int rzv2h_wdt_probe(struct platform_device *pdev)
+ 	if (!priv)
+ 		return -ENOMEM;
+ 
++	priv->of_data = of_device_get_match_data(dev);
 +
- additionalProperties: false
+ 	priv->base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(priv->base))
+ 		return PTR_ERR(priv->base);
+@@ -254,8 +262,13 @@ static int rzv2h_wdt_probe(struct platform_device *pdev)
+ 	return devm_watchdog_register_device(dev, &priv->wdev);
+ }
  
- examples:
++static const struct rzv2h_of_data rzv2h_wdt_of_data = {
++	.cks_min = WDTCR_CKS_CLK_1,
++	.cks_max = WDTCR_CKS_CLK_256,
++};
++
+ static const struct of_device_id rzv2h_wdt_ids[] = {
+-	{ .compatible = "renesas,r9a09g057-wdt", },
++	{ .compatible = "renesas,r9a09g057-wdt", .data = &rzv2h_wdt_of_data },
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(of, rzv2h_wdt_ids);
 -- 
 2.49.0
 
