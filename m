@@ -1,161 +1,164 @@
-Return-Path: <linux-watchdog+bounces-3844-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3845-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E292AFCC49
-	for <lists+linux-watchdog@lfdr.de>; Tue,  8 Jul 2025 15:37:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B593BAFD833
+	for <lists+linux-watchdog@lfdr.de>; Tue,  8 Jul 2025 22:20:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0121D1BC30CD
-	for <lists+linux-watchdog@lfdr.de>; Tue,  8 Jul 2025 13:37:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 760D4542494
+	for <lists+linux-watchdog@lfdr.de>; Tue,  8 Jul 2025 20:19:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBAAD2DEA96;
-	Tue,  8 Jul 2025 13:37:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B134D23D2BC;
+	Tue,  8 Jul 2025 20:18:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hUp0dder"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eZq2ZSm5"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD9032DCF78;
-	Tue,  8 Jul 2025 13:36:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FA3F1D54E2;
+	Tue,  8 Jul 2025 20:18:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751981820; cv=none; b=p5q/7Ofc9+psUnWPmNhp3rhMKoa6qLYDktCc3j9nu0kKe4cBiXFEeLcSbxakJYVx0V5IzfdaK+5kzOspnXiDWzpIoYawqQUVDjLC9dQ5vbN9rVqSi1wvzaoEhWZ1eUJLAwk6oI8wJOEYhIXAYfuiy/TNBD/eZGlq/3wRkFCxybg=
+	t=1752005888; cv=none; b=MUZEzUbo4ibu47hqdrG1Mfd8x4Sp2PiE4ILafxNO67+m/VsJoJOKB7LzSZ2owizjigtLxoggn2RHdI0aT+BqoRiCNhZ91dYGLVKD6CFYLYkgvWfl8DsxzvarVa3r4HxdDiZnltDUosjaZUjJSKFPPJErWb3sqglaa1R60+bDRC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751981820; c=relaxed/simple;
-	bh=emU0e9TLtejOoRZzf0+eKJu/SfyRyiWD4cDimXd+CS8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EN3Vy52nAQeB3HSc4KfK9v1TvivzCENgMZKhJ9dUMvIYtnX0a0v6BnrJNX/Rnzv5fTgZCT9Lz8PJe4o9RrAuM49nEWSyEEMAyqk0a8g72g/+e03UOzSD5mPGI5sXh4WHZUBLwWo7DV2OX98us0yH6GI/4cuCtkZkCMmhyAx5ciM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hUp0dder; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751981819; x=1783517819;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=emU0e9TLtejOoRZzf0+eKJu/SfyRyiWD4cDimXd+CS8=;
-  b=hUp0dderPgKIovtGt2T8dMBXzwkF2TaecUf1uED6eXxnFQAlZjhVgUKj
-   obEgEVKWFpxpgB/OhlN90mFGW75vg3Te6MMEEA7mG5pENjv5yxdmQ+2pG
-   b/Bfo4E6Rio+4P6Wrv9UNxemfWfnyIW5Dt8F6WQfYJRb+bTorxTtnbF2C
-   Z6FEIF64McuinCcRt26xEZ5SMQ5Ide6ve5cRytMkmSH/kNxoLpLoEWndk
-   FwSO5aSbAiHmC1So3MmW6H2BymrX9FmAj/s79SLAz/P8khOBHaXUXOg7W
-   JU6MDAWT5llj0b4edKCM8x6xzmcUiWJvcL7xXFEcq7GnV7WHIkS/rnSTX
-   Q==;
-X-CSE-ConnectionGUID: Uwm0U8RXT0+eHBJcJpjoBQ==
-X-CSE-MsgGUID: UJU3XrI1QJSuEnGjya5DRg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11487"; a="65678027"
-X-IronPort-AV: E=Sophos;i="6.16,297,1744095600"; 
-   d="scan'208";a="65678027"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2025 06:36:53 -0700
-X-CSE-ConnectionGUID: jaXyz3m4SJqv9BBP0SDnIg==
-X-CSE-MsgGUID: iJp2/zGQQf6cEGjUV2twOg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,297,1744095600"; 
-   d="scan'208";a="154909700"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa006.jf.intel.com with ESMTP; 08 Jul 2025 06:36:52 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 256B95CF; Tue, 08 Jul 2025 16:36:50 +0300 (EEST)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Guenter Roeck <linux@roeck-us.net>,
-	James Hilliard <james.hilliard1@gmail.com>,
+	s=arc-20240116; t=1752005888; c=relaxed/simple;
+	bh=zfkbjPg4tfTz4BD5E+6M+vCmZHxU3gsUQB6PvWPchNM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tPiAnwL2T2sbOIAmtfd2jIJlx0AMdPWpV6sz9QIUUj8cpJAmIGyqwhtDDmbOGh0pTxgoCZsvf6qu2b6/5Jx8EdOscd/rni1+dfYXK8tCWUSt83Hrb7Ydqul/WrCwyO02dIsAOOJQuV3zV3jiJMX1ihXpbp97JFf+1GbYHynPlfo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eZq2ZSm5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6534C4CEF1;
+	Tue,  8 Jul 2025 20:18:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752005888;
+	bh=zfkbjPg4tfTz4BD5E+6M+vCmZHxU3gsUQB6PvWPchNM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=eZq2ZSm55e4ofOg+hNlkFpOxIV5V7eRne+d2kXkN110cHHYVQ8dYjm2LIrlDnQxCJ
+	 PhKK0uGqlbgRLeTJihMhwiMOS9emQvGv42QvUGg52nOyin7M4jlPraFnYPgaWp/UKg
+	 OvaPRBE5A2LQd5feBze+97YbboqOVJ5DaNQybooiYdcmwD0soFL4EPO60Qi34l6HVn
+	 7oCaMp0yxWDwxsJrJehhDmxEiIb7bBkQmYkRXXyxzokxkLsa1ojG4gw2Aq0VBosMFs
+	 +ajvyu23qepGhhAJtMJtLbJIGAVh2Tgrhdjpvi6eH09OJkc+fnwEJkxS0w1IoP8EDV
+	 z2YaCt8KTOgIQ==
+Date: Tue, 8 Jul 2025 15:18:06 -0500
+From: Rob Herring <robh@kernel.org>
+To: Prabhakar <prabhakar.csengg@gmail.com>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
 	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-watchdog@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-Subject: [PATCH v3 2/2] watchdog: Don't use "proxy" headers
-Date: Tue,  8 Jul 2025 16:33:44 +0300
-Message-ID: <20250708133646.70384-3-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250708133646.70384-1-andriy.shevchenko@linux.intel.com>
-References: <20250708133646.70384-1-andriy.shevchenko@linux.intel.com>
+	linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH 1/9] dt-bindings: watchdog: renesas,wdt: Add support for
+ RZ/T2H and RZ/N2H
+Message-ID: <20250708201806.GA897559-robh@kernel.org>
+References: <20250707200111.329663-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20250707200111.329663-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250707200111.329663-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Update header inclusions to follow IWYU (Include What You Use)
-principle.
+On Mon, Jul 07, 2025 at 09:01:03PM +0100, Prabhakar wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> 
+> Extend the Renesas WDT device tree bindings to support the watchdog timer
+> found on the RZ/T2H (R9A09G077) and RZ/N2H (R9A09G087) SoCs.
+> 
+> The RZ/T2H WDT is mostly compatible with the one found on the RZ/V2H(P),
+> but includes an additional register and differs in the clock division
+> ratio settings for the WDTCR[CKS] field. To reflect these differences,
+> introduce a new compatible string, "renesas,r9a09g077-wdt".
+> 
+> The binding schema is updated accordingly. On RZ/T2H, the WDT does not
+> require the "resets" property. It also requires two register regions and
+> the presence of a "power-domains" property. The "clock-names" property is
+> limited to a single entry, "pclk", for this SoC.
+> 
+> The RZ/N2H SoC uses the same WDT IP as the RZ/T2H. It is supported by
+> using "renesas,r9a09g087-wdt" as the primary compatible string, with
+> "renesas,r9a09g077-wdt" listed as a fallback to describe the shared
+> hardware features.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+>  .../bindings/watchdog/renesas,wdt.yaml        | 37 +++++++++++++++++--
+>  1 file changed, 34 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
+> index 78874b90c88c..ce439a401c12 100644
+> --- a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
+> @@ -81,10 +81,17 @@ properties:
+>                - renesas,r9a09g056-wdt # RZ/V2N
+>            - const: renesas,r9a09g057-wdt # RZ/V2H(P)
+>  
+> -      - const: renesas,r9a09g057-wdt       # RZ/V2H(P)
+> +      - enum:
+> +          - renesas,r9a09g057-wdt    # RZ/V2H(P)
+> +          - renesas,r9a09g077-wdt    # RZ/T2H
+> +
+> +      - items:
+> +          - const: renesas,r9a09g087-wdt # RZ/N2H
+> +          - const: renesas,r9a09g077-wdt # RZ/T2H
+>  
+>    reg:
+> -    maxItems: 1
+> +    minItems: 1
+> +    maxItems: 2
+>  
+>    interrupts:
+>      minItems: 1
+> @@ -132,6 +139,7 @@ allOf:
+>            compatible:
+>              contains:
+>                enum:
+> +                - renesas,r9a09g077-wdt
+>                  - renesas,rza-wdt
+>                  - renesas,rzn1-wdt
+>      then:
+> @@ -183,7 +191,9 @@ allOf:
+>        properties:
+>          compatible:
+>            contains:
+> -            const: renesas,r9a09g057-wdt
+> +            enum:
+> +              - renesas,r9a09g057-wdt
+> +              - renesas,r9a09g077-wdt
+>      then:
+>        properties:
+>          interrupts: false
+> @@ -192,6 +202,27 @@ allOf:
+>        required:
+>          - interrupts
+>  
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: renesas,r9a09g077-wdt
+> +    then:
+> +      properties:
+> +        resets: false
+> +        clock-names:
+> +          items:
+> +            - const: pclk
 
-Note that kernel.h is discouraged to be included as it's written
-at the top of that file.
+Just 'maxItems: 1' as pclk is already the defined name.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/watchdog/watchdog_core.h       |  8 +++++++-
- drivers/watchdog/watchdog_pretimeout.c |  2 ++
- include/linux/watchdog.h               | 12 ++++++++----
- 3 files changed, 17 insertions(+), 5 deletions(-)
+With that,
 
-diff --git a/drivers/watchdog/watchdog_core.h b/drivers/watchdog/watchdog_core.h
-index 5b35a8439e26..ab825d9f9248 100644
---- a/drivers/watchdog/watchdog_core.h
-+++ b/drivers/watchdog/watchdog_core.h
-@@ -24,8 +24,14 @@
-  *	This material is provided "AS-IS" and at no charge.
-  */
- 
--#include <linux/hrtimer.h>
-+#include <linux/cdev.h>
-+#include <linux/device.h>
-+#include <linux/hrtimer_types.h>
-+#include <linux/init.h>
- #include <linux/kthread.h>
-+#include <linux/mutex_types.h>
-+#include <linux/types.h>
-+#include <linux/watchdog.h>
- 
- #define MAX_DOGS	32	/* Maximum number of watchdog devices */
- 
-diff --git a/drivers/watchdog/watchdog_pretimeout.c b/drivers/watchdog/watchdog_pretimeout.c
-index e5295c990fa1..2526436dc74d 100644
---- a/drivers/watchdog/watchdog_pretimeout.c
-+++ b/drivers/watchdog/watchdog_pretimeout.c
-@@ -7,6 +7,8 @@
- #include <linux/slab.h>
- #include <linux/spinlock.h>
- #include <linux/string.h>
-+#include <linux/sysfs.h>
-+#include <linux/types.h>
- #include <linux/watchdog.h>
- 
- #include "watchdog_core.h"
-diff --git a/include/linux/watchdog.h b/include/linux/watchdog.h
-index 99660197a36c..8c60687a3e55 100644
---- a/include/linux/watchdog.h
-+++ b/include/linux/watchdog.h
-@@ -9,14 +9,18 @@
- #ifndef _LINUX_WATCHDOG_H
- #define _LINUX_WATCHDOG_H
- 
--
- #include <linux/bitops.h>
--#include <linux/cdev.h>
--#include <linux/device.h>
--#include <linux/kernel.h>
-+#include <linux/limits.h>
- #include <linux/notifier.h>
-+#include <linux/printk.h>
-+#include <linux/types.h>
-+
- #include <uapi/linux/watchdog.h>
- 
-+struct attribute_group;
-+struct device;
-+struct module;
-+
- struct watchdog_ops;
- struct watchdog_device;
- struct watchdog_core_data;
--- 
-2.47.2
-
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
