@@ -1,212 +1,296 @@
-Return-Path: <linux-watchdog+bounces-3863-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3864-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43B51B0422B
-	for <lists+linux-watchdog@lfdr.de>; Mon, 14 Jul 2025 16:51:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 647DBB04E0B
+	for <lists+linux-watchdog@lfdr.de>; Tue, 15 Jul 2025 04:56:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BACBB4A1E78
-	for <lists+linux-watchdog@lfdr.de>; Mon, 14 Jul 2025 14:51:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B71877AA34F
+	for <lists+linux-watchdog@lfdr.de>; Tue, 15 Jul 2025 02:55:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32C5B7262A;
-	Mon, 14 Jul 2025 14:51:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FA772D0C71;
+	Tue, 15 Jul 2025 02:56:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Tnpj5prc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X+679Nd4"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 395C717A319
-	for <linux-watchdog@vger.kernel.org>; Mon, 14 Jul 2025 14:51:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5391619DF4F;
+	Tue, 15 Jul 2025 02:56:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752504679; cv=none; b=Z4WT56REOL7ORMfaKGp9s31i0Ony7LE+BtcCOJ23Y6+ooXwxqIX/WJhL1HizWOcvRJfu2pC1870oei51Wwhv0BDIQez2bnY0TG0O72XMfa34gRGGVblQ8mNvKFHGZUiQGH45e5WkKXZ+Fm2dsW9hgTz0A6wgbMsM6tOm7fPMGSw=
+	t=1752548205; cv=none; b=pzYSB+WUTcGoC61uaJ0RbJzOeJvYfrVmeVG7S1WUQytuUvlhpXhywDHYb2vUM7kT94ebi3DqzGy6z5jDzwbTNnNWSvEYW0CLG/XgpMXKxLTTu52apHsUoVuN1qHy42wdAkSMEktHrp5KMLpSXUSnTZMT8mJcDKiLT6sOnOhRBgE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752504679; c=relaxed/simple;
-	bh=34c3k2JS0Ft1btNphYjTKqe1IWB+QrtfS49zngYMtao=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=clrjN+nm+RGmI7GVL239zXXk8gfAoichy4EX3goRyX1k4iqVuPj9glC8hb3KYogfELwQ2Ko8Pfm9pxfq2N7y3ZdKjIKmubZSlyBwpBDWr4nIjWs0G6QakHM5PdJ4DeIGNbA9S1byNiD3Q0jKsQ6GqkmiWHtLELnd9BC6Ce8JzLg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Tnpj5prc; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56EA3pVw015241
-	for <linux-watchdog@vger.kernel.org>; Mon, 14 Jul 2025 14:51:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	j9W4CuSLttgvJ6FyeozWzpAz4Cuh64rTL2lKSOstBnM=; b=Tnpj5prcJdQb1sjj
-	DaqdXinNI+fa/pI24OGOYmul1c0U91R2/kJjbtdbblS4sUrouilbyd/2dEIhzF6u
-	SPH784E5X9M5Eu672ZZfeDzjvGq3fOEcBN5S/+OOHhDFUB7yv3SgXEbFp834ndz1
-	9P1zz4hT0jNXzreyesyzdBrVga4OjXHlGW52PZjs7iCuBHSMSI4JgYvRIsnrR5zE
-	pEiHj8xERc/3fFLgNc2Qib1eGiwxCktRURQgYf6fWeArSxwd2Uz0Bmjl60ZYgEhe
-	SyLN9CGqSMqRgYrLzGbLDtMPcE+I1szYfwMQvzoGJpHoBPBTx5K3NjGOuWw8RO9T
-	6uP8pQ==
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47ufu84wup-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-watchdog@vger.kernel.org>; Mon, 14 Jul 2025 14:51:15 +0000 (GMT)
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7dff19eab5fso78413485a.3
-        for <linux-watchdog@vger.kernel.org>; Mon, 14 Jul 2025 07:51:15 -0700 (PDT)
+	s=arc-20240116; t=1752548205; c=relaxed/simple;
+	bh=pnDc7tKlJXykpE4JScafT346qw3O0XuaLZxyjGUF9jk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=iL7HLbp7+hybo11AExIqaEi8UxO7luFa/xg5waW29EzJqE+WI3lQelXdDSyq/zmEluH5eQKMXRuuHUCLmmBAYu5AULP1CiTma6DDu7fF8v+0mrOr0lqxoGn/FJbkM+wcTPvkrAdN2wMpYilpdgy7or+MxYW/o4X/Mec1v+GxZdI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X+679Nd4; arc=none smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3138b2f0249so4049128a91.2;
+        Mon, 14 Jul 2025 19:56:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1752548202; x=1753153002; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3bO919OUM6Xg5D31l+zQtsuQcm2HmuC6LDQ0t9cbkJg=;
+        b=X+679Nd47RUg90d0Qzk8sa4tdX/7WOLPSMSTHY9956IkznjZbQRa1gBBfwVeNJFBpo
+         lkOoUXGyOYD2Qkb805nO9L/WqhqRoRM+lcDm4XFkWFy7vvausfsAXDzCFLaa/98MpGl/
+         zVCWv9aPE2ae4NhMJPVndh6ijnEIxl/T4n70Q+2Y+U+zghqZDKbrkdUlw4AfdS9vRISV
+         ua00tere0HdVCdedbSww1QmNgo/P9ALYWNIaNwctvULArXvhuWseY1HhILX5Pc0LaB2k
+         uLoB72c+O+F3VNj/uAs8hPPWZna9hlF7lZayXxnRHx2OSty4sO3bIYbiSuss7qbGALI8
+         6Lsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752504675; x=1753109475;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=j9W4CuSLttgvJ6FyeozWzpAz4Cuh64rTL2lKSOstBnM=;
-        b=KWW/gyIJqPZnV1MUoKRyG0qFjgHuBOmLM5x1gY81XbzOqe+fQQsI3PQqnz0WEn234L
-         i2JNAUqBQcIt7hFbvSi5kByfPlXOI1s4gLIZvlHxmmI6/WpSnWqffCGFv3VYt/J+HsBU
-         foJoAsJ+cVRC7FcHbwmr07eSwO6sjZSt9MrwssuN96A/qPKwL7fmRSiznkjEkdS5FD3l
-         sZdXcw1/AAwFL7k2JP5nx2oZJ4LrEMILrVI7RWhLMAdL+o6j+/BQ3d47zYWi0Xdkz0UG
-         UjlTSlL8f8hXfE6fhEr/zjf7ScvoTgdadvrTsd6xeh6Fsd0AfUIWbK2eANDYjjiGHouC
-         0+yw==
-X-Forwarded-Encrypted: i=1; AJvYcCXraoplgRfS8CDTWAJLlfjkYTJvBK1dcpPUck0zuToOM9waCadcAHGSD3y0eIA6ISgUYRYxhtUZiPPvgWvtsg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxY7FIENr+EYnavHcmPvUarhs7vwfCeyFC+UpVZVIrlhQv1lsBA
-	S2MvPpEsLyRzuLJb5QwmEBFw2anKomwNGEb6ZAI0cYHu5mqemlLYkKO+ox1DQXGK0WYPk5dio/u
-	ilgamGsQGZVzArNafnxc42pvZM4zFqCWsCBAbNLnFD6TezX7O1eWlbIkJOs0jeSfCtf/GPQ==
-X-Gm-Gg: ASbGncuzWzfDF/rIaqvOQYmkvlGFrHOUuXq4laAoWO/29Shdb6cNac/nAKFFiXESQUi
-	eeMhmQBt/5iUdgrBs9Kaw/6MKp4coKtJDo1naQ9OyC91W7RSka1tniRF12gfKWg9Uk5OWxI7AKJ
-	PfPujFDsjtUtTWdNWLeu26nZ2H2qskT1xI7Dkw5v+fu+Gmg5MojHs91C8y/ZW0uu9d/K5eAkBXL
-	ByyljEELt09MHn8fE7YEvE95CcvryuAa0WVjb1b2JOARi6uDDdwGyAJyOQBwqLZT84ZsOnD4VXZ
-	klpco5F31gHDmMkWBLVAiivdwq3nFL2MVIpVgoUeIQl7Sb+cAnY3qb6UtpWLMWpudizwxkKEufn
-	766bNvcgShHQYqLylTRku
-X-Received: by 2002:a05:620a:44d0:b0:7e2:ee89:205a with SMTP id af79cd13be357-7e2ee893ba1mr225930085a.5.1752504674798;
-        Mon, 14 Jul 2025 07:51:14 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IE74z/KAqLPegwZP0R34v4pwdMd2EKA/Hi8iI61zdmqy3z3diiIL2Ji8kmWMZfmjJZIoWEzUg==
-X-Received: by 2002:a05:620a:44d0:b0:7e2:ee89:205a with SMTP id af79cd13be357-7e2ee893ba1mr225927485a.5.1752504674098;
-        Mon, 14 Jul 2025 07:51:14 -0700 (PDT)
-Received: from [192.168.143.225] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-611c9542fe5sm6049190a12.35.2025.07.14.07.51.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Jul 2025 07:51:12 -0700 (PDT)
-Message-ID: <39acdb37-e6f0-45e3-b54e-bd8a5905b2ec@oss.qualcomm.com>
-Date: Mon, 14 Jul 2025 16:51:10 +0200
+        d=1e100.net; s=20230601; t=1752548202; x=1753153002;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3bO919OUM6Xg5D31l+zQtsuQcm2HmuC6LDQ0t9cbkJg=;
+        b=HQnYGkqLnrio4hW9tUF3ApX3PcNtEBAsh/BEFRwQALCxfO9MTIRV7YOrhdPf5oqyhi
+         hUlNReMVKPMLtr8+bAs9vGNxqADQ64IgHcqn3MsaNFuD01xWXFtykVrQANWINeu0S0jz
+         WiZM3kGAxvc+xMdAB221YQQ5EzUjN9b/kBnXDY48Xw4AmSo1zyVDyEPCftqEB8oGV64l
+         vdlQ0f9MeI1m0uYR8wZI9/zS//hliIzwf+wHuEhnrYdPsB9eRs+rPVbchFwJ9auXgBtE
+         11UNFg9oNrCzuUAJ1G0qumjT8PQpZE/f7jOVEH4iOfh/yIlGMzTCy5Olt9w+fwpWQ46M
+         q/fg==
+X-Forwarded-Encrypted: i=1; AJvYcCUQ44nO41lLolvpDTpXW0IytAdDDz48Xrr9lUSd/829mtQ4gTWrDngh3UECLpNURJDbzUBgt/ZticA=@vger.kernel.org, AJvYcCUgQmdmCi5hcBZ14rolv3NQY+VfEkxbROyMHAPF5NXEHNfM8sEsqcC6OcNLBDkTmN1IlaJMOIgF49c3@vger.kernel.org, AJvYcCUpd6MZ2G63wVlKMotCKStKNb4lzbhMe3wh8k10e9P9eje1r3zMrPIwUN44oxxnL5rxmxamRoy1@vger.kernel.org, AJvYcCVdy2p20UyNKDZGwgTSH2kFnyGo7wE6KKuQqAwmUqz9xVrYuc5C87ShN1vLpdDegjZRNMu7MwPI23xVLHdpzFI=@vger.kernel.org, AJvYcCWA6LP/IijgJW1jul6mrXCKYHzYNGKkBH2beMoONHOhou1v/GFC8QUqkT1qcq+8k7hDIHhIqYniBEjbO8A=@vger.kernel.org, AJvYcCWi07pVkUZcri3g83lEcWLJcKp7uSKqPIXg15jFmLydsIk3i79D8RpIZp21rBy7iDITqy/aMgEVSKc1@vger.kernel.org, AJvYcCWoykigCo3sGfXzZabT/86KyrvWpk/NC7BfTpW9qYvzF19Eaol9oL5MtEfOZ8UNUqfOtdTjctUXJrKx@vger.kernel.org, AJvYcCWptja+Fl7tEm8899jk/h060OD9BhmoFLIeIQnr5P/tBDojRE10kQFNwusfZj2buptwLXrXhtDxlbZwqA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2Y9zLPaWjMqNL1c8DeXnEdIYy3l8sWyjrQ3qmEO1L7Fc3QyL+
+	tA5NNIJwe78ZSm8YwXHTX+xHZUho9Ilzje8fGThdcKRoK0d09u+Fyj7b
+X-Gm-Gg: ASbGncsDWsMJ3SSrhi6n3SFxfDV5phqa4q70aVM4nNJM7HUbGYGao/2UTUovwTYwvv9
+	X0o06RFEGwf/p8MzKsW1jIuAVF5GgLo/TULdYyhe93GUMLN/RTSi8qSAp0ZDPtf34MlzQvVGBAA
+	vi87w877fHXBIsNv2WTe29jihiV08gGI8D3eqM5WnC7oAsN6MC7R54LRn+U8atw3qrEn+QhnvpT
+	gqQ3qsxfOpEP6hkRBQ8Oqo07dRBJeMhfR+Oc9XaIR+NasyBw4HD/JhdJKfVQ/u06i0mwPWDEHeK
+	JZRQwwmEdQX0Y1oLs2lu5Js4OjF+XeLAXDe3bm8tyiMJ7AE2yeqBTJDimAU/oL4ND5egwhj1QFl
+	voOTwZmeB8V2eKEOIAlmW7RyYi+xsfD/TciZTAH3pDz+X86KiXkvXeHccTc175evsc/Hw0vmrJI
+	0L
+X-Google-Smtp-Source: AGHT+IHOzDEnUslD1T9VK/rUq+JA7lhuj9wHB3GqGmAK1Ms6Uk9IEY1cTtcELmM0wq/IymnjUbbX4Q==
+X-Received: by 2002:a17:90b:57c5:b0:311:b3e7:fb38 with SMTP id 98e67ed59e1d1-31c50e17631mr19597128a91.19.1752548202330;
+        Mon, 14 Jul 2025 19:56:42 -0700 (PDT)
+Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31c3e957ddcsm11148168a91.9.2025.07.14.19.56.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Jul 2025 19:56:41 -0700 (PDT)
+From: a0282524688@gmail.com
+To: tmyu0@nuvoton.com,
+	lee@kernel.org,
+	linus.walleij@linaro.org,
+	brgl@bgdev.pl,
+	andi.shyti@kernel.org,
+	mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	wim@linux-watchdog.org,
+	linux@roeck-us.net,
+	jdelvare@suse.com,
+	alexandre.belloni@bootlin.com
+Cc: linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Ming Yu <a0282524688@gmail.com>
+Subject: [PATCH v14 0/7] Add Nuvoton NCT6694 MFD drivers
+Date: Tue, 15 Jul 2025 10:56:19 +0800
+Message-Id: <20250715025626.968466-1-a0282524688@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 3/5] dt-bindings: watchdog: qcom-wdt: Document sram
- property
-To: Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>,
-        Rob Herring <robh@kernel.org>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck
- <linux@roeck-us.net>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
-References: <20250610-wdt_reset_reason-v5-0-2d2835160ab5@oss.qualcomm.com>
- <20250610-wdt_reset_reason-v5-3-2d2835160ab5@oss.qualcomm.com>
- <20250610180345.GA2382213-robh@kernel.org>
- <a8b33510-c010-452f-9177-ce743b732d21@oss.qualcomm.com>
- <073480a2-0b6f-4dc0-b7eb-eec500b3106e@oss.qualcomm.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <073480a2-0b6f-4dc0-b7eb-eec500b3106e@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzE0MDA4NyBTYWx0ZWRfX5RvoJXnsBcBQ
- b7HA3QqsFWFqdhUmpRzZoRqwwDTJ+hcsvKsrtyMPScKVOCybzXmQ+33mbz0gWKoRUndsLhlecu4
- 4u8UzzxNqzq7UCwn6a1Dbz2XKF3SJ7WPnMekq1tjMb/ry5PBamolQdlRt2HH9BjWt9GsouSsJJy
- Oz6WX/UwdMRx/eEZs1LAncfCn51541EpMs1M3pCTTdJTo3xYIXn1CrtiuS7neIi+Atz9CZgvW7+
- GvhnK0ed9qpmGCgbiIPofPDmUawwyq7kLzVM1mmME4QC3/3bibBeWMt6//qZNdOjozS1Riso9xK
- D3ARWOjRh9sIuA5hWtAT5vcWdrrk7/Zo/U07ojof/r9hj3wO/27+2UFrVwIJ0LP98HE0kzECbg7
- 1JIuQlS5dMPk0J6U/rarrweNqiG0JCuN52J6EE9UKcNfF6PzujgKMpgqXq5KlPjqIqGcDG8L
-X-Proofpoint-ORIG-GUID: lr1zB7P0OnFlhXMs0YNhpudBZhQdLhhY
-X-Proofpoint-GUID: lr1zB7P0OnFlhXMs0YNhpudBZhQdLhhY
-X-Authority-Analysis: v=2.4 cv=f59IBPyM c=1 sm=1 tr=0 ts=68751963 cx=c_pps
- a=HLyN3IcIa5EE8TELMZ618Q==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
- a=9B6XoSWOLoSC-pKoQf8A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=bTQJ7kPSJx9SKPbeHEYW:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-07-14_01,2025-07-14_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 lowpriorityscore=0 malwarescore=0 spamscore=0 mlxscore=0
- bulkscore=0 suspectscore=0 impostorscore=0 adultscore=0 priorityscore=1501
- mlxlogscore=999 phishscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2507140087
 
-On 6/19/25 7:48 AM, Kathiravan Thirumoorthy wrote:
-> 
-> On 6/16/2025 10:48 AM, Kathiravan Thirumoorthy wrote:
->> Thanks Rob for the review comments!
->>
->> On 6/10/2025 11:33 PM, Rob Herring wrote:
->>> On Tue, Jun 10, 2025 at 07:15:19PM +0530, Kathiravan Thirumoorthy wrote:
->>>> Document the "sram" property for the watchdog device on Qualcomm
->>>> IPQ platforms. Use this property to extract the restart reason from
->>>> IMEM, which is updated by XBL. Populate the watchdog's bootstatus sysFS
->>>> entry with this information, when the system reboots due to a watchdog
->>>> timeout.
->>>>
->>>> Describe this property for the IPQ5424 watchdog device and extend support
->>>> to other targets subsequently.
->>>>
->>>> Signed-off-by: Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>
->>>> ---
->>>> Changes in v5:
->>>>     - Rename the property 'qcom,imem' to 'sram'
->>>> Changes in v4:
->>>>     - New patch
->>>> ---
->>>>   .../devicetree/bindings/watchdog/qcom-wdt.yaml       | 20 ++++++++++++++++++++
->>>>   1 file changed, 20 insertions(+)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
->>>> index 49e2b807db0bc9d3edfc93ec41ad0df0b74ed032..74a09c391fd8e2befeac07f254ea16d0ca362248 100644
->>>> --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
->>>> +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
->>>> @@ -81,6 +81,16 @@ properties:
->>>>       minItems: 1
->>>>       maxItems: 5
->>>>   +  sram:
->>>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->>>> +    description:
->>>> +      phandle to the IMEM syscon node that exposes the system restart reason
->>>> +    items:
->>>> +      - items:
->>>> +          - description: phandle of IMEM syscon
->>>> +          - description: offset of restart reason region
->>>> +          - description: value indicate that the watchdog timeout has occurred
->>> A 'sram' property points to an SRAM region (see mmio-sram binding), not
->>> a syscon and offset.
->>>
->>> The 'value' should be a separate property or implied by the compatible.
->>
->> Sorry for the delay. It was a long weekend here!
->>
->> Let me start with the requirement (Please feel free to skip it). When the system goes for reboot, Xtensible Boot loader (XBL) find the cause and update the particular offset (in this case it is 0x7b0) in the IMEM region with the known values. On the next boot, if the system is rebooted due to  watchdog timeout, watchdog's bootstatus is updated accordingly, which this series tries to address it.
->>
->> Based on the previous review comments / discussions [1], it is decided to go with the above approach, i.e., name the property to 'sram' and let it points to the syscon region (IMEM) along with the offset to read and what value to expect. So that we don't have to touch the driver if either of the offset or the value changes across the platforms.
->>
->> Currently, IMEM region (which is a on-chip SRAM) in the most of the QCOM platforms are modeled as 'syscon' [2]. So I have followed the same approach here as well. Should I describe the IMEM region as "sram" (mmio-sram)  instead of the "syscon" (existing approach) and retrieve the offset and desired value from the compatible? or stick with existing approach and name the property to something else? Could you guide me here to proceed further?
->>
->> [1] https://lore.kernel.org/linux-arm-msm/20250519-wdt_reset_reason-v4-3-d59d21275c75@oss.qualcomm.com/#t
->>
->> [2] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/Documentation/devicetree/bindings/sram/qcom,imem.yaml
-> 
-> Konrad,
-> 
-> The bootloader team confirmed that the IMEM offset and restart reason value are fixed for the SoC's lifetime. Based on Rob’s suggestion, let’s pull these values from the device data using the compatible string. Let me know your thoughts.
-> 
-> Kathiravan T.
+From: Ming Yu <a0282524688@gmail.com>
 
-So I'm not sure whether I proposed this before, but this is how I solved a
-parallel problem for IPA, also consuming a slice of IMEM:
+This patch series introduces support for Nuvoton NCT6694, a peripheral
+expander based on USB interface. It models the chip as an MFD driver
+(1/7), GPIO driver(2/7), I2C Adapter driver(3/7), CANfd driver(4/7),
+WDT driver(5/7), HWMON driver(6/7), and RTC driver(7/7).
 
-https://lore.kernel.org/all/20250527-topic-ipa_imem-v2-0-6d1aad91b841@oss.qualcomm.com/
+The MFD driver implements USB device functionality to issue
+custom-define USB bulk pipe packets for NCT6694. Each child device can
+use the USB functions nct6694_read_msg() and nct6694_write_msg() to issue
+a command. They can also request interrupt that will be called when the
+USB device receives its interrupt pipe.
 
-Konrad 
+The following introduces the custom-define USB transactions:
+	nct6694_read_msg - Send bulk-out pipe to write request packet
+			   Receive bulk-in pipe to read response packet
+			   Receive bulk-in pipe to read data packet
+
+	nct6694_write_msg - Send bulk-out pipe to write request packet
+			    Send bulk-out pipe to write data packet
+			    Receive bulk-in pipe to read response packet
+			    Receive bulk-in pipe to read data packet
+
+Changes since version 13:
+- Update to guard(spinlock_irqsave)() in nct6694.c
+- Add struct i2c_adapter_quirks in i2c-nct6694.c
+
+Changes since version 12:
+- Implement IDA in MFD driver to handle per-device IDs
+- Use spinlock to replace irq mutex lock
+- Use same email address in the signature
+
+Changes since version 11:
+- Use platform_device's id to replace IDA
+- Modify the irq_domain_add_simple() to irq_domain_create_simple() in
+  nct6694.c
+- Update struct data_bittiming_params related part in nct6694_canfd.c
+- Fix the typo in the header in nct6694-hwmon.c
+
+Changes since version 10:
+- Add change log for each patch
+- Fix mfd_cell to MFD_CELL_NAME() in nct6694.c
+- Implement IDA to allocate id in gpio-nct6694.c, i2c-nct6694.c,
+  nct6694_canfd.c and nct6694_wdt.c
+- Add header <linux/bitfield.h> in nct6694_canfd.c
+- Add support to config tdc in nct6694_canfd.c
+- Add module parameters to configure WDT's timeout and pretimeout value
+  in nct6694_wdt.c
+
+Changes since version 9:
+- Add devm_add_action_or_reset() to dispose irq mapping
+- Add KernelDoc to exported functions in nct6694.c
+
+Changes since version 8:
+- Modify the signed-off-by with my work address
+- Rename all MFD cell names to "nct6694-xxx"
+- Add irq_dispose_mapping() in the error handling path and in the remove
+  function
+- Fix some comments in nct6694.c and in nct6694.h
+- Add module parameters to configure I2C's baudrate in i2c-nct6694.c
+- Rename all function names nct6694_can_xxx to nct6694_canfd_xxx in
+  nct6694_canfd.c
+- Fix nct6694_canfd_handle_state_change() in nct6694_canfd.c
+- Fix nct6694_canfd_start() to configure NBTP and DBTP in nct6694_canfd.c
+- Add can_set_static_ctrlmode() in nct6694_canfd.c
+
+Changes since version 7:
+- Add error handling for devm_mutex_init()
+- Modify the name of the child devices CAN1 and CAN2 to CAN0 and CAN1.
+- Fix multiline comments to net-dev style in nct6694_canfd.c
+
+Changes since version 6:
+- Fix nct6694_can_handle_state_change() in nct6694_canfd.c
+- Fix warnings in nct6694_canfd.c
+- Move the nct6694_can_priv's bec to the end in nct6694_canfd.c
+- Fix warning in nct6694_wdt.c
+- Fix temp_hyst's data type to signed variable in nct6694-hwmon.c
+
+Changes since version 5:
+- Modify the module name and the driver name consistently
+- Fix mfd_cell to MFD_CELL_NAME() and MFD_CELL_BASIC()
+- Drop unnecessary macros in nct6694.c
+- Update private data and drop mutex in nct6694_canfd.c
+- Fix nct6694_can_handle_state_change() in nct6694_canfd.c
+
+Changes since version 4:
+- Modify arguments in read/write function to a pointer to cmd_header
+- Modify all callers that call the read/write function
+- Move the nct6694_canfd.c to drivers/net/can/usb/
+- Fix the missing rx offload function in nct6694_canfd.c
+- Fix warngings in nct6694-hwmon.c
+
+Changes since version 3:
+- Modify array buffer to structure for each drivers
+- Fix defines and comments for each drivers
+- Add header <linux/bits.h> and use BIT macro in nct6694.c and
+  gpio-nct6694.c
+- Modify mutex_init() to devm_mutex_init()
+- Add rx-offload helper in nct6694_canfd.c
+- Drop watchdog_init_timeout() in nct6694_wdt.c
+- Modify the division method to DIV_ROUND_CLOSEST() in nct6694-hwmon.c
+- Drop private mutex and use rtc core lock in rtc-nct6694.c
+- Modify device_set_wakeup_capable() to device_init_wakeup() in
+  rtc-nct6694.c
+
+Changes since version 2:
+- Add MODULE_ALIAS() for each child driver
+- Modify gpio line names be a local variable in gpio-nct6694.c
+- Drop unnecessary platform_get_drvdata() in gpio-nct6694.c
+- Rename each command in nct6694_canfd.c
+- Modify each function name consistently in nct6694_canfd.c
+- Modify the pretimeout validation procedure in nct6694_wdt.c
+- Fix warnings in nct6694-hwmon.c
+
+Changes since version 1:
+- Implement IRQ domain to handle IRQ demux in nct6694.c
+- Modify USB_DEVICE to USB_DEVICE_AND_INTERFACE_INFO API in nct6694.c
+- Add each driver's command structure
+- Fix USB functions in nct6694.c
+- Fix platform driver registration in each child driver
+- Sort each driver's header files alphabetically
+- Drop unnecessary header in gpio-nct6694.c
+- Add gpio line names in gpio-nct6694.c
+- Fix errors and warnings in nct6694_canfd.c
+- Fix TX-flow control in nct6694_canfd.c
+- Fix warnings in nct6694_wdt.c
+- Drop unnecessary logs in nct6694_wdt.c
+- Modify start() function to setup device in nct6694_wdt.c
+- Add voltage sensors functionality in nct6694-hwmon.c
+- Add temperature sensors functionality in nct6694-hwmon.c
+- Fix overwrite error return values in nct6694-hwmon.c
+- Add write value limitation for each write() function in nct6694-hwmon.c
+- Drop unnecessary logs in rtc-nct6694.c
+- Fix overwrite error return values in rtc-nct6694.c
+- Modify to use dev_err_probe API in rtc-nct6694.c
+
+
+Ming Yu (7):
+  mfd: Add core driver for Nuvoton NCT6694
+  gpio: Add Nuvoton NCT6694 GPIO support
+  i2c: Add Nuvoton NCT6694 I2C support
+  can: Add Nuvoton NCT6694 CANFD support
+  watchdog: Add Nuvoton NCT6694 WDT support
+  hwmon: Add Nuvoton NCT6694 HWMON support
+  rtc: Add Nuvoton NCT6694 RTC support
+
+ MAINTAINERS                         |  12 +
+ drivers/gpio/Kconfig                |  12 +
+ drivers/gpio/Makefile               |   1 +
+ drivers/gpio/gpio-nct6694.c         | 499 +++++++++++++++
+ drivers/hwmon/Kconfig               |  10 +
+ drivers/hwmon/Makefile              |   1 +
+ drivers/hwmon/nct6694-hwmon.c       | 949 ++++++++++++++++++++++++++++
+ drivers/i2c/busses/Kconfig          |  10 +
+ drivers/i2c/busses/Makefile         |   1 +
+ drivers/i2c/busses/i2c-nct6694.c    | 196 ++++++
+ drivers/mfd/Kconfig                 |  15 +
+ drivers/mfd/Makefile                |   2 +
+ drivers/mfd/nct6694.c               | 388 ++++++++++++
+ drivers/net/can/usb/Kconfig         |  11 +
+ drivers/net/can/usb/Makefile        |   1 +
+ drivers/net/can/usb/nct6694_canfd.c | 832 ++++++++++++++++++++++++
+ drivers/rtc/Kconfig                 |  10 +
+ drivers/rtc/Makefile                |   1 +
+ drivers/rtc/rtc-nct6694.c           | 297 +++++++++
+ drivers/watchdog/Kconfig            |  11 +
+ drivers/watchdog/Makefile           |   1 +
+ drivers/watchdog/nct6694_wdt.c      | 307 +++++++++
+ include/linux/mfd/nct6694.h         | 102 +++
+ 23 files changed, 3669 insertions(+)
+ create mode 100644 drivers/gpio/gpio-nct6694.c
+ create mode 100644 drivers/hwmon/nct6694-hwmon.c
+ create mode 100644 drivers/i2c/busses/i2c-nct6694.c
+ create mode 100644 drivers/mfd/nct6694.c
+ create mode 100644 drivers/net/can/usb/nct6694_canfd.c
+ create mode 100644 drivers/rtc/rtc-nct6694.c
+ create mode 100644 drivers/watchdog/nct6694_wdt.c
+ create mode 100644 include/linux/mfd/nct6694.h
+
+-- 
+2.34.1
+
 
