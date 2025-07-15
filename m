@@ -1,527 +1,229 @@
-Return-Path: <linux-watchdog+bounces-3871-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3872-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F7E2B04E6F
-	for <lists+linux-watchdog@lfdr.de>; Tue, 15 Jul 2025 05:00:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62A4EB04F80
+	for <lists+linux-watchdog@lfdr.de>; Tue, 15 Jul 2025 05:52:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DA2277A5254
-	for <lists+linux-watchdog@lfdr.de>; Tue, 15 Jul 2025 02:58:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F31D5611E1
+	for <lists+linux-watchdog@lfdr.de>; Tue, 15 Jul 2025 03:52:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F3852D5A18;
-	Tue, 15 Jul 2025 02:57:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE6C62D238A;
+	Tue, 15 Jul 2025 03:52:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f8WkkGzQ"
+	dkim=pass (2048-bit key) header.d=fetCA905017.onmicrosoft.com header.i=@fetCA905017.onmicrosoft.com header.b="LveL5ANT"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from TYPPR03CU001.outbound.protection.outlook.com (mail-japaneastazon11022082.outbound.protection.outlook.com [52.101.126.82])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 248A72D0C9C;
-	Tue, 15 Jul 2025 02:57:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752548234; cv=none; b=J18YDM72SEaINOrL/ZE+2c8wfAMs2wmsSSH3vmYa+gXVne3akcUOTU4IXEypEdSrBHYNBap++1j3E4r5O0G1YlrP7mno9CFTKDRcboQjQxaroXr6S7x3XqLegfPT67aXskIkIBL5ufWyBcWnVu7mx4zd3hyo7ymIzleezd1TEQI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752548234; c=relaxed/simple;
-	bh=HBv1KgP0Vd0KcWEoh0UfygcjP7f3T2S9yGCvHObrHa4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=cwOFl7KE2lni9Cr4QIkYArp3FLBEi98+m7GpO6ErAz9i81f0tlGKOOjWb91aY8H4+20vW4BUEKROnio5OOlblhcOl/FUVnWK1E7D2JXMeqosPL1mqORBI8/i/AS5E8NAZUp7zqG8euGj0/iEUeh3cIereMh7A7OyXMQcwZwo7W4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f8WkkGzQ; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-315f6b20cf9so5418941a91.2;
-        Mon, 14 Jul 2025 19:57:11 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA1DC2D0C8A;
+	Tue, 15 Jul 2025 03:51:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.126.82
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1752551522; cv=fail; b=HL2+5g334K4Ecqa/mpCmTuczdrwx0AdM/VZB3pE0f37Mm7UU+HukMWaQX3remEWLMK6tqasx76SEhZQUBXIpXmmfApjqKZJYg7ENaJygC90C9AwQd6mcMibAZamAbktt5qwd8yd54N9Wwvenbb1mLUL1mbVNP26jAXPif6sackw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1752551522; c=relaxed/simple;
+	bh=56nqYRGsB778OYyoIIop20111YmjCuCssoNlSFDa04g=;
+	h=Message-ID:Date:From:Subject:To:Cc:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=l1/j6NvO2hg+pyTYsykviWNQG6CAMjb55FzWcArcQe2miGyCWIfXfjX4Wk5/jTTY1gJmWnkABLw1MaNKcoFbOKmErVQyM2Da0t5QOeBG6TUodJYLCdq8gDHv0DFMhE3fj2OOo52FmgrmbmV7p2IX4IuYj4T5cv2Pqg+coabHufk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=portwell.com.tw; spf=pass smtp.mailfrom=portwell.com.tw; dkim=pass (2048-bit key) header.d=fetCA905017.onmicrosoft.com header.i=@fetCA905017.onmicrosoft.com header.b=LveL5ANT; arc=fail smtp.client-ip=52.101.126.82
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=portwell.com.tw
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=portwell.com.tw
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=C63ePmDjiO6s0d+WBVtiSRksW/goQdvJiRPlg7RaeH0I3OZ5KziN4umlR5G6l9tRqM1KiGH5Jg3lkXvlfgmz2x8i7UCpnGuv1UDEi3BYqYFwL5Kc8j1Z+Hz2Hm6mkTahUu1ml9qZYSkKrj6QSwfWYW/N5vLh/oD//gFzthmIs2HCTsU8BVjjs5C4KX3RvRUGCR0NsQt5wrMX6N97CVVedxJ7xo5ykW2bVYk+NujV2AQLreFbRcG5Eq67Un1hqfDynAGgXqlu1yC5vnCfNb6ZF4Vd4gpjEmsQuYtoFfM/IER05DXkOhe+fL1WduHQnr5XoPkSCJXmnJKDBtaiCvccvQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dz+EGPRNCxLlDpNbc7U/xUrEKDT1FYDy34R48jYx6Fg=;
+ b=tPQcNYnTJzo7e+GWzi3qN0JXP//HLiO3msUNwVzKlC/oIGBxcNZ7VE//I7i1yo46xyP3GvOfXvcGmmTdWXLOo6dhNJ7SRB1dgpv6qW+rJ5la/R7GM5a6/sGoKxnjcqzOxN91BotS92ZRb9af7NOZnvnSI9LBOFMiOAZQRB9cqKlKzRoe6SchOISlsl7nJV3Ri9E4lO9834qcSHsEFaLM4FsVEqxBuV0PgSdP4/rhBb+0nlcBT1ybnDGTIA92DcGCj4Ug4VhB/q49Cz9Maq9jhm4FP4JfwmOYCd4IRAFHY2E8dsO47ux/RYDSIThuIhZgIuDs9hjZkPb37uqjNXbf/Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=portwell.com.tw; dmarc=pass action=none
+ header.from=portwell.com.tw; dkim=pass header.d=portwell.com.tw; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752548231; x=1753153031; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=b+DpNvLfZgXJbSyo/1KPV0nPQcd/neSkyFRkxB2AOkE=;
-        b=f8WkkGzQ4Ffjm0M0pOUsiAbTmb39cGQJ0jYB0tLSI/qQMnDBHSUnTwFFKSBkpIRWO4
-         eLYmxxUDwTufSZuTHxJrf4s7FH0OZha2g5k8M4Ne849z8Y1L2svt+Gby3Tz7k+X1xs6t
-         fOLWyL8CSpLLW0lAd4A+0j2CHP2BTz2wWaggVcyvl7PB5Hzr44KIIGZOJa+VMSdcrwy3
-         ULpkGyzVGgjn8A3qQ632k6Ur0AcreZqA6JpAfIA65VxR2L7Di+j4Y1UWeZ5oeUgkQZgS
-         oJ4509Do98H7YbONdAlObvnInBNRo8XsozTVtdoeVqyPraIYrN9NCrCMqMFKVNiI5bAa
-         M0RQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752548231; x=1753153031;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=b+DpNvLfZgXJbSyo/1KPV0nPQcd/neSkyFRkxB2AOkE=;
-        b=V7WSN87BBfYbre/Om+luyf04bizhx058/MC0VHnwvk+rmJoTA6N52lqLtlluien4gS
-         CLBEIgfHWY8cO4KEYlAPDmckTxUIsaDjZeym16pmGsJQQZVlUYUs9jGDGkNdrpppDSaj
-         vDzUMYGKc4Qgpn8MWbrzsdfHfu0MCLNdt6Aafk1kKKgWdABOSKQQAY18DADlFrdHqlmz
-         9r1Ryeew50wp8ogTeXp/cHCxMNSRWlTJzWDRYbNXvCpzr6n5C8qa3vpt3Ozzrf5EilEB
-         FPw4kwAibuYevAsw4VU+PTl/IGj7vGo7qr7C33Lc+3Ubku9zulmMKQmKaVQwCgjY0RIS
-         KnsA==
-X-Forwarded-Encrypted: i=1; AJvYcCUIHKi7ZZiMBwLKjWG2MQlcPzsvS9AtBCU19EyQ+7bsAqOEH5mDPUaomm3Tv8wxFgDstVoo79x0m3/ixA==@vger.kernel.org, AJvYcCUyjo2J6eBpUpO7Tl5qkl2klUSlz5czHp0HJG29a/7bJRXq/JtQKHFPSldJSxRfL8gccHm4/IDy@vger.kernel.org, AJvYcCUzlN/GBH3gPIK9SBdIdWQB6is0v0EXKfhqxNZ+n/NB1tiOs/tx60f9/Q9twlttPcQ61onTV4fL+5mI@vger.kernel.org, AJvYcCVSjLPqJezUeqa387x5ms2a9PiJiVPQHoQ/k/0mMENNLJDKTPkwrW9TB2bj4SMiz7uXcIHD6Qx8G8Gs@vger.kernel.org, AJvYcCVeBNKENBKbFKV58cb3hBZjlTD8F+a+MbQe0ONNCND2NEGaBXCEi2RBUlMuHA2eYv6gUtQaV6d37YYmgsqkaTw=@vger.kernel.org, AJvYcCX+93ROXEmEA0fEQKvejcb5/Hv8tKZos8lCFT1twpdtldMNLKagHiDg1EzaL31750v1kzE8scdoeMs=@vger.kernel.org, AJvYcCX5n+Z6BQ1kEJKM7U/szfEXKuS9CGcElEEBSLYuzqmIgxJl80ZYO67o52VC+vBc0QVfNcGtJmDYE5sAosc=@vger.kernel.org, AJvYcCXIdeFADedCybvqUM0Xnm68clPvCNDqdejSZtD6K3mChuqe2z9zBdent3S6Ygh0HJske32vjFm5Mdmj@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz0MWn6wLoCj8DwQ1JasomGOGTDHsqZAvyN6OkwO72DFr/nmtig
-	QF4A5UQv0FyaikrS9CLhcVht3/0atE8qlLN6PzZPVLaYDzsbGAyFLkEr
-X-Gm-Gg: ASbGncsOI43Un0nGBtQljf941S+5PljfBy1X8At8JehlmVptttAg8SoqYxVEJ2+K6Fu
-	TQ/YCitY1y8FEP3fTiOnfBSasUTqrNdDUIQWTrGfQ9q6eZmSRGUSpKZktFtJ7UHfHpmzhraWdpg
-	TLHRzw49WyJkBTAhOq8mVi26tBpBWgLAe59e+zipgmUrFhTOfEarJs7L/EIyOrQu8odqlaGPKtY
-	1L3HliNR3sf2g6Oog2I230K83kULNIGC2ralCEK3ufkO+FxK99RTV5WdbIuzsm6UDQlsOVD+bqq
-	Yd3VAQrlyyA036dqTFUGsWVxUISUu0ZE2NKmi7vnjKP+dHn+wqgbTJgHSFJhDsuRTDqVJfUBFlt
-	DlvBbHP+YgdFWEyf2MzaH3vW92aeG3vsF6rkJkOfm653b6e2X4uHaVoPlR+VyD6P7GA==
-X-Google-Smtp-Source: AGHT+IG9AHu9YNI7wPW+t+D5rVW7jGH3pvOPx3uTM13pQJbL2Dby8R9I+xMplvifGeMHDKEN2Be8jA==
-X-Received: by 2002:a17:90b:3c0e:b0:311:cc4e:516f with SMTP id 98e67ed59e1d1-31c4f5c1e77mr21392163a91.31.1752548231345;
-        Mon, 14 Jul 2025 19:57:11 -0700 (PDT)
-Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31c3e957ddcsm11148168a91.9.2025.07.14.19.57.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Jul 2025 19:57:11 -0700 (PDT)
-From: a0282524688@gmail.com
-To: tmyu0@nuvoton.com,
-	lee@kernel.org,
-	linus.walleij@linaro.org,
-	brgl@bgdev.pl,
-	andi.shyti@kernel.org,
-	mkl@pengutronix.de,
-	mailhol.vincent@wanadoo.fr,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	wim@linux-watchdog.org,
-	linux@roeck-us.net,
-	jdelvare@suse.com,
-	alexandre.belloni@bootlin.com
-Cc: linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	linux-can@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-rtc@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Ming Yu <a0282524688@gmail.com>
-Subject: [PATCH v14 7/7] rtc: Add Nuvoton NCT6694 RTC support
-Date: Tue, 15 Jul 2025 10:56:26 +0800
-Message-Id: <20250715025626.968466-8-a0282524688@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250715025626.968466-1-a0282524688@gmail.com>
-References: <20250715025626.968466-1-a0282524688@gmail.com>
+ d=fetCA905017.onmicrosoft.com; s=selector1-fetCA905017-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dz+EGPRNCxLlDpNbc7U/xUrEKDT1FYDy34R48jYx6Fg=;
+ b=LveL5ANTZoYynh0fuy0K6BblV0r1joMZ4nbL4IIIMOkgkJ9LMGePzPbneLyft3BVr4whXVfV9/RtDv1RAP/CMZU4YNQQWqmovpaTaiC0B1AYEHRb6mlgm0dLaptMCLoudvo90iwL8KZdNO0TJt5tRqqwvOyqb7B6mDnBiURivy1T1xBLyml9FCubMX9FjESlaB4xK3KQfK44T2/WyIzRn6xULlI2W8f93mMAbgXzuKWoQZcOsTBwcSUcedKdbA12bpXyC13UYxKRxz+o1dvdaQz70fF6OSpyqSptTUpUsRrSbKcUsiEgjEiOGYBkRXsuKLEjL2eDrFMnGtWV2aOLzw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=portwell.com.tw;
+Received: from KL1PR06MB6395.apcprd06.prod.outlook.com (2603:1096:820:e7::10)
+ by TYZPR06MB6748.apcprd06.prod.outlook.com (2603:1096:400:464::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8922.32; Tue, 15 Jul
+ 2025 03:51:55 +0000
+Received: from KL1PR06MB6395.apcprd06.prod.outlook.com
+ ([fe80::9235:5570:71b3:224]) by KL1PR06MB6395.apcprd06.prod.outlook.com
+ ([fe80::9235:5570:71b3:224%4]) with mapi id 15.20.8922.028; Tue, 15 Jul 2025
+ 03:51:55 +0000
+Message-ID: <ef9455cc-1bc3-4e6c-a445-047127cdfbc7@portwell.com.tw>
+Date: Tue, 15 Jul 2025 11:51:51 +0800
+User-Agent: Mozilla Thunderbird
+From: jesse huang <jesse.huang@portwell.com.tw>
+Subject: [PATCH v2 1/2] platform/x86: portwell-ec: Add suspend/resume support
+ for watchdog
+To: hdegoede@redhat.com, ilpo.jarvinen@linux.intel.com, jdelvare@suse.com,
+ linux@roeck-us.net, wim@linux-watchdog.org
+Cc: linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ jay.chen@canonical.com
+References: <a07d8764-ee23-4d21-a7b5-121cb8a576b9@portwell.com.tw>
+Content-Language: en-US
+In-Reply-To: <a07d8764-ee23-4d21-a7b5-121cb8a576b9@portwell.com.tw>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: TPYP295CA0051.TWNP295.PROD.OUTLOOK.COM
+ (2603:1096:7d0:8::11) To KL1PR06MB6395.apcprd06.prod.outlook.com
+ (2603:1096:820:e7::10)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: KL1PR06MB6395:EE_|TYZPR06MB6748:EE_
+X-MS-Office365-Filtering-Correlation-Id: b7f3fb3f-0c60-441b-95a1-08ddc352f0a8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|7416014|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?UWxxNGg1blRFUmlpZ0dJTklOMWNnbDhDVzVGNGpVUnE3VnRiZm1rRlNSUncz?=
+ =?utf-8?B?SVJ4ejJ5Zm02bWlVcDVGRE5tMjdqc2RVbzBIcWIzUFA2TVg4NnJwaDZpVnA0?=
+ =?utf-8?B?WStWc2lUaEJ5SUVyTTh6UzBNSzJBNmQ2SGp2cVpodWdGcTAxejBhRzhGV3VW?=
+ =?utf-8?B?cDE2UVk0dDdYNklqNEU5Y3JoRk8yYytrM0U1SmFFY0hXZy83NE1FRU5aUndh?=
+ =?utf-8?B?UHpjaEhoZHRnZVo0aWJzRTNRSy80QXpGZEV5dVRiRS85cmkzek0yWitVZGhZ?=
+ =?utf-8?B?eWhFYmt0c0dTSmovd29uZVZ5S1FzMU4zRDhPKytJZWNnVlNhY0JwdjdZK2g5?=
+ =?utf-8?B?ZXNtSzlUZ2ZSYXhCUFJJeUYrcGs5Z0ZEdkh1UTF3bUoxTDVJa3dHbXJZT0VB?=
+ =?utf-8?B?ai9QY0ZwVCtDeWdlQnB0VzZORHVvTVVkY3haeEhUcDRHN0JIakZHMG5EWmd5?=
+ =?utf-8?B?dndZSXdxYmxOei9LN2p1Yis5Z0huVkN2d1poWEkzTXNiOHZIVnNPcGtUZ20r?=
+ =?utf-8?B?RFFtcHRad0QzcEdpMy96Z3crTFQ3TUw0c05mRjV2bkRHMEdBeHNLcy9iN1Ft?=
+ =?utf-8?B?ZnhteWpGM3JLMEZ0bHgxcmZsbENJRVQ1c1hNWUlDZUpkNjRYVU9YQzJMcUZC?=
+ =?utf-8?B?bEw3VXVPc29mQUV2Mkp1Y2JvZEczSHNKTnM0NEtZamIyZFdlL21XcEc3NE1y?=
+ =?utf-8?B?U1lmNzNFNXVrS0c4T3ZxY1dTSU5rSzRqa2VxS0tyZFdnS3VaZ1RnMnJUWDZs?=
+ =?utf-8?B?eEdVeDBXV1ZWNVo1M0s0c2ZsSzAwRGY3eVpTV09ENnYwRDdrR1FqcWRvTDU4?=
+ =?utf-8?B?eHNndlZ5QXphRmhueStGR2FNMUUrM0pldXZqUktXanV3Qkdac3NINURjellS?=
+ =?utf-8?B?OGprQnFRVEdSOG80bWhoSGRSeHpxWFU5LzArOFFzU0dpcjFqOEo4TU1jZDZw?=
+ =?utf-8?B?MUFNSXA0RUVHNm1OVmVSMW4rOXV5QmF5alppNEJQaWRJR1RSVWxqV09yTE1q?=
+ =?utf-8?B?MEdOTmplRFcyZlc4THlPOEM0eWw5TE9qTll6TWQzb215STh4aEhoNnNtc1M1?=
+ =?utf-8?B?RTM3S1RUYWZoQUdwdDRSNGpRUzdvVXJzNU5DZ2tWTDZ2c2NHUXh4YitxSU9T?=
+ =?utf-8?B?OVJmQ2w3bkh5Nlh0MU5LbllaRjY2YmNDQkdMRElSL0tCcExzcUs1NXZETzFJ?=
+ =?utf-8?B?NHA2aDYrWTU1bzM3czRsbEZCQnJpZ1JIQTYrYWI4OTNLalRIZWxwdWZTaVNp?=
+ =?utf-8?B?ZndwdG9zeE1YVUZXVXdNSWxFTkN4RGwvMjRUc251R1pnNkVhVDdTVmlOSkZ1?=
+ =?utf-8?B?SmdMWExLZW5wL1U2TGhtaWhJellycTNzbkFuejRQV0xJbHpiNEQ2YzV6L1pY?=
+ =?utf-8?B?K0hsdWtORGRyeXczRHl6SFFWZDBnUU1vNG9IZ3pOM0VMUStzV0ZuQXhlOGJE?=
+ =?utf-8?B?UzdqUHY4bnZXSHBFYUg2NW1UcVduODNLbVlNY05JY0hlUUJBS2xIdGw0TUh5?=
+ =?utf-8?B?ZzQwSGZ4azUvZTRaODdnejZLL2FRZXhRZjMwNzZHMk5kU09TWFlyY1oyR3c1?=
+ =?utf-8?B?V3VrMS9OWHhvSDlzUm9pNzBlUHZCVDRiM251b0pjNVp0NzNwUUZIZUtZZmgy?=
+ =?utf-8?B?SEhLQWQvTE9yVjNaUllKN3hTa1M1b28wYXJmUjM0WTY0VHltV0lPNXBvcW1H?=
+ =?utf-8?B?bXJFcDIybEwrRG5uRjRKV0VxTC95Z1FxK3BTWTBJYWkvQ2pUSHQzMDR5Z0Nm?=
+ =?utf-8?B?UkdDc2xrRSttV3QxRkNFZUVqL1ZJL1VCZkNxQVhnajZ6Q0REakZUekhQME4v?=
+ =?utf-8?B?YWFBNmQ1c2NlMXJ4TjBDdlFsaWhvMVRCR0Y2U2E1QkVZb0RKdTVGVEl3WGNL?=
+ =?utf-8?B?T2RGRUwyQVo0SWx2anpOOWdzY2lISHhnV3dmaWZPUnduOHBkZXBUZVc0U2RJ?=
+ =?utf-8?Q?IIBHe55KkVg=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR06MB6395.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?MlV0WURhQVFwUzlqcFhQd3hvdU1pUEt3L2c0OVVpSHRLbFdPdzJZRjNOTkFr?=
+ =?utf-8?B?ajJLeDFFbFFBbHV2RXZqeGJsa3NBaUo5MngzRmlVQnJMalpDOVFBTzdmVU5Z?=
+ =?utf-8?B?TG5uWWkxbUp4Z1JEWW5GcytCWDJMWFVYSmRBbCs1NHhhbFRKbVgvaVdkSmNa?=
+ =?utf-8?B?R25Hd2VsczJKTTlQSEpuZ1M4b25KYStyZjFIaWdHTEVUcmNnQkFRMkMvb1Nh?=
+ =?utf-8?B?dW1NeXRPcFpFUzJQcXluUVY4MDM4aTVEZy95eHBZbFNnVk1leXByV2ZQVVVI?=
+ =?utf-8?B?alBJbXNUMWtDZWhCdW9HNnlMKzFlTFJrRlYxOExFbXBYUUdGaFFvT1l0UUZx?=
+ =?utf-8?B?cEt5TVVRTkpKRWsvbTVvM2o0R1FGclNUM2Fic3VjaS9zN1dFeUE2dXRyZm14?=
+ =?utf-8?B?d2RHa203cTFBamF1MDZPWjhrQ0RDaHRGaXVjUzFaT2NWQ2xjSFRXOW1qa0Jv?=
+ =?utf-8?B?MXdQQ29Ga0RPeWkxR3lNb055ajlrZk00RUdHbDl3dlR2ZFpKcGhnUkNCUGJm?=
+ =?utf-8?B?ZW9xRmhZQXlJWEFtQkNxWlpaNGlBRThoMG1YWDg0TlNiWFdIbnJKSStDaEU1?=
+ =?utf-8?B?WGZMWTZMUDhEdUxPa2pWOWRFRXFNRXEyUFVIYlVLejRSM2Vkc3pmOFVPaUZI?=
+ =?utf-8?B?WkVydzJZaTVzaUJ5cFR3TjIyR09EWVZwNzJ5SUkvc0hPajNJOUQ1VjVOZHFz?=
+ =?utf-8?B?NTRUOU16VlVodmVJY3lVU2F5OGVIQ1ZMUzc1QzZ6OWJoVmRoTGQ2QlR4a1FB?=
+ =?utf-8?B?cVIrMDlzV0tSZTIrOVN5RmdKbWlTRjJRRXViTVBIOHFDMExkbHlvM1p0Wkdv?=
+ =?utf-8?B?dk1UL2h0TWx6c0RGR0xtcm1YclhxLy9IMWp1TjZNcFpDSUR1c3Fyb3JaNWZZ?=
+ =?utf-8?B?Rjh5QXhPenhNV203VUozaHFUc2JWOGZsdG1PY0JuTXZ2NlhLUnBXT2p0VFJm?=
+ =?utf-8?B?NTh6c1FUTVJsNG0xeENOcVNKYUZPQW95UUdmM1ZyQlBEQUpyU2VPTHN1MVpN?=
+ =?utf-8?B?M3VOMGpVQWJMdGRzdk1tNHdZNStweTB1NHdLYkVyVi9PRDZyeVBGU21xdmFS?=
+ =?utf-8?B?dm8yaStGQVN0WFhMdzFRd0RKYTdldzJMTTVqK0dUcG5MMGJsZ2VTVWtlYjZ6?=
+ =?utf-8?B?dEpZTlBTUG4zaHJ5STQ3QU1ZOW9nYnpIL09PQ1pWbFJJbzlvbXIxR1hidmNY?=
+ =?utf-8?B?bmI3YW9vTUgvRHhNcjVpQ1NMbEZ2MnRJejMyd0ZlUzZEWVNnQ2d4bHhPZnJP?=
+ =?utf-8?B?bUtGM2xKZ1lxbDRMMmozSGdUL3FpdWttd1o3T2tsS3orK29JOFZYa2ZBalJR?=
+ =?utf-8?B?VW9SUTNUWncwbENGcU5rdER3T01ReWV0RVF1OVJRQ245K2dsb1V4TkdZVERH?=
+ =?utf-8?B?ajRtMjhIbE9mZHJEQS9URkxZSms1RFhVRWlCMy96c0ZUdmZRdk1YcEFOV3Mz?=
+ =?utf-8?B?UHpxM3R4eTQ1ZEoxKzJEdDFoNmVBOWNnZWsrc0hIeW1ucUNDSGE2WDkzNXFq?=
+ =?utf-8?B?RjJjWjFhYURRMEFpdktXMGJWVjJKWjVtclAvbEhsdEV3cEZPaHE3SStJSURa?=
+ =?utf-8?B?WEkwWE9EVXZEQlRBL05WNGsxcFdwWUxxTUgyTHhSSkYrVEhlZDdRQThZaDBK?=
+ =?utf-8?B?b0VzaXIvL0VsZk05ZytJUE1Id1FJRmFheWt0ZFNMNzhWa2JrWHRkVUhPQWhX?=
+ =?utf-8?B?QWZJY0NHWEhWa0p4SmJ6L0ZFUFVLRTJDQ1hBUktZSzZGUE1udk5VdUJLVWh5?=
+ =?utf-8?B?MFV0bVpDSlJTcS8wSS9RbGwrNk0wcnVlVng5cmJzQXpVSzhkdDFwU1dKMXlu?=
+ =?utf-8?B?d1pjSW5rMXB0dmpCdExOOUdpU29ka0tmdWV3aHFxc0JnejdjUFQ1Q0Rvd3ZZ?=
+ =?utf-8?B?R2NIcXJiUlZLT09HY05qVlNIQ0FlQ2VxY3JBQzh4WTNnclA2ZkF3a29mbEli?=
+ =?utf-8?B?YkQwSlN6dE80cHlycTU1dmxNUDlwaTdXOUpIWlY2SlFTZ3REK0F2SXlQSWJi?=
+ =?utf-8?B?NUk5T1llMFY3VVBJeHREVkNvbGl6VVhmdGNUTUg1Ym5FOHRTVVJ2R3dSUkda?=
+ =?utf-8?B?VXhNWFM1SlpaTTZVQmVGQWZ2eURzLzMxSmlIUzl1cDd6WDk2dEZPOEc1eXdC?=
+ =?utf-8?B?V3BZTXladFI4Wi9CcGRnMm00THVVZ2NrRjBQTVQrU2NXeVhtVmRqUnNvdEF1?=
+ =?utf-8?B?T3c9PQ==?=
+X-OriginatorOrg: portwell.com.tw
+X-MS-Exchange-CrossTenant-Network-Message-Id: b7f3fb3f-0c60-441b-95a1-08ddc352f0a8
+X-MS-Exchange-CrossTenant-AuthSource: KL1PR06MB6395.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2025 03:51:55.1552
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5e309f7e-c3ee-443b-8668-97701d998b2c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8TcBsVhWKqKfyyRZC3JD+tVstwI72fma8JROwXNmFMaDVtX+kCNSXJzUcjGbCfc9ICUNpksFBohCLvBDDADHk74wVxc4pUhlb6RVU3rvJGk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB6748
 
-From: Ming Yu <a0282524688@gmail.com>
+Portwell EC does not disable the watchdog during suspend. To avoid unwanted
+resets, this patch adds suspend and resume callbacks (pwec_suspend() and
+pwec_resume()) to the driver.
 
-This driver supports RTC functionality for NCT6694 MFD device
-based on USB interface.
+The watchdog is stopped in pwec_suspend() and restarted in pwec_resume() if
+it was active before suspend.
 
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Signed-off-by: Ming Yu <a0282524688@gmail.com>
+Signed-off-by: Yen-Chi Huang <jesse.huang@portwell.com.tw>
 ---
-Changes since version 13:
 
-Changes since version 12:
-- Use same email address in the signature
+[Re-sending to fix message threading, no content changes since v2.]
+---
+ drivers/platform/x86/portwell-ec.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-Changes since version 11:
-
-Changes since version 10:
-
-Changes since version 9:
-- Add devm_add_action_or_reset() to dispose irq mapping
-
-Changes since version 8:
-- Modify the signed-off-by with my work address
-- Add irq_dispose_mapping() in the error handling path and in the remove
-  function
-
-Changes since version 7:
-
-Changes since version 6:
-
-Changes since version 5:
-- Modify the module name and the driver name consistently
-
-Changes since version 4:
-- Modify arguments in read/write function to a pointer to cmd_header
-- Modify all callers that call the read/write function
-
-Changes since version 3:
-- Modify array buffer to structure
-- Fix defines and comments
-- Drop private mutex and use rtc core lock
-- Modify device_set_wakeup_capable() to device_init_wakeup()
-
-Changes since version 2:
-- Add MODULE_ALIAS()
-
-Changes since version 1:
-- Add each driver's command structure
-- Fix platform driver registration
-- Drop unnecessary logs
-- Fix overwrite error return values
-- Modify to use dev_err_probe API
-
- MAINTAINERS               |   1 +
- drivers/rtc/Kconfig       |  10 ++
- drivers/rtc/Makefile      |   1 +
- drivers/rtc/rtc-nct6694.c | 297 ++++++++++++++++++++++++++++++++++++++
- 4 files changed, 309 insertions(+)
- create mode 100644 drivers/rtc/rtc-nct6694.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1bb97ee6a11b..e5edd911a28e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17823,6 +17823,7 @@ F:	drivers/hwmon/nct6694-hwmon.c
- F:	drivers/i2c/busses/i2c-nct6694.c
- F:	drivers/mfd/nct6694.c
- F:	drivers/net/can/usb/nct6694_canfd.c
-+F:	drivers/rtc/rtc-nct6694.c
- F:	drivers/watchdog/nct6694_wdt.c
- F:	include/linux/mfd/nct6694.h
+diff --git a/drivers/platform/x86/portwell-ec.c b/drivers/platform/x86/portwell-ec.c
+index 8b788822237b..a68522aaa3fa 100644
+--- a/drivers/platform/x86/portwell-ec.c
++++ b/drivers/platform/x86/portwell-ec.c
+@@ -245,11 +245,29 @@ static int pwec_probe(struct platform_device *pdev)
+ 	return 0;
+ }
  
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index 9aec922613ce..7fd2439436c1 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -416,6 +416,16 @@ config RTC_DRV_NCT3018Y
- 	   This driver can also be built as a module, if so, the module will be
- 	   called "rtc-nct3018y".
++static int pwec_suspend(struct platform_device *pdev, pm_message_t message)
++{
++	if (watchdog_active(&ec_wdt_dev))
++		return pwec_wdt_stop(&ec_wdt_dev);
++
++	return 0;
++}
++
++static int pwec_resume(struct platform_device *pdev)
++{
++	if (watchdog_active(&ec_wdt_dev))
++		return pwec_wdt_start(&ec_wdt_dev);
++
++	return 0;
++}
++
+ static struct platform_driver pwec_driver = {
+ 	.driver = {
+ 		.name = "portwell-ec",
+ 	},
+ 	.probe = pwec_probe,
++	.suspend = pm_ptr(pwec_suspend),
++	.resume = pm_ptr(pwec_resume),
+ };
  
-+config RTC_DRV_NCT6694
-+	tristate "Nuvoton NCT6694 RTC support"
-+	depends on MFD_NCT6694
-+	help
-+	  If you say yes to this option, support will be included for Nuvoton
-+	  NCT6694, a USB device to RTC.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called rtc-nct6694.
-+
- config RTC_DRV_RK808
- 	tristate "Rockchip RK805/RK808/RK809/RK817/RK818 RTC"
- 	depends on MFD_RK8XX
-diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-index 4619aa2ac469..f564f9a9fa5e 100644
---- a/drivers/rtc/Makefile
-+++ b/drivers/rtc/Makefile
-@@ -119,6 +119,7 @@ obj-$(CONFIG_RTC_DRV_MXC)	+= rtc-mxc.o
- obj-$(CONFIG_RTC_DRV_MXC_V2)	+= rtc-mxc_v2.o
- obj-$(CONFIG_RTC_DRV_GAMECUBE)	+= rtc-gamecube.o
- obj-$(CONFIG_RTC_DRV_NCT3018Y)	+= rtc-nct3018y.o
-+obj-$(CONFIG_RTC_DRV_NCT6694)	+= rtc-nct6694.o
- obj-$(CONFIG_RTC_DRV_NTXEC)	+= rtc-ntxec.o
- obj-$(CONFIG_RTC_DRV_OMAP)	+= rtc-omap.o
- obj-$(CONFIG_RTC_DRV_OPAL)	+= rtc-opal.o
-diff --git a/drivers/rtc/rtc-nct6694.c b/drivers/rtc/rtc-nct6694.c
-new file mode 100644
-index 000000000000..35401a0d9cf5
---- /dev/null
-+++ b/drivers/rtc/rtc-nct6694.c
-@@ -0,0 +1,297 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Nuvoton NCT6694 RTC driver based on USB interface.
-+ *
-+ * Copyright (C) 2025 Nuvoton Technology Corp.
-+ */
-+
-+#include <linux/bcd.h>
-+#include <linux/irqdomain.h>
-+#include <linux/kernel.h>
-+#include <linux/mfd/nct6694.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/rtc.h>
-+#include <linux/slab.h>
-+
-+/*
-+ * USB command module type for NCT6694 RTC controller.
-+ * This defines the module type used for communication with the NCT6694
-+ * RTC controller over the USB interface.
-+ */
-+#define NCT6694_RTC_MOD		0x08
-+
-+/* Command 00h - RTC Time */
-+#define NCT6694_RTC_TIME	0x0000
-+#define NCT6694_RTC_TIME_SEL	0x00
-+
-+/* Command 01h - RTC Alarm */
-+#define NCT6694_RTC_ALARM	0x01
-+#define NCT6694_RTC_ALARM_SEL	0x00
-+
-+/* Command 02h - RTC Status */
-+#define NCT6694_RTC_STATUS	0x02
-+#define NCT6694_RTC_STATUS_SEL	0x00
-+
-+#define NCT6694_RTC_IRQ_INT_EN	BIT(0)	/* Transmit a USB INT-in when RTC alarm */
-+#define NCT6694_RTC_IRQ_GPO_EN	BIT(5)	/* Trigger a GPO Low Pulse when RTC alarm */
-+
-+#define NCT6694_RTC_IRQ_EN	(NCT6694_RTC_IRQ_INT_EN | NCT6694_RTC_IRQ_GPO_EN)
-+#define NCT6694_RTC_IRQ_STS	BIT(0)	/* Write 1 clear IRQ status */
-+
-+struct __packed nct6694_rtc_time {
-+	u8 sec;
-+	u8 min;
-+	u8 hour;
-+	u8 week;
-+	u8 day;
-+	u8 month;
-+	u8 year;
-+};
-+
-+struct __packed nct6694_rtc_alarm {
-+	u8 sec;
-+	u8 min;
-+	u8 hour;
-+	u8 alarm_en;
-+	u8 alarm_pend;
-+};
-+
-+struct __packed nct6694_rtc_status {
-+	u8 irq_en;
-+	u8 irq_pend;
-+};
-+
-+union __packed nct6694_rtc_msg {
-+	struct nct6694_rtc_time time;
-+	struct nct6694_rtc_alarm alarm;
-+	struct nct6694_rtc_status sts;
-+};
-+
-+struct nct6694_rtc_data {
-+	struct nct6694 *nct6694;
-+	struct rtc_device *rtc;
-+	union nct6694_rtc_msg *msg;
-+	int irq;
-+};
-+
-+static int nct6694_rtc_read_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_time *time = &data->msg->time;
-+	static const struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_TIME,
-+		.sel = NCT6694_RTC_TIME_SEL,
-+		.len = cpu_to_le16(sizeof(*time))
-+	};
-+	int ret;
-+
-+	ret = nct6694_read_msg(data->nct6694, &cmd_hd, time);
-+	if (ret)
-+		return ret;
-+
-+	tm->tm_sec = bcd2bin(time->sec);		/* tm_sec expect 0 ~ 59 */
-+	tm->tm_min = bcd2bin(time->min);		/* tm_min expect 0 ~ 59 */
-+	tm->tm_hour = bcd2bin(time->hour);		/* tm_hour expect 0 ~ 23 */
-+	tm->tm_wday = bcd2bin(time->week) - 1;		/* tm_wday expect 0 ~ 6 */
-+	tm->tm_mday = bcd2bin(time->day);		/* tm_mday expect 1 ~ 31 */
-+	tm->tm_mon = bcd2bin(time->month) - 1;		/* tm_month expect 0 ~ 11 */
-+	tm->tm_year = bcd2bin(time->year) + 100;	/* tm_year expect since 1900 */
-+
-+	return ret;
-+}
-+
-+static int nct6694_rtc_set_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_time *time = &data->msg->time;
-+	static const struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_TIME,
-+		.sel = NCT6694_RTC_TIME_SEL,
-+		.len = cpu_to_le16(sizeof(*time))
-+	};
-+
-+	time->sec = bin2bcd(tm->tm_sec);
-+	time->min = bin2bcd(tm->tm_min);
-+	time->hour = bin2bcd(tm->tm_hour);
-+	time->week = bin2bcd(tm->tm_wday + 1);
-+	time->day = bin2bcd(tm->tm_mday);
-+	time->month = bin2bcd(tm->tm_mon + 1);
-+	time->year = bin2bcd(tm->tm_year - 100);
-+
-+	return nct6694_write_msg(data->nct6694, &cmd_hd, time);
-+}
-+
-+static int nct6694_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_alarm *alarm = &data->msg->alarm;
-+	static const struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_ALARM,
-+		.sel = NCT6694_RTC_ALARM_SEL,
-+		.len = cpu_to_le16(sizeof(*alarm))
-+	};
-+	int ret;
-+
-+	ret = nct6694_read_msg(data->nct6694, &cmd_hd, alarm);
-+	if (ret)
-+		return ret;
-+
-+	alrm->time.tm_sec = bcd2bin(alarm->sec);
-+	alrm->time.tm_min = bcd2bin(alarm->min);
-+	alrm->time.tm_hour = bcd2bin(alarm->hour);
-+	alrm->enabled = alarm->alarm_en;
-+	alrm->pending = alarm->alarm_pend;
-+
-+	return ret;
-+}
-+
-+static int nct6694_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_alarm *alarm = &data->msg->alarm;
-+	static const struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_ALARM,
-+		.sel = NCT6694_RTC_ALARM_SEL,
-+		.len = cpu_to_le16(sizeof(*alarm))
-+	};
-+
-+	alarm->sec = bin2bcd(alrm->time.tm_sec);
-+	alarm->min = bin2bcd(alrm->time.tm_min);
-+	alarm->hour = bin2bcd(alrm->time.tm_hour);
-+	alarm->alarm_en = alrm->enabled ? NCT6694_RTC_IRQ_EN : 0;
-+	alarm->alarm_pend = 0;
-+
-+	return nct6694_write_msg(data->nct6694, &cmd_hd, alarm);
-+}
-+
-+static int nct6694_rtc_alarm_irq_enable(struct device *dev, unsigned int enabled)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_status *sts = &data->msg->sts;
-+	static const struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_STATUS,
-+		.sel = NCT6694_RTC_STATUS_SEL,
-+		.len = cpu_to_le16(sizeof(*sts))
-+	};
-+
-+	if (enabled)
-+		sts->irq_en |= NCT6694_RTC_IRQ_EN;
-+	else
-+		sts->irq_en &= ~NCT6694_RTC_IRQ_EN;
-+
-+	sts->irq_pend = 0;
-+
-+	return nct6694_write_msg(data->nct6694, &cmd_hd, sts);
-+}
-+
-+static const struct rtc_class_ops nct6694_rtc_ops = {
-+	.read_time = nct6694_rtc_read_time,
-+	.set_time = nct6694_rtc_set_time,
-+	.read_alarm = nct6694_rtc_read_alarm,
-+	.set_alarm = nct6694_rtc_set_alarm,
-+	.alarm_irq_enable = nct6694_rtc_alarm_irq_enable,
-+};
-+
-+static irqreturn_t nct6694_irq(int irq, void *dev_id)
-+{
-+	struct nct6694_rtc_data *data = dev_id;
-+	struct nct6694_rtc_status *sts = &data->msg->sts;
-+	static const struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_STATUS,
-+		.sel = NCT6694_RTC_STATUS_SEL,
-+		.len = cpu_to_le16(sizeof(*sts))
-+	};
-+	int ret;
-+
-+	rtc_lock(data->rtc);
-+
-+	sts->irq_en = NCT6694_RTC_IRQ_EN;
-+	sts->irq_pend = NCT6694_RTC_IRQ_STS;
-+	ret = nct6694_write_msg(data->nct6694, &cmd_hd, sts);
-+	if (ret) {
-+		rtc_unlock(data->rtc);
-+		return IRQ_NONE;
-+	}
-+
-+	rtc_update_irq(data->rtc, 1, RTC_IRQF | RTC_AF);
-+
-+	rtc_unlock(data->rtc);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static void nct6694_irq_dispose_mapping(void *d)
-+{
-+	struct nct6694_rtc_data *data = d;
-+
-+	irq_dispose_mapping(data->irq);
-+}
-+
-+static int nct6694_rtc_probe(struct platform_device *pdev)
-+{
-+	struct nct6694_rtc_data *data;
-+	struct nct6694 *nct6694 = dev_get_drvdata(pdev->dev.parent);
-+	int ret;
-+
-+	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	data->msg = devm_kzalloc(&pdev->dev, sizeof(union nct6694_rtc_msg),
-+				 GFP_KERNEL);
-+	if (!data->msg)
-+		return -ENOMEM;
-+
-+	data->irq = irq_create_mapping(nct6694->domain, NCT6694_IRQ_RTC);
-+	if (!data->irq)
-+		return -EINVAL;
-+
-+	ret = devm_add_action_or_reset(&pdev->dev, nct6694_irq_dispose_mapping,
-+				       data);
-+	if (ret)
-+		return ret;
-+
-+	ret = devm_device_init_wakeup(&pdev->dev);
-+	if (ret)
-+		return dev_err_probe(&pdev->dev, ret, "Failed to init wakeup\n");
-+
-+	data->rtc = devm_rtc_allocate_device(&pdev->dev);
-+	if (IS_ERR(data->rtc))
-+		return PTR_ERR(data->rtc);
-+
-+	data->nct6694 = nct6694;
-+	data->rtc->ops = &nct6694_rtc_ops;
-+	data->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-+	data->rtc->range_max = RTC_TIMESTAMP_END_2099;
-+
-+	platform_set_drvdata(pdev, data);
-+
-+	ret = devm_request_threaded_irq(&pdev->dev, data->irq, NULL,
-+					nct6694_irq, IRQF_ONESHOT,
-+					"rtc-nct6694", data);
-+	if (ret < 0)
-+		return dev_err_probe(&pdev->dev, ret, "Failed to request irq\n");
-+
-+	return devm_rtc_register_device(data->rtc);
-+}
-+
-+static struct platform_driver nct6694_rtc_driver = {
-+	.driver = {
-+		.name	= "nct6694-rtc",
-+	},
-+	.probe		= nct6694_rtc_probe,
-+};
-+
-+module_platform_driver(nct6694_rtc_driver);
-+
-+MODULE_DESCRIPTION("USB-RTC driver for NCT6694");
-+MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
-+MODULE_LICENSE("GPL");
-+MODULE_ALIAS("platform:nct6694-rtc");
+ static struct platform_device *pwec_dev;
 -- 
 2.34.1
-
 
