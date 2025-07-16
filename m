@@ -1,436 +1,217 @@
-Return-Path: <linux-watchdog+bounces-3873-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3874-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 773B2B04F93
-	for <lists+linux-watchdog@lfdr.de>; Tue, 15 Jul 2025 05:56:31 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E99BFB07D20
+	for <lists+linux-watchdog@lfdr.de>; Wed, 16 Jul 2025 20:48:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 85F343B0A3E
-	for <lists+linux-watchdog@lfdr.de>; Tue, 15 Jul 2025 03:56:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 34B487A572E
+	for <lists+linux-watchdog@lfdr.de>; Wed, 16 Jul 2025 18:46:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A41AC250C18;
-	Tue, 15 Jul 2025 03:56:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0F2B21D5B8;
+	Wed, 16 Jul 2025 18:48:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fetCA905017.onmicrosoft.com header.i=@fetCA905017.onmicrosoft.com header.b="Hhe3lPdu"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="H6DkAmrb"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from TYPPR03CU001.outbound.protection.outlook.com (mail-japaneastazon11022089.outbound.protection.outlook.com [52.101.126.89])
+Received: from fllvem-ot04.ext.ti.com (fllvem-ot04.ext.ti.com [198.47.19.246])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BBF31B4F1F;
-	Tue, 15 Jul 2025 03:56:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.126.89
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752551786; cv=fail; b=jiLEB+3ry/gkCTv8GkR9FUQfO52Sz74aRPD6/4uTTVC0aYO107Vsz+e3bvhMfQjkvqmtayF2e4V3vsdIOmoTHpzvCiqWNiNw+/2VQOkL2qO3FbjGde+SRxz1xiGtu/BgIv+Iw+27Y1wwBvEQ4rkMDB7W1HnuGiL2eQSkiov73B8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752551786; c=relaxed/simple;
-	bh=Rl1vCHRNPqTlYOz7c7ZlTEJB7I2NoR6WWk7weT9FSWM=;
-	h=Message-ID:Date:From:Subject:To:Cc:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=Y20QQndZOJgrSx3h4y4apP5Ufv3PFnvJz4y7UGCBLwg8Kv24xGtyM7kj4sBp3iytGLHHIuV7vTVf+s5i8IdSHUe+9SvTjnEsrvESULpNFlkvnv7rmfbENuFD4TQZQl9TESuTYvKe6n7yH88RL+w4WV6f1p0u1zBgh1w/gEtpUmk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=portwell.com.tw; spf=pass smtp.mailfrom=portwell.com.tw; dkim=pass (2048-bit key) header.d=fetCA905017.onmicrosoft.com header.i=@fetCA905017.onmicrosoft.com header.b=Hhe3lPdu; arc=fail smtp.client-ip=52.101.126.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=portwell.com.tw
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=portwell.com.tw
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=lMnf30qipHJ8xXwE8hPw6xda9iTZgoEuOBnr5tZy56n+TeTIpnZXXD65QU/vgCe+gMcfw6JP7zBqGaJMpcAcmcd0FShtOD2cAy8rdyzj5GJFPgpjEeZolySjTWQxBWeAczEGYtZfJ5tZ4dYvZel94HnBQjo2hQc5VPMAwY72/S9S003dBF2dGv+eJjS1p82OA2zRSgXkDXB9kPbBjp1cqkh6ox8yUgmatrgBYo53VCx3zk3pUWXU/OtQn1fAkAdYnzuAnLpwp3ZcWWpGTMuxk3RK8Ob6LOyc8uioGbsKFzuh6lXXkkVK9H5sRIRyuZoAHq/YPZs+Nvgm2K7yySesPQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4k8sXYSdzdavwSBDc9839C9ZDhXvAZoZIIsZL5Ba+QM=;
- b=taJn/cazkflG+JbmEIb890f8/DG8nRzqg8qIPSw/16sbb7DS+fOdwFQrjiXGKGbhHvahbZaoE+waM+YjqkcfVK41fLrc8rzYmSFdGybbpeolEUSSmbBbyIVaCT/DGKQYYOXKvuLtTYj4l7a6rNPwHtuSsucdWeZb4X8z2jUaNduhYNgd9Iipy9zxQy9UpJXKZLaFGQLhlNWP0z0Flc5lpT6nY8tqFaLQLokvQADOasEitwnlc0agGws7bknkxWARBy2bFiFxSSAlT0lTSIsVY5sVU7RtcWjg5Bys4xSxF0/Whux09+XCWtVw+k9Tfa9ISZwI60pLo7hm+Jo561i+CQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=portwell.com.tw; dmarc=pass action=none
- header.from=portwell.com.tw; dkim=pass header.d=portwell.com.tw; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=fetCA905017.onmicrosoft.com; s=selector1-fetCA905017-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4k8sXYSdzdavwSBDc9839C9ZDhXvAZoZIIsZL5Ba+QM=;
- b=Hhe3lPduciVlpqR+OFMKrnhC8fk1qf1DC7F9w+821MMaphXdzIlctQPYUPzGcAfBb5/+/kMBaBWXq0QWKx+0ne0urhaQauA8KUKMf2gUYwGA46Vu1qWYaTTiJEDBtVAECamL2TicgBxwtl7MC6HYPLjoTlm2bE8RZ8WlEHjt0yc83HlbM7J45OtCvKKpJZRYhLvdeHRlXHMZMP3JQaad3fKS5hu2rmFFe1Cdhj/BgAD7206Unoa/fnSK0cW8it5drMLkUVym+qC6M0x98IEr43q4A+gnTjnV2Oegzh+N5Iq/wNDzCMvTDvjtWEIeW1PxhfROuyHBbHBeLq6WUt3O1g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=portwell.com.tw;
-Received: from KL1PR06MB6395.apcprd06.prod.outlook.com (2603:1096:820:e7::10)
- by TYZPR06MB6748.apcprd06.prod.outlook.com (2603:1096:400:464::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8922.32; Tue, 15 Jul
- 2025 03:56:21 +0000
-Received: from KL1PR06MB6395.apcprd06.prod.outlook.com
- ([fe80::9235:5570:71b3:224]) by KL1PR06MB6395.apcprd06.prod.outlook.com
- ([fe80::9235:5570:71b3:224%4]) with mapi id 15.20.8922.028; Tue, 15 Jul 2025
- 03:56:21 +0000
-Message-ID: <a961ba6f-4c4b-4f60-9804-2736a3d239d8@portwell.com.tw>
-Date: Tue, 15 Jul 2025 11:56:18 +0800
-User-Agent: Mozilla Thunderbird
-From: Yen-Chi Huang <jesse.huang@portwell.com.tw>
-Subject: [PATCH v2 2/2] platform/x86: portwell-ec: Add hwmon support for
- voltage and temperature
-To: hdegoede@redhat.com, ilpo.jarvinen@linux.intel.com, jdelvare@suse.com,
- linux@roeck-us.net, wim@linux-watchdog.org
-Cc: linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-watchdog@vger.kernel.org,
- jay.chen@canonical.com
-References: <a07d8764-ee23-4d21-a7b5-121cb8a576b9@portwell.com.tw>
-Content-Language: en-US
-In-Reply-To: <a07d8764-ee23-4d21-a7b5-121cb8a576b9@portwell.com.tw>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: TPYP295CA0057.TWNP295.PROD.OUTLOOK.COM (2603:1096:7d0:8::8)
- To KL1PR06MB6395.apcprd06.prod.outlook.com (2603:1096:820:e7::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A17A84A3E;
+	Wed, 16 Jul 2025 18:48:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.246
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1752691692; cv=none; b=dcCfcpBbH0lee1WsNifTJLOVMH7dWJ+JS2MIZo7n/hmxMNatvXFVrpT2eyQxZGGaA3Rzn+0BUj/9PZo+2MD3vYh9CKyICHCkTy6hHLt7dOj6x/7I035Dik5KMw6EaXD28nwMER3OE7jBZC3Ka+O/hnyFSCuah+lYZW+R99LAaus=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1752691692; c=relaxed/simple;
+	bh=8n3WqsdGagN8W0DhZryy0a4hrWcsi0O0hz8Trf27+yI=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
+	 In-Reply-To:Content-Type; b=WJySMKSX5rKog7RqCVGimOUNeJg4jPdPKX8a/FeSACehyHmw1xuttpinG1TQxazPRtZaJrEExlAYYPjRAyTzoDNDlKFzsqh/cbIcPAbzDEc0hR7MWQUZs1vhKKs/rKcuBKCD2VgBbmMR3OYMG+uxoSjwDKpuocgPcSFnybet/yg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=H6DkAmrb; arc=none smtp.client-ip=198.47.19.246
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelvem-sh01.itg.ti.com ([10.180.77.71])
+	by fllvem-ot04.ext.ti.com (8.15.2/8.15.2) with ESMTP id 56GIlX0E305357;
+	Wed, 16 Jul 2025 13:47:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1752691653;
+	bh=qTEuwqLVvtb64mUYPFpiLTtsuvwj0j87WEm1+Xxkd+I=;
+	h=Date:Subject:From:To:CC:References:In-Reply-To;
+	b=H6DkAmrbZImWtMmL0l7ALuZmwb995zdh4lcoJMgHxQ4X6lH7uGXiFW8Y+xBoE5HZV
+	 jSThy56gsvKPiTexmMsfnsBP51twch0KBWdvO9wIhxaN7aJXjBCBr7EK/W7B3Ri4d/
+	 j4ALKJ6ckJ8c7OexHKHczYYMHL75JzwgLZnvyB90=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+	by lelvem-sh01.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 56GIlXvV3817913
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
+	Wed, 16 Jul 2025 13:47:33 -0500
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Wed, 16
+ Jul 2025 13:47:33 -0500
+Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55 via
+ Frontend Transport; Wed, 16 Jul 2025 13:47:33 -0500
+Received: from [128.247.81.105] (judy-hp.dhcp.ti.com [128.247.81.105])
+	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 56GIlXkW919838;
+	Wed, 16 Jul 2025 13:47:33 -0500
+Message-ID: <fb2cc029-796e-4bc7-a1fa-b43256a86c39@ti.com>
+Date: Wed, 16 Jul 2025 13:47:33 -0500
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: KL1PR06MB6395:EE_|TYZPR06MB6748:EE_
-X-MS-Office365-Filtering-Correlation-Id: 062642b5-18cc-40ff-12a3-08ddc3538f77
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|7416014|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?Q2JTNmZlSm1BTE95TEI4OHZWb0VqNXZNcjlFSEJxelEwS2pxOFN5a1Yzd0F5?=
- =?utf-8?B?eXJyUmJ0cE5KSG9Oc29Fa1daN0JTTmRZV2I5cDlIR1gxUlk5OW04dU9NU2JL?=
- =?utf-8?B?UGlKcjNyTXpSanJubXFLL3k3VWZXcjhEU01yMzFBOGNGSnIrTzI4Yjk3VWJX?=
- =?utf-8?B?cmE3QW1wV0pheEdJMVFPWWk3OGRQS0FEaGliVm03dzh3M2tRVHB3TVlrQVZK?=
- =?utf-8?B?b091RWNXY1lJeHBoS1R4K21IQXMzdVJTbGdoRG1oVHhBMnVpRmw1L1FTS3Iz?=
- =?utf-8?B?dHFRdXNYTDRpWno5cWNidHJ2UlhuQ2RDZ3Bja094WGlrMnJwQS9vSHNZM0dL?=
- =?utf-8?B?VHhEUDgwdjRZRGVVKzFoRVRyWTdwUitRRWFmTXRsNmFyaW01YTlUeE5KRUNB?=
- =?utf-8?B?V25tUng4eWJUUFI3NjdLWmhrZTJlSzdsbS9BVkhRT1MzLzg5WGpuSWNMeTZm?=
- =?utf-8?B?V1ppVEIvLzZiTStHMzh4WTZWUHE0dzB1dGMxNWtVdG1ud083dGNuUHc1KzZD?=
- =?utf-8?B?dmdYUnpXZ2xCY3UzeHBIYUFFM2pVTWN2SExpdnMzQStDaUt5akJyTElvRDg5?=
- =?utf-8?B?RkQxODdITThtRmVlUUdCRk1GMmJJakRFOFY2KzJST0tQS3NpRFpvdjdaUm1s?=
- =?utf-8?B?UU9EZnp5OTVka3FHZGgxZXZFSjJWeWZ2OGh3K2d3UjJHdlpnWXJvUkczaStD?=
- =?utf-8?B?WEs3QWJiRW1qdFJpOGNPNTBhZUhrN3MxSWM5YmxWc2FFalJjV3FnVVFCVnVj?=
- =?utf-8?B?QmN1TGZaZmtOSy8vVk9KT1RaZURvTmZTdk8rOWxPVEZ2SWI4cWoxamNvU3pu?=
- =?utf-8?B?dHArUWpLYkhUaEhCMHk3cm1adjRpMHNlcHNtT051N0dTaTl5d3dUUzRkaFpZ?=
- =?utf-8?B?UU9MS2h3RVNhU2o1c29USGwxMW8vcTNqUXNyeHFiamQyRnhJOEJHL3BKTGgz?=
- =?utf-8?B?ZjdIVmJQSnZiT2xJZGFGaVB5cVFaNUNwcVdlK0g0dFJJY0FhTHd2Nmh2eW04?=
- =?utf-8?B?bDhPb3dTcnY3K0sveVVTYVFreUlSV3BLNEpmQXkrOEdqeU4xVjBTN2pKa2p5?=
- =?utf-8?B?ZEIwcEZPSWdHRHMxbFNubm5SRDBITFcveHAzbVFOMUM3cHJIOXQ0K09WNUNM?=
- =?utf-8?B?NDFRYzRuaTgzcnR6cStDaEpleDVKSEpoUHYrWmhrNzNiaVVEMUoxVzFpMnlv?=
- =?utf-8?B?NTgvcEh2U2ppOGNpOVhTenVCQkZnck1FOGU5RHFhazRtb0x3RVNCOFhXM1Vy?=
- =?utf-8?B?c25Gcms4UGNXZWlsWm1mWXd0eDRYc3U5a3l6Nit0WUdwU08za085R2lGallz?=
- =?utf-8?B?RDU4MzNrMkVVMHJpMHhNWGhna1JYc0VScWhaTTFoM1Q4RjFtd1ZydnloWGdx?=
- =?utf-8?B?dGhLbWNmeXRHNDV1SEFHbVhqMUVRcVIrQis5V1phRWNzMjZaVWdEQk1jRnMx?=
- =?utf-8?B?QWhld29UeTVaREVwQXo0S1kvUmRyTDJ1TDIyMGg1ZFhtWUY1U3pvQ1QvWVhp?=
- =?utf-8?B?ZkF0cWFyL0ZBd2VwQlRTV1dhdC9RTis4QTJmTERKa0ZiQW4yVkpXNVpNL3Jv?=
- =?utf-8?B?NWpaWEI5QzhCVE5VL0hZUVFub0g3MDFvdWVRaXlrOW5FYlBPOVFNM2dLTmo4?=
- =?utf-8?B?bzNvZnVWKytNKzB6NEhCRXQwSGg5OEtHR3RwUGs3Y2J0VFZ4SGVQOXY1VGkv?=
- =?utf-8?B?c0xxTFMrSE14eXRvSEJFSko0UDlxSmZFWGJlYmxUaFZkTDB0MERRRDYxdzRB?=
- =?utf-8?B?YlgxOFUxUmIxQXAxbmpMaHpQUnZjU2NPZjRjb0xNK2MyczBPRTRGZHBPYlVh?=
- =?utf-8?B?dG9JZWhtdExMMTB6VDhXakY5S2ZJeEx4QmtyNHdJQjB0WWJkQWVMNDJGbWho?=
- =?utf-8?B?QXNKK1dHS0M5SWI0M0FPNEhRWDBIblZGSEFlS0hITXpxYnRMVUxZZGlhRVlX?=
- =?utf-8?Q?m89oGxxfj4I=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR06MB6395.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?NEJSU0hMdnJjdlQ4ZEFnSFd6UnRmSFZIZXpWVWhlL0M5TDFYTGxkWmVlejVS?=
- =?utf-8?B?b0VOYnllR1JzUGlIOWdqc2gvVW1mcCs2TWQyclcrT1JoaHBKMExwSlVmNlVF?=
- =?utf-8?B?NmwwOFRONG92TW5lRGlvU01KbnIxNnhlK2Fid3ppTHdqOXFOZ3lpWWw3cEFE?=
- =?utf-8?B?T2VNeTdjQk5vc1lqVnJJUU5wbEFzMFFSaTVITHZEbEU0aURvSy9lZ2dzandp?=
- =?utf-8?B?dEhheUdNRS9XLzJDOXFYRUx1UVpjb3cwbE9DR2F2OS9yQWdZSUZ1MDZBUXMy?=
- =?utf-8?B?Y2hDbnM2TkdrS3hpQjdSZ1ZzZFRMOUUvTFowcDkwR0Vab2RhY0dadzQxNDdl?=
- =?utf-8?B?aXkyOVN3ZjcyZXJ6Rml4NmlkVVVZRlVEQWRqZzJKTWUwQitpWjNYL25aM2JE?=
- =?utf-8?B?dlB0cXU4c3FoendTOUV2UXBNdzNFMzkycmFFOGszVWczOVRZdkRxM1BWVkcw?=
- =?utf-8?B?M0ZPczl1SGl0cDZpZks2aDl0dzdrWlRhYmRNU2JhMHl4UERqSms3bXh2c29U?=
- =?utf-8?B?cDZpbG95Nm1RWFBYY3hPQnhiZFhjcDl4VE5SVEhkc3F3dGJuOFRtMFBDays1?=
- =?utf-8?B?UFNZTnlSVlI2QmlZdDJWWjFXOFhuTGhQVUNaeVJudU11QngxQW81Z0F6THZM?=
- =?utf-8?B?bkNyQ3pwc2NMTlFqOGM4VUt3TmVnTXU0d3dzOHdENmxKMC9ETXltdjVPNEJ3?=
- =?utf-8?B?blBwVXlwcW1IRWVsOWpqc2h3NytRdDZNSGJVb2xjbHVCVnNhMkEvSXlyQThs?=
- =?utf-8?B?R0IrRUl2ajVvQnFnTHYxTW0vWXJNSlNaNXpBanZjT0M3cVpoY0hzT3lsdis0?=
- =?utf-8?B?YXU4ZHBkL1d2Y25iQ0k5M3hZVDYra2RxV25FUFN2UXdLbG83TVhLWCtmTC9D?=
- =?utf-8?B?MEJKMk95ekVqUjVqUHcxK1N3NzNaSXI3WHRmRVRCKzcyRmdFY3g2TFcrRmZl?=
- =?utf-8?B?WTkyRFJvcFV1RHVEMmVwZ3A1dTJmVkJVelRNMFcxR21uVHo5dW10YVl5NEwx?=
- =?utf-8?B?SWxLeXB2TXJsUG5jVW43VGpIZ1pDUDg3UWhKSVJJZEp4RFJPQ2xqcWxxVU1F?=
- =?utf-8?B?ZDhiekkyY3l5cnFqcXhidzE0UUw3b3kwamJ1Nk8zSFR4a1FWYWJ2NU1qbXBV?=
- =?utf-8?B?VVZxTjRhZnFkTG1TTEVTVTNOUG1Rc2dvZjdPK0hvYUR3dzFjM0JlTWV6VHg0?=
- =?utf-8?B?ZEM0VDVuY0cxaU9hSm5MYlllQzcrN0FjODJ6N0x1eHZ5amZOak1TUTlheEZr?=
- =?utf-8?B?d3kxdzJNbm5sdnM5US80czRJK1NvMTZIdytyVTdZendvQW5ndGZHTm9RcE56?=
- =?utf-8?B?M1pPZU5keGFIOEkwV0xiMytZeXNVVUsyakRCQWp2aGlzTEJxbjVabFU0aUJO?=
- =?utf-8?B?eEdvZG9UcWJBTmltM0l2UzJYNlBmWjNHWDd4YjZwaUNJUzRPbjJEUUUreTFW?=
- =?utf-8?B?bTlDbEQ5Ulp3ajdtWXVKMGtpck5zNVdrYklHRlNUTjQyMEVoZU9vVDQvQmtx?=
- =?utf-8?B?cW9MbVM4amlxNnRWWWFKc1J6U25vUEJyZXR1Zm53WVdIdHRZUkJ1VEpxWDE4?=
- =?utf-8?B?TCtMUktkQlFSUDgzK2xJRXlMUW5xY0pyc0FHZGVlL0NWZ1BiM25JbC9LdGZY?=
- =?utf-8?B?U2NGOWQxZVF0TklKbDFGbXU1L3hNRGtGVFRoVlhSZDIrYWkzTE1lb3F3ekkx?=
- =?utf-8?B?bkQxa0VVZllTbUZyNGwvR3Q4a1dSNjh6Ym01TjhCUmMwZ0YzN0dkQjUyT2pB?=
- =?utf-8?B?aDNvU1pDNTJBRkppZ25zWGthYXM3d0pWdWorWlQ2ejNBOUhHV3QwSTJxdWp0?=
- =?utf-8?B?SmhFU25wMExvaDZmbDJwb2h3MDFjR2h0RTdGOXl5T28wTWNJbFMyb2ZpZlEy?=
- =?utf-8?B?a0FNdm41b3RVNXZKNDVYbHVDcnBXZVFDdzFZN3BlSGhncExaSHVIeHRxNXk4?=
- =?utf-8?B?ZEt4MWpaY2xPeVhkbCtXS3ZDSFBQL2svak1rbkVMeTRuTXd0U09WeENhY05I?=
- =?utf-8?B?cjM4YThVMHV2b3ZXcnljdDhLQWp0V1pJZFYybVlraEJ1Rk1vNjJmV3FVdEVv?=
- =?utf-8?B?U0xyNGRKdUYzUTdDTFh6REJ3REphMEhhRmFWeWFyeldJQ3p0NWI2MzNaQjlE?=
- =?utf-8?B?d1NMSWV5dnk3YW9MSEZ6dTEzMVdjK1pYS0g3blpDb01qbXR0WEVNcnAvT1B4?=
- =?utf-8?B?U1E9PQ==?=
-X-OriginatorOrg: portwell.com.tw
-X-MS-Exchange-CrossTenant-Network-Message-Id: 062642b5-18cc-40ff-12a3-08ddc3538f77
-X-MS-Exchange-CrossTenant-AuthSource: KL1PR06MB6395.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2025 03:56:21.5499
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5e309f7e-c3ee-443b-8668-97701d998b2c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FDnLmmVTAlpriA5+rnLzg6eitBMuvnnh/TsJA4k5uRCNJO9WFnlsfEA7EfhnXu2fIMyiNhA4qqiWz8Px+SLaM6YVqiGsF4qRSAzpcaXICTQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB6748
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/2] watchdog: rti_wdt: Add reaction control
+From: Judith Mendez <jm@ti.com>
+To: Guenter Roeck <linux@roeck-us.net>, Andrew Davis <afd@ti.com>
+CC: Wim Van Sebroeck <wim@linux-watchdog.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>,
+        <linux-watchdog@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20250707180002.3918865-1-jm@ti.com>
+ <20250707180002.3918865-3-jm@ti.com>
+ <cc37e797-d3e5-444d-8016-c437a0534001@roeck-us.net>
+ <d96541bc-644d-4c90-b9f7-1e4afd16aeb6@ti.com>
+ <953f78a8-3928-479d-8700-dfe1cea15454@roeck-us.net>
+ <299c363a-23c7-4522-b58c-100f49c4eece@ti.com>
+Content-Language: en-US
+In-Reply-To: <299c363a-23c7-4522-b58c-100f49c4eece@ti.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-Integrates Vcore, VDIMM, 3.3V, 5V, 12V voltage and system temperature
-monitoring into the driver via the hwmon subsystem, enabling
-standardized reporting via tools like lm-sensors.
+Hi all,
 
-Signed-off-by: Yen-Chi Huang <jesse.huang@portwell.com.tw>
----
+On 7/10/25 9:08 AM, Judith Mendez wrote:
+> Hi Guenter, Andrew,
+> 
+> On 7/7/25 5:55 PM, Guenter Roeck wrote:
+>> On Mon, Jul 07, 2025 at 04:49:31PM -0500, Andrew Davis wrote:
+>>> On 7/7/25 3:58 PM, Guenter Roeck wrote:
+>>>> On Mon, Jul 07, 2025 at 01:00:02PM -0500, Judith Mendez wrote:
+>>>>> This allows to configure reaction between NMI and reset for WWD.
+>>>>>
+>>>>> On K3 SoC's other than AM62L SoC [0], watchdog reset output is routed
+>>>>> to the ESM module which can subsequently route the signal to safety
+>>>>> master or SoC reset. On AM62L, the watchdog reset output is routed
+>>>>> to the SoC HW reset block. So, add a new compatible for AM62l to add
+>>>>> SoC data and configure reaction to reset instead of NMI.
+>>>>>
+>>>>> [0] https://www.ti.com/product/AM62L
+>>>>> Signed-off-by: Judith Mendez <jm@ti.com>
+>>>>> ---
+>>>>>    drivers/watchdog/rti_wdt.c | 32 ++++++++++++++++++++++++++++----
+>>>>>    1 file changed, 28 insertions(+), 4 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/watchdog/rti_wdt.c b/drivers/watchdog/rti_wdt.c
+>>>>> index d1f9ce4100a8..c9ee443c70af 100644
+>>>>> --- a/drivers/watchdog/rti_wdt.c
+>>>>> +++ b/drivers/watchdog/rti_wdt.c
+>>>>> @@ -35,7 +35,8 @@
+>>>>>    #define RTIWWDRXCTRL    0xa4
+>>>>>    #define RTIWWDSIZECTRL    0xa8
+>>>>> -#define RTIWWDRX_NMI    0xa
+>>>>> +#define RTIWWDRXN_RST    0x5
+>>>>> +#define RTIWWDRXN_NMI    0xa
+>>>>>    #define RTIWWDSIZE_50P        0x50
+>>>>>    #define RTIWWDSIZE_25P        0x500
+>>>>> @@ -63,22 +64,29 @@
+>>>>>    static int heartbeat;
+>>>>> +struct rti_wdt_data {
+>>>>> +    bool reset;
+>>>>> +};
+>>>>> +
+>>>>>    /*
+>>>>>     * struct to hold data for each WDT device
+>>>>>     * @base - base io address of WD device
+>>>>>     * @freq - source clock frequency of WDT
+>>>>>     * @wdd  - hold watchdog device as is in WDT core
+>>>>> + * @data - hold configuration data
+>>>>>     */
+>>>>>    struct rti_wdt_device {
+>>>>>        void __iomem        *base;
+>>>>>        unsigned long        freq;
+>>>>>        struct watchdog_device    wdd;
+>>>>> +    const struct rti_wdt_data *data;
+>>>>>    };
+>>>>>    static int rti_wdt_start(struct watchdog_device *wdd)
+>>>>>    {
+>>>>>        u32 timer_margin;
+>>>>>        struct rti_wdt_device *wdt = watchdog_get_drvdata(wdd);
+>>>>> +    u8 reaction;
+>>>>>        int ret;
+>>>>>        ret = pm_runtime_resume_and_get(wdd->parent);
+>>>>> @@ -101,8 +109,13 @@ static int rti_wdt_start(struct 
+>>>>> watchdog_device *wdd)
+>>>>>         */
+>>>>>        wdd->min_hw_heartbeat_ms = 520 * wdd->timeout + MAX_HW_ERROR;
+>>>>> -    /* Generate NMI when wdt expires */
+>>>>> -    writel_relaxed(RTIWWDRX_NMI, wdt->base + RTIWWDRXCTRL);
+>>>>> +    /* Reset device if wdt serviced outside of window or generate 
+>>>>> NMI if available */
+>>>>
+>>>> Shouldn't that be "or generate NMI if _not_ available" ?
+>>>>
+>>>
+>>> For almost all the K3 devices, the WDT has two selectable outputs, 
+>>> one resets
+>>> the device directly, the other is this "NMI" which is wired to an ESM 
+>>> module
+>>> which can take other actions (but usually it just also resets the 
+>>> device).
+>>> For AM62L that second NMI output is not wired (no ESM module), so our 
+>>> only
+>>> choice is to set the WDT to direct reset mode.
+>>>
+>>> The wording is a little strange, but the "or generate NMI if 
+>>> available" meaning
+>>> if NMI is available, then do that. Reset being the fallback when 
+>>> _not_ available.
+>>>
+>>> Maybe this would work better:
+>>>
+>>> /* If WDT is serviced outside of window, generate NMI if available, 
+>>> or reset device */
+>>>
+>>
+>> The problem is that the code doesn't match the comment. The code 
+>> checks the
+>> "reset" flag and requests a reset if available. If doesn't check an "nmi"
+>> flag.
+>>
+>> If the preference is NMI, as your comment suggests, the flag should be 
+>> named
+>> "nmi" and be set if NMI is available. That would align the code and the
+>> comment. Right now both code and comment are misleading, since the 
+>> presence
+>> of a reset flag (and setting it to false) suggests that a direct reset is
+>> not available, and that reset is preferred if available. A reset is the
+>> normally expected behavior for a watchdog, so the fact that this is _not_
+>> the case for this watchdog should be made more visible.
+> 
+> 
+> How about:
+> 
+> 
+> /* If WWDT serviced outside of window, generate NMI or reset the device
+> if NMI not available */
+> 
+> if (wdt->data->reset)
+>      reaction = RTIWWDRXN_RST;
+> else
+>      reaction = RTIWWDRXN_NMI;
 
-[Re-sending to fix message threading, no content changes since v2.]
----
- drivers/platform/x86/portwell-ec.c | 178 ++++++++++++++++++++++++++++-
- 1 file changed, 176 insertions(+), 2 deletions(-)
+Since there is no response, I assume no one has an issue with the above
+comment, so will respin the series with that change.
 
-diff --git a/drivers/platform/x86/portwell-ec.c b/drivers/platform/x86/portwell-ec.c
-index a68522aaa3fa..ac113aaf8bb0 100644
---- a/drivers/platform/x86/portwell-ec.c
-+++ b/drivers/platform/x86/portwell-ec.c
-@@ -25,6 +25,7 @@
- #include <linux/bitfield.h>
- #include <linux/dmi.h>
- #include <linux/gpio/driver.h>
-+#include <linux/hwmon.h>
- #include <linux/init.h>
- #include <linux/io.h>
- #include <linux/ioport.h>
-@@ -52,16 +53,64 @@
- #define PORTWELL_EC_FW_VENDOR_LENGTH     3
- #define PORTWELL_EC_FW_VENDOR_NAME       "PWG"
- 
-+#define PORTWELL_EC_ADC_MAX              1023
-+
- static bool force;
- module_param(force, bool, 0444);
- MODULE_PARM_DESC(force, "Force loading EC driver without checking DMI boardname");
- 
-+struct pwec_hwmon_data {
-+	const char *label;
-+	u8 lsb_reg;
-+	u32 scale;
-+};
-+
-+struct pwec_data {
-+	const struct pwec_hwmon_data *hwmon_in_data;
-+	int hwmon_in_num;
-+	const struct pwec_hwmon_data *hwmon_temp_data;
-+	int hwmon_temp_num;
-+	const struct hwmon_channel_info * const *hwmon_info;
-+};
-+
-+static const struct pwec_hwmon_data pwec_nano_hwmon_in[] = {
-+	{ "Vcore", 0x20, 3000 },
-+	{ "VDIMM", 0x32, 3000 },
-+	{ "3.3V",  0x22, 6000 },
-+	{ "5V",    0x24, 9600 },
-+	{ "12V",   0x30, 19800 },
-+};
-+
-+static const struct pwec_hwmon_data pwec_nano_hwmon_temp[] = {
-+	{ "System Temperature", 0x02, 0 },
-+};
-+
-+static const struct hwmon_channel_info *pwec_nano_hwmon_info[] = {
-+	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_LABEL),
-+	HWMON_CHANNEL_INFO(in,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL),
-+	NULL
-+};
-+
-+static const struct pwec_data pwec_board_data_nano = {
-+	.hwmon_in_data = pwec_nano_hwmon_in,
-+	.hwmon_in_num = ARRAY_SIZE(pwec_nano_hwmon_in),
-+	.hwmon_temp_data = pwec_nano_hwmon_temp,
-+	.hwmon_temp_num = ARRAY_SIZE(pwec_nano_hwmon_temp),
-+	.hwmon_info = pwec_nano_hwmon_info
-+};
-+
- static const struct dmi_system_id pwec_dmi_table[] = {
- 	{
- 		.ident = "NANO-6064 series",
- 		.matches = {
- 			DMI_MATCH(DMI_BOARD_NAME, "NANO-6064"),
- 		},
-+		.driver_data = (void *)&pwec_board_data_nano,
- 	},
- 	{ }
- };
-@@ -79,6 +128,19 @@ static u8 pwec_read(u8 address)
- 	return inb(PORTWELL_EC_IOSPACE + address);
- }
- 
-+static u16 pwec_read16_stable(u8 lsb_reg)
-+{
-+	u8 lsb, msb, old_msb;
-+
-+	do {
-+		old_msb = pwec_read(lsb_reg+1);
-+		lsb = pwec_read(lsb_reg);
-+		msb = pwec_read(lsb_reg+1);
-+	} while (msb != old_msb);
-+
-+	return (msb << 8) | lsb;
-+}
-+
- /* GPIO functions */
- 
- static int pwec_gpio_get(struct gpio_chip *chip, unsigned int offset)
-@@ -204,6 +266,110 @@ static struct watchdog_device ec_wdt_dev = {
- 	.max_timeout = PORTWELL_WDT_EC_MAX_COUNT_SECOND,
- };
- 
-+/* HWMON functions */
-+
-+static umode_t pwec_hwmon_is_visible(const void *data, enum hwmon_sensor_types type,
-+		u32 attr, int channel)
-+{
-+	const struct pwec_data *d = data;
-+
-+	switch (type) {
-+	case hwmon_temp:
-+		if (channel < d->hwmon_temp_num)
-+			return 0444;
-+		break;
-+	case hwmon_in:
-+		if (channel < d->hwmon_in_num)
-+			return 0444;
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
-+static int pwec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-+			   u32 attr, int channel, long *val)
-+{
-+	struct pwec_data *data = dev_get_drvdata(dev);
-+	u16 tmp;
-+
-+	switch (type) {
-+	case hwmon_temp:
-+		if (channel < data->hwmon_temp_num) {
-+			*val = pwec_read(data->hwmon_temp_data[channel].lsb_reg) * 1000;
-+			return 0;
-+		}
-+		break;
-+	case hwmon_in:
-+		if (channel < data->hwmon_in_num) {
-+			tmp = pwec_read16_stable(data->hwmon_in_data[channel].lsb_reg);
-+			*val = (data->hwmon_in_data[channel].scale * tmp) / PORTWELL_EC_ADC_MAX;
-+			return 0;
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return -EOPNOTSUPP;
-+}
-+
-+static int pwec_hwmon_read_string(struct device *dev, enum hwmon_sensor_types type,
-+				  u32 attr, int channel, const char **str)
-+{
-+	struct pwec_data *data = dev_get_drvdata(dev);
-+
-+	switch (type) {
-+	case hwmon_temp:
-+		if (channel < data->hwmon_temp_num) {
-+			*str = data->hwmon_temp_data[channel].label;
-+			return 0;
-+		}
-+		break;
-+	case hwmon_in:
-+		if (channel < data->hwmon_in_num) {
-+			*str = data->hwmon_in_data[channel].label;
-+			return 0;
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return -EOPNOTSUPP;
-+}
-+
-+static const struct hwmon_ops pwec_hwmon_ops = {
-+	.is_visible = pwec_hwmon_is_visible,
-+	.read = pwec_hwmon_read,
-+	.read_string = pwec_hwmon_read_string,
-+};
-+
-+static struct hwmon_chip_info pwec_chip_info = {
-+	.ops = &pwec_hwmon_ops,
-+};
-+
-+static int pwec_hwmon_init(struct device *dev)
-+{
-+	struct pwec_data *data = dev_get_platdata(dev);
-+	void *hwmon;
-+	int ret;
-+
-+	if (!IS_REACHABLE(CONFIG_HWMON))
-+		return 0;
-+
-+	pwec_chip_info.info = data->hwmon_info;
-+	hwmon = devm_hwmon_device_register_with_info(dev, "portwell_ec", data, &pwec_chip_info,
-+						     NULL);
-+	ret = PTR_ERR_OR_ZERO(hwmon);
-+	if (ret)
-+		dev_err(dev, "Failed to register hwmon_dev: %d\n", ret);
-+
-+	return ret;
-+}
-+
- static int pwec_firmware_vendor_check(void)
- {
- 	u8 buf[PORTWELL_EC_FW_VENDOR_LENGTH + 1];
-@@ -242,6 +408,10 @@ static int pwec_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
-+	ret = pwec_hwmon_init(&pdev->dev);
-+	if (ret < 0)
-+		return ret;
-+
- 	return 0;
- }
- 
-@@ -274,11 +444,14 @@ static struct platform_device *pwec_dev;
- 
- static int __init pwec_init(void)
- {
-+	const struct dmi_system_id *match;
- 	int ret;
- 
--	if (!dmi_check_system(pwec_dmi_table)) {
-+	match = dmi_first_match(pwec_dmi_table);
-+	if (!match) {
- 		if (!force)
- 			return -ENODEV;
-+		match = &pwec_dmi_table[0];
- 		pr_warn("force load portwell-ec without DMI check\n");
- 	}
- 
-@@ -286,7 +459,8 @@ static int __init pwec_init(void)
- 	if (ret)
- 		return ret;
- 
--	pwec_dev = platform_device_register_simple("portwell-ec", -1, NULL, 0);
-+	pwec_dev = platform_device_register_data(NULL, "portwell-ec", -1, match->driver_data,
-+						 sizeof(struct pwec_data));
- 	if (IS_ERR(pwec_dev)) {
- 		platform_driver_unregister(&pwec_driver);
- 		return PTR_ERR(pwec_dev);
--- 
-2.34.1
+~ Judith
+
+
+
 
