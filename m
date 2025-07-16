@@ -1,82 +1,82 @@
-Return-Path: <linux-watchdog+bounces-3875-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3876-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9298FB07D28
-	for <lists+linux-watchdog@lfdr.de>; Wed, 16 Jul 2025 20:50:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84F85B07D4E
+	for <lists+linux-watchdog@lfdr.de>; Wed, 16 Jul 2025 21:01:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D1D317A2612
-	for <lists+linux-watchdog@lfdr.de>; Wed, 16 Jul 2025 18:49:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BDA8658117C
+	for <lists+linux-watchdog@lfdr.de>; Wed, 16 Jul 2025 19:01:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86CF5263F5B;
-	Wed, 16 Jul 2025 18:50:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32E311BD01D;
+	Wed, 16 Jul 2025 19:01:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jcK5OyXc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jtQroIMU"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B83621D5B8;
-	Wed, 16 Jul 2025 18:50:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 716A64A06;
+	Wed, 16 Jul 2025 19:01:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752691821; cv=none; b=VXDrk9V77d5O1HSFt5j+OgN5ljUocls6XGyo2lUbMWowrl+1xckX3JUrG0rVfqhpDPGufkKePyPY9XHg6yQfNnuYU/tHtEB9q+8hdFhz9zhIwMoS3wX6tOz0NSRr9rLVobAXHHwJ2c57KUqY6wy8FONyHlBNj2rhB8eElCfeBu0=
+	t=1752692478; cv=none; b=N7e9nC4okSGGGh7yRVkcDn5U6mubZRHCPDJDiLBJ2Fv1GuNM7NyEXqsxesEe1Dq0/Ww85hqgPN7mnewAjPVw+SUCOsPV0Bkhl2EN7vm724k2S2MQ8ppPCp7aF9c1gH/aqPUA3zhg9Rwa8TcZQXYutqbzN0aRv14Ig6IKA7xAJ0E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752691821; c=relaxed/simple;
-	bh=2SsV6e/YJQJ5JZ7EBFFC80zRUBpJnuDVga7+BCm9BkU=;
+	s=arc-20240116; t=1752692478; c=relaxed/simple;
+	bh=4HgBNHGHioJJIuoe+u0aDTUZiPXfpbaZMtb61F3Tj4k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gpyZnCkvOzZrn684Tkpd0x7rQH7TGMtnHEiGQ1Fu70V6WgoTTwCglnqo6kimslLVKLaJWrdDk+ZCEgmFIgobXB/MvoSp0R4m8krwqJlHK/g3HyEzSHh0adSFFwxwRXMQQ52Hd5X25UR3/FgNnpm7kESCDwoMETBeTLATY8AHnrA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jcK5OyXc; arc=none smtp.client-ip=209.85.214.178
+	 In-Reply-To:Content-Type; b=YdNGcnFWCrpi1LvVM2EGA/d6oUejBoqHa9mdmiLLURY/iKF0FSmzicXil1kZe5Df2hAlYww7rQ5z5n2pA+5DJdfZ2QxZO3jMTeHjcJaY3eFE8H5N89UB3leDw2viVpUs+D8KseYZeJPE/47Rf9ywuivn+ApgHwkBSPEJ7wur328=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jtQroIMU; arc=none smtp.client-ip=209.85.210.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-234c5b57557so1188905ad.3;
-        Wed, 16 Jul 2025 11:50:19 -0700 (PDT)
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-74b27c1481bso188405b3a.2;
+        Wed, 16 Jul 2025 12:01:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752691819; x=1753296619; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1752692476; x=1753297276; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=55CI9qwqZZ/X+xODdWJN1T4oZqGBoQ5xLG7HeFL2fEs=;
-        b=jcK5OyXcIXlv1Xc4xISvXn5+T9o+hZIdTNppNhFGwlfl6PkoNPeAXPT3/ZOQTKFkOR
-         P8v/n+nXsViS5Qpq50i7uuOlxNsZUGM3ikmcwDh0OsG5tPTg/BH+2n0bbBejdeDUZR2z
-         RnEfkfek3ZYt6GWmFBVZcIDWWkfGmKANvqZRFRqJ2pGHLZ5QCRjtORMmcXHQNXfFU/XE
-         a8egFhcO5+QziL2o9UoDuEysVbzObOpSLOdyq4stY5IQCJLAoJ85ThmJQySDmgiqUqS4
-         fkaxqiD00yKcx5OylTEfi16V4kE+b+Qy5bKJBPsv7jtDmrYTFrJ//StbTf/s/mbWDoIK
-         173A==
+        bh=fs2uQqNG/6R2lnG3XYbRegbLMspSkDWgL1TK60SKjDw=;
+        b=jtQroIMU49SJSPOA360t5EBacZjVBtK9chSOP0bBnhUbK8AVe9wwKea9sPIxrSQZ7/
+         /993NrrIePpJvKSssVI3kLAkuEcYev9MNr3ntD5R6uoXizhSLrfT8vOCJItRdTFI0ifD
+         WIpn4lO5/NUTGAqsYq0XT2WkgVH/5YpsSNbZHsU21RntIGCL0QwAybRC7U/jHMgwiZsZ
+         biLN23cOxA4nAQbf4ifb73wduaKWCureg4+U7fYc1Fx+qIoxNQ+zJtX2kjndgi/Uksyr
+         Fm78tKcJiWbElickF9VqFBQktHjUC8V/evtryAp+Njm8EYH/zBUVHpJo9KIE/BN2JzCV
+         tvsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752691819; x=1753296619;
+        d=1e100.net; s=20230601; t=1752692476; x=1753297276;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=55CI9qwqZZ/X+xODdWJN1T4oZqGBoQ5xLG7HeFL2fEs=;
-        b=gTt5yOal+A4aJj0LHhCvzpeSr6M7yrmL0ajSnQxLmWjW6KXOcuC8LloEHNQ9SIhv/j
-         4OVMuwA1bxwn8JV6f27iWDjHqN0Ty/Ppef9vqOkJwEBkAS8cj9sTmN8VVWZRQTLz2QCD
-         hwGHAhMb9Bpg/NCj+l/ldW33zNAkILU+8Tl19Kym7eNzPWvW2B6lKJPp5kkM4wHSrdAW
-         hbiWDwhWzCfeXoBLNUkllaN2SeQoBounZGbkVqgqUBPRO70IOwJNtSS/MXuph1ak+sMc
-         wSmJJAFWq/txsw33+w2PIYvdYKQHtmLeRXkyoMZVDkXS1xcIGuxNVFLEOajikXjl/bX2
-         4Iyg==
-X-Forwarded-Encrypted: i=1; AJvYcCVVyCHhB4c1BJYof/Wbq+0+7H/HKL+hBoXOL2DAVCX0H4hqvH2gYyjDqfl9xWN8kJSVqeEq2XenFgNCDD9n@vger.kernel.org, AJvYcCX00+K3ZN2f0r9Xbk9YuQI8LwdAAfgvxb/4sfa7CVMBmakZk/D15jqi87AEmnkghcjA2C0Uu9UpcfLo@vger.kernel.org, AJvYcCXUFrENnKgQQdZVsh8GbfzrFovB0SIY6uJ9A07uANBC3UB+LjnBjUZeUCij0MX8I5GKwWUcAxlo7taQLHo3y3k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJ/M8xUSPRYXTrQL019aapSDHUzNSRu6af7bpMR4kN3fKsY4Py
-	hJ/HgsqdNpyOljXwMxhnPQEVqsJpEX59wTRiyoz8BVPqZa43CNCKB3BGFbvLKw==
-X-Gm-Gg: ASbGncsbejUHnSb9vDLMeuPSOuis4+yidkNg/oQEmViz4Rcz1wZ2Y/vS4cFw9Gve9tr
-	Yx90Jenvy+GLX8OzdwJQfe9jw+v2LmlcQtbzR7ZDdArIbIdkxHTI6/Tt6/3ALtDqaVzStu7Qjs2
-	VG/gaO0JsHw88RLpIitQEGSVVCCbAyeczkRvZGemfnT3zZ3jxXuypykuW14Ll3TcP+zPB/8CCCg
-	qDAvWzdlnsqkJA1YFWtASNbmtA9UbQs6gplUnq+okRql8VPdHj7MT9Ps5suuCGiuKw8QRkCWRNv
-	ZPaRNQM486KB1Wh4pdbU5CNgY/0EiwcquxQ6yhdBtp1nZrYG/mK2Sbh9CtP8E1NU4NYnvcZCU95
-	t1+qitvk1xDWIMNT2kVDdzfiaCY86jqjZo5N9ar8daH/QBldSmrSSwsjwjNK5UdWBSCdmMB8=
-X-Google-Smtp-Source: AGHT+IE59qROXyaWOC0wCIHwcfE55x00ppkt/Riu9bhhfr3ok7cGb2r6Xp/Gp7IsCuKw6x8V7rRGaw==
-X-Received: by 2002:a17:903:acb:b0:215:8d49:e2a7 with SMTP id d9443c01a7336-23e25791562mr49992825ad.50.1752691818477;
-        Wed, 16 Jul 2025 11:50:18 -0700 (PDT)
+        bh=fs2uQqNG/6R2lnG3XYbRegbLMspSkDWgL1TK60SKjDw=;
+        b=HJmmSvDjFjYjxO/LtsOfACz/+l/75z7hDxZYmn1l3TOOaa4cFg84QRfE1y78JQHpQc
+         6c0MEXTqYcZqhLGl+0Hz8HntpNTENNzDdHiHucawNwWp/Z//EBjP3a0uVKTXN83dZvsD
+         vFKAZd/d29NkSm5SjuL+AJMqyh53dKKgXvuW7ktU61qy9mS8XODUTb/StuYpQmUxlKmX
+         e9W+9t/seOWcuSY0oGu5pb/+xtjapzW8NMhHERF/tp8FhlXZgLldQjGqarCW1fg5qJs2
+         xzRzPLRIjRsPbDyi4D1B/LI3UBFgs6S2oubuWJ5gxbgesQSJc/1AgGtzPg7m9M1cy+m3
+         FQ6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWTeemWOqzmNzSopg45Gwprx98jdIWqLm53lHlPAFPzdAoZHcaNwScbWkeclFSbtY9bhsdAnFeKQ+h/mkY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz1CC7eHONYen6qKQ0PjxfE6VlfEbj9wPsssGIblyfVhWPxFE7i
+	Zz9h5GvR7+IMdkQzFw80tI0wyesIU/lXjGf8ZEkDBNYkeo/qwBnvvd+pYqaXhA==
+X-Gm-Gg: ASbGncvNcz7F+kOdggzTB36dc0eknliwZndjoliIWkkpelCB63hEFMl54I87bl5GVXj
+	8beB1P868VWpMvGOOShjaD+GU9YezMkbIiI0xFEnXc6d5WJeKqadZoEDk4uHDaDcxE6HEOzg4NI
+	Gh0bR+GekNyfHBhzmj/CcJTfYh8HHkxw6Rn5z2zsx0NdDbD6M43RYFOH1lSgIXKAj9SlHC6N1kM
+	cx20ovHHPALIxWb3rgMiCNXaf1+MCPs06AAKW9BmAid49rzpmiibmndE/xxY0Xj6cEvBdx9/R/F
+	5hk9YwN698I0F3xTEQwXi5ELPmALaTcUUoguU3Ssul7jxRoh6euPDlvvfgxvlGQDemps+6Y2RHR
+	kN/pUWu3PgxYenjDHb/lK00T7TK+fqTdlv4PPSOEZUZXoJHztf/Mp41ijPCUe9NYj8BR3WN8=
+X-Google-Smtp-Source: AGHT+IEe4Tt0rzb7dFI2kakjzWuiDKR+AsYAYtkj/QIm5/yy0xspfQWic5kez7v5A+ftlOc11GPf6g==
+X-Received: by 2002:a05:6a00:3e0a:b0:742:aecc:c46b with SMTP id d2e1a72fcca58-756e99fc423mr5772221b3a.15.1752692475107;
+        Wed, 16 Jul 2025 12:01:15 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23de428473fsm134553595ad.13.2025.07.16.11.50.17
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74eb9f64c73sm14859060b3a.141.2025.07.16.12.01.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Jul 2025 11:50:17 -0700 (PDT)
+        Wed, 16 Jul 2025 12:01:14 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <7d2bb793-14d0-45d8-b8bd-b770cdb4ca70@roeck-us.net>
-Date: Wed, 16 Jul 2025 11:50:16 -0700
+Message-ID: <08cc0273-6c26-4ff1-b5fe-75235bca7a9f@roeck-us.net>
+Date: Wed, 16 Jul 2025 12:01:13 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -84,19 +84,13 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] watchdog: rti_wdt: Add reaction control
-To: Judith Mendez <jm@ti.com>, Andrew Davis <afd@ti.com>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Vignesh Raghavendra <vigneshr@ti.com>,
- Tero Kristo <kristo@kernel.org>, linux-watchdog@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250707180002.3918865-1-jm@ti.com>
- <20250707180002.3918865-3-jm@ti.com>
- <cc37e797-d3e5-444d-8016-c437a0534001@roeck-us.net>
- <d96541bc-644d-4c90-b9f7-1e4afd16aeb6@ti.com>
- <953f78a8-3928-479d-8700-dfe1cea15454@roeck-us.net>
- <299c363a-23c7-4522-b58c-100f49c4eece@ti.com>
+Subject: Re: [PATCH] watchdog: sbsa: Adjust keepalive timeout to avoid
+ MediaTek WS0 race condition
+To: Aaron Plattner <aplattner@nvidia.com>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Timur Tabi <ttabi@nvidia.com>
+References: <20250708233354.1551268-1-aplattner@nvidia.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -142,123 +136,89 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <299c363a-23c7-4522-b58c-100f49c4eece@ti.com>
+In-Reply-To: <20250708233354.1551268-1-aplattner@nvidia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 7/10/25 07:08, Judith Mendez wrote:
-> Hi Guenter, Andrew,
+On 7/8/25 16:33, Aaron Plattner wrote:
+> The MediaTek implementation of the sbsa_gwdt watchdog has a race
+> condition where a write to SBSA_GWDT_WRR is ignored if it occurs while
+> the hardware is processing a timeout refresh that asserts WS0.
 > 
-> On 7/7/25 5:55 PM, Guenter Roeck wrote:
->> On Mon, Jul 07, 2025 at 04:49:31PM -0500, Andrew Davis wrote:
->>> On 7/7/25 3:58 PM, Guenter Roeck wrote:
->>>> On Mon, Jul 07, 2025 at 01:00:02PM -0500, Judith Mendez wrote:
->>>>> This allows to configure reaction between NMI and reset for WWD.
->>>>>
->>>>> On K3 SoC's other than AM62L SoC [0], watchdog reset output is routed
->>>>> to the ESM module which can subsequently route the signal to safety
->>>>> master or SoC reset. On AM62L, the watchdog reset output is routed
->>>>> to the SoC HW reset block. So, add a new compatible for AM62l to add
->>>>> SoC data and configure reaction to reset instead of NMI.
->>>>>
->>>>> [0] https://www.ti.com/product/AM62L
->>>>> Signed-off-by: Judith Mendez <jm@ti.com>
->>>>> ---
->>>>>    drivers/watchdog/rti_wdt.c | 32 ++++++++++++++++++++++++++++----
->>>>>    1 file changed, 28 insertions(+), 4 deletions(-)
->>>>>
->>>>> diff --git a/drivers/watchdog/rti_wdt.c b/drivers/watchdog/rti_wdt.c
->>>>> index d1f9ce4100a8..c9ee443c70af 100644
->>>>> --- a/drivers/watchdog/rti_wdt.c
->>>>> +++ b/drivers/watchdog/rti_wdt.c
->>>>> @@ -35,7 +35,8 @@
->>>>>    #define RTIWWDRXCTRL    0xa4
->>>>>    #define RTIWWDSIZECTRL    0xa8
->>>>> -#define RTIWWDRX_NMI    0xa
->>>>> +#define RTIWWDRXN_RST    0x5
->>>>> +#define RTIWWDRXN_NMI    0xa
->>>>>    #define RTIWWDSIZE_50P        0x50
->>>>>    #define RTIWWDSIZE_25P        0x500
->>>>> @@ -63,22 +64,29 @@
->>>>>    static int heartbeat;
->>>>> +struct rti_wdt_data {
->>>>> +    bool reset;
->>>>> +};
->>>>> +
->>>>>    /*
->>>>>     * struct to hold data for each WDT device
->>>>>     * @base - base io address of WD device
->>>>>     * @freq - source clock frequency of WDT
->>>>>     * @wdd  - hold watchdog device as is in WDT core
->>>>> + * @data - hold configuration data
->>>>>     */
->>>>>    struct rti_wdt_device {
->>>>>        void __iomem        *base;
->>>>>        unsigned long        freq;
->>>>>        struct watchdog_device    wdd;
->>>>> +    const struct rti_wdt_data *data;
->>>>>    };
->>>>>    static int rti_wdt_start(struct watchdog_device *wdd)
->>>>>    {
->>>>>        u32 timer_margin;
->>>>>        struct rti_wdt_device *wdt = watchdog_get_drvdata(wdd);
->>>>> +    u8 reaction;
->>>>>        int ret;
->>>>>        ret = pm_runtime_resume_and_get(wdd->parent);
->>>>> @@ -101,8 +109,13 @@ static int rti_wdt_start(struct watchdog_device *wdd)
->>>>>         */
->>>>>        wdd->min_hw_heartbeat_ms = 520 * wdd->timeout + MAX_HW_ERROR;
->>>>> -    /* Generate NMI when wdt expires */
->>>>> -    writel_relaxed(RTIWWDRX_NMI, wdt->base + RTIWWDRXCTRL);
->>>>> +    /* Reset device if wdt serviced outside of window or generate NMI if available */
->>>>
->>>> Shouldn't that be "or generate NMI if _not_ available" ?
->>>>
->>>
->>> For almost all the K3 devices, the WDT has two selectable outputs, one resets
->>> the device directly, the other is this "NMI" which is wired to an ESM module
->>> which can take other actions (but usually it just also resets the device).
->>> For AM62L that second NMI output is not wired (no ESM module), so our only
->>> choice is to set the WDT to direct reset mode.
->>>
->>> The wording is a little strange, but the "or generate NMI if available" meaning
->>> if NMI is available, then do that. Reset being the fallback when _not_ available.
->>>
->>> Maybe this would work better:
->>>
->>> /* If WDT is serviced outside of window, generate NMI if available, or reset device */
->>>
->>
->> The problem is that the code doesn't match the comment. The code checks the
->> "reset" flag and requests a reset if available. If doesn't check an "nmi"
->> flag.
->>
->> If the preference is NMI, as your comment suggests, the flag should be named
->> "nmi" and be set if NMI is available. That would align the code and the
->> comment. Right now both code and comment are misleading, since the presence
->> of a reset flag (and setting it to false) suggests that a direct reset is
->> not available, and that reset is preferred if available. A reset is the
->> normally expected behavior for a watchdog, so the fact that this is _not_
->> the case for this watchdog should be made more visible.
+> Detect this based on the hardware implementer and adjust wdd->timeout to
+> avoid the race.
 > 
+> Signed-off-by: Aaron Plattner <aplattner@nvidia.com>
+> Acked-by: Timur Tabi <ttabi@nvidia.com>
+> ---
+>   drivers/watchdog/sbsa_gwdt.c | 52 +++++++++++++++++++++++++++++++++---
+>   1 file changed, 49 insertions(+), 3 deletions(-)
 > 
-> How about:
-> 
-> 
-> /* If WWDT serviced outside of window, generate NMI or reset the device
-> if NMI not available */
-> 
-> if (wdt->data->reset)
->      reaction = RTIWWDRXN_RST;
-> else
->      reaction = RTIWWDRXN_NMI;
-> 
+> diff --git a/drivers/watchdog/sbsa_gwdt.c b/drivers/watchdog/sbsa_gwdt.c
+> index 5f23913ce3b4..81012dbe9088 100644
+> --- a/drivers/watchdog/sbsa_gwdt.c
+> +++ b/drivers/watchdog/sbsa_gwdt.c
+> @@ -75,11 +75,17 @@
+>   #define SBSA_GWDT_VERSION_MASK  0xF
+>   #define SBSA_GWDT_VERSION_SHIFT 16
+>   
+> +#define SBSA_GWDT_IMPL_MASK	0x7FF
+> +#define SBSA_GWDT_IMPL_SHIFT	0
+> +#define SBSA_GWDT_IMPL_MEDIATEK	0x426
+> +
+>   /**
+>    * struct sbsa_gwdt - Internal representation of the SBSA GWDT
+>    * @wdd:		kernel watchdog_device structure
+>    * @clk:		store the System Counter clock frequency, in Hz.
+>    * @version:            store the architecture version
+> + * @need_ws0_race_workaround:
+> + *			indicate whether to adjust wdd->timeout to avoid a race with WS0
+>    * @refresh_base:	Virtual address of the watchdog refresh frame
+>    * @control_base:	Virtual address of the watchdog control frame
+>    */
+> @@ -87,6 +93,7 @@ struct sbsa_gwdt {
+>   	struct watchdog_device	wdd;
+>   	u32			clk;
+>   	int			version;
+> +	bool			need_ws0_race_workaround;
+>   	void __iomem		*refresh_base;
+>   	void __iomem		*control_base;
+>   };
+> @@ -161,6 +168,31 @@ static int sbsa_gwdt_set_timeout(struct watchdog_device *wdd,
+>   		 */
+>   		sbsa_gwdt_reg_write(((u64)gwdt->clk / 2) * timeout, gwdt);
+>   
+> +	/*
+> +	 * Some watchdog hardware has a race condition where it will ignore
+> +	 * sbsa_gwdt_keepalive() if it is called at the exact moment that a
+> +	 * timeout occurs and WS0 is being asserted. Unfortunately, the default
+> +	 * behavior of the watchdog core is very likely to trigger this race
+> +	 * when action=0 because it programs WOR to be half of the desired
+> +	 * timeout, and watchdog_next_keepalive() chooses the exact same time to
+> +	 * send keepalive pings.
+> +	 *
+> +	 * This triggers a race where sbsa_gwdt_keepalive() can be called right
+> +	 * as WS0 is being asserted, and affected hardware will ignore that
+> +	 * write and continue to assert WS0. After another (timeout / 2)
+> +	 * seconds, the same race happens again. If the driver wins then the
+> +	 * explicit refresh will reset WS0 to false but if the hardware wins,
+> +	 * then WS1 is asserted and the system resets.
+> +	 *
+> +	 * Avoid the problem by scheduling keepalive heartbeats one second
+> +	 * earlier than the WOR timeout.
+> +	 *
+> +	 * This workaround might not be needed in a future revision of the
+> +	 * hardware.
+> +	 */
+> +	if (gwdt->need_ws0_race_workaround)
+> +		wdd->timeout -= 2;
+> +
 
-As I have said before, the problem is the "reset" flag. Its name suggests that
-it means "reset is available". That is not what it actually means. It means
-"NMI is not available". So I suggested to rename it to "nmi" or maybe "no_nmi".
-Please educate me - why is that such a problem to name the flag to match its
-meaning ?
+It seems to me that this is still racy. If the ping is ignored, I would assume
+that this is reflected in the watchdog registers. How about reading the status
+if the workaround is needed and issuing another keepalive if it was ignored ?
+Or just always issue a second write to SBSA_GWDT_WRR in that case, maybe after
+some short delay ?
 
 Guenter
 
