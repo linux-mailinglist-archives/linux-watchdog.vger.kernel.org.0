@@ -1,82 +1,83 @@
-Return-Path: <linux-watchdog+bounces-3876-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3877-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84F85B07D4E
-	for <lists+linux-watchdog@lfdr.de>; Wed, 16 Jul 2025 21:01:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D0E0B0815F
+	for <lists+linux-watchdog@lfdr.de>; Thu, 17 Jul 2025 02:25:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BDA8658117C
-	for <lists+linux-watchdog@lfdr.de>; Wed, 16 Jul 2025 19:01:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 652ED4A7BF7
+	for <lists+linux-watchdog@lfdr.de>; Thu, 17 Jul 2025 00:25:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32E311BD01D;
-	Wed, 16 Jul 2025 19:01:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B1F121348;
+	Thu, 17 Jul 2025 00:25:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jtQroIMU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LnLpXSi+"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 716A64A06;
-	Wed, 16 Jul 2025 19:01:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 208001799F;
+	Thu, 17 Jul 2025 00:24:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752692478; cv=none; b=N7e9nC4okSGGGh7yRVkcDn5U6mubZRHCPDJDiLBJ2Fv1GuNM7NyEXqsxesEe1Dq0/Ww85hqgPN7mnewAjPVw+SUCOsPV0Bkhl2EN7vm724k2S2MQ8ppPCp7aF9c1gH/aqPUA3zhg9Rwa8TcZQXYutqbzN0aRv14Ig6IKA7xAJ0E=
+	t=1752711899; cv=none; b=ME2GdWLH8amqW7TKzNgrkvxqw+9iO6NcD7cdWjfmFK8/pOkmpZ4T3T5EeKuAy+LY/HZOUoBNp5ueeRPIvRNNS/lO4ja/nO+c0y+ZVXC76CimKGewXtriUdZAj/wdIoSAkxRqiBQKCfnXRm/aqpW3aaeT96xhPZCcw3qZnUTOwC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752692478; c=relaxed/simple;
-	bh=4HgBNHGHioJJIuoe+u0aDTUZiPXfpbaZMtb61F3Tj4k=;
+	s=arc-20240116; t=1752711899; c=relaxed/simple;
+	bh=LuKolpuRHUSfSWdVW11ldVecIX7BnRkJQDxMDYB1ukM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YdNGcnFWCrpi1LvVM2EGA/d6oUejBoqHa9mdmiLLURY/iKF0FSmzicXil1kZe5Df2hAlYww7rQ5z5n2pA+5DJdfZ2QxZO3jMTeHjcJaY3eFE8H5N89UB3leDw2viVpUs+D8KseYZeJPE/47Rf9ywuivn+ApgHwkBSPEJ7wur328=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jtQroIMU; arc=none smtp.client-ip=209.85.210.169
+	 In-Reply-To:Content-Type; b=Ym8zcdPAau4HRkJ+BOz2N6ZrJTsS/KSodvaK860giRUrRry1JvS6E15+Z3+IU83+wSN9rzaorcsTi5QxhW7hYnsb5q60ldN5ga3893VrbnvESaZ/9aowzie1A5cuTYrBGbCIwUrF9X+EpPqLqBYZqSzKdJ6lD1wYRw5Xyk3vSA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LnLpXSi+; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-74b27c1481bso188405b3a.2;
-        Wed, 16 Jul 2025 12:01:16 -0700 (PDT)
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-234bfe37cccso3053265ad.0;
+        Wed, 16 Jul 2025 17:24:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752692476; x=1753297276; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1752711897; x=1753316697; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=fs2uQqNG/6R2lnG3XYbRegbLMspSkDWgL1TK60SKjDw=;
-        b=jtQroIMU49SJSPOA360t5EBacZjVBtK9chSOP0bBnhUbK8AVe9wwKea9sPIxrSQZ7/
-         /993NrrIePpJvKSssVI3kLAkuEcYev9MNr3ntD5R6uoXizhSLrfT8vOCJItRdTFI0ifD
-         WIpn4lO5/NUTGAqsYq0XT2WkgVH/5YpsSNbZHsU21RntIGCL0QwAybRC7U/jHMgwiZsZ
-         biLN23cOxA4nAQbf4ifb73wduaKWCureg4+U7fYc1Fx+qIoxNQ+zJtX2kjndgi/Uksyr
-         Fm78tKcJiWbElickF9VqFBQktHjUC8V/evtryAp+Njm8EYH/zBUVHpJo9KIE/BN2JzCV
-         tvsg==
+        bh=D33PJ1weY8/mdLQW1iw5tG9vj4+pyB4UQgnzZxRMDKU=;
+        b=LnLpXSi+WXVO8/P1KcpjdX+12LkxuW3AIu4/iy+KInzT2LVcUaHo+iHQopmXl0dYLP
+         R+YiEy6RrhgJ4MI3ZtV6Vd89VJWmue9cb7IrpiFPxFWQ/Abv84/v1DgRRcEZvdNJMhVX
+         9nTnjEJDZM0AY/tVRduxCpOK8sD484Af6KJ8URvtmhkN+5vxQGseBSrVMA4GxPu94kJt
+         VtyQl00AkTpd11bIyopYwV06UoC5UnkV21vQGbGezAuaVxBD1YC1nlfa56GUW8kQxoPI
+         Vnkdh2WcZ2lHIx2kJZVUfDMkBoZnyvUS2jd37Cd5iT9eC+MO2mLPtpQBqA/50gsa/2fj
+         6Mrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752692476; x=1753297276;
+        d=1e100.net; s=20230601; t=1752711897; x=1753316697;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fs2uQqNG/6R2lnG3XYbRegbLMspSkDWgL1TK60SKjDw=;
-        b=HJmmSvDjFjYjxO/LtsOfACz/+l/75z7hDxZYmn1l3TOOaa4cFg84QRfE1y78JQHpQc
-         6c0MEXTqYcZqhLGl+0Hz8HntpNTENNzDdHiHucawNwWp/Z//EBjP3a0uVKTXN83dZvsD
-         vFKAZd/d29NkSm5SjuL+AJMqyh53dKKgXvuW7ktU61qy9mS8XODUTb/StuYpQmUxlKmX
-         e9W+9t/seOWcuSY0oGu5pb/+xtjapzW8NMhHERF/tp8FhlXZgLldQjGqarCW1fg5qJs2
-         xzRzPLRIjRsPbDyi4D1B/LI3UBFgs6S2oubuWJ5gxbgesQSJc/1AgGtzPg7m9M1cy+m3
-         FQ6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWTeemWOqzmNzSopg45Gwprx98jdIWqLm53lHlPAFPzdAoZHcaNwScbWkeclFSbtY9bhsdAnFeKQ+h/mkY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz1CC7eHONYen6qKQ0PjxfE6VlfEbj9wPsssGIblyfVhWPxFE7i
-	Zz9h5GvR7+IMdkQzFw80tI0wyesIU/lXjGf8ZEkDBNYkeo/qwBnvvd+pYqaXhA==
-X-Gm-Gg: ASbGncvNcz7F+kOdggzTB36dc0eknliwZndjoliIWkkpelCB63hEFMl54I87bl5GVXj
-	8beB1P868VWpMvGOOShjaD+GU9YezMkbIiI0xFEnXc6d5WJeKqadZoEDk4uHDaDcxE6HEOzg4NI
-	Gh0bR+GekNyfHBhzmj/CcJTfYh8HHkxw6Rn5z2zsx0NdDbD6M43RYFOH1lSgIXKAj9SlHC6N1kM
-	cx20ovHHPALIxWb3rgMiCNXaf1+MCPs06AAKW9BmAid49rzpmiibmndE/xxY0Xj6cEvBdx9/R/F
-	5hk9YwN698I0F3xTEQwXi5ELPmALaTcUUoguU3Ssul7jxRoh6euPDlvvfgxvlGQDemps+6Y2RHR
-	kN/pUWu3PgxYenjDHb/lK00T7TK+fqTdlv4PPSOEZUZXoJHztf/Mp41ijPCUe9NYj8BR3WN8=
-X-Google-Smtp-Source: AGHT+IEe4Tt0rzb7dFI2kakjzWuiDKR+AsYAYtkj/QIm5/yy0xspfQWic5kez7v5A+ftlOc11GPf6g==
-X-Received: by 2002:a05:6a00:3e0a:b0:742:aecc:c46b with SMTP id d2e1a72fcca58-756e99fc423mr5772221b3a.15.1752692475107;
-        Wed, 16 Jul 2025 12:01:15 -0700 (PDT)
+        bh=D33PJ1weY8/mdLQW1iw5tG9vj4+pyB4UQgnzZxRMDKU=;
+        b=WQZqyUR1C1TeDHar/3xfDcgyvp+Sarl6bAcGTCpngqOCTegRP01ctgsThXnf01sqve
+         gWv6XI/f7mLVfhAp6LavBxpQviTruEAbY5NxmLstCQVAkymiJ/0PWTySpGJ2duAnWwQD
+         kC+nOrZNQME9gEpvV0qcEzwZT/sm8BW1cTCatlTmAnrXBTwJBZY2hFBNDQIziqIqR7VF
+         Tfz5ejohACN7Ml/aooyADQx8ojyOqeB+TQvJ6sq0zOksRM5i7f4AEaYq6z7wmtqJdMUR
+         NNxj3mpHyXyGBoWridVLeoOCE6xQqsYoAiAaCMNduNmdhQ8LjlfS/1mbZbSOg1ciYMrU
+         /8Tw==
+X-Forwarded-Encrypted: i=1; AJvYcCU43T7ebtJ00bTIrI+NAkuNRQpS6UhC2WgdSZS6Yvr7OapIMvmrB4mTQnUOeFrwQLIRnUFWnch+ky66hhSOZxQ=@vger.kernel.org, AJvYcCVjqoy1Af+yXrjMpnLYVpxhYOP6rd8+rxV5GqaPi+PLRMvYBr82rBEO9Gvh674VjgFGQKaYMTuJCVTsFrg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YymSTgruTTycgVg0yXNJb/URIzcxYd+4sqlO6ROEzsr+bu27S8u
+	ZAaYhSOD1urjWDZTbga7xGLxKVBqjxUWeF3vRzdaYgj5mhgCh5yu4ZLI6i/JgQ==
+X-Gm-Gg: ASbGnctdNLLmPFi7hLLlz4bNIk0L7eH3xcQtQyKuYqvnt9OJ6v0/nu0Ikbc8M5SVRHX
+	ptkkhdQJ3rfAHQjsOgs/lo2phV7Glcw2PN+zchqzmeTBZ8AAQ12K74+zYfoJjrSltC8n+kAbuvx
+	olHiecavBbCZ5P8zwuyAvDNnirO0gAbA35Qc4u51sbVwmiZU1xBr+vaOSlik2GFxlmZ4w+pNrnl
+	sVCm89reAu4s5rkTiDex4WGRjCHjoPEpFGimH7eLJL1fQUptn3qaa8JNY2XbIzrKHo9lN0t2H65
+	O7GRYXIjc5ndFepXS1JAoXmVYv2znCY7jTT50IWukCQ6whdRBOqVjsGj2y+o664D2Vr6Y7SLRgA
+	CWZW4vY2IgWB2xdM7017KV/k7pFTizQ4Ns3obSos+ytC0zwufj9yKdrr7Xcrk1Ijgz1MzHkwd2T
+	P4NQi+hg==
+X-Google-Smtp-Source: AGHT+IHW7YoB0xH+rq7y1zz+Rwcz3jA2fFUCSkGgO0qKiFCzP4VkW7EQGgZEktifvFnfgJ2Mq0SQ6Q==
+X-Received: by 2002:a17:902:dac7:b0:235:e1e4:ec5e with SMTP id d9443c01a7336-23e24f70854mr74300635ad.49.1752711897210;
+        Wed, 16 Jul 2025 17:24:57 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74eb9f64c73sm14859060b3a.141.2025.07.16.12.01.14
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23e31027f80sm1978905ad.123.2025.07.16.17.24.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Jul 2025 12:01:14 -0700 (PDT)
+        Wed, 16 Jul 2025 17:24:56 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <08cc0273-6c26-4ff1-b5fe-75235bca7a9f@roeck-us.net>
-Date: Wed, 16 Jul 2025 12:01:13 -0700
+Message-ID: <5e471ef4-5303-4c7f-a7fa-e19f8fea0f8f@roeck-us.net>
+Date: Wed, 16 Jul 2025 17:24:55 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -84,13 +85,14 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] watchdog: sbsa: Adjust keepalive timeout to avoid
- MediaTek WS0 race condition
-To: Aaron Plattner <aplattner@nvidia.com>,
- Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
- Timur Tabi <ttabi@nvidia.com>
-References: <20250708233354.1551268-1-aplattner@nvidia.com>
+Subject: Re: [PATCH v3 1/2] watchdog: it87_wdt: Don't use "proxy" headers
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ James Hilliard <james.hilliard1@gmail.com>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+References: <20250708133646.70384-1-andriy.shevchenko@linux.intel.com>
+ <20250708133646.70384-2-andriy.shevchenko@linux.intel.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -136,90 +138,43 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20250708233354.1551268-1-aplattner@nvidia.com>
+In-Reply-To: <20250708133646.70384-2-andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 7/8/25 16:33, Aaron Plattner wrote:
-> The MediaTek implementation of the sbsa_gwdt watchdog has a race
-> condition where a write to SBSA_GWDT_WRR is ignored if it occurs while
-> the hardware is processing a timeout refresh that asserts WS0.
+On 7/8/25 06:33, Andy Shevchenko wrote:
+> Update header inclusions to follow IWYU (Include What You Use)
+> principle.
 > 
-> Detect this based on the hardware implementer and adjust wdd->timeout to
-> avoid the race.
+> Note that kernel.h is discouraged to be included as it's written
+> at the top of that file.
 > 
-> Signed-off-by: Aaron Plattner <aplattner@nvidia.com>
-> Acked-by: Timur Tabi <ttabi@nvidia.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 > ---
->   drivers/watchdog/sbsa_gwdt.c | 52 +++++++++++++++++++++++++++++++++---
->   1 file changed, 49 insertions(+), 3 deletions(-)
+>   drivers/watchdog/it87_wdt.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/watchdog/sbsa_gwdt.c b/drivers/watchdog/sbsa_gwdt.c
-> index 5f23913ce3b4..81012dbe9088 100644
-> --- a/drivers/watchdog/sbsa_gwdt.c
-> +++ b/drivers/watchdog/sbsa_gwdt.c
-> @@ -75,11 +75,17 @@
->   #define SBSA_GWDT_VERSION_MASK  0xF
->   #define SBSA_GWDT_VERSION_SHIFT 16
+> diff --git a/drivers/watchdog/it87_wdt.c b/drivers/watchdog/it87_wdt.c
+> index a1e23dce8810..3b8488c86a2f 100644
+> --- a/drivers/watchdog/it87_wdt.c
+> +++ b/drivers/watchdog/it87_wdt.c
+> @@ -22,11 +22,13 @@
 >   
-> +#define SBSA_GWDT_IMPL_MASK	0x7FF
-> +#define SBSA_GWDT_IMPL_SHIFT	0
-> +#define SBSA_GWDT_IMPL_MEDIATEK	0x426
-> +
->   /**
->    * struct sbsa_gwdt - Internal representation of the SBSA GWDT
->    * @wdd:		kernel watchdog_device structure
->    * @clk:		store the System Counter clock frequency, in Hz.
->    * @version:            store the architecture version
-> + * @need_ws0_race_workaround:
-> + *			indicate whether to adjust wdd->timeout to avoid a race with WS0
->    * @refresh_base:	Virtual address of the watchdog refresh frame
->    * @control_base:	Virtual address of the watchdog control frame
->    */
-> @@ -87,6 +93,7 @@ struct sbsa_gwdt {
->   	struct watchdog_device	wdd;
->   	u32			clk;
->   	int			version;
-> +	bool			need_ws0_race_workaround;
->   	void __iomem		*refresh_base;
->   	void __iomem		*control_base;
->   };
-> @@ -161,6 +168,31 @@ static int sbsa_gwdt_set_timeout(struct watchdog_device *wdd,
->   		 */
->   		sbsa_gwdt_reg_write(((u64)gwdt->clk / 2) * timeout, gwdt);
+>   #include <linux/bits.h>
+>   #include <linux/dmi.h>
+> +#include <linux/errno.h>
+>   #include <linux/init.h>
+>   #include <linux/io.h>
+> -#include <linux/kernel.h>
+> +#include <linux/ioport.h>
+>   #include <linux/module.h>
+>   #include <linux/moduleparam.h>
+> +#include <linux/printk.h>
+>   #include <linux/types.h>
+>   #include <linux/watchdog.h>
 >   
-> +	/*
-> +	 * Some watchdog hardware has a race condition where it will ignore
-> +	 * sbsa_gwdt_keepalive() if it is called at the exact moment that a
-> +	 * timeout occurs and WS0 is being asserted. Unfortunately, the default
-> +	 * behavior of the watchdog core is very likely to trigger this race
-> +	 * when action=0 because it programs WOR to be half of the desired
-> +	 * timeout, and watchdog_next_keepalive() chooses the exact same time to
-> +	 * send keepalive pings.
-> +	 *
-> +	 * This triggers a race where sbsa_gwdt_keepalive() can be called right
-> +	 * as WS0 is being asserted, and affected hardware will ignore that
-> +	 * write and continue to assert WS0. After another (timeout / 2)
-> +	 * seconds, the same race happens again. If the driver wins then the
-> +	 * explicit refresh will reset WS0 to false but if the hardware wins,
-> +	 * then WS1 is asserted and the system resets.
-> +	 *
-> +	 * Avoid the problem by scheduling keepalive heartbeats one second
-> +	 * earlier than the WOR timeout.
-> +	 *
-> +	 * This workaround might not be needed in a future revision of the
-> +	 * hardware.
-> +	 */
-> +	if (gwdt->need_ws0_race_workaround)
-> +		wdd->timeout -= 2;
-> +
-
-It seems to me that this is still racy. If the ping is ignored, I would assume
-that this is reflected in the watchdog registers. How about reading the status
-if the workaround is needed and issuing another keepalive if it was ignored ?
-Or just always issue a second write to SBSA_GWDT_WRR in that case, maybe after
-some short delay ?
-
-Guenter
 
 
