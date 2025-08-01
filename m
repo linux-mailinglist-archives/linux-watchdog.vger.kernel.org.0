@@ -1,74 +1,74 @@
-Return-Path: <linux-watchdog+bounces-3938-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3939-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EADA6B180C3
-	for <lists+linux-watchdog@lfdr.de>; Fri,  1 Aug 2025 13:15:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9756B18139
+	for <lists+linux-watchdog@lfdr.de>; Fri,  1 Aug 2025 13:42:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A62D4A8327B
-	for <lists+linux-watchdog@lfdr.de>; Fri,  1 Aug 2025 11:15:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 35D221C25981
+	for <lists+linux-watchdog@lfdr.de>; Fri,  1 Aug 2025 11:42:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BAF623D28C;
-	Fri,  1 Aug 2025 11:15:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6141123E358;
+	Fri,  1 Aug 2025 11:41:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PWRfwZws"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JbsW1Y8z"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A68801E9B0B;
-	Fri,  1 Aug 2025 11:15:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A27C9223707;
+	Fri,  1 Aug 2025 11:41:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754046952; cv=none; b=jMr67NfS2lUALh9QmgknOJq312EVgnMAUe9KtU0asUSTPGQvTqmfF3+ijG19sC3/FuPZhmIkvmVcGVO+oOlpLrQMw7LwFNP4uvN4dzg8Z2kEeY3K7/aCMiRvPQtYj3ZvTJvQBv9jbiI8KVXQbKATzJ69NMkzsqMTJ5R/BzgLsj8=
+	t=1754048515; cv=none; b=bIzlSaJ86mkQoHNtcf9Qvg6lqbxvi60NgSfQta24lpwkJ5zz5ATMkqbxO0WiHcu6kjSs76VP/VUYLyI5Lcjy84NrFp50UjDOk15fSHQtyCf7kmadTIfDO0nlTQ5y6XSMPc/tS4H9GHaCTMGGfAQLhI0pCb58DSSJ4y34RbpJRbY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754046952; c=relaxed/simple;
-	bh=d2LoNBGDHqkG1oI8UNko8tQKxLJHUD+ZPPv10zHQNuQ=;
+	s=arc-20240116; t=1754048515; c=relaxed/simple;
+	bh=5zgcWv27kOfgwf/FgHN2jEl6cF4uOEV2nY7x2dD1QXw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Hixklsm9w21VjnRydzNABMrPYW+oeM0bVF6XQQUuc0ravjn1KDMYXJOX+KavHq35boLe31UyQn4pRcNMgT8GXofrFrtQKCt5W7+mbkIBtDzgrGjTIkD72xx5Ckm1nFjhUsLY6OVskXtkyWfl1M6WGbq7zvWAKBWoOl8slX3cwzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PWRfwZws; arc=none smtp.client-ip=209.85.221.51
+	 To:Cc:Content-Type; b=gFUJ/whQPwZtNmZon3XpRuL3fkC8lILTwIZudgNHjqXLI68ptHcCVxBU7DAwsNCQqROAptrFztYFXfBulpmjmJPtMhQRz72mzeARSaCsosa2G+DY81lTeKgme0qWOWEfK5ezHCa3sO1ZLnHYMZfGNtata3I29I3HeoszMIts7aY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JbsW1Y8z; arc=none smtp.client-ip=209.85.221.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3b77b8750acso1185928f8f.0;
-        Fri, 01 Aug 2025 04:15:50 -0700 (PDT)
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3b794a013bcso975096f8f.2;
+        Fri, 01 Aug 2025 04:41:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754046949; x=1754651749; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1754048511; x=1754653311; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=r+BOmaApAnQRani5bFyxdb8l2UHhei1f6sfi+qVNR+c=;
-        b=PWRfwZwsKZP2GS6DEnkkgMQ3ZMX0/NRNmxc29RQVLNS8dSBThLX6mqBBUXpgB+yYZD
-         83z2q3d+AFChQv5txsKlJpnsPf+O9f/wTv4Vyvp4Z51ACiJr5qh4mixJkD+83Dq3CUvw
-         LldWAWck37j8VvMK28SpsrtTpIXWgrzAJcztOZKKcp0AnhASpVldg87Hv8jkhj9+NDpW
-         tpEXEKni6oXKHWQmMBtYj5NwVu2LVbEG8LY3gHeKeYLKvFNnrLiOx0kmqZ3zvTCbaG56
-         RoYEM+LMDXKvvH0HwYMvyuizex2ZznmqcfORo2p7FwkkiWlgmJLWkFYTo65IayHMw9LD
-         nUPA==
+        bh=5zgcWv27kOfgwf/FgHN2jEl6cF4uOEV2nY7x2dD1QXw=;
+        b=JbsW1Y8zfhyA+kaWJHiGnYkv5Do2jV89vuX6ZDqM1McPoM+tN5JTeYJMfalYUqapir
+         mx3vzyfCyj2ipBxLNoPb8h8/wM0gxDq7jUJJzzYt2nMT608+zMpcs+Hf+cOSEZHj4Y7E
+         T0pbpQmQKlK8ViV74gQgCCRGSwupsrhj7eArT1Kdb2QKKcv7i41MN3a4EURhXxHW+/k5
+         FLfYfWfonA4HYU21W8qwEOp4Fm6Z1RBaKOAJpNqCFRxbil+T/L4nSUU2yu5w8pkxBxVZ
+         7vd+ELoDCi1R1KtgX0IWziN1o6Z41nqpr+Dg13749/wmwJflJhFlL4kJJtUu/8NcIpBe
+         ceiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754046949; x=1754651749;
+        d=1e100.net; s=20230601; t=1754048511; x=1754653311;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=r+BOmaApAnQRani5bFyxdb8l2UHhei1f6sfi+qVNR+c=;
-        b=La98TElB3MPcoOzRffY0G1SaFOQ5jx60fKce+ZIYXwJlFWF1J+QCmPYyRqybAx6jKm
-         BOz4C3Ceia6ZnoKWYqrLXdEzRGFxZrxcQaWqv7+mrkYqeBDSn3pgU3xilk4I5XWCXtqu
-         uKO1eMI0B1Wi4G5XFLhmDPfnzyX2s8DbGPusNpixaSabCSe4nMQqBSbm6rM1bSIB+mEf
-         yryZpVYbFAz79uHP1W3iFpJwEnOS0jxppCN+XeVZjUfULtjI8jcHSkpOKETCVWrkb2Tb
-         hryn8Vq3oiE0E5IfhrKwCGOyEzTvta928AFzJRju+feTvL9kQBuyimvLGZ7e5/DX5RTn
-         VxEw==
-X-Forwarded-Encrypted: i=1; AJvYcCVZfllFP2JfFRd3mhiV2cakcH9IDY9oDkYtxYUoyWRMSfIEg50gZIr+7fkMXed/i51CmOi9truJ8ZLPYU3XCVI=@vger.kernel.org, AJvYcCVyy9WiKBioq+wTOpj62flTRDiT6fLfCQuu9J6YMiL9VaxnDBmpWyjWNo2NAUNqmYS5FlhyA7aAin1WTO7p@vger.kernel.org, AJvYcCW3RNMS8iQAsIYyDxj7ayZRG0zrP1JyOll9n7Y2Pr4oy1ilh9EOQmtECCo3aSeO/WvFGNY4VtWqxdJR@vger.kernel.org, AJvYcCWum/10Lhbkc+lIcvpkn4mH5yKkgnV5Uod6/n7HMMjbelfW7YOW9gvIYLZXZ+jPuQDKZiadUr7CE3tIzuIdJhePiTU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxrm3TGqjw2/XR5ismzHKAAsIqsnnyuoHM8vo1yj0d5N7ctOwIT
-	zAzGpXJMa6NUjw1PuLC2zXMLI3SmE3THpgXUqFZCmvc5yGN6p/gGJiehOPB3J6AIDzSegkK1Gxb
-	Ob6dX5lTTPDRNlXCPo6LZ0zN0mj7WSDY=
-X-Gm-Gg: ASbGncvxjuFwhOopuz3Rw/49DPAGwBBsocAC+pj1QqvJccxrZoPlAfhi4moOUwVdWJC
-	bTTggrtLv+5e+Qhzmc2GF04f5MFfZDaBqS6Hf6pdsg7rWRwVRpbPNUy8SwBAs670zIhVvUkDVFD
-	NmNpZaDYUvkDEx6n5MoIUh+D4etUugZnWfSzIGqdfnpYTYqkZl/0V1fkUBzSegYCSGiPGd0bF33
-	OKt75iIfw==
-X-Google-Smtp-Source: AGHT+IHsfOy3LeUyGBHi4zzK0MMI7dOLV5vo4mqdDOoXykG8lbptTHP115xcOiuQ3Ftf99FTjWDlH24hasIwiyr4ogw=
-X-Received: by 2002:a5d:5d88:0:b0:3a5:8991:64b7 with SMTP id
- ffacd0b85a97d-3b79d813d8dmr4620723f8f.26.1754046948603; Fri, 01 Aug 2025
- 04:15:48 -0700 (PDT)
+        bh=5zgcWv27kOfgwf/FgHN2jEl6cF4uOEV2nY7x2dD1QXw=;
+        b=ckyv1cMGl6RuUF76M3/A6rdMF1wmhKfIF8/6faPvMZQqr1MQ6X5RWkp6P8CeX36Zj+
+         sm3tDEiOdsE7eEkIa9+bKKSw4JT8gePaanx6XAaWpHPzLfy4oVt4W0GstbryhttNvrii
+         XErirtDEjEy/7xxy2JdRc9p+r3WTkeXWFWfzBl31/ftSlxSB+kqp3UP+/u2KYHEh3VW1
+         GcCNrMgCtLlqimdioLiBsO4M1cS1V1OS7SRSJJZJnaECO5qn8cJHFXiRu5GrdsxOToOI
+         bomcwv9BYNNL5BlSxOFljrA09yqxKTBSDzol+ceLb0qItVfuFnNG53desiMlUXYLjo/I
+         BJAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV2sgGhaNyZMQ2utxdupXDjrTN2AOWaZ4knIkXXEOYaRhWA0OIyKFRBPo8HaYPK6KAGZqT0lT/lkyesxmt39e47Jmg=@vger.kernel.org, AJvYcCVM+q+paR8ljXW2MymJhhrAzgGJn/hFW785DAelDGVpSbAvVXIW0I73WNcjigjvIUjPaw31B8UDEkK9@vger.kernel.org, AJvYcCVUgiPQsHv6lROHOFjrtew3Ztm7BFMrvfVkE0243pRXF4kPS+9e+NClCgUBkv8PlJnzhJB+iO3GBeKcHujf@vger.kernel.org, AJvYcCW5IbayYyHo8qIOmJUkzXteUpZKz3YACj9hxUIRlTOvIe3LzyhuOVI1DxXQ4qrWcB6tJzFf7hYMbfIQYPl+y1Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzuvR6ALci5vOS8FaKYQAJkAYCb4gFL9wUM/9FfU3zf+HudVrVX
+	RulMptzC07C5+8sOI7UQPtU8OoEpFpKxYONgiWqlSCxEfcf14l+NrB8dBh4dO4MOVsT77PRhvUZ
+	IagH7GcoUmXVYblOUjhMvVUuNqafEb9s=
+X-Gm-Gg: ASbGncu+Crv9qIRkZBNnq4CuyInR2XI0eVjj838Jo2wxrKO1CXQ5RlEAs3ncSYS+Tgs
+	ndvycKtB4zKcGel/q9JfGzz9gegKW9TzZrt4a0EHqU+pYghG2vOC8Kke4p0saVYGBRjvCEsPbYf
+	5gz0H83c3zTBB8v53QCMCr2eKRnlJiPVeSAzJUtnYYHDny59IQvWSJSwUI7J9FFFQqdnkAIn6wB
+	eR6wpdZ0w==
+X-Google-Smtp-Source: AGHT+IF19siieTYWpm5yWDbheWA40LtTDU+ZKWilablMRyEvIEXJLOdcGsENCXGzTrpqxf5L+YoOubH6TL49und/fJY=
+X-Received: by 2002:a05:6000:1372:b0:3b7:994b:8438 with SMTP id
+ ffacd0b85a97d-3b7994b866dmr5688135f8f.46.1754048510720; Fri, 01 Aug 2025
+ 04:41:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -76,13 +76,13 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20250729155915.67758-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20250729155915.67758-9-prabhakar.mahadev-lad.rj@bp.renesas.com> <aIw-sxQgdzTSLrJ_@shikoro>
-In-Reply-To: <aIw-sxQgdzTSLrJ_@shikoro>
+ <20250729155915.67758-4-prabhakar.mahadev-lad.rj@bp.renesas.com> <aIw8u6mZxC8e76JQ@shikoro>
+In-Reply-To: <aIw8u6mZxC8e76JQ@shikoro>
 From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date: Fri, 1 Aug 2025 12:15:22 +0100
-X-Gm-Features: Ac12FXxB7KTWna_KgkuQC2HTkAPiZxLfvyASMmBcJptTa4JiUTiZzqkfcolFBD4
-Message-ID: <CA+V-a8se2NMGPEffwnAgDp4NB0vHndf2EQmvNTT5ySzr8c4OMg@mail.gmail.com>
-Subject: Re: [PATCH v2 8/9] watchdog: rzv2h: Add support for RZ/T2H
+Date: Fri, 1 Aug 2025 12:41:24 +0100
+X-Gm-Features: Ac12FXzc_vFbg8BxTb0zr5UwnnDeuTuMJmSKHb4FXmvfwV7Bn9DA6DRm8jPz38s
+Message-ID: <CA+V-a8vSb+s+AxKDt8Vw6zPyLaLLW67_N+7LVeyaBSNGfJWwTg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/9] watchdog: rzv2h_wdt: Obtain CKS divider via OF data
 To: Wolfram Sang <wsa+renesas@sang-engineering.com>
 Cc: Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
 	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
@@ -99,51 +99,29 @@ Hi Wolfram,
 
 Thank you for the review.
 
-On Fri, Aug 1, 2025 at 5:12=E2=80=AFAM Wolfram Sang
+On Fri, Aug 1, 2025 at 5:04=E2=80=AFAM Wolfram Sang
 <wsa+renesas@sang-engineering.com> wrote:
 >
-> On Tue, Jul 29, 2025 at 04:59:14PM +0100, Prabhakar wrote:
+> On Tue, Jul 29, 2025 at 04:59:09PM +0100, Prabhakar wrote:
 > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > >
-> > Add support for the RZ/T2H watchdog timer. The RZ/T2H requires control =
-of
-> > the watchdog counter using the WDT Debug Control Register (WDTDCR), whi=
-ch
-> > allows explicitly stopping and starting the counter. This behavior diff=
-ers
-> > from RZ/V2H, which doesn't use WDTDCR, so the driver is extended to han=
-dle
-> > this requirement.
+> > Update the rzv2h_wdt driver to obtain the clock division ratio (`cks_di=
+v`)
+> > from OF match data instead of using a hardcoded value. This allows the
+> > driver to support SoCs where the clock divider differs from the default
+> > value of 256.
+> >
+> > This change is a preparatory step for supporting the RZ/T2H SoC, which
+> > requires a divider value of 8192.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 >
-> Is it really required or is it an additional feature?
+> I'd think this should be merged with patch 2, but for the change itself:
 >
-Sorry for not being clear WDTDCR register is not present on the
-RZ/V2H(P) SoC, and is required on RZ/T2H (and RZ/N2H) SoC to
-start/stop down counting.
+Ok, I will squash it with patch 2/9.
 
-> > To support this, a new `wdtdcr` flag is introduced in the `rzv2h_of_dat=
-a`
-> > structure. When set, the driver maps the WDTDCR register and uses it to
-> > control the watchdog counter in the start, stop, and restart callbacks.
-> > Additionally, the clock divisor and count source for RZ/T2H are defined
-> > to match its hardware configuration.
+> Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 >
-> Where is the register placed? We need a seperate resource for it? Can
-> you kindly give an example DT node for this case?
->
-The WDTDCR register is placed somewhere out and yes we need a separate
-resource for it.
-
-Below is the node for RZ/T2H SoC:
-        wdt0: watchdog@80082000 {
-            compatible =3D "renesas,r9a09g077-wdt";
-            reg =3D <0 0x80082000 0 0x400>,
-                  <0 0x81295100 0 0x04>;
-            clocks =3D <&cpg CPG_CORE R9A09G077_CLK_PCLKL>;
-            clock-names =3D "pclk";
-            power-domains =3D <&cpg>;
-            status =3D "disabled";
-        };
 
 Cheers,
 Prabhakar
