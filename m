@@ -1,126 +1,140 @@
-Return-Path: <linux-watchdog+bounces-3940-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3941-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1107AB1813E
-	for <lists+linux-watchdog@lfdr.de>; Fri,  1 Aug 2025 13:42:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C359B182AA
+	for <lists+linux-watchdog@lfdr.de>; Fri,  1 Aug 2025 15:46:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C5887A84A62
-	for <lists+linux-watchdog@lfdr.de>; Fri,  1 Aug 2025 11:42:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6BA30587B53
+	for <lists+linux-watchdog@lfdr.de>; Fri,  1 Aug 2025 13:46:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B31D246765;
-	Fri,  1 Aug 2025 11:42:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 523382E40B;
+	Fri,  1 Aug 2025 13:46:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dvIa4Em3"
+	dkim=pass (2048-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b="yVW7+rlV"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8FED2367A8;
-	Fri,  1 Aug 2025 11:42:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B68E28F49;
+	Fri,  1 Aug 2025 13:46:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.87.125.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754048564; cv=none; b=HvzRC0KTmuBDtdj5ypPwJkYLDrf5ZUNoUQ4oAChCO90mbCOiHsT6uC1a1LRfr9bOSn5a+wTH/hDzgB2jMD9cNunhGiKZccHbblzGiC9NM9RoAQKbpYWF50Amq8JFQy8zmw1jHjYg6qvI0Lzzp/AOn9uV3ZFT/zqVA9wEeyAgKq4=
+	t=1754055992; cv=none; b=AHFVzHWFlGhy+TvJYZi4pdzZX+2M+5Y65LWGJeqk33Y33srFh6FIf62Qhqm1OHQj/UIOMZEWzRgWHPiE6X6sdH7s4svIzv5XHN+7zff2Oy6aySkxRBLtD+b+4aCAps0dRPlDF5XeEScpnWVJQAIgfCL4rzUUeRTO5K09qC63Vig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754048564; c=relaxed/simple;
-	bh=ge1vXMxZRii7E9qNjZ77uD+NkdbM9zxuTcy26IRKlzI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EXt7U8L9BrD+nmJedwLhbAAM2RROFymiS5Jgkg37Um4qevp44ve57h590A48Qzws6G2CDEC/LzeiltgbpHZfkZU7Y8BbgLOcZIZLuJFn7qRfaCzZoI9e34sW61KBBYIqviAYqF4zvkdQ3zUZoPGqQbEH976A0kN9v0UW77alNBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dvIa4Em3; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3b783ea502eso1444135f8f.1;
-        Fri, 01 Aug 2025 04:42:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754048561; x=1754653361; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ge1vXMxZRii7E9qNjZ77uD+NkdbM9zxuTcy26IRKlzI=;
-        b=dvIa4Em3WRk+FOK7UJwIiG27s8WoH+7hLL0Nzt7KxuXEZIbPoyJ3Zpg3H8RdanlVMh
-         kIhDPis3N1j2fKOzV6vG5eD1JGxWJ/zSKJ0eW6CDNSONXXI0hJMdPnblugIC9B5Q7bqI
-         VUUxq2d0wl2ySREBWJRYJGUQrw8tjNgDna2R24XEcXCFZTFM0chg4iYCnxxKJQDrYaZV
-         6oumlHFtgZqFOO3zGIWIHwLxgiWLHUyR8kN+LE7kro4JQ0slwVjEntxcU/iLGeuywHmY
-         H2fJ8nme4ESTcUIgDSzWz0RHvbSLozXmUOaTLNMFQTWqI9O2G4k932zgAQkqTJlvmgY4
-         1u4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754048561; x=1754653361;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ge1vXMxZRii7E9qNjZ77uD+NkdbM9zxuTcy26IRKlzI=;
-        b=idiBso7LMio4yTyj5yCXB5y+4ZANMGtIGeckqKck3gjwv4B+DH2EmawDtXp0yt9wH8
-         aPqJ0kQDONt9O1gIUtPTA7t9qepWsH+Eo9ZGHTyi7BHPzxtw+xqMqXzCWlfVeiQL8JX4
-         B6xOHTq+HVmMS8EClcvO/H9BioJLtOz3VgAHvAqEXgN+FPishN1FIuDCuQ+NQGzX8oU8
-         vLJlNoUpoNWjHjaNQCmnDB3JY22x5hvc9bJ8m1PqAmMHg8nP2MXkadbB/98PVpX7rsc3
-         QfBHfm4TyzDB8TQ834ttK1eSug8XlkACHzOCh9F5VqJYDiyAXSOxHhf+5NRojl2CrPat
-         eNyg==
-X-Forwarded-Encrypted: i=1; AJvYcCUoDWjUtBFqS2g0tVXA9/iB/CgHXyv5SS1FXJN5hciVLvIOz2VKFKkmBBhSHH885+AflM2bezRh70NRFySqahQ=@vger.kernel.org, AJvYcCVQ8Qi5oZKkO3uY6vENQsAuU1Kt3b27t5a2liKjxC8BhUS1O6yeSUbSZtv2rYEo6KU8kIKCCi7oxibCr34d@vger.kernel.org, AJvYcCX7tKSc+VttJfdm2AswMSeyCGfr9o7lJ4OVBpwVXnUsIUrjCakjm8jyinEPfFP2MBNCJI2Moym7j5rjj6Ca4T43QF0=@vger.kernel.org, AJvYcCXddTj/ulSiIsjzm/PVKuw2C+tQFTuaXgxP5WjKbD14aC5iT7nI1ZJX9TEdwH6Q3o8isLjwMEQxIrE+@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw6Vu/t8SDl3UXxGJ/6S6d+lIy7eKgMkpu3iDixIxBMnszb7dIe
-	12dnsof5Yni9o4ZC47ZwCA6IXxPAcXggDqIaWuB50cfMa9HHX8GvDfIGjy7Ywz8l5NEHVzQEiFA
-	w6HfWyMHpvtaqF6uoDiCbOj/vNEvw0Gs=
-X-Gm-Gg: ASbGncujQgGIkjlEXWlGT6FEQfCu4KQIs99BvRXdKHS7BKh4OiQUlMDMcc07CRuqV94
-	Ebw7KQ0CThbt5EL/RKERa/B6xex9xVC97zPdcNqGBlJMaCIw1qb/g038NEjNbdWOW0JkLsvL4Tu
-	SwIMrKW82dBkyMSwxcZSgzXKy3xPySsM9OQlVY/iLECqCFqTBZVrgDLbMlnLZVKvHRFSYo2ADtr
-	Bwn4urW42VZJmLHzcOA
-X-Google-Smtp-Source: AGHT+IFW2Ox2G6V3KbTDmivPliuNNNEuGZ1niSNtFBzJVEBkud4GTR587ujBtHknuXy8/lJ+ciZPYzuW4hPnNGGt9zs=
-X-Received: by 2002:adf:9bd9:0:b0:3b7:9703:d99f with SMTP id
- ffacd0b85a97d-3b79d808289mr3827649f8f.27.1754048560625; Fri, 01 Aug 2025
- 04:42:40 -0700 (PDT)
+	s=arc-20240116; t=1754055992; c=relaxed/simple;
+	bh=MifSY8tRIAg1qFUULhDhX2OU31xcFDWcCK4ISt43qmI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=cPBI5BwT32kR1KoOvgjKHMlgAIr+3aUkvXnf10fa5RRsH12kic5jNeKVQdkyWftHxoqTaN3g2pf/DCXEFtv9lpvYeIGtrZrc7PuOc7qVXtSvhBhcDc9EkpVXkOOW9emPHPO626s6AQOFAiy8ExZwaFdGXn1q1LGxyJdvkAE+J3c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org; spf=pass smtp.mailfrom=linux-watchdog.org; dkim=pass (2048-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b=yVW7+rlV; arc=none smtp.client-ip=185.87.125.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux-watchdog.org
+Received: by www.linux-watchdog.org (Postfix, from userid 500)
+	id 9913E40A0A; Fri,  1 Aug 2025 14:54:10 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 9913E40A0A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
+	s=odk20250313; t=1754052850;
+	bh=MifSY8tRIAg1qFUULhDhX2OU31xcFDWcCK4ISt43qmI=;
+	h=Date:From:To:Cc:Subject:From;
+	b=yVW7+rlVjkwtuPwUlCy5K35O1MdxjHmt10XO5JDF2ixxbV9AJwqqc4MiziTKvN8lO
+	 +6dCHzCRnATMUEsNzW+8NMQUlfP7f2ukZHGiXE82ZDK0cPLdqowOjnOrE3PA7WJ14j
+	 O22sF2pyHlsc74QgYrv2V0MxcrasxZkFO1REURyVgzoovZfKUfIISnjxmJ1BAdW6nd
+	 kvstkYaMuS+VrOfz0gQk16px39DRr/EJjW7FMN+jksgn3rf3lN5hcsNwRfBMiQzvXj
+	 76iWM+igrP5qM+jy/bXsjBsiCTCGmUMyQ1KUq1ojc/6U86rvFXETzf2JU6M0gmY5NW
+	 qRHRMQyTmt9+Q==
+Date: Fri, 1 Aug 2025 14:54:10 +0200
+From: Wim Van Sebroeck <wim@linux-watchdog.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Aaron Plattner <aplattner@nvidia.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Frank Li <Frank.Li@nxp.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Rob Herring <robh@kernel.org>,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	Ziyan Fu <fuzy5@lenovo.com>
+Subject: [GIT PULL REQUEST] watchdog - v6.17 release cycle.
+Message-ID: <20250801125410.GA25291@www.linux-watchdog.org>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250729155915.67758-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20250729155915.67758-7-prabhakar.mahadev-lad.rj@bp.renesas.com> <aIw86G4sOJH0yT5i@shikoro>
-In-Reply-To: <aIw86G4sOJH0yT5i@shikoro>
-From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date: Fri, 1 Aug 2025 12:42:14 +0100
-X-Gm-Features: Ac12FXw5nyJSg3tns9bLB_dxCwt0LxAawlvmjwH4i7MukYEb0200ehLAwwPBH_Y
-Message-ID: <CA+V-a8vP5HyQrDTtLukifdMy-9bQw6LOBkE932aQ1TBvGPv-FQ@mail.gmail.com>
-Subject: Re: [PATCH v2 6/9] watchdog: rzv2h_wdt: Make reset controller optional
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Magnus Damm <magnus.damm@gmail.com>, linux-watchdog@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.20 (2009-12-10)
 
-Hi Wolfram,
+Hi Linus,
 
-Thank you for the review.
+Please pull following watchdog changes for the v6.17 release cycle.
 
-On Fri, Aug 1, 2025 at 5:04=E2=80=AFAM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
->
-> On Tue, Jul 29, 2025 at 04:59:12PM +0100, Prabhakar wrote:
-> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > Use devm_reset_control_get_optional_exclusive() instead of
-> > devm_reset_control_get_exclusive() to allow the driver to operate
-> > on platforms where a reset controller is not present.
-> >
-> > This change is in preparation for supporting the RZ/T2H SoC, which
-> > does not have reset.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> I'd suggest to merge this with patch 4.
->
-Ok, I will squash it with patch 4/9.
+This series contains:
+* sbsa: Adjust keepalive timeout to avoid MediaTek WS0 race condition
+* Various improvements and fixes
 
-> Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
->
+The output from git request-pull:
+----------------------------------------------------------------
+The following changes since commit d7b8f8e20813f0179d8ef519541a3527e7661d3a:
 
-Cheers,
-Prabhakar
+  Linux 6.16-rc5 (2025-07-06 14:10:26 -0700)
+
+are available in the git repository at:
+
+  git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.17-rc1
+
+for you to fetch changes up to 48defdf6b083f74a44e1f742db284960d3444aec:
+
+  watchdog: sbsa: Adjust keepalive timeout to avoid MediaTek WS0 race condition (2025-07-28 12:07:08 +0200)
+
+----------------------------------------------------------------
+linux-watchdog 6.17-rc1 tag
+
+----------------------------------------------------------------
+Aaron Plattner (1):
+      watchdog: sbsa: Adjust keepalive timeout to avoid MediaTek WS0 race condition
+
+Andy Shevchenko (2):
+      watchdog: it87_wdt: Don't use "proxy" headers
+      watchdog: Don't use "proxy" headers
+
+Dan Carpenter (1):
+      watchdog: ziirave_wdt: check record length in ziirave_firm_verify()
+
+Frank Li (1):
+      dt-bindings: watchdog: nxp,pnx4008-wdt: allow clocks property
+
+Geert Uytterhoeven (1):
+      watchdog: renesas_wdt: Convert to DEFINE_SIMPLE_DEV_PM_OPS()
+
+Rob Herring (Arm) (1):
+      watchdog: rti_wdt: Use of_reserved_mem_region_to_resource() for "memory-region"
+
+Sebastian Reichel (1):
+      watchdog: dw_wdt: Fix default timeout
+
+Ziyan Fu (1):
+      watchdog: iTCO_wdt: Report error if timeout configuration fails
+
+ .../bindings/watchdog/nxp,pnx4008-wdt.yaml         |  3 ++
+ drivers/watchdog/dw_wdt.c                          |  2 +
+ drivers/watchdog/iTCO_wdt.c                        |  6 ++-
+ drivers/watchdog/it87_wdt.c                        |  4 +-
+ drivers/watchdog/renesas_wdt.c                     |  8 ++--
+ drivers/watchdog/rti_wdt.c                         | 14 ++----
+ drivers/watchdog/sbsa_gwdt.c                       | 50 ++++++++++++++++++++--
+ drivers/watchdog/watchdog_core.h                   |  8 +++-
+ drivers/watchdog/watchdog_pretimeout.c             |  2 +
+ drivers/watchdog/ziirave_wdt.c                     |  3 ++
+ include/linux/watchdog.h                           | 12 ++++--
+ 11 files changed, 87 insertions(+), 25 deletions(-)
+----------------------------------------------------------------
+
+Kind regards,
+Wim.
+
 
