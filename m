@@ -1,165 +1,148 @@
-Return-Path: <linux-watchdog+bounces-3961-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3962-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2C1CB1A9F0
-	for <lists+linux-watchdog@lfdr.de>; Mon,  4 Aug 2025 21:58:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D74AB1AD17
+	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Aug 2025 06:23:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 503CC18A39D7
-	for <lists+linux-watchdog@lfdr.de>; Mon,  4 Aug 2025 19:59:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C1F833B7249
+	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Aug 2025 04:23:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB69B2918EB;
-	Mon,  4 Aug 2025 19:57:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D56522135A1;
+	Tue,  5 Aug 2025 04:23:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WRfI9QIp"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="ubkh80zG"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2815A23D294;
-	Mon,  4 Aug 2025 19:57:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12B233597A
+	for <linux-watchdog@vger.kernel.org>; Tue,  5 Aug 2025 04:23:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754337459; cv=none; b=pm1EEY/1xCF/llZ4n+8Ym+BGQRZNdswp66WIhxZFr99XSI4am2S1bx/WnFUwbCf+RrwYYLJrtvIm04J8MZ0leiftrMZS7ZJjYIH60eNAPOcpqZlxLiAosJeyGFCBVyPmwqPgfWh/zNPA3Zz3JP3pB5ULJuj8GvdpgzAZ7P7TChE=
+	t=1754367784; cv=none; b=GcqnfXPdnboas2+jINA8BVzqguM6Un7BVQirDiJvJ/YVvSXRWx8EXUuFyAwFDLPqurLFsnKhMP5YQh9Uw/aq2MFCmCNohhhcVPNZ/AHmCQL9i5l9HHWqrg71M3XgrWCi3Pbs19Row/7eHWkImVjHt0mEpd3w91abfNSnRziR0JQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754337459; c=relaxed/simple;
-	bh=iGZD0LQ3kSDXmYoPeaYnugCI5o1eWItexWDE/LM8Q+U=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XnR2Vrnq5kulFinydB7HWelITX9K6+14XlY+/XYF9NnbPDuqZLfJcKSvIRl06UaMhgbs2Tysj9tCYGfsmpazBzmAkOyCM5/CUUtMlxiVwHl4NjrIwTAcDndQVbBCp7EH9cwxNr2IuMUIZk2EOo8r31opXn+JVkLdeqozvO4k9kU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WRfI9QIp; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-455b00339c8so30487485e9.3;
-        Mon, 04 Aug 2025 12:57:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754337456; x=1754942256; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8VJM1mx30IuCWN7LUhFDjSWyKbNj6VnDSykcNH8sS+0=;
-        b=WRfI9QIpBhUnK0lGMssMEMgfhjpjPDjCHqWOELgFseJfUMz879ktSL7Qx28UON5W/c
-         MURuUl2PwwH+H758C4ex2ikI5Ft9HYqP20RK8E55vMepBhrYFAmBNC0TNac2nSz9FV66
-         kPh+brN79t5xnd04D6y8KjIs8M1MSfk2UDSNe+xbwqa2e6rFswkZSPGnPHU36HSqkLES
-         0RK5JJ+DMLpMW7HZ45ibx29ptu1OKW1EOLFNz8QpCoAYfQ1DnQsVi8Veg5wQNTvXgrCb
-         tu0t/JaYhatYc1/vMEB3czYL80oEzQwobZzAgv74rN4jnVqRh/VrSUTTWBWFTIgZ7546
-         qh3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754337456; x=1754942256;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8VJM1mx30IuCWN7LUhFDjSWyKbNj6VnDSykcNH8sS+0=;
-        b=H37GosiS92yuKA0tbTkfS+71qo7IGjJtqN/PAqUom1bGJbL5yOhvaE53dZYv6lfldY
-         KyNMpWpPgANMGdujoLiWjO3+9kNaME2ws/KhWmQJuDg8K1w8huZAUVyOU8ij2XuWua53
-         9Uj/hqqpRExfmPwt6WYgSf4dMPzVvnZ8JUf8mhQsAIEEEtUXSgNciUqoWc8r8NJHDidf
-         o5odUmFwg7vNxQBaELG0M9cjZqX7nsP4kR64SmYpszztXmiZ1x3XXbTvF7lQjEyO9DN/
-         cXb3h0IV+1YPhPXOY3kQZxc3TAYgNyVUrYCjJcjly8EuENGH6tB2otaQc21jCE9opIE7
-         niaQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUbiFnD7lYZo0reQEsFXourPEaIcSPjkF/q4JLJpnkgtABpAlc80hHLXbaWQWJy6AbV/yX57uvoGHHigHAM@vger.kernel.org, AJvYcCVr47Jr4g5asP39tD6yyoitPKUfPmEpvjGdhJ82dw+ArxjzywkBvjDX+MXaDPnaW2vlP2yCbGziV3s6vrOiqTXH8JQ=@vger.kernel.org, AJvYcCWWAH4G3KGtg0sT5Zy3fD/SuQL7z2882xVzN0VXBjjtGdoeIABnkZFTP1/RzLuiPIVj/+paRS8/62W3@vger.kernel.org
-X-Gm-Message-State: AOJu0YyN4Rdy0foQhyvISx4YPlYmYW5Ej9QfQQMA5vCPIY93TR5ClU/W
-	onuF6+CvpY+DtAOb6eOgJLeYy55EYHWi+8MzbdAxbDx/WmyJYRZ/uT0Q
-X-Gm-Gg: ASbGnct+S31DRJkQORPXD1Hpz6GTMbvuTDVCefhEJD20A2tsk6aB5Qd7BLJXV90Ufig
-	O+NMGDRCgrBxoIGhmR01PvZc1WnmWDltV4/Bn/Cl5iQAVtxkTDuQAfkZRRz1APEgbO9JEgAecMl
-	lqCTVyHIwktTqNHHjfhS5TsTG0r1p6g60IaWY00pWJ+Y+Kbnn2botNWXcV4ih5NtgVmenNFrR1h
-	ash2RuBK4lA0OofK60DgUFlFW+bgzj/WAkeXjeHoli3kGYqNqIfYBN4dFMyPWDrv8ufdidiOYFn
-	Iz6726O1csTqIhuoE2TtV1PevaNWQRUpANnPvYSxTL45vE6M5qblEEH/qQ4OsgMuh4c4ICUYVvw
-	nlX+ehJfhXSy3jsA5sdhbN7sDrbmXOCttnYC33DfgtR2OgYBAk9SJ7CqRN84i/qYYFmRfth9D6Q
-	==
-X-Google-Smtp-Source: AGHT+IFhirFSwPDMKdw0szNtN+lgDQLs7hfhawj6V3Wl0uz6ab9RL3vLHJiWuSfsZg9QrYIu8FKcTQ==
-X-Received: by 2002:a05:6000:2004:b0:3b8:d16a:a4b1 with SMTP id ffacd0b85a97d-3b8d94ca58dmr7129938f8f.58.1754337456380;
-        Mon, 04 Aug 2025 12:57:36 -0700 (PDT)
-Received: from iku.Home (97e54365.skybroadband.com. [151.229.67.101])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b79c3b9074sm16293840f8f.17.2025.08.04.12.57.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Aug 2025 12:57:35 -0700 (PDT)
-From: Prabhakar <prabhakar.csengg@gmail.com>
-X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To: Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Magnus Damm <magnus.damm@gmail.com>
-Cc: linux-watchdog@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	Prabhakar <prabhakar.csengg@gmail.com>,
-	Biju Das <biju.das.jz@bp.renesas.com>,
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v3 6/6] watchdog: rzv2h: Improve error strings and add newlines
-Date: Mon,  4 Aug 2025 20:57:23 +0100
-Message-ID: <20250804195723.3963524-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250804195723.3963524-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20250804195723.3963524-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+	s=arc-20240116; t=1754367784; c=relaxed/simple;
+	bh=x4qAdIOwabgKrjpzT3JrvXoHgiyopFX+ODTpj23JAwI=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:Message-ID:MIME-Version:
+	 Content-Type:References; b=Nu9k4uy1lTMeUOn5aQdzdUo/D3YlSuUWDWW0GWe4Z8ozi8jJQ8SrvFpo5nbCwqjHcoTLYDGWZ37OADFeNMtk96iUnnVNnvHwsojq0L5m+HBDhhZa7gH5BqkMs4OJDQLCgZ87iwOCH26AS8f+0izcqHFlnl6qJmUTNOzG7S4DkSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=ubkh80zG; arc=none smtp.client-ip=203.254.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20250805042259epoutp0439ca26013bbef4085d605f8f7139bbcb~YxDNpF0Gp1682616826epoutp04k
+	for <linux-watchdog@vger.kernel.org>; Tue,  5 Aug 2025 04:22:59 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20250805042259epoutp0439ca26013bbef4085d605f8f7139bbcb~YxDNpF0Gp1682616826epoutp04k
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1754367779;
+	bh=dYOmk++d7CASSvlIW8u4QMsdypGYRvSYn8mi2FnZsnw=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+	b=ubkh80zGGacpBKtPqHK4g+eF4TdnmFD8gKTFMcafYfhycc1ngt4iJRN4ZqRKcXZF/
+	 qPewIL0AEd0gs0Ms1497LBVxAOcui4FJbLkVQBpBLr6buz85zxOsf8vOmxmZwenrDR
+	 8M0Uj5VXtcVvZFbq/Ms5affHB8q9+x+e50lKgAHQ=
+Received: from epsnrtp04.localdomain (unknown [182.195.42.156]) by
+	epcas2p3.samsung.com (KnoxPortal) with ESMTPS id
+	20250805042259epcas2p3a3c30bbe884d5f154777b431b94be1fa~YxDMw1Kf82531325313epcas2p3u;
+	Tue,  5 Aug 2025 04:22:59 +0000 (GMT)
+Received: from epcas2p3.samsung.com (unknown [182.195.36.97]) by
+	epsnrtp04.localdomain (Postfix) with ESMTP id 4bx0dt22cDz6B9mD; Tue,  5 Aug
+	2025 04:22:58 +0000 (GMT)
+Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
+	epcas2p1.samsung.com (KnoxPortal) with ESMTPA id
+	20250805042257epcas2p1be233a189b619f4b6fc2253931a2dfc5~YxDLadew41226612266epcas2p1d;
+	Tue,  5 Aug 2025 04:22:57 +0000 (GMT)
+Received: from KORCO180836 (unknown [12.36.150.245]) by epsmtip2.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20250805042257epsmtip22d4312d31b3c174c806adc6fe9821709~YxDLWqroy2523925239epsmtip2E;
+	Tue,  5 Aug 2025 04:22:57 +0000 (GMT)
+From: <sw617.shin@samsung.com>
+To: "'Sam Protsenko'" <semen.protsenko@linaro.org>
+Cc: <krzk@kernel.org>, <alim.akhtar@samsung.com>, <wim@linux-watchdog.org>,
+	<linux@roeck-us.net>, <khwan.seo@samsung.com>, <dongil01.park@samsung.com>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-samsung-soc@vger.kernel.org>,
+	<linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+In-Reply-To: <CAPLW+4nRh9DEnkhunG68xvGdaNJswC8fN4v4uBA1Aaao_5pxfw@mail.gmail.com>
+Subject: RE: [PATCH v4 2/4] watchdog: s3c2410_wdt: Fix max_timeout being
+ calculated larger
+Date: Tue, 5 Aug 2025 13:22:57 +0900
+Message-ID: <000a01dc05c0$9f0ab110$dd201330$@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQH0xghtQJzMk6eIf2JQ+3VnAplQzQKQWbtpAWsaNKYBwwrfw7Pz5ruw
+Content-Language: ko
+X-CMS-MailID: 20250805042257epcas2p1be233a189b619f4b6fc2253931a2dfc5
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+cpgsPolicy: CPGSC10-234,N
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20250724081336epcas2p38e95932ddc5c702e05a6436f05582993
+References: <CGME20250724081336epcas2p38e95932ddc5c702e05a6436f05582993@epcas2p3.samsung.com>
+	<20250724080854.3866566-1-sw617.shin@samsung.com>
+	<20250724080854.3866566-3-sw617.shin@samsung.com>
+	<CAPLW+4nRh9DEnkhunG68xvGdaNJswC8fN4v4uBA1Aaao_5pxfw@mail.gmail.com>
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On Saturday, August 2, 2025 at 1:12 PM Sam Protsenko <semen.protsenko=40lin=
+aro.org> wrote:
 
-Update rzv2h_wdt_probe() to provide clearer error strings when retrieving
-the pclk, oscclk, and reset controller, and append missing newline
-characters to dev_err_probe() and dev_warn() calls for proper log
-formatting.
+> How about something like this instead?
+>=20
+> 8<--------------------------------------------------------------------->8
+> static inline unsigned int s3c2410wdt_max_timeout(unsigned long freq) =7B
+>     const u64 div_max =3D (S3C2410_WTCON_PRESCALE_MAX + 1) *
+>                 S3C2410_WTCON_MAXDIV; /* 32768 */
+>     const u64 n_max =3D S3C2410_WTCNT_MAXCNT * div_max;
+>     u64 t_max =3D n_max / freq;
+>=20
+>     if (t_max > UINT_MAX)
+>         t_max =3D UINT_MAX;
+>=20
+>     return (unsigned int)t_max;
+> =7D
+> 8<--------------------------------------------------------------------->8
+>=20
+> This implementation's result:
+>   - is never greater than real timeout, as it loses the decimal part afte=
+r
+> integer division in t_max
+>   - much closer to the real timeout value, as it benefits from very big
+> n_max in the numerator (this is the main trick here)
+>   - prepared for using 32-bit max counter value in your next patch, as it
+> uses u64 type for calculations
+>=20
+> For example, at the clock frequency of 33 kHz:
+>   - real timeout is: 65074.269 sec
+>   - old function returns: 65535 sec
+>   - your function returns: 32767 sec
+>   - the suggested function returns: 65074 sec
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
-v2->v3:
-- Added reviewed-by from Wolfram.
+Thank you for your feedback.
+I'll make the code changes as follows in the next patch set:
 
-v1->v2:
-- No changes.
----
- drivers/watchdog/rzv2h_wdt.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+static inline unsigned int s3c2410wdt_max_timeout(struct s3c2410_wdt *wdt)
+ =7B
+        const unsigned long freq =3D s3c2410wdt_get_freq(wdt);
++       const u64 div_max =3D (S3C2410_WTCON_PRESCALE_MAX + 1) *
++                       S3C2410_WTCON_MAXDIV;
++       const u64 n_max =3D S3C2410_WTCNT_MAXCNT * div_max;
++       u64 t_max =3D n_max / freq;
 
-diff --git a/drivers/watchdog/rzv2h_wdt.c b/drivers/watchdog/rzv2h_wdt.c
-index ee3ed5a6d98e..2027795f212e 100644
---- a/drivers/watchdog/rzv2h_wdt.c
-+++ b/drivers/watchdog/rzv2h_wdt.c
-@@ -296,16 +296,16 @@ static int rzv2h_wdt_probe(struct platform_device *pdev)
- 
- 	priv->pclk = devm_clk_get_prepared(dev, "pclk");
- 	if (IS_ERR(priv->pclk))
--		return dev_err_probe(dev, PTR_ERR(priv->pclk), "no pclk");
-+		return dev_err_probe(dev, PTR_ERR(priv->pclk), "Failed to get pclk\n");
- 
- 	priv->oscclk = devm_clk_get_optional_prepared(dev, "oscclk");
- 	if (IS_ERR(priv->oscclk))
--		return dev_err_probe(dev, PTR_ERR(priv->oscclk), "no oscclk");
-+		return dev_err_probe(dev, PTR_ERR(priv->oscclk), "Failed to get oscclk\n");
- 
- 	priv->rstc = devm_reset_control_get_optional_exclusive(dev, NULL);
- 	if (IS_ERR(priv->rstc))
- 		return dev_err_probe(dev, PTR_ERR(priv->rstc),
--				     "failed to get cpg reset");
-+				     "Failed to get cpg reset\n");
- 
- 	switch (priv->of_data->count_source) {
- 	case COUNT_SOURCE_LOCO:
-@@ -343,7 +343,7 @@ static int rzv2h_wdt_probe(struct platform_device *pdev)
- 
- 	ret = watchdog_init_timeout(&priv->wdev, 0, dev);
- 	if (ret)
--		dev_warn(dev, "Specified timeout invalid, using default");
-+		dev_warn(dev, "Specified timeout invalid, using default\n");
- 
- 	return devm_watchdog_register_device(dev, &priv->wdev);
- }
--- 
-2.50.1
+-       return S3C2410_WTCNT_MAXCNT / (freq / (S3C2410_WTCON_PRESCALE_MAX +=
+ 1)
+-                                      / S3C2410_WTCON_MAXDIV);
++       if (t_max > UINT_MAX)
++               t_max =3D UINT_MAX;
++
++       return (unsigned int)t_max;
+ =7D
 
 
