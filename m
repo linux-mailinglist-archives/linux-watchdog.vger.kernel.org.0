@@ -1,57 +1,57 @@
-Return-Path: <linux-watchdog+bounces-3969-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3970-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A27E2B1B455
-	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Aug 2025 15:12:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE42AB1B451
+	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Aug 2025 15:12:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 85D7D182D91
-	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Aug 2025 13:12:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E41863AC975
+	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Aug 2025 13:12:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E962127780D;
-	Tue,  5 Aug 2025 13:10:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67100237173;
+	Tue,  5 Aug 2025 13:11:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P01faNNU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vQh8ayeM"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF6B8272E5E;
-	Tue,  5 Aug 2025 13:10:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A3362737E7;
+	Tue,  5 Aug 2025 13:11:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754399454; cv=none; b=VybWg2O87r0dp8pg+QH4eRdsSg15GWp+eWDVgJpSpfFGyIWdd1YHPT4A2/bj6EFsUsQLdRpkNMoOXlqH/VjqG4LXLCHGSo8+fW2ogmrWe7PsOc49UrurMRyXtNRC2nyYVYAFfqLMMLEHtetJETzhi9BGnl00ZaMlJX/Dzw4tW2k=
+	t=1754399461; cv=none; b=J9sE6i1lrtkJwuI0ekt5tRWJAHIh8vzxY5uQSNiME3IySn/AQCRkVE3kFZ5Tt3Ga1F9yL0/JbZSzwni+QjFXQ/lET+JSp751OlgFeVPQtrm8klfUMCnSppETTrn2hXQ5PWZ2Pzs/m8Bc6ec1dFe8idNJfE4e+Rlbr3tKLI5UuCE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754399454; c=relaxed/simple;
-	bh=HynsNXTfXJ8if4X286OxVES8dPGhWFDMtO9Y8MkCMVs=;
+	s=arc-20240116; t=1754399461; c=relaxed/simple;
+	bh=DdvEbqBqA1HOPxq3rnYuvqPczayzOQ3TI0Xd1OOEko8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=dGdQjkGXFKq8jWp6OcY4SV5L7azGow8SflbHf1xxHJLI6ZovocPg5Hw0slqW2uV2L7iNduLBAOwIcaDji37sayeyIgYXyqiP6q64QjpXNE1/zhB5ctvFYFgeQqsMyGK5qfYlCMEKy41dcFrDnjm+foMAHmD4ADqsZdscdb3cia0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P01faNNU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7355EC4CEF4;
-	Tue,  5 Aug 2025 13:10:53 +0000 (UTC)
+	 MIME-Version; b=bY6KbMoSQWu4/6u5EmnoyeemK8e0TKrJioHjr9Saw+WBIy4p84tgQhkaf5N5zF+KCOquZi4j8/AkBqqnoo+PRFq4nyd4gm6fED951IH3VzCi8qyWjSlsLdkDcMCHpNFFM+87vvgEFrP7uiKjR3DLHPvF3hXY3yPwdlXbMQXnkcg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vQh8ayeM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA364C4CEF7;
+	Tue,  5 Aug 2025 13:10:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754399454;
-	bh=HynsNXTfXJ8if4X286OxVES8dPGhWFDMtO9Y8MkCMVs=;
+	s=k20201202; t=1754399461;
+	bh=DdvEbqBqA1HOPxq3rnYuvqPczayzOQ3TI0Xd1OOEko8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=P01faNNUVP2tb7BmmhS6XbTbMDjBIt8IeCgbKb8+IbbK4fXJLZ1l3wJV1E+Ok5Hip
-	 P+Rx9mYcEt4FPupz5VNCU38laFp/iltHp0VjkVvmBU+c3hC6plMTV9M5kfSnv9MvQz
-	 Jwr4Wtv63t7OrquT+enMN7zukCfDmtiIc5a7cHzcMxatlFEYZiyU2X2aQ3YRQuLrDx
-	 RIt8WTyM1YgWCHhZn4vfG55rpOnZftCQd5Ej89B3ELuVa43/nHqjsD3vEq/SsJLOSX
-	 us2T2gElBneJ4evP98DGA2DWxWZYGQqvi1vrDpJ91AZT1PWi7xHQ4+SN7iOIW27utc
-	 u6MQ9ujgZ/GYg==
+	b=vQh8ayeMN+8nuo/4pyF2hWCBDgIX6I8oMLsWAetuvgFCVW4AwxuXUpQ750mJv4tzW
+	 2eZ2QdUK5/zlnZO1TwHllZoKPJum/XX65zMc9eVA5E6duE5kFTjs5VRnbPe+fZ0jxV
+	 Moy9Jacc6AgTVf1i1FLz842AhPRSAxKPdNpwWeCFUqi6JOOJW58JSq3L08fwyw3LM0
+	 Mmul17hMLFII2XuvCMDu/ZWEqggul5LZ2QahpiDmFteVkFuQQvXj698kYngVOYm6ig
+	 kae9/hn/bbmgn94FsWlpu8k97P5iZ+imImSGPv0BYDgl5vuldzdL3NzNvxCW71OdXq
+	 8ROieH0bxlniQ==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Ziyan Fu <fuzy5@lenovo.com>,
+Cc: Sebastian Reichel <sebastian.reichel@collabora.com>,
 	Guenter Roeck <linux@roeck-us.net>,
 	Wim Van Sebroeck <wim@linux-watchdog.org>,
 	Sasha Levin <sashal@kernel.org>,
 	linux-watchdog@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.16-5.15] watchdog: iTCO_wdt: Report error if timeout configuration fails
-Date: Tue,  5 Aug 2025 09:09:06 -0400
-Message-Id: <20250805130945.471732-31-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.16-5.4] watchdog: dw_wdt: Fix default timeout
+Date: Tue,  5 Aug 2025 09:09:09 -0400
+Message-Id: <20250805130945.471732-34-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250805130945.471732-1-sashal@kernel.org>
 References: <20250805130945.471732-1-sashal@kernel.org>
@@ -66,28 +66,21 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.16
 Content-Transfer-Encoding: 8bit
 
-From: Ziyan Fu <fuzy5@lenovo.com>
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-[ Upstream commit 40efc43eb7ffb5a4e2f998c13b8cfb555e671b92 ]
+[ Upstream commit ac3dbb91e0167d017f44701dd51c1efe30d0c256 ]
 
-The driver probes with the invalid timeout value when
-'iTCO_wdt_set_timeout()' fails, as its return value is not checked. In
-this case, when executing "wdctl", we may get:
+The Synopsys Watchdog driver sets the default timeout to 30 seconds,
+but on some devices this is not a valid timeout. E.g. on RK3588 the
+actual timeout being used is 44 seconds instead.
 
-Device:        /dev/watchdog0
-Timeout:       30 seconds
-Timeleft:      613 seconds
+Once the watchdog is started the value is updated accordingly, but
+it would be better to expose a sensible timeout to userspace without
+the need to first start the watchdog.
 
-The timeout value is the value of "heartbeat" or "WATCHDOG_TIMEOUT", and
-the timeleft value is calculated from the register value we actually read
-(0xffff) by masking with 0x3ff and converting ticks to seconds (* 6 / 10).
-
-Add error handling to return the failure code if 'iTCO_wdt_set_timeout()'
-fails, ensuring the driver probe fails and prevents invalid operation.
-
-Signed-off-by: Ziyan Fu <fuzy5@lenovo.com>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Link: https://lore.kernel.org/r/20250704073518.7838-1-13281011316@163.com
+Link: https://lore.kernel.org/r/20250717-dw-wdt-fix-initial-timeout-v1-1-86dc864d48dd@kernel.org
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
@@ -95,91 +88,91 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
 
 LLM Generated explanations, may be completely bogus:
 
+Based on my analysis of the commit, here's my assessment:
+
 **Backport Status: YES**
 
-This commit should be backported to stable kernel trees for the
-following reasons:
+## Extensive Explanation:
 
-## Bug Fix Analysis
+This commit is a clear bugfix that should be backported to stable kernel
+trees for the following reasons:
 
-1. **Critical Bug Being Fixed**: The commit fixes a probe failure
-   handling bug where the driver continues to initialize with an invalid
-   timeout value when `iTCO_wdt_set_timeout()` fails. This can lead to:
-   - Watchdog operating with incorrect timeout values
-   - Misleading information reported to userspace (timeout shows 30s but
-     actual timer reads 0xffff)
-   - Potential system instability due to watchdog misbehavior
+### 1. **It fixes a real user-visible bug**
+The commit addresses a problem where the watchdog driver exposes an
+incorrect timeout value (30 seconds) to userspace when that value is not
+actually valid for the hardware. On RK3588 specifically, the hardware
+uses 44 seconds instead of the requested 30 seconds, creating a
+discrepancy between what userspace sees and what the hardware actually
+does.
 
-2. **Clear Error Path Issue**: Looking at the code changes in
-   drivers/watchdog/iTCO_wdt.c:579-584, the original code ignored the
-   return value of the fallback `iTCO_wdt_set_timeout()` call. If this
-   second attempt to set the default timeout also fails, the driver
-   would continue initialization with a potentially corrupted watchdog
-   state.
+### 2. **The fix is minimal and contained**
+The change adds only two lines of code:
+```c
++               /* Limit timeout value to hardware constraints. */
++               dw_wdt_set_timeout(wdd, wdd->timeout);
+```
+This simply calls the existing `dw_wdt_set_timeout()` function during
+initialization to ensure the timeout value is properly validated and
+adjusted to hardware constraints before the watchdog is registered with
+the kernel.
 
-3. **Hardware Interaction Failure**: The `iTCO_wdt_set_timeout()`
-   function (lines 351-395) performs hardware register writes and
-   verifies them. A failure here means:
-   - Hardware register writes failed to take effect
-   - Verification showed the written value didn't match what was read
-     back
-   - The watchdog timer is in an undefined/invalid state
+### 3. **No architectural changes or new features**
+The commit doesn't introduce any new functionality or change the
+driver's architecture. It merely ensures that the existing timeout
+validation logic (which was already being called when the watchdog
+starts) is also applied during initialization.
 
-## Stable Backport Criteria
+### 4. **Low risk of regression**
+The `dw_wdt_set_timeout()` function is already being called in other
+code paths (when the watchdog is started, when timeout is changed). This
+commit just ensures it's also called during probe to validate the
+initial timeout. The function itself uses `dw_wdt_find_best_top()` to
+find a valid hardware timeout value that's closest to the requested
+value.
 
-1. **Small and Contained Fix**: The change is minimal - only 4 lines
-   added:
-   - Captures return value of fallback timeout setting
-   - Adds error checking and proper error return
-   - Adds appropriate error logging
+### 5. **Affects user-facing behavior**
+Without this fix, userspace applications that query the watchdog timeout
+before starting it will get an incorrect value (30 seconds) that doesn't
+match what the hardware will actually use (e.g., 44 seconds on RK3588).
+This could lead to incorrect assumptions about watchdog behavior in
+monitoring and recovery systems.
 
-2. **No Architectural Changes**: This is a straightforward error
-   handling fix that doesn't change any interfaces or introduce new
-   features.
+### 6. **The fix follows established patterns**
+The commit message notes "it would be better to expose a sensible
+timeout to userspace without the need to first start the watchdog" -
+this is a reasonable expectation that userspace should have accurate
+information about hardware settings without needing to activate the
+hardware first.
 
-3. **Fixes Real User-Visible Issue**: The commit message shows this
-   causes real problems visible to users through `wdctl` command showing
-   incorrect timeout/timeleft values.
+### 7. **Subsystem maintainer review**
+The commit has been reviewed by Guenter Roeck (the watchdog subsystem
+maintainer) and signed off by both subsystem maintainers, indicating
+it's a proper fix that they consider important.
 
-4. **Low Risk of Regression**: The change only adds error checking where
-   none existed before. If the timeout setting succeeds (normal case),
-   behavior is unchanged. If it fails, the driver now properly fails to
-   probe instead of continuing with invalid state.
+The fix ensures that the watchdog timeout value exposed to userspace
+through sysfs and ioctl interfaces accurately reflects the hardware's
+actual timeout capability from the moment the driver is loaded, rather
+than showing an incorrect default value until the watchdog is started.
+This is particularly important for systems that need to make decisions
+based on watchdog capabilities before actually starting the watchdog
+timer.
 
-5. **Critical Subsystem**: Watchdog drivers are critical for system
-   reliability and recovery. A malfunctioning watchdog that reports
-   incorrect values or operates with wrong timeouts can lead to
-   unexpected system reboots or failure to reboot when needed.
+ drivers/watchdog/dw_wdt.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-6. **Part of a Series of Fixes**: This appears to be from the same
-   author (Ziyan Fu) who previously fixed a related issue in commit
-   158f9f2f7152 about updating the heartbeat value. This suggests
-   ongoing work to fix error handling in this driver.
-
-The fix prevents the driver from operating in an invalid state when
-hardware initialization fails, which is exactly the type of bug fix that
-stable kernels should include to maintain system reliability.
-
- drivers/watchdog/iTCO_wdt.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
-index 9ab769aa0244..4ab3405ef8e6 100644
---- a/drivers/watchdog/iTCO_wdt.c
-+++ b/drivers/watchdog/iTCO_wdt.c
-@@ -577,7 +577,11 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
- 	/* Check that the heartbeat value is within it's range;
- 	   if not reset to the default */
- 	if (iTCO_wdt_set_timeout(&p->wddev, heartbeat)) {
--		iTCO_wdt_set_timeout(&p->wddev, WATCHDOG_TIMEOUT);
-+		ret = iTCO_wdt_set_timeout(&p->wddev, WATCHDOG_TIMEOUT);
-+		if (ret != 0) {
-+			dev_err(dev, "Failed to set watchdog timeout (%d)\n", WATCHDOG_TIMEOUT);
-+			return ret;
-+		}
- 		dev_info(dev, "timeout value out of range, using %d\n",
- 			WATCHDOG_TIMEOUT);
- 		heartbeat = WATCHDOG_TIMEOUT;
+diff --git a/drivers/watchdog/dw_wdt.c b/drivers/watchdog/dw_wdt.c
+index 26efca9ae0e7..c3fbb6068c52 100644
+--- a/drivers/watchdog/dw_wdt.c
++++ b/drivers/watchdog/dw_wdt.c
+@@ -644,6 +644,8 @@ static int dw_wdt_drv_probe(struct platform_device *pdev)
+ 	} else {
+ 		wdd->timeout = DW_WDT_DEFAULT_SECONDS;
+ 		watchdog_init_timeout(wdd, 0, dev);
++		/* Limit timeout value to hardware constraints. */
++		dw_wdt_set_timeout(wdd, wdd->timeout);
+ 	}
+ 
+ 	platform_set_drvdata(pdev, dw_wdt);
 -- 
 2.39.5
 
