@@ -1,58 +1,57 @@
-Return-Path: <linux-watchdog+bounces-3968-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3969-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51C25B1B42C
-	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Aug 2025 15:10:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A27E2B1B455
+	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Aug 2025 15:12:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 711E1182A91
-	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Aug 2025 13:10:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 85D7D182D91
+	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Aug 2025 13:12:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DA97274B4B;
-	Tue,  5 Aug 2025 13:10:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E962127780D;
+	Tue,  5 Aug 2025 13:10:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="efIMo+c9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P01faNNU"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 620C5274670;
-	Tue,  5 Aug 2025 13:10:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF6B8272E5E;
+	Tue,  5 Aug 2025 13:10:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754399413; cv=none; b=jsBLc/D0Ad9PkxsogN84eyFBRKa6T9p0QKAxB69A0nOAJ/ytmRRpyWQ8fHB/42f9C/HgQXFUl/SGPrH0BCukZuqnxjuUr8K+kAE4Pmhf2lJm65QfnOja1hPyr0EuN+KbucM8LC7/an3PSY2+KBjzjvWfLNGJrENiFM8wMDgouqo=
+	t=1754399454; cv=none; b=VybWg2O87r0dp8pg+QH4eRdsSg15GWp+eWDVgJpSpfFGyIWdd1YHPT4A2/bj6EFsUsQLdRpkNMoOXlqH/VjqG4LXLCHGSo8+fW2ogmrWe7PsOc49UrurMRyXtNRC2nyYVYAFfqLMMLEHtetJETzhi9BGnl00ZaMlJX/Dzw4tW2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754399413; c=relaxed/simple;
-	bh=aQXMZfH1wHhsd/+r/zee2+k5gSW1co6Nvqj5usvcqHY=;
+	s=arc-20240116; t=1754399454; c=relaxed/simple;
+	bh=HynsNXTfXJ8if4X286OxVES8dPGhWFDMtO9Y8MkCMVs=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=AZzmDC0d7thJNo1tnTEGBqQ9E8RzrJ2WGcsCkvClFoEkIHJnOB3d+28EdX/YdJyHs/Cg4pyTwDYONOgMkIEziS+w2fn4HUen8mK9F0No7vHg5+xtXjFEDhUTGLRxnNtFnHoI0ndCxPecH0C440ktPthlAT1qYRXo5OBS37muzHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=efIMo+c9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7FB6C4CEF0;
-	Tue,  5 Aug 2025 13:10:11 +0000 (UTC)
+	 MIME-Version; b=dGdQjkGXFKq8jWp6OcY4SV5L7azGow8SflbHf1xxHJLI6ZovocPg5Hw0slqW2uV2L7iNduLBAOwIcaDji37sayeyIgYXyqiP6q64QjpXNE1/zhB5ctvFYFgeQqsMyGK5qfYlCMEKy41dcFrDnjm+foMAHmD4ADqsZdscdb3cia0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P01faNNU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7355EC4CEF4;
+	Tue,  5 Aug 2025 13:10:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754399413;
-	bh=aQXMZfH1wHhsd/+r/zee2+k5gSW1co6Nvqj5usvcqHY=;
+	s=k20201202; t=1754399454;
+	bh=HynsNXTfXJ8if4X286OxVES8dPGhWFDMtO9Y8MkCMVs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=efIMo+c9uLUkiCmltyMl4M4bWY6qPrjjNM89Lux4HqzJEAlgQ+zn90po1SDlp+ULB
-	 vNURRLS/nFD4Aih/0G+5e+Gu5znOznlmR7xJnFKRqFxXOOjV1w8muY4c5pEHiJ1/v/
-	 oZZiEw8FkfwrygAElQ9zej/KL647GCUNe/CjQUK3t4FSSrsLCbc2ppadyQScA5o6CW
-	 wngA/JEMRYQo7zpEkmomOjoIhbX2OWZbaZLsEJbpgZuxS5L3WVGLFEx5TbpqCPioas
-	 c5YDIuQQvUB9V/qdY5b0NOVcBrJSa7SihZ2Yepc/x/ahVlajI+ErBQnKNwYjMnj8SF
-	 GIaBZyXr8deBg==
+	b=P01faNNUVP2tb7BmmhS6XbTbMDjBIt8IeCgbKb8+IbbK4fXJLZ1l3wJV1E+Ok5Hip
+	 P+Rx9mYcEt4FPupz5VNCU38laFp/iltHp0VjkVvmBU+c3hC6plMTV9M5kfSnv9MvQz
+	 Jwr4Wtv63t7OrquT+enMN7zukCfDmtiIc5a7cHzcMxatlFEYZiyU2X2aQ3YRQuLrDx
+	 RIt8WTyM1YgWCHhZn4vfG55rpOnZftCQd5Ej89B3ELuVa43/nHqjsD3vEq/SsJLOSX
+	 us2T2gElBneJ4evP98DGA2DWxWZYGQqvi1vrDpJ91AZT1PWi7xHQ4+SN7iOIW27utc
+	 u6MQ9ujgZ/GYg==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Aaron Plattner <aplattner@nvidia.com>,
-	Timur Tabi <ttabi@nvidia.com>,
+Cc: Ziyan Fu <fuzy5@lenovo.com>,
 	Guenter Roeck <linux@roeck-us.net>,
 	Wim Van Sebroeck <wim@linux-watchdog.org>,
 	Sasha Levin <sashal@kernel.org>,
 	linux-watchdog@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.16-5.15] watchdog: sbsa: Adjust keepalive timeout to avoid MediaTek WS0 race condition
-Date: Tue,  5 Aug 2025 09:08:47 -0400
-Message-Id: <20250805130945.471732-12-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.16-5.15] watchdog: iTCO_wdt: Report error if timeout configuration fails
+Date: Tue,  5 Aug 2025 09:09:06 -0400
+Message-Id: <20250805130945.471732-31-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250805130945.471732-1-sashal@kernel.org>
 References: <20250805130945.471732-1-sashal@kernel.org>
@@ -67,22 +66,28 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.16
 Content-Transfer-Encoding: 8bit
 
-From: Aaron Plattner <aplattner@nvidia.com>
+From: Ziyan Fu <fuzy5@lenovo.com>
 
-[ Upstream commit 48defdf6b083f74a44e1f742db284960d3444aec ]
+[ Upstream commit 40efc43eb7ffb5a4e2f998c13b8cfb555e671b92 ]
 
-The MediaTek implementation of the sbsa_gwdt watchdog has a race
-condition where a write to SBSA_GWDT_WRR is ignored if it occurs while
-the hardware is processing a timeout refresh that asserts WS0.
+The driver probes with the invalid timeout value when
+'iTCO_wdt_set_timeout()' fails, as its return value is not checked. In
+this case, when executing "wdctl", we may get:
 
-Detect this based on the hardware implementer and adjust
-wdd->min_hw_heartbeat_ms to avoid the race by forcing the keepalive ping
-to be one second later.
+Device:        /dev/watchdog0
+Timeout:       30 seconds
+Timeleft:      613 seconds
 
-Signed-off-by: Aaron Plattner <aplattner@nvidia.com>
-Acked-by: Timur Tabi <ttabi@nvidia.com>
+The timeout value is the value of "heartbeat" or "WATCHDOG_TIMEOUT", and
+the timeleft value is calculated from the register value we actually read
+(0xffff) by masking with 0x3ff and converting ticks to seconds (* 6 / 10).
+
+Add error handling to return the failure code if 'iTCO_wdt_set_timeout()'
+fails, ensuring the driver probe fails and prevents invalid operation.
+
+Signed-off-by: Ziyan Fu <fuzy5@lenovo.com>
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Link: https://lore.kernel.org/r/20250721230640.2244915-1-aplattner@nvidia.com
+Link: https://lore.kernel.org/r/20250704073518.7838-1-13281011316@163.com
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
@@ -92,181 +97,89 @@ LLM Generated explanations, may be completely bogus:
 
 **Backport Status: YES**
 
-This commit should be backported to stable kernel trees. Here's my
-extensive analysis:
+This commit should be backported to stable kernel trees for the
+following reasons:
 
-## Nature of the Fix
+## Bug Fix Analysis
 
-This is a **hardware-specific bug fix** that addresses a race condition
-in MediaTek's implementation of the SBSA generic watchdog. The race
-occurs when a watchdog keepalive ping (`writel(0, gwdt->refresh_base +
-SBSA_GWDT_WRR)`) happens simultaneously with the hardware asserting the
-WS0 timeout signal. In affected hardware, this write is silently
-ignored, potentially leading to unexpected system resets.
+1. **Critical Bug Being Fixed**: The commit fixes a probe failure
+   handling bug where the driver continues to initialize with an invalid
+   timeout value when `iTCO_wdt_set_timeout()` fails. This can lead to:
+   - Watchdog operating with incorrect timeout values
+   - Misleading information reported to userspace (timeout shows 30s but
+     actual timer reads 0xffff)
+   - Potential system instability due to watchdog misbehavior
 
-## Key Code Changes Analysis
+2. **Clear Error Path Issue**: Looking at the code changes in
+   drivers/watchdog/iTCO_wdt.c:579-584, the original code ignored the
+   return value of the fallback `iTCO_wdt_set_timeout()` call. If this
+   second attempt to set the default timeout also fails, the driver
+   would continue initialization with a potentially corrupted watchdog
+   state.
 
-1. **Hardware Detection** (lines 78-79, 217-219):
-   - Adds `SBSA_GWDT_IMPL_MEDIATEK` constant (0x426) to identify
-     MediaTek hardware
-   - Reads hardware implementer ID from `SBSA_GWDT_W_IIDR` register
-   - Sets `need_ws0_race_workaround` flag only for MediaTek
-     implementations when `action=0`
+3. **Hardware Interaction Failure**: The `iTCO_wdt_set_timeout()`
+   function (lines 351-395) performs hardware register writes and
+   verifies them. A failure here means:
+   - Hardware register writes failed to take effect
+   - Verification showed the written value didn't match what was read
+     back
+   - The watchdog timer is in an undefined/invalid state
 
-2. **Workaround Implementation** (lines 171-191):
-   - Adjusts `wdd->min_hw_heartbeat_ms` to `timeout * 500 + 1000`
-   - This forces keepalive pings to occur 1 second after the WOR timeout
-   - Avoids the exact moment when WS0 is being asserted
+## Stable Backport Criteria
 
-3. **Minimum Timeout Adjustment** (lines 337-343):
-   - Sets minimum timeout to 3 seconds for affected hardware
-   - Ensures WOR is set to 1.5 seconds with heartbeats every 2.5 seconds
+1. **Small and Contained Fix**: The change is minimal - only 4 lines
+   added:
+   - Captures return value of fallback timeout setting
+   - Adds error checking and proper error return
+   - Adds appropriate error logging
 
-## Why This Qualifies for Stable Backport
+2. **No Architectural Changes**: This is a straightforward error
+   handling fix that doesn't change any interfaces or introduce new
+   features.
 
-1. **Fixes a Real Bug**: Addresses a hardware race condition that can
-   cause **unexpected system resets** - a critical reliability issue in
-   production systems.
+3. **Fixes Real User-Visible Issue**: The commit message shows this
+   causes real problems visible to users through `wdctl` command showing
+   incorrect timeout/timeleft values.
 
-2. **Limited Scope**:
-   - Only affects MediaTek SBSA watchdog implementations
-   - Workaround is conditionally applied based on hardware detection
-   - No impact on other implementations
+4. **Low Risk of Regression**: The change only adds error checking where
+   none existed before. If the timeout setting succeeds (normal case),
+   behavior is unchanged. If it fails, the driver now properly fails to
+   probe instead of continuing with invalid state.
 
-3. **Minimal Risk**:
-   - Changes are confined to timing adjustments
-   - No architectural changes or new features
-   - Preserves existing behavior for all non-MediaTek hardware
+5. **Critical Subsystem**: Watchdog drivers are critical for system
+   reliability and recovery. A malfunctioning watchdog that reports
+   incorrect values or operates with wrong timeouts can lead to
+   unexpected system reboots or failure to reboot when needed.
 
-4. **Clear Hardware Issue**: The commit message explicitly describes the
-   race condition where "a write to SBSA_GWDT_WRR is ignored if it
-   occurs while the hardware is processing a timeout refresh that
-   asserts WS0."
+6. **Part of a Series of Fixes**: This appears to be from the same
+   author (Ziyan Fu) who previously fixed a related issue in commit
+   158f9f2f7152 about updating the heartbeat value. This suggests
+   ongoing work to fix error handling in this driver.
 
-5. **Production Impact**: Without this fix, systems with MediaTek SBSA
-   watchdog can experience spurious reboots when the race condition is
-   triggered, affecting system availability.
+The fix prevents the driver from operating in an invalid state when
+hardware initialization fails, which is exactly the type of bug fix that
+stable kernels should include to maintain system reliability.
 
-6. **Follows Stable Rules**:
-   - Fixes an actual bug (not adding features)
-   - Small, contained change (~50 lines)
-   - Already reviewed by subsystem maintainers
-   - Hardware-specific fix with clear problem/solution
+ drivers/watchdog/iTCO_wdt.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-## Comparison with Similar Commits
-
-Looking at recent watchdog commits that were backported:
-- `c6e89348fd58`: Fixed incorrect timeout calculations - backported with
-  Cc: stable
-- `041fdbe73de9`: Fixed timeout programming limits - backported to
-  stable
-
-This commit follows the same pattern of fixing hardware-specific bugs
-that affect system reliability.
-
-The fix is essential for MediaTek-based systems using SBSA watchdog to
-prevent unexpected reboots caused by the hardware race condition.
-
- drivers/watchdog/sbsa_gwdt.c | 50 +++++++++++++++++++++++++++++++++---
- 1 file changed, 47 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/watchdog/sbsa_gwdt.c b/drivers/watchdog/sbsa_gwdt.c
-index 5f23913ce3b4..6ce1bfb39064 100644
---- a/drivers/watchdog/sbsa_gwdt.c
-+++ b/drivers/watchdog/sbsa_gwdt.c
-@@ -75,11 +75,17 @@
- #define SBSA_GWDT_VERSION_MASK  0xF
- #define SBSA_GWDT_VERSION_SHIFT 16
- 
-+#define SBSA_GWDT_IMPL_MASK	0x7FF
-+#define SBSA_GWDT_IMPL_SHIFT	0
-+#define SBSA_GWDT_IMPL_MEDIATEK	0x426
-+
- /**
-  * struct sbsa_gwdt - Internal representation of the SBSA GWDT
-  * @wdd:		kernel watchdog_device structure
-  * @clk:		store the System Counter clock frequency, in Hz.
-  * @version:            store the architecture version
-+ * @need_ws0_race_workaround:
-+ *			indicate whether to adjust wdd->timeout to avoid a race with WS0
-  * @refresh_base:	Virtual address of the watchdog refresh frame
-  * @control_base:	Virtual address of the watchdog control frame
-  */
-@@ -87,6 +93,7 @@ struct sbsa_gwdt {
- 	struct watchdog_device	wdd;
- 	u32			clk;
- 	int			version;
-+	bool			need_ws0_race_workaround;
- 	void __iomem		*refresh_base;
- 	void __iomem		*control_base;
- };
-@@ -161,6 +168,31 @@ static int sbsa_gwdt_set_timeout(struct watchdog_device *wdd,
- 		 */
- 		sbsa_gwdt_reg_write(((u64)gwdt->clk / 2) * timeout, gwdt);
- 
-+	/*
-+	 * Some watchdog hardware has a race condition where it will ignore
-+	 * sbsa_gwdt_keepalive() if it is called at the exact moment that a
-+	 * timeout occurs and WS0 is being asserted. Unfortunately, the default
-+	 * behavior of the watchdog core is very likely to trigger this race
-+	 * when action=0 because it programs WOR to be half of the desired
-+	 * timeout, and watchdog_next_keepalive() chooses the exact same time to
-+	 * send keepalive pings.
-+	 *
-+	 * This triggers a race where sbsa_gwdt_keepalive() can be called right
-+	 * as WS0 is being asserted, and affected hardware will ignore that
-+	 * write and continue to assert WS0. After another (timeout / 2)
-+	 * seconds, the same race happens again. If the driver wins then the
-+	 * explicit refresh will reset WS0 to false but if the hardware wins,
-+	 * then WS1 is asserted and the system resets.
-+	 *
-+	 * Avoid the problem by scheduling keepalive heartbeats one second later
-+	 * than the WOR timeout.
-+	 *
-+	 * This workaround might not be needed in a future revision of the
-+	 * hardware.
-+	 */
-+	if (gwdt->need_ws0_race_workaround)
-+		wdd->min_hw_heartbeat_ms = timeout * 500 + 1000;
-+
- 	return 0;
- }
- 
-@@ -202,12 +234,15 @@ static int sbsa_gwdt_keepalive(struct watchdog_device *wdd)
- static void sbsa_gwdt_get_version(struct watchdog_device *wdd)
- {
- 	struct sbsa_gwdt *gwdt = watchdog_get_drvdata(wdd);
--	int ver;
-+	int iidr, ver, impl;
- 
--	ver = readl(gwdt->control_base + SBSA_GWDT_W_IIDR);
--	ver = (ver >> SBSA_GWDT_VERSION_SHIFT) & SBSA_GWDT_VERSION_MASK;
-+	iidr = readl(gwdt->control_base + SBSA_GWDT_W_IIDR);
-+	ver = (iidr >> SBSA_GWDT_VERSION_SHIFT) & SBSA_GWDT_VERSION_MASK;
-+	impl = (iidr >> SBSA_GWDT_IMPL_SHIFT) & SBSA_GWDT_IMPL_MASK;
- 
- 	gwdt->version = ver;
-+	gwdt->need_ws0_race_workaround =
-+		!action && (impl == SBSA_GWDT_IMPL_MEDIATEK);
- }
- 
- static int sbsa_gwdt_start(struct watchdog_device *wdd)
-@@ -299,6 +334,15 @@ static int sbsa_gwdt_probe(struct platform_device *pdev)
- 	else
- 		wdd->max_hw_heartbeat_ms = GENMASK_ULL(47, 0) / gwdt->clk * 1000;
- 
-+	if (gwdt->need_ws0_race_workaround) {
-+		/*
-+		 * A timeout of 3 seconds means that WOR will be set to 1.5
-+		 * seconds and the heartbeat will be scheduled every 2.5
-+		 * seconds.
-+		 */
-+		wdd->min_timeout = 3;
-+	}
-+
- 	status = readl(cf_base + SBSA_GWDT_WCS);
- 	if (status & SBSA_GWDT_WCS_WS1) {
- 		dev_warn(dev, "System reset by WDT.\n");
+diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
+index 9ab769aa0244..4ab3405ef8e6 100644
+--- a/drivers/watchdog/iTCO_wdt.c
++++ b/drivers/watchdog/iTCO_wdt.c
+@@ -577,7 +577,11 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
+ 	/* Check that the heartbeat value is within it's range;
+ 	   if not reset to the default */
+ 	if (iTCO_wdt_set_timeout(&p->wddev, heartbeat)) {
+-		iTCO_wdt_set_timeout(&p->wddev, WATCHDOG_TIMEOUT);
++		ret = iTCO_wdt_set_timeout(&p->wddev, WATCHDOG_TIMEOUT);
++		if (ret != 0) {
++			dev_err(dev, "Failed to set watchdog timeout (%d)\n", WATCHDOG_TIMEOUT);
++			return ret;
++		}
+ 		dev_info(dev, "timeout value out of range, using %d\n",
+ 			WATCHDOG_TIMEOUT);
+ 		heartbeat = WATCHDOG_TIMEOUT;
 -- 
 2.39.5
 
