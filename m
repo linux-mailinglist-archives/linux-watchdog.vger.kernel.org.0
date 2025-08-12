@@ -1,93 +1,104 @@
-Return-Path: <linux-watchdog+bounces-3989-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3990-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE452B21495
-	for <lists+linux-watchdog@lfdr.de>; Mon, 11 Aug 2025 20:42:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53CB5B22852
+	for <lists+linux-watchdog@lfdr.de>; Tue, 12 Aug 2025 15:25:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A735B625F4F
-	for <lists+linux-watchdog@lfdr.de>; Mon, 11 Aug 2025 18:42:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C4A5B1882E68
+	for <lists+linux-watchdog@lfdr.de>; Tue, 12 Aug 2025 13:21:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBB7B2E3380;
-	Mon, 11 Aug 2025 18:41:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AbuLZlDw"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17D25279346;
+	Tue, 12 Aug 2025 13:20:38 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF0232E336C;
-	Mon, 11 Aug 2025 18:41:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4002C19C546;
+	Tue, 12 Aug 2025 13:20:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754937677; cv=none; b=XvAPpSY1ZKpK4aNn4iJHsGoCOoWMP1T3P0eizejuFgiUiCrdW0l/gNLVHFpZ/oarSBkJ+N7++/+ZrxkyS4s0GkIsUzDN/THK6Gsj9/lvD8ox6lx2kZ3OIIPqn3o5LDKBRdRdL338t0rbM7FnZVXcxMwVmBrQIoEyRjAiTxH0OYw=
+	t=1755004838; cv=none; b=LYw6zZ/u0Jhm7tCxBZ2A4ca0mp6yV6xdLGFJyCM+llEcfvuoJB+hDDA+kXtPfDNgWl7OvQprixStxx/f+ox1AzgvJOuIPqD8D1yllilyk6hxVbcY1KFk5dLMmOszcGFM1l5hPf+HlCfbl5QHayJIM0dQagHcA1yd7zQrO0koKfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754937677; c=relaxed/simple;
-	bh=f+CLPephwGhFpFxL9fAwCN64RSUg7mbAh29TU2oyj+w=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bwR5VKNSPGJWvrvvB/BgzKeFwAk4eY7bRVqhKn3Llvdnl1fTRUMJTBivayOoFXwzFOLiOyudeu2RwlB/8qNf6HD3lr5PicY79SSGbBOLwgbX+omzJxw8a6kOaGfSecopkz/s6hRX9iYA6i1WdaHtD0AozoTW5X3WT9oTc+VvAzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AbuLZlDw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50BE5C4CEFC;
-	Mon, 11 Aug 2025 18:41:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754937677;
-	bh=f+CLPephwGhFpFxL9fAwCN64RSUg7mbAh29TU2oyj+w=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=AbuLZlDwNBgm+xQloKdNcOn6oKVlHAvtzdBh7jp4kMYy3u3cO0CiF28boKQJdcKwp
-	 if5vcaOCONb6qQDYHasNoEyJn8A6i4eXFZoiuuUo1IqhzpEF3LecTJz0eWUjcFq32C
-	 gTpI41IG63C8inqlgGeC6LkZ3L0RWTQDzvctN9LcgaXO6uiDDvZle/TWkENRpfdZAE
-	 q70Rocxrl3GcNqgECwkaiHgx/UXVb0oH7B7h41I3Nud9b54zqZqKCy/A2XxdGl1UoC
-	 cp7mtitBFqJNc3jGO87UiNoo4nhERo1ygjb+OXkIQjAmIeJmJ/jIT5HLIM6XO23ps7
-	 1eWX2CnHNh6dg==
-From: Bjorn Andersson <andersson@kernel.org>
-To: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	bod.linux@nxsw.ie,
-	Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>
-Cc: linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1755004838; c=relaxed/simple;
+	bh=dKZeRbXDmDXyWaQzC5JavRNVD3OYwP4u3q81PEyl0tA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fN346rcWN4Ho1PupgnBwMq7xkjLAoivjZnDnAaQ7JozumCOFjhOqI+CsKaDoPUsxqlWnfQUMw9GudwdPXA2xNoRecXpnjkW1rbHeUSUzrlUu9L6zffnYUFmxDqAozsL2sPBCUujUKkeQtzq67YRS9FOmfePsMICV1VbnwgWLeZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub4.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4c1WbS5Yxdz9sSf;
+	Tue, 12 Aug 2025 14:51:32 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iikEfDgg7jeb; Tue, 12 Aug 2025 14:51:32 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4c1WbS4ppkz9sSW;
+	Tue, 12 Aug 2025 14:51:32 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 8FFCD8B764;
+	Tue, 12 Aug 2025 14:51:32 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id Vtjy13ysAxeu; Tue, 12 Aug 2025 14:51:32 +0200 (CEST)
+Received: from PO20335.idsi0.si.c-s.fr (unknown [192.168.235.99])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 4277B8B763;
+	Tue, 12 Aug 2025 14:51:32 +0200 (CEST)
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+To: Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
 	linux-watchdog@vger.kernel.org,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: Re: (subset) [PATCH v3 0/4] Add support to read the restart reason from IMEM
-Date: Mon, 11 Aug 2025 13:40:55 -0500
-Message-ID: <175493766109.138281.3436384432329568509.b4-ty@kernel.org>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] watchdog: mpc8xxx_wdt: Reload the watchdog timer when enabling the watchdog
+Date: Tue, 12 Aug 2025 14:51:26 +0200
+Message-ID: <7cfd025ca62fb501dff1f0f923091415a5bc663f.1755002982.git.christophe.leroy@csgroup.eu>
 X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250502-wdt_reset_reason-v3-0-b2dc7ace38ca@oss.qualcomm.com>
-References: <20250502-wdt_reset_reason-v3-0-b2dc7ace38ca@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1755003087; l=1306; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=dKZeRbXDmDXyWaQzC5JavRNVD3OYwP4u3q81PEyl0tA=; b=DHlc4najn4H0S8heYPb/zAXQoBhuXVwytdtt0/rZgWx85ANJqqu396NbX9HuLosa5Kmauvvlc Aok+4K7ILhvCCtwuBRNhhfDkYALoJmHH8/zyAan4/WS7+aBD4SsGJ6X
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
 
+When the watchdog gets enabled with this driver, it leaves enough time
+for the core watchdog subsystem to start pinging it. But when the
+watchdog is already started by hardware or by the boot loader, little
+time remains before it fires and it happens that the core watchdog
+subsystem doesn't have time to start pinging it.
 
-On Fri, 02 May 2025 18:47:48 +0530, Kathiravan Thirumoorthy wrote:
-> In Qualcomm IPQ SoC, if the system is rebooted due to the watchdog
-> timeout, there is no way to identify it. Current approach of checking
-> the EXPIRED_STATUS in WDT_STS is not working.
-> 
-> To achieve this, if the system is rebooted due to watchdog timeout, the
-> information is captured in the IMEM by the bootloader (along with other
-> reason codes as well).
-> 
-> [...]
+Until commit 19ce9490aa84 ("watchdog: mpc8xxx: use the core worker
+function") pinging was managed by the driver itself and the watchdog
+was immediately pinged by setting the timer expiry to 0.
 
-Applied, thanks!
+So restore similar behaviour by pinging it when enabling it so that
+if it was already enabled the watchdog timer counter is reloaded.
 
-[1/4] dt-bindings: sram: qcom,imem: Document IPQ5424 compatible
-      commit: 3fa1095979393d5b178264cc1bdfb473e80ab774
+Fixes: 19ce9490aa84 ("watchdog: mpc8xxx: use the core worker function")
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ drivers/watchdog/mpc8xxx_wdt.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Best regards,
+diff --git a/drivers/watchdog/mpc8xxx_wdt.c b/drivers/watchdog/mpc8xxx_wdt.c
+index 867f9f3113797..a4b497ecfa205 100644
+--- a/drivers/watchdog/mpc8xxx_wdt.c
++++ b/drivers/watchdog/mpc8xxx_wdt.c
+@@ -100,6 +100,8 @@ static int mpc8xxx_wdt_start(struct watchdog_device *w)
+ 	ddata->swtc = tmp >> 16;
+ 	set_bit(WDOG_HW_RUNNING, &ddata->wdd.status);
+ 
++	mpc8xxx_wdt_keepalive(ddata);
++
+ 	return 0;
+ }
+ 
 -- 
-Bjorn Andersson <andersson@kernel.org>
+2.49.0
+
 
