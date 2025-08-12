@@ -1,104 +1,169 @@
-Return-Path: <linux-watchdog+bounces-3990-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3991-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53CB5B22852
-	for <lists+linux-watchdog@lfdr.de>; Tue, 12 Aug 2025 15:25:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9519B23A05
+	for <lists+linux-watchdog@lfdr.de>; Tue, 12 Aug 2025 22:33:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C4A5B1882E68
-	for <lists+linux-watchdog@lfdr.de>; Tue, 12 Aug 2025 13:21:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5FEE76E4F89
+	for <lists+linux-watchdog@lfdr.de>; Tue, 12 Aug 2025 20:33:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17D25279346;
-	Tue, 12 Aug 2025 13:20:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9E102C21E2;
+	Tue, 12 Aug 2025 20:33:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P4SQ4e4b"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4002C19C546;
-	Tue, 12 Aug 2025 13:20:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8BB5202C3A;
+	Tue, 12 Aug 2025 20:33:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755004838; cv=none; b=LYw6zZ/u0Jhm7tCxBZ2A4ca0mp6yV6xdLGFJyCM+llEcfvuoJB+hDDA+kXtPfDNgWl7OvQprixStxx/f+ox1AzgvJOuIPqD8D1yllilyk6hxVbcY1KFk5dLMmOszcGFM1l5hPf+HlCfbl5QHayJIM0dQagHcA1yd7zQrO0koKfI=
+	t=1755030785; cv=none; b=eChGLUy/xq3XwknEsgxQT9nFkrHsCQkz+0xJunxCZKhghzoIa9zmcGsqLn0s8jhHDzdy/Mo/VoU4aDYOVLN/0mHSLdUMcrNsQvexH/Eyy7P0Cs1IWdqdjqoXukwWbZoBnVkfV8wPLWvroaFCSB8cB1nDJAqP8TwT+QWryAu+4yM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755004838; c=relaxed/simple;
-	bh=dKZeRbXDmDXyWaQzC5JavRNVD3OYwP4u3q81PEyl0tA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fN346rcWN4Ho1PupgnBwMq7xkjLAoivjZnDnAaQ7JozumCOFjhOqI+CsKaDoPUsxqlWnfQUMw9GudwdPXA2xNoRecXpnjkW1rbHeUSUzrlUu9L6zffnYUFmxDqAozsL2sPBCUujUKkeQtzq67YRS9FOmfePsMICV1VbnwgWLeZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub4.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4c1WbS5Yxdz9sSf;
-	Tue, 12 Aug 2025 14:51:32 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iikEfDgg7jeb; Tue, 12 Aug 2025 14:51:32 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4c1WbS4ppkz9sSW;
-	Tue, 12 Aug 2025 14:51:32 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 8FFCD8B764;
-	Tue, 12 Aug 2025 14:51:32 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id Vtjy13ysAxeu; Tue, 12 Aug 2025 14:51:32 +0200 (CEST)
-Received: from PO20335.idsi0.si.c-s.fr (unknown [192.168.235.99])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 4277B8B763;
-	Tue, 12 Aug 2025 14:51:32 +0200 (CEST)
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
+	s=arc-20240116; t=1755030785; c=relaxed/simple;
+	bh=1zQDwv+c+2f8PAjLjmyAUalogDJhgfoJjuw8TmC5/fQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=u8aiU5gmZw5Q7dehR1AdsRN/a2mUekZmUGSDNcsUpXN3fdU0znGgtckesZ11KK28P1ECH0e59tUoXVjfD4m/DxDtp/t9+sshC5IwAsYxYWvPVPGj63YzdJFVgIVAJgy48h0LVnP85j4SOogfBWgpeKE1haxOSgGG6UwGXTZ1H68=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P4SQ4e4b; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF141C4CEF0;
+	Tue, 12 Aug 2025 20:33:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755030785;
+	bh=1zQDwv+c+2f8PAjLjmyAUalogDJhgfoJjuw8TmC5/fQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=P4SQ4e4bFLupR3TzUMp1am/GwXfw7JyeJPr1ysMR7ki4SP6VkCE8A2g61LTrM2EXK
+	 U7EkuaZzgMPLghKkZ39zoTCNjwuvFy4kiWmsfLigXy69Rt5aSjURab/QVf8bdBtFCs
+	 OQuvaicDLsuPHbIJ67Ismm+KPGF4wABSCYOU0s3U9V2Mux7sBuytZ5XviXM5YYuUfO
+	 6fCi2TE5gkH/bfXFBgTLZGkVZ1d9/qsTVE1s6PriULIM7rrfxIgr0LKRm3hb6w2tk3
+	 v+T9buWsTsJQMVj/SsWeiv0rWIZjYQ5MIPFsrxMVQkTxYfhILlfWjY+9IILhES4unh
+	 KYCHaMbNWHnqQ==
+From: "Rob Herring (Arm)" <robh@kernel.org>
 To: Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
-	linux-watchdog@vger.kernel.org,
+	Guenter Roeck <linux@roeck-us.net>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	=?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+Cc: linux-watchdog@vger.kernel.org,
+	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] watchdog: mpc8xxx_wdt: Reload the watchdog timer when enabling the watchdog
-Date: Tue, 12 Aug 2025 14:51:26 +0200
-Message-ID: <7cfd025ca62fb501dff1f0f923091415a5bc663f.1755002982.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.49.0
+Subject: [PATCH] dt-bindings: watchdog: Convert marvell,armada-3700-wdt to DT schema
+Date: Tue, 12 Aug 2025 15:32:57 -0500
+Message-ID: <20250812203301.726374-1-robh@kernel.org>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1755003087; l=1306; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=dKZeRbXDmDXyWaQzC5JavRNVD3OYwP4u3q81PEyl0tA=; b=DHlc4najn4H0S8heYPb/zAXQoBhuXVwytdtt0/rZgWx85ANJqqu396NbX9HuLosa5Kmauvvlc Aok+4K7ILhvCCtwuBRNhhfDkYALoJmHH8/zyAan4/WS7+aBD4SsGJ6X
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-When the watchdog gets enabled with this driver, it leaves enough time
-for the core watchdog subsystem to start pinging it. But when the
-watchdog is already started by hardware or by the boot loader, little
-time remains before it fires and it happens that the core watchdog
-subsystem doesn't have time to start pinging it.
+Convert the Marvell Armada 3700 watchdog binding to DT schema format.
+It's a straight-forward conversion.
 
-Until commit 19ce9490aa84 ("watchdog: mpc8xxx: use the core worker
-function") pinging was managed by the driver itself and the watchdog
-was immediately pinged by setting the timer expiry to 0.
-
-So restore similar behaviour by pinging it when enabling it so that
-if it was already enabled the watchdog timer counter is reloaded.
-
-Fixes: 19ce9490aa84 ("watchdog: mpc8xxx: use the core worker function")
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 ---
- drivers/watchdog/mpc8xxx_wdt.c | 2 ++
- 1 file changed, 2 insertions(+)
+ .../bindings/watchdog/armada-37xx-wdt.txt     | 23 -----------
+ .../watchdog/marvell,armada-3700-wdt.yaml     | 41 +++++++++++++++++++
+ MAINTAINERS                                   |  2 +-
+ 3 files changed, 42 insertions(+), 24 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/armada-37xx-wdt.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/marvell,armada-3700-wdt.yaml
 
-diff --git a/drivers/watchdog/mpc8xxx_wdt.c b/drivers/watchdog/mpc8xxx_wdt.c
-index 867f9f3113797..a4b497ecfa205 100644
---- a/drivers/watchdog/mpc8xxx_wdt.c
-+++ b/drivers/watchdog/mpc8xxx_wdt.c
-@@ -100,6 +100,8 @@ static int mpc8xxx_wdt_start(struct watchdog_device *w)
- 	ddata->swtc = tmp >> 16;
- 	set_bit(WDOG_HW_RUNNING, &ddata->wdd.status);
- 
-+	mpc8xxx_wdt_keepalive(ddata);
+diff --git a/Documentation/devicetree/bindings/watchdog/armada-37xx-wdt.txt b/Documentation/devicetree/bindings/watchdog/armada-37xx-wdt.txt
+deleted file mode 100644
+index a8d00c31a1d8..000000000000
+--- a/Documentation/devicetree/bindings/watchdog/armada-37xx-wdt.txt
++++ /dev/null
+@@ -1,23 +0,0 @@
+-* Armada 37xx CPU Watchdog Timer Controller
+-
+-Required properties:
+-- compatible : must be "marvell,armada-3700-wdt"
+-- reg : base physical address of the controller and length of memory mapped
+-	region.
+-- clocks : the clock feeding the watchdog timer. See clock-bindings.txt
+-- marvell,system-controller : reference to syscon node for the CPU Miscellaneous
+-	Registers
+-
+-Example:
+-
+-	cpu_misc: system-controller@d000 {
+-		compatible = "marvell,armada-3700-cpu-misc", "syscon";
+-		reg = <0xd000 0x1000>;
+-	};
+-
+-	wdt: watchdog@8300 {
+-		compatible = "marvell,armada-3700-wdt";
+-		reg = <0x8300 0x40>;
+-		marvell,system-controller = <&cpu_misc>;
+-		clocks = <&xtalclk>;
+-	};
+diff --git a/Documentation/devicetree/bindings/watchdog/marvell,armada-3700-wdt.yaml b/Documentation/devicetree/bindings/watchdog/marvell,armada-3700-wdt.yaml
+new file mode 100644
+index 000000000000..60d44d642fb5
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/marvell,armada-3700-wdt.yaml
+@@ -0,0 +1,41 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/marvell,armada-3700-wdt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- 	return 0;
- }
- 
++title: Armada 37xx CPU Watchdog Timer Controller
++
++maintainers:
++  - Marek Behún <kabel@kernel.org>
++
++properties:
++  compatible:
++    const: marvell,armada-3700-wdt
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  marvell,system-controller:
++    description: Reference to syscon node for the CPU Miscellaneous Registers
++    $ref: /schemas/types.yaml#/definitions/phandle
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - marvell,system-controller
++
++additionalProperties: false
++
++examples:
++  - |
++    watchdog@8300 {
++        compatible = "marvell,armada-3700-wdt";
++        reg = <0x8300 0x40>;
++        marvell,system-controller = <&cpu_misc>;
++        clocks = <&xtalclk>;
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 06a4cde222bd..6a2de9638c08 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2623,7 +2623,7 @@ F:	Documentation/devicetree/bindings/firmware/cznic,turris-mox-rwtm.txt
+ F:	Documentation/devicetree/bindings/firmware/cznic,turris-omnia-mcu.yaml
+ F:	Documentation/devicetree/bindings/interrupt-controller/marvell,mpic.yaml
+ F:	Documentation/devicetree/bindings/leds/cznic,turris-omnia-leds.yaml
+-F:	Documentation/devicetree/bindings/watchdog/armada-37xx-wdt.txt
++F:	Documentation/devicetree/bindings/watchdog/marvell,armada-3700-wdt.yaml
+ F:	drivers/bus/moxtet.c
+ F:	drivers/firmware/turris-mox-rwtm.c
+ F:	drivers/gpio/gpio-moxtet.c
 -- 
-2.49.0
+2.47.2
 
 
