@@ -1,101 +1,110 @@
-Return-Path: <linux-watchdog+bounces-3996-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3997-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A07CBB25398
-	for <lists+linux-watchdog@lfdr.de>; Wed, 13 Aug 2025 21:06:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E5682B2925D
+	for <lists+linux-watchdog@lfdr.de>; Sun, 17 Aug 2025 11:00:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B6BE5A24C7
-	for <lists+linux-watchdog@lfdr.de>; Wed, 13 Aug 2025 19:05:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E3D782A0F73
+	for <lists+linux-watchdog@lfdr.de>; Sun, 17 Aug 2025 09:00:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12C7E2BE63A;
-	Wed, 13 Aug 2025 19:05:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6ED72222C3;
+	Sun, 17 Aug 2025 09:00:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="BEJ/kbU3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ATz8DR95"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 194472BF016
-	for <linux-watchdog@vger.kernel.org>; Wed, 13 Aug 2025 19:05:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B3CB221F2D
+	for <linux-watchdog@vger.kernel.org>; Sun, 17 Aug 2025 09:00:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755111950; cv=none; b=a52GLsKYmEmzK2NPd68JRJ5eZh5M0mwMmR+PuWQWdEkNK/F266vS1Hbr20Aj3dbQfYRQBaSli6XFk4B2fuFQ9evatvLr+jzE1WhyWaQjYrEbVxI2nMx6D6/zNB842pU2u2u6ibiV/a1KfopeFoZvqv56h6wDqYNxRFj6fyz4CTc=
+	t=1755421206; cv=none; b=sXnmqA/UxVDu8TaaiS8pMuBYk8BnB6vee8Br5oghbgxAQ3WizKjy9vGSJgg5gt8ZZZrE6VOuAi9A8O03jwsCc74KsNahytG3Mc+54HFk0kQi5brOY7+fPTK14RqmALGc9PcQpU6nO18ia8ufG5tI+bAsNaZ//jeL9iwym9FoeQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755111950; c=relaxed/simple;
-	bh=XHKlaM/JOc8UJjANnxQ0zIDCY7y2d+22cR959I+l0Dk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cdxBxKTKJ0Ke4B3QWebHNs6/cpJM21y1HOi6hdBK6EW/lx52eCixHA+Yk0Bt/zUNcqNVLBw2wFzk3NKVhSIBhEpDpkE1YHmXcWMerWCwTXT2q1n/pYFUpFHVUW2djfIuCeNhUfLNMeVmmDeKr87EUlvCilXfT3CrwARDCwN2F2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=BEJ/kbU3; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=1oIO6DXz+fTrVcY/k0heIpTBXqUv5vw8f/KeSfHLKLQ=; b=BEJ/kb
-	U3eUsMf3CEx0T2tm2blwGgW2LxqEG5Z6+p0r/awH7eGYy/m1IP7VLQMycFBBeaZf
-	i+IBrg5XTyjr6cj5h3TTCi7VyoVIdujTOLyWYkzNuT0Oiy/2nnGxhkXkn3ez8ce3
-	Ty/7c4+1LzvwxTcFh/RVmqycbP/Cilvx3uRHz3SkL+hhKhtA36og+gqC9AT1KBxa
-	3elMd9+qZQuTaBad4nHvxximRnMyxS906XN+7jYbRsj5R6SJGEoAN7GLISuvy4Xq
-	pc8vOeuEArXIzORhspb9j91sRJ/oWotARq2U6wL4fqt0I5xmQCXUyJMceMY7yl+a
-	kDk9AEROdohpYcEg==
-Received: (qmail 732770 invoked from network); 13 Aug 2025 21:05:45 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 13 Aug 2025 21:05:45 +0200
-X-UD-Smtp-Session: l3s3148p1@DA4G2EM8tqJtKDDX
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-watchdog@vger.kernel.org
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 3/3] watchdog: visconti: don't print superfluous errors
-Date: Wed, 13 Aug 2025 21:05:11 +0200
-Message-ID: <20250813190507.3408-8-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250813190507.3408-5-wsa+renesas@sang-engineering.com>
-References: <20250813190507.3408-5-wsa+renesas@sang-engineering.com>
+	s=arc-20240116; t=1755421206; c=relaxed/simple;
+	bh=uZ5hszxPt7eNl/wmtnrB03nVXHTXQmo4M68QI3ZLvjw=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=Sz2tF2B4ypUNN3Js3ORJr4kkuWjloa8RQW5jj3G7nvvbkK9FG4hqYFUwY8hitVKqNkD3Sg5xGjLa9u+jYIbKB5ksedrasG67im+H5zH57hYyNKsslntvS/J1/vgXp06o/CrITObRiGes3vWEQsdd9lTuHJEbxV2efpIixiX6dZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ATz8DR95; arc=none smtp.client-ip=209.85.221.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-53b174c9c79so1425923e0c.2
+        for <linux-watchdog@vger.kernel.org>; Sun, 17 Aug 2025 02:00:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755421204; x=1756026004; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=uZ5hszxPt7eNl/wmtnrB03nVXHTXQmo4M68QI3ZLvjw=;
+        b=ATz8DR95eRlhJpa3nmM5cv12KcifoOQe8eAeWSl6kfmI/ExcIz0eMftevXJM15N4sY
+         77KNiyadDUzqegTLUN23dMXuezliNey6fcKUrPmUocCMm52Ie0Vop4ZwQj8AdcTasHlo
+         Pdr6YOI5geU+I1QT9sAlu4MRmtXLi+eXupIJes1lh2oZ0w/6pwq3dNeGpZZ7vQpv9J4k
+         LIDXsdhymi7E9/sHB7vmPG2TXPkrOKLEUTDZS8xnJbXQPxNgEvqjrLxKy6O3ZcKFoqMe
+         0kO7PvpkArvE/BNV4ru+xSMXvtiZ8wEwqOjfkBQjge8Jc1kSTz9fd3NRGq5bUm1qyJJA
+         aIgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755421204; x=1756026004;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uZ5hszxPt7eNl/wmtnrB03nVXHTXQmo4M68QI3ZLvjw=;
+        b=k8nej9aZbxTvS78BCVx98Ed2vnzTdZaFtKoJ7OEPMe/MtYesjxtgfWdm5etHY8odjy
+         N/gonyjR6vNSsb2kzt56eMaZ3H2VJeBEdL43tty+5MvRPrMZ/a3jla7CriKO3Yyqh9nx
+         +l1itR+snflyGvTzCNQB7DhDzCZTY17aTOfGm0szXZ1Yz+UCvKbtTOo5zNNUNwHhvkRd
+         o0DdkHsVCZ2F3zcyF8w8VzwIf1P25cyzRfzPAeZBqPHyOGNyt7EvFSzoukPYFX2BYb3c
+         Md090hQDwQzCkvaIuPTvu5kaEdaLap7GAzon+V2OyyTG7oG/HDe/lHLuRf39nhhMwpwt
+         LQGA==
+X-Gm-Message-State: AOJu0YzEEH/J3XmLpsR4T9ABnGl2fJtVphXiU4RUy4F/w/VzcP0xZt1l
+	K+80oy1efbT8CAoJjoJUIEClHuStTSTWzwjU5k0fHcs3BnfobwZfvMlNZPpiduA2lcYHD0y6mj8
+	BsqruIl+dCzwz/h8jElw67OUU0i+dFgJEq9IF2n4=
+X-Gm-Gg: ASbGnctZ/C+Zdl4GeO70+/qWGAwH+EGdt8lDbA4A/XQjNQhoUE8u06suQEMXJOqteZH
+	ZkBSS+3p8G/Y32v/lpjNYl6nAXqCJZRdoetPmjyinMuy5fcinTz5yyWX2vD6IaO7ZpXYBL9ZCIg
+	OrLmA9uYHOnlq4Go8gf+Cmgiu3+6ATqXCKb0myMXyPe7KLp0FCuDIAIcsICWFdLHFgfWNphDXbK
+	0b1DKE=
+X-Google-Smtp-Source: AGHT+IGRisQnHLXGUwhzR3Q/oPo7YJuflgWRCGVevUDfhluUP52ldTkVWY9bpH4f0SXnQ2zhXxEIKh5ns28PLp1g5dA=
+X-Received: by 2002:a05:6122:925:b0:539:1142:21a1 with SMTP id
+ 71dfb90a1353d-53b2b631130mr2422490e0c.0.1755421204030; Sun, 17 Aug 2025
+ 02:00:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From: =?UTF-8?B?UGV0YXIgS3VsacSH?= <cooleech@gmail.com>
+Date: Sun, 17 Aug 2025 10:59:52 +0200
+X-Gm-Features: Ac12FXzWzSIH0EYx1GoZEkdcqPgAynV_KXNAJw14C-eURkCD49gIwdRDVH4WQ_8
+Message-ID: <CAFbNFpBY-wrxjD0h8hjGnHFirn35kWfW-ucoX-wAVmR5SHjARg@mail.gmail.com>
+Subject: Bug with intel_oc_wdt kernel module
+To: linux-watchdog@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-The watchdog core will handle error messages already.
+Hi,
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- drivers/watchdog/visconti_wdt.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+as I was pointed out in this thread:
 
-diff --git a/drivers/watchdog/visconti_wdt.c b/drivers/watchdog/visconti_wdt.c
-index cef0794708e7..7795e7fbf67e 100644
---- a/drivers/watchdog/visconti_wdt.c
-+++ b/drivers/watchdog/visconti_wdt.c
-@@ -118,7 +118,6 @@ static int visconti_wdt_probe(struct platform_device *pdev)
- 	struct visconti_wdt_priv *priv;
- 	struct device *dev = &pdev->dev;
- 	struct clk *clk;
--	int ret;
- 	unsigned long clk_freq;
- 
- 	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-@@ -153,9 +152,7 @@ static int visconti_wdt_probe(struct platform_device *pdev)
- 	watchdog_stop_on_unregister(wdev);
- 
- 	/* This overrides the default timeout only if DT configuration was found */
--	ret = watchdog_init_timeout(wdev, 0, dev);
--	if (ret)
--		dev_warn(dev, "Specified timeout value invalid, using default\n");
-+	watchdog_init_timeout(wdev, 0, dev);
- 
- 	return devm_watchdog_register_device(dev, wdev);
- }
--- 
-2.47.2
+bbs.archlinux.org/viewtopic.php?pid=2256738
 
+... I'd like to report a bug that prevents me from fully booting my
+Arch Linux install unless I blacklist this module.
+
+My config is as follows:
+
+OS: Arch Linux x86_64
+Host: HP EliteDesk 800 G1 USDT
+Kernel: Linux 6.16.1-arch1-1
+DE: KDE Plasma 6.4.4
+WM: KWin (Wayland)
+CPU: Intel(R) Core(TM) i5-4590S (4) @ 3.70 GHz
+GPU: Intel Xeon E3-1200 v3/4th Gen Core Processor Integrat]
+
+Problem started after I updated my system with pacman -Syu and kernel
+got updated from 6.15.9 to 6.16. Same problem exists in 6.16.1 kernel,
+but as I've already stated, once I blacklist intel_oc_wdt all works
+just fine.
+Let me know if you need any more info.
+
+Thank you.
+
+Petar
 
