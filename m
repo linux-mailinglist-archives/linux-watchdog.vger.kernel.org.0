@@ -1,76 +1,78 @@
-Return-Path: <linux-watchdog+bounces-4012-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4013-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97B4FB2B750
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABACAB2B751
 	for <lists+linux-watchdog@lfdr.de>; Tue, 19 Aug 2025 04:52:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 68B807AB194
-	for <lists+linux-watchdog@lfdr.de>; Tue, 19 Aug 2025 02:51:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 507C61B66593
+	for <lists+linux-watchdog@lfdr.de>; Tue, 19 Aug 2025 02:52:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE9892882DC;
-	Tue, 19 Aug 2025 02:52:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A1AC1B4F08;
+	Tue, 19 Aug 2025 02:52:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XOFmwNR3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YBy40dAY"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F05515667D;
-	Tue, 19 Aug 2025 02:52:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD6DE1401B;
+	Tue, 19 Aug 2025 02:52:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755571948; cv=none; b=onGkF4cNhVNhTCqjjlPMgW49tDCwFI/XJlDkJ2Jp50qW50ivWxoTMzYM6QiJW0CLzp93hvIKPsck5pTCMabOd6S7b2+BhxPF5zCtTmn5NuoauHbwguiQETabEOxMWvMR4lEbPI4vBCRAipfmTowf1fm/ZQ4W83TYa9Zq3ZqVo1Y=
+	t=1755571953; cv=none; b=rAs+eMng0lOhgQrhx8A/FrlWHV4SM2teIrRsQ2fdaMPFJ3oGBq4DIRVH/G6nT1qCDnLU6f0Zc0dPIn0vrFaEw2h7CaG13drd0YFcTKKrng1+iHAym6MRYmDByGI6A50YlKQ8QEv/vZIgTJpO46ox0KiCam6RK+KQ7SJPlz+noXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755571948; c=relaxed/simple;
-	bh=8TCDh9v9syqCZtg556uYdrY6e+WV9Cbbz9FZAISmjwU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=a7s29PvdSGc/0MF0WJi9vFqAine5T4ezLXJy26IgpcAYjVYbniwj61B5OBSdAMsLSNCLIGCmVBg0ZmhI6mtrT/tZHhx4NEfHL0g1fQIbVG1WhaCIUjQLfCITC3JRSSTJP8l/wbWRIuA6eG9hVFHQCKNHtdika9SH0pv1oekVdq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XOFmwNR3; arc=none smtp.client-ip=209.85.216.42
+	s=arc-20240116; t=1755571953; c=relaxed/simple;
+	bh=Y8x0Dz67DsKdjkPQ4PqlBubQxlf28YguajRC+ZrW2pc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=QR/Jt5OIZOl49lwBtmgsGoEhFdbf3B/X15cbsX0OTTkfB2MQhRmBgcS7BY6drLFsoCMllwNJPZkdqiTUkGKsHkx9pPPQTyhdAn6J/gubfJNLZrNdH9WAMNnMJyB1vfUWV0oAtRhHGuAo+y1bySMqQj+ayidI91fwn3IT0s1ZgSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YBy40dAY; arc=none smtp.client-ip=209.85.216.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-32326de9f4eso4206326a91.2;
-        Mon, 18 Aug 2025 19:52:27 -0700 (PDT)
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-323267b7dfcso4460152a91.1;
+        Mon, 18 Aug 2025 19:52:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755571947; x=1756176747; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=CH2KwpNP3L6st9s8ZTQdVOKVVct0EtCDxjQxgfg+SPE=;
-        b=XOFmwNR3lfcAcVvADEu0l9tV+J7/0V/7CsWTFdiUSlKy+BV9HPlTD3PlVKYITKH27o
-         LoWu1DFt+hI9p49SWDkVkCShl62bEiewAYpsq2KzUUnkfDq6h8fzWFPSLYe0x8c5Kqqy
-         3hGdphU85VuehdY9I6KwWmeOoATZscr0QpYqUPrqo/7a13coY79PwDVyWAgVdWk4koeE
-         M74i7NzLsmgzPYiWcDBt1wocoYVLtCC0Rs9f/9UAo0LRdhf3/AbZdloAQy/qPPVK8O10
-         3kvq7WtevaV3Im7Qbe3pxluLovT1NDqUu/0m/yhOmoU/5dQEjpQ8PKm1pjf/OyHMMyLe
-         DZ5g==
+        d=gmail.com; s=20230601; t=1755571951; x=1756176751; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gkCzBsvlP6/Ffz6cOOw96jrDeHTlV8A8u/fp/nqqvhc=;
+        b=YBy40dAYL5AGJlXpHM4sHkqfMf7vcNODjNbxbcNwUrd3IfT/XVMvvUvHBx2oP6CVOf
+         /o7iGF8rhRDYZ2+UL04MqAFVNd3U8F3Vekx1hxPJVxBaAWRjBj7xm1g3AhZQqBIncq4o
+         eJs09+PSz61HnYl3snOrwv8xF9qiQr9+N+WR6H0DBzxaby/TiHoQmTbU5RSYqkgbO+Qp
+         z2RJjYIW40JUXITLwArlhGkOxkdyuIZcusVj8c2b2NtQdtmlL0P+pMlNfOwZ3uU696pn
+         YVsiOVs3+h/VO3NCorWohMfDsUBcQ9xYGskEWPfRpZZujow906Zny9WtQL9KCNvtMewR
+         nffg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755571947; x=1756176747;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CH2KwpNP3L6st9s8ZTQdVOKVVct0EtCDxjQxgfg+SPE=;
-        b=wQzAH+lphYhejB9YJPrP2HyukOlX6QrSxh3GCIdq46hFDRDasKCe5HUnVNufQYv/iZ
-         24UfmY/tF7srVOnfZ+noaMkvIb7dumuFKaTjo60kb7qNcbiydO+3K/oecP12ZkvzaCCX
-         5eRQfcu/NLtvvfwVD8Aor+RQdzUXK940niiRxf9SmwKHzujjojFsyvRwQRSEbjzYRFpM
-         Bz8RbKWAPrSNZhvSif2S5mKdDTt9L4EYC9raUVCyJ1LKOrrVleQ4/leWYWh8jKjD26Rt
-         23jDaGIq9F9YYqb2FK1opolucb3xZudUorm1hjIYr5N4V8blC3VvVqBNJOdndBZk+QLs
-         cuBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVHmWneQG1oxiI3q8MKDICX7+RhxLQyVVUI5jJBFMQeM4dLtKjtslZu2ZA8gp1yGniFlM5CLOR8HMgDAszSTFU=@vger.kernel.org, AJvYcCWRamwbEahXpDR0Q5Yhle3WonXjSnGfzUbO9AcIU4EUTsjNNFB3Ib59cDshiD7GR1/TllS2GP4aoCM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxjZ79Iczce/HX9xgIh7p8TEDs8jYesdkHIWyUApvIsQAUTRn0e
-	bBbnwXzEeRn8pPuPNwkmVS3q8SJl+qX8zSCCnca/bmbZ0LYXDTPaEpzoyGnqLWTFBrs=
-X-Gm-Gg: ASbGncsBUBaFhZZy8CBGqYwqU/+E5LWVVNsar3FbQ6D9IGnWkSvYSpGwd9/TCGzlk97
-	HRPMMVe5jYtp7qpJGDjee7Nn0mCIoZRxjOgyYrJx0PUq0yFihV9CtLAhOo32A8015fdL5MeNOIp
-	/ZtD12EInYE2FouO1qOa47bjt2N8aRLqGUI0kth8Q6vvhBrIM4e8wSlOHvwxhtEqCvkFoVAE5YV
-	9eEjJXW1PWocaAee40mKzWBJ9ZDVip13GMeb4BTT4X+jvOxVnxOYX8FLsbm1qFtHv+nnYIOrGG+
-	d7GkXIyjWfYZLxBojTUaDYLT/qxntSMd3r2ntyMl4Jq5/lm1TN10vJ7GqnX5ZV5J8FYeJN37rQS
-	wTKiM+GmDLKoOuTPOvZqlQj32uaxxUBqvpdY=
-X-Google-Smtp-Source: AGHT+IEhwZCEHI+dkYJ3BI51GnhpHUygOZNkzScZtnkzkKJms0O4e0OOM2+qIMxChVoyeIS4mD36Fw==
-X-Received: by 2002:a17:90b:1d85:b0:31f:12f:ffaa with SMTP id 98e67ed59e1d1-32476a4a2c2mr1561335a91.6.1755571946518;
-        Mon, 18 Aug 2025 19:52:26 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1755571951; x=1756176751;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gkCzBsvlP6/Ffz6cOOw96jrDeHTlV8A8u/fp/nqqvhc=;
+        b=X+XxPhPwyiJo7PzbcXpjO+2cdIDgkinE3uLXgatXnReM7VWGG0ft1E/tEHSxPuSbLh
+         cwZoREhqBaxTJzQ3XeAb36C1n0kJ++peA1XF2FWSuEhlQjfZG+kuDc+2SpY5SSoAIrGe
+         SQVcBpyGOsi80/AUscZgGU3oy1FSHxpRJ25Vw/eJXi78n1PY7Wpnr9rnkbjbEkoig1Eo
+         go/oqPCKJr/LP0IzdyLp9NODuHFYNeXpyNicki4jYP70FVGdLu+Jq9ScBRDg14jwKsYH
+         ac0hwGlllzjlJSVczFdadwIZxyugfmqXPmkvsgNUJigB/cpjaSH3aRBF5C4wSMu102Gc
+         cmwg==
+X-Forwarded-Encrypted: i=1; AJvYcCXDVX40sWfYkNDWoS/QZ/4/EsU3mvNJ3h8fXqYfv4VkftH6pSg/SQg/EsFNNoAwlgGkc5TpmMgVqOE=@vger.kernel.org, AJvYcCXOs94FKJx9vfUbbHe8HAx4/5OnZdOlaQCDloW/PHPMSAusz1gW3oNIA/yXmGpWsiISIikJP9cmaL22A4Z8RW8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzBUOzxZi5ImUCE6BSnljKx8X6oiN+dHhlgbchyxOmyD0QvU6s6
+	C3rgZbKmNnpp4seoHw7Sl6mRSuSWLCFF1jHhK1sl9aT6WlFHMkU5sHvC
+X-Gm-Gg: ASbGnctLXmn1nXsj1kZTEgvD2BWY3sGqDwW7rXBxDuMrOsGkkn8S+yr33GjecoK4+xt
+	n5gqbUPJaJLOaVkFIkRmcLLF8sIyr8IkGhLDyF2wQMKNdNmwD/8XhPanFlwah/wV0z1XNIPDCwA
+	nrX9/qyz4fR6P2ahUNloO+7JB+VajOPqJekET13EQxhgHW7bggBH2qhVRYwmczFyAyo+V8MD9wF
+	xU2uTMYe2lk1W+pN8ZtZmtl2tIW1NG2C8cs8jF25inBKOj1x6qwj8WV50ElnaVvhUGGRRz12yfv
+	CnkKJ15QPg+/1EtXitNRe73CwTmaX05YYGNR76lZDd6r3+iyXn03f0nnqzq1fPLjFsSplN6CHg7
+	XW0wMuCQVmxv7ZaJcObipJT4I
+X-Google-Smtp-Source: AGHT+IFyQEfl1JPJPxf0BZz+v6ihfWCb5OyV0lLUdFcv0lT0Fbn28LslaGE9gKAirHH4EXO//Ee0AA==
+X-Received: by 2002:a17:90b:2fc3:b0:31f:2bd7:a4d2 with SMTP id 98e67ed59e1d1-32476abd39dmr1551147a91.35.1755571951020;
+        Mon, 18 Aug 2025 19:52:31 -0700 (PDT)
 Received: from linux ([223.185.134.58])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3237e3ecc64sm1315532a91.15.2025.08.18.19.52.22
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3237e3ecc64sm1315532a91.15.2025.08.18.19.52.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Aug 2025 19:52:25 -0700 (PDT)
+        Mon, 18 Aug 2025 19:52:30 -0700 (PDT)
 From: I Viswanath <viswanathiyyappan@gmail.com>
 To: wim@linux-watchdog.org
 Cc: linux@roeck-us.net,
@@ -78,11 +80,14 @@ Cc: linux@roeck-us.net,
 	linux-watchdog@vger.kernel.org,
 	linux-doc@vger.kernel.org,
 	skhan@linuxfoundation.org,
-	linux-kernel-mentees@lists.linux.dev
-Subject: watchdog: cpwd: Clarify wd*_timeout parameters 
-Date: Tue, 19 Aug 2025 08:21:09 +0530
-Message-ID: <20250819025159.6292-1-viswanathiyyappan@gmail.com>
+	linux-kernel-mentees@lists.linux.dev,
+	I Viswanath <viswanathiyyappan@gmail.com>
+Subject: [PATCH] watchdog: cpwd: Clarify wd*_timeout parameters
+Date: Tue, 19 Aug 2025 08:21:10 +0530
+Message-ID: <20250819025159.6292-2-viswanathiyyappan@gmail.com>
 X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250819025159.6292-1-viswanathiyyappan@gmail.com>
+References: <20250819025159.6292-1-viswanathiyyappan@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -91,9 +96,55 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hello,
-  
-        It's easy to misread "timeout in 1/10s" as "timeout in either units
-of 1 sec or 10 secs". This change should clear that up.
+Reword "in 1/10secs" to "in units of 100 ms" in MODULE_PARAM_DESC
+and the corresponding documentation to avoid misinterpretation of
+the fractional notation.
+
+Signed-off-by: I Viswanath <viswanathiyyappan@gmail.com>
+---
+ Documentation/watchdog/watchdog-parameters.rst | 6 +++---
+ drivers/watchdog/cpwd.c                        | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/Documentation/watchdog/watchdog-parameters.rst b/Documentation/watchdog/watchdog-parameters.rst
+index 0a0119edfa82..4257a59792de 100644
+--- a/Documentation/watchdog/watchdog-parameters.rst
++++ b/Documentation/watchdog/watchdog-parameters.rst
+@@ -122,11 +122,11 @@ coh901327_wdt:
+ 
+ cpwd:
+     wd0_timeout:
+-	Default watchdog0 timeout in 1/10secs
++	Default watchdog0 timeout in units of 100 ms
+     wd1_timeout:
+-	Default watchdog1 timeout in 1/10secs
++	Default watchdog1 timeout in units of 100 ms
+     wd2_timeout:
+-	Default watchdog2 timeout in 1/10secs
++	Default watchdog2 timeout in units of 100 ms
+ 
+ -------------------------------------------------
+ 
+diff --git a/drivers/watchdog/cpwd.c b/drivers/watchdog/cpwd.c
+index 13a4d47e68cd..c0a5c6f274e0 100644
+--- a/drivers/watchdog/cpwd.c
++++ b/drivers/watchdog/cpwd.c
+@@ -163,11 +163,11 @@ static int wd1_timeout;
+ static int wd2_timeout;
+ 
+ module_param(wd0_timeout, int, 0);
+-MODULE_PARM_DESC(wd0_timeout, "Default watchdog0 timeout in 1/10secs");
++MODULE_PARM_DESC(wd0_timeout, "Default watchdog0 timeout in units of 100 ms");
+ module_param(wd1_timeout, int, 0);
+-MODULE_PARM_DESC(wd1_timeout, "Default watchdog1 timeout in 1/10secs");
++MODULE_PARM_DESC(wd1_timeout, "Default watchdog1 timeout in units of 100 ms");
+ module_param(wd2_timeout, int, 0);
+-MODULE_PARM_DESC(wd2_timeout, "Default watchdog2 timeout in 1/10secs");
++MODULE_PARM_DESC(wd2_timeout, "Default watchdog2 timeout in units of 100 ms");
+ 
+ MODULE_AUTHOR("Eric Brower <ebrower@usa.net>");
+ MODULE_DESCRIPTION("Hardware watchdog driver for Sun Microsystems CP1400/1500");
+-- 
+2.50.1
 
 
