@@ -1,83 +1,82 @@
-Return-Path: <linux-watchdog+bounces-4027-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4028-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26066B2EC6C
-	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Aug 2025 05:52:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7AD12B2EC73
+	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Aug 2025 05:53:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A443E1CC50C5
-	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Aug 2025 03:52:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA3FA1CC4BBB
+	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Aug 2025 03:53:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2125C2E7F3C;
-	Thu, 21 Aug 2025 03:51:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BB592E8DFE;
+	Thu, 21 Aug 2025 03:52:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XuRE/tty"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OLga+w5X"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ABBD2E7F3E;
-	Thu, 21 Aug 2025 03:51:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7902F2E7F00;
+	Thu, 21 Aug 2025 03:52:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755748316; cv=none; b=f7OR3OqAIkPhMspKSpT63QZbETeAhalQBsj9E7uT0xUpquZf4EWrs9BQ0yNWqcnSmvojtauQ1LrBpzIkaT9K1xj5XY2O4TZBn0kcVBlh7Ar87Puwf/aBbwDmzVPv4thDuj613ljZnN49ZaYpaVeWmEANGFlGg/7O7Bjzg3NkBlE=
+	t=1755748331; cv=none; b=lg5/krCfxdFv+QLSkd36Sx17HC+aGnmyfftKgWARIB57phrxpbMSMRdJI5oR6NYd+6uBbFwpbRiof8jwAI+9kiZs0EUEF4rRDsTJO5YTYBEs0GcCr56z1Hjro/NRz7LWnJIRHCSCYhkGhtDr+V8FLKDGHc5Pc4gdEl3+4MuGevQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755748316; c=relaxed/simple;
-	bh=AUVo76PWlr0EWxclNeZcyo6xV9nFnkPuUQKtyGQwIoQ=;
+	s=arc-20240116; t=1755748331; c=relaxed/simple;
+	bh=HO+iKLe8HlT2pb6fd5e3H9BdROezL8fWqlMIHvgy/Kc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lnRyxYzzKVjUSDiNaIVVQCEyEB/+A07nNqHouye0RcD5Tx2fNFNHqdRfEnyH9GpBxtL019jPVo/tyTBG19Ng2jIrmCy3TJ2lVCSgrjYNzrEJrQSP00jfC+6VQvGRJx5z8QALwraDT9CVKXeJiqNzCm41vSVhdaBltgF/m5dGXV0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XuRE/tty; arc=none smtp.client-ip=209.85.216.49
+	 In-Reply-To:Content-Type; b=EUzDV7uZRY3OeD2Wp0dg7vWPVCrc5HsCKhB5+DxwgR2DUGwiJ0ZPb2fSu7Cgnvwc72bPtxTvrAdN4kkMvK7/n/LvNFAaCCzNtxrzOM9ja4tk5EEjmlicpG3+hdlzUrNf+yomqDcm+AkHUnODQafDPVgBZsvRphwQuBsI9+XFg7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OLga+w5X; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-323266d2d9eso438982a91.0;
-        Wed, 20 Aug 2025 20:51:54 -0700 (PDT)
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2445811e19dso4479145ad.1;
+        Wed, 20 Aug 2025 20:52:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755748313; x=1756353113; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1755748330; x=1756353130; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=SXxswA8fj5FkcY/2ax+ewvXqc7samX9gc8sogWliBdQ=;
-        b=XuRE/tty2PrUhSzVWlyXCNlUF45IZjnq1q0ESgXM+Uol9jBzHhTO81Zk6/zjJmyHxM
-         urTyusezMGja4WmN05fZZhTiJmLZ234UvvAQJceZ2ymqoxioJt+EeqdfSvMj1GMqV/+s
-         8n045VXEF4ecnGbQ/EZjLDaWzo0YlAqiiBtWRiWhMuKFkkGDu1wzx8bdSjmb5Tq4Kv3L
-         fHHR/PLJVja5E7Md81S2UfesKzjxgC91tiIj45MmE47yw/H5oI9R1nxboYM6CBAOvgNf
-         8BUzc2c/yHisSHUdbNtAM3OmSQLa1yQf9rBCiFjSce7kXLDm3wq9ymrDhKxfsvv5Zd5W
-         pMJA==
+        bh=JyMYwN8hLYvWAiCmCjc2sLRiji+vi2/IY5OYZOqnCHI=;
+        b=OLga+w5XJaM9XA3vIJ1Sh/E/J9m/Zku1x9XrppoJqV42//Sc0FUhKOSgl9MEwnuCPv
+         P2GJ194qzggm3DvrHFUfRV9F+LmwX6S1qCz9F2BrwxLBg3fphkUc2aTtRGpXlLhF62Vi
+         A/qWJNhOrka9ck4DuUGam1tlUDj+QrI8x4HlfZcs+839cyb4+5EIAOowMMe4RUAaVUUg
+         xGLVqPWyKs6Ly7H7BHljjLCHMSaEyWcM+gCoOVm9vk2jd4W+5bQ0UuerqiQsG3OEGbbE
+         YSmzNcrteC6jxg9iG8BVPglrHWvpU2Ms4LVZWvXhmc7Gmo9WJcvgWv90LnADK/snVznP
+         CWow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755748313; x=1756353113;
+        d=1e100.net; s=20230601; t=1755748330; x=1756353130;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SXxswA8fj5FkcY/2ax+ewvXqc7samX9gc8sogWliBdQ=;
-        b=PvR5JDyFFCaz/6SNkk2hYADi/YWRYYZV8NHdmrB5+4yeWJdrVkzeigNGLRlNWmh2nn
-         SrphY5BWHgvIStp11hYZMUjojQYsMf9Eg7SV8b+3z9b2Wdc+O5gR5nIShYU4pPd3KyH5
-         /rioJatr0GxgoiQ8IyS0CioVxSaxyGq/zwIUZAnQrPwI5Eo+YtKzbknRPB5k6UeEtPkC
-         WvJvgkFEiYAsA/HKgmLvN9NvwLMoEmvtIW/1DEsxTMggNdoFLr8K8awfC8+fGdJ3yANn
-         n3SATjHGg2G3AjN03dQqrDzMVLpbLOk4jBO0vB5YTIX2+oAwc1qKwqTr92Xc4ESPZJvH
-         YTXg==
-X-Forwarded-Encrypted: i=1; AJvYcCUe1RXaddsheWdZN7U6tL1aM4n/jyaHc+ZLeWU4sU7V7I47FsY9HW0+QBsmwMU5wy5l7v1TGG9BnuPaJLepvz2jlcE=@vger.kernel.org, AJvYcCVjtPb7+wm5llCfeQQe2G7MjWc2dUEEPz46o7dOZw1wpJ1bjiHAI50c5wnPOyfWPtrMuXnTzp/ZFDPKQBYg@vger.kernel.org, AJvYcCXAkiBteo0dDV/9JaqGfoDPvzpVHz81ujL8R9H+d0mdtUEpleoEXH9a3XdgXvur/EhLkO3OJLqwaWT1@vger.kernel.org
-X-Gm-Message-State: AOJu0YwbdXtqxfG2yWCzJ95sKI8uNq3KMYxf0UfVCYPLxUPyMx8n+Xkq
-	AxlG6I1S2AIHqbah17Gh9mYkAmK77MCE75IHJfWXod2fWpYeJXndOl9D
-X-Gm-Gg: ASbGnct/gXoXTTQHykWyyFKN4pqILQkxZ9AgV7SxfpaDnGUx7DsObXahHusvPSCQONb
-	dmnKTOCedUcKX757WFam7FM8C1aTPprfETgABibZptv2A710GVdMfgyfzsw6+K5IS5raUPGL45j
-	fGFLTzj+ywR9Iv0J4enlKqiw5NCdI98PB2kOAKVi3upGkjdJL9kY0in9IpWHqIoIK26/Diyd7F+
-	eGV06fC507kndNpJYAc5KGzgkvNsW0oW/swA6l/OjQjII+xzAR5HA51Kjwn/G/mOwIPZalADV5F
-	52vTMJO4VAb9DP3DA3LhQIbxNSxPqzKX0NkNa4fPmja4x7oFmzUZelLOqAKmZxuBwgN5Otg74KK
-	nUy8+DQf1iIKd6VjsaqVooc9G9OSbwELSvKPFAIJOyPGA43TxaZ+uZqqguNrX8ylYv34gLRB2LE
-	bd+lDvLg==
-X-Google-Smtp-Source: AGHT+IEwdG7b/zyrxugqxS19jjdhBSYJ8MGE9COorTJ3ktwcBVABH+KcfX8Fy3glx6jvHwaNnW8pwA==
-X-Received: by 2002:a17:90b:3504:b0:321:cf49:2c04 with SMTP id 98e67ed59e1d1-324ed073647mr1277524a91.9.1755748313341;
-        Wed, 20 Aug 2025 20:51:53 -0700 (PDT)
+        bh=JyMYwN8hLYvWAiCmCjc2sLRiji+vi2/IY5OYZOqnCHI=;
+        b=vBpnsWqDLOIZJrYA0MUDr9L6bVZaFsvojHdoxYFGsnDLxXAGej2js1NdxFsgtlKKhW
+         01dwDGXrJ6rP6Pj5f5eSfm4MM3uozZv/Az2oVdfMBmoI58uL1DnE8Pewo1uTOnScTgIg
+         FJkIaSc1iTZl+cJVWbNW73xHzZCKUKb0vwyheY9xorX6NbWuKG1t1+lVGmJ27TB2h/fo
+         A+TtZj8+McK3Ddpkm5igVVuTwGbs0EXz5uVeFKmYw4c5uxmMKZY/aHKC+qQbYOcvzaEl
+         kSWc2EqCFhmIreqQjSxxx7RUb8bg9RtRjP1tPhduJzQgHLgIgubRqVq3QKFPRLb73xkx
+         MKOw==
+X-Forwarded-Encrypted: i=1; AJvYcCUmbwoNhVeL11uzbXv5tEPuztrPQomrl2ghWcbkMI3QjqBZGnfWtURlgJWdsQ5CHS9JDiUmyPndtWKfjnjP@vger.kernel.org, AJvYcCW+2f84fZSkoLNN3zcBAw6w/vGQ20zyYjjz0J3GtIg6O3l0p6VGwW6pK8G46+3ASiXOSw5CHG/yLFLP@vger.kernel.org, AJvYcCW5cVSOc7tE3O7+sRCPeFBLzgvEebo8iyat9sSd5axQQQ508JxHjy4QX44xKckHJs231pCHrlF0Tk0J0Ima86moJ4Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyXJlrQlkgmTybx+6M2b0d3PofF5KlZQRYLNS6Z3zzDOdGYHZru
+	kw56tyPibU/Zin/8gX2sj3Vm22WILXJH8jRendSjDCX26WqrE+KCuRKd
+X-Gm-Gg: ASbGncti4Hxv5qNf9EK7m80IFUPNZXcEoIxWFJPhk0I5OF55DdxW7xb6x1koXRovR02
+	xtbnDASg6WRIAph4mAcuogoBnUxz8rKOeku45JkPfkvoE462jkEJEpbIteexJuK5b53/agp6vhy
+	NVCn6Y+QWlWEVpM/PM3GSw62FDUHglUCO2rG7YCpfShAXVI9ZIUEMW9oRP/tWPY2fVr7VeX+QS4
+	RmSydJW9zf03pyked/aYLt3aUiOZ/zThp1fK45JrdBn7WudGf+m1GRaanJB7b12wj/lozDq3CMe
+	SbgQd3GETcQPyGY6X/TKyBil/4QC2I2ClNGE89YQx3sp0osjfasufBhlh3yAthwXdN1stJZFmdm
+	vDGA6UKZDA738oStr5f9a5kOchAx/ripZ+QmFoNwnuvkvJc5A+3EyNcKTVHSuFxLH3GF+XzM=
+X-Google-Smtp-Source: AGHT+IFdrBOlIZ1KC6ZocldPQNsAuSVc4siyM4M9qVomvcrP+Sm16xq8ocBgPOsSrRoaZL0c/B9wlg==
+X-Received: by 2002:a17:902:f684:b0:240:6aad:1c43 with SMTP id d9443c01a7336-245ff865cadmr17423075ad.48.1755748329666;
+        Wed, 20 Aug 2025 20:52:09 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b47640d508esm3632171a12.58.2025.08.20.20.51.51
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-245ed4c707csm40992795ad.69.2025.08.20.20.52.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Aug 2025 20:51:52 -0700 (PDT)
+        Wed, 20 Aug 2025 20:52:09 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e4aee9b2-5085-4424-a7c6-0b7e2e63ccc3@roeck-us.net>
-Date: Wed, 20 Aug 2025 20:51:51 -0700
+Message-ID: <fa916e30-581b-4454-92b6-2c2614661e79@roeck-us.net>
+Date: Wed, 20 Aug 2025 20:52:07 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -85,7 +84,8 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 5/6] watchdog: rzv2h: Add support for RZ/T2H
+Subject: Re: [PATCH v4 6/6] watchdog: rzv2h: Improve error strings and add
+ newlines
 To: Prabhakar <prabhakar.csengg@gmail.com>,
  Wim Van Sebroeck <wim@linux-watchdog.org>, Rob Herring <robh@kernel.org>,
  Geert Uytterhoeven <geert+renesas@glider.be>,
@@ -99,7 +99,7 @@ Cc: linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
  Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
  Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20250820202322.2051969-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20250820202322.2051969-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20250820202322.2051969-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -145,24 +145,17 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20250820202322.2051969-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20250820202322.2051969-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 8/20/25 13:23, Prabhakar wrote:
 > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > 
-> Add support for the RZ/T2H watchdog timer. The RZ/T2H requires control of
-> the watchdog counter using the WDT Debug Control Register (WDTDCR), which
-> allows explicitly stopping and starting the counter. This behavior differs
-> from RZ/V2H, which doesn't have WDTDCR, so the driver is extended to handle
-> this requirement.
-> 
-> To support this, a new `wdtdcr` flag is introduced in the `rzv2h_of_data`
-> structure. When set, the driver maps the WDTDCR register and uses it to
-> control the watchdog counter in the start, stop, and restart callbacks.
-> Additionally, the clock divisor and count source for RZ/T2H are defined
-> to match its hardware configuration.
+> Update rzv2h_wdt_probe() to provide clearer error strings when retrieving
+> the pclk, oscclk, and reset controller, and append missing newline
+> characters to dev_err_probe() and dev_warn() calls for proper log
+> formatting.
 > 
 > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
