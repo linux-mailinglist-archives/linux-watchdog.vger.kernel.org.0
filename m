@@ -1,143 +1,185 @@
-Return-Path: <linux-watchdog+bounces-4033-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4034-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 378DEB2FF06
-	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Aug 2025 17:48:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FB47B2FFCB
+	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Aug 2025 18:17:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0FE73640E75
-	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Aug 2025 15:36:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 28E0256345A
+	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Aug 2025 16:12:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E789A2765D6;
-	Thu, 21 Aug 2025 15:35:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E85C72D027F;
+	Thu, 21 Aug 2025 16:12:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OqDW5n33"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GNkjCTTk"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D939258EFF;
-	Thu, 21 Aug 2025 15:35:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA7C6288C12;
+	Thu, 21 Aug 2025 16:12:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755790558; cv=none; b=nT2TM2YERLcyQOdtz89dhnmXY2F8vIg7dvvOJ6ogoG2qBmVQ2q9GmX77pnjov1v6j6ZaD16Wn/JiG+zvjRqRHHYIKauUK2f0PXgoa2r9YE+bISnMcdENKcVKMJMOodkzfQXC/stH9socD+dK0OfqlGs/OC4LUvAtAKTmF9A+hwM=
+	t=1755792774; cv=none; b=VvG725D96NhFnJGfbQKQIg0p7s/baddmDPu+kg8Ag4FC+u2W2vhOmwEcKZBFN0vy8b0R+GghKtW6Bee4LZ/bt2DH3SRPWiqoZPkyBVsRQt3Na3LC/hC5hk+105L0+Hw13TVVpb3DO+9q+Prii2avqqBtzKJytWCu8xnhi3JPHJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755790558; c=relaxed/simple;
-	bh=s82GxoNSw63yRZx/u0+Xxio+PIiKpP4YwVGMnr28pv4=;
+	s=arc-20240116; t=1755792774; c=relaxed/simple;
+	bh=MR+7f396WrEbtGRfUw87oG8dHsGs9G0ZUbfzqDxjrJ4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tVxC/nBrNSYJrdaGSdx0lKuN0S2sb/kodDpEwecd/Q5wexgYDWAObYhCSq4d1zf+JYuioUD6LK9vvAGh7U0ydgd0h3VN8XDef6yIZQ3MVNIJL8szVXeoZN05x0TVZhC3Wmu2o//QrXtuSqvfR+4zLcO+xhnnthLYsx9ZPEO7EiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OqDW5n33; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-245f2a8fa81so15634215ad.0;
-        Thu, 21 Aug 2025 08:35:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755790556; x=1756395356; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jMyV1g4zn80PbhfAc9iWBO3qy/khW3/zllYxtdudBRY=;
-        b=OqDW5n33ztzGfzYnTNt48WQChRpq9dh6R8iwydErRcUk8kBxTdFQgIXRC1hMn6MRRo
-         ekKE23V5eGRoBEMXyg5lAFEPGTXckj7dkW7aU7Qsm+LKcmDqIPzV1e39A86RLYR9edDC
-         FYpdTPB15TzwDxHw3A4UX06BO5OcpX5pv3q/WM/WB1bstqEAqulySsrOPbBU9kMLsJHm
-         K/1GvzCo0Zr4/CQrPF0ws+Tr+Q3tiFtmSoHbxTOxoaIxk6BTrCpVYLCzEcWPEthDBdwh
-         lhUnHg9ks4Rp6xZwWAGK/cVofNSSRRjfl5QSeB4wEJ0L/JNI61U9KYEzE2y+ZCnvB8Gm
-         SBBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755790556; x=1756395356;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jMyV1g4zn80PbhfAc9iWBO3qy/khW3/zllYxtdudBRY=;
-        b=Egar0tCYGm9yzXZhpXMza565LDBCR0MLw6K3pkSaYsb7Da5DWAb+74L8Mo9REDXSNN
-         WN4xikjS8djDJ/utrm9HmCYxzSVdcuxKODENqFUlgImD0C837LYL07Uv0U/L4GfDfsnP
-         Q/z8RcBRvn63C/6DqCjEMRbX6SGuf0cfFmEtMzN4XB+yMfX/gqvLVLl3ZqOcVTXbM5bu
-         meMQE3V/4i7C8LKQVcAZx6w0aZQ8yFzZzDdUO2KoAtECntIdI+utVulMcDHnj6/U+sgW
-         jxUbULv3VWF9ceRJbobP7lSXV7mh/MvzUNXmwjNxN+NvIkRJ8wmi73NcHza9Y1RFIkAY
-         cX1w==
-X-Forwarded-Encrypted: i=1; AJvYcCU7ohkfmhx4e6H/utrtIVNqBGeMT1Meft5EUgF87lWCKmS4g/GMtF952l2om195xb6BUsfZBgfR5LCiG8NntkEy4iw=@vger.kernel.org, AJvYcCW06NEAY9yqcMbq99I3STVSToJWNKBw2D+S9Gt9c86NB27iQFTxZPZqv2ve0l8k7T57MaxPG91YMA31siM=@vger.kernel.org, AJvYcCXGrCRE9NMCj+hN+iVKnAokUh6LdKfRaM0XNa/O2MgGknmCoZyYBBNsl7glKyGQJZozaG3cSr2CvMQeqSY4R6c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YywQsZhqBVRZhCXRCw9XLee7k8S+CgACABK4OgQfYPURHtKaP7B
-	UbKp1lEBvp7XHDCkAGEZ9GSPGPi2ZgJB7/kDojZZ1G2gONH18Jet4f8E
-X-Gm-Gg: ASbGncsHXJG64uw75UTlw2UOkQ//RVYJXNG/Ut6PvOa8hKjRcM6ZQuNcYt6MTigj+SA
-	dOg677dOKEQLkShtzEkzwEcGgz6wQ4NXffUD7mU6r1TNe9oE8EcHGAfe8dD+XFHou6du+tpO4B/
-	/W5JB6ZDlaU2bze1cHzKRFkouhEVE8h4JSD9xJVepqfOQJk2pNyHrDa6fK0r+uzsPXhI+KiisA3
-	AOX0mpLS6vtkXhFdZgajDNLYRSymh3dzg8I9nWiEhNmZU11vnK4o4iUKsthApNEgFnWa8S07gww
-	MTsSegAP/1KNSydWx5rA3iln6Obe/rIrdJgTTYu0phsJSjNbTdvz5VkIqOkXa1j0SFlCqcl0X7H
-	OpcmCTpfmmXLhEBc+ASOlJxKFvEtXL6xJ2+jzM59CWqjeRA==
-X-Google-Smtp-Source: AGHT+IGrMWesMUWnFglIGSBoWLu6F3+7GZd8RAE67E8bXFw1pRYGmeUsNSijIB145sp3eYLYZFRBaQ==
-X-Received: by 2002:a17:902:f54d:b0:235:efbb:9537 with SMTP id d9443c01a7336-2460238be4amr27003675ad.3.1755790556289;
-        Thu, 21 Aug 2025 08:35:56 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-325154b70e0sm71365a91.29.2025.08.21.08.35.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Aug 2025 08:35:55 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 21 Aug 2025 08:35:55 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Sangwook Shin <sw617.shin@samsung.com>
-Cc: krzk@kernel.org, alim.akhtar@samsung.com, wim@linux-watchdog.org,
-	semen.protsenko@linaro.org, dongil01.park@samsung.com,
-	khwan.seo@samsung.com, linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 5/5] watchdog: s3c2410_wdt: exynosautov9: Enable
- supported features
-Message-ID: <8798e925-6c99-4efe-a0e8-5cedf04a3403@roeck-us.net>
-References: <20250818021826.623830-1-sw617.shin@samsung.com>
- <CGME20250818022433epcas2p15ec2e45f26f6ff5fb69f0b1e377616f4@epcas2p1.samsung.com>
- <20250818021826.623830-6-sw617.shin@samsung.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=lg7/92UFFUmVxNfh/yL/9kr6z7wzCMZH6Ay2vl68LnyK5Cjk9fpNyJCuXyx64YFApkqlsVTNGNp4lakFdc27WFE1o+18NAlvwqU6Q0nl6PNb8EsmvPEtLUHwZaTU26VhCYpMFSxi6iQ++5+T+yQkc6TnxBOzmE+WBTA/KO4vzNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GNkjCTTk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42AD8C4CEEB;
+	Thu, 21 Aug 2025 16:12:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755792774;
+	bh=MR+7f396WrEbtGRfUw87oG8dHsGs9G0ZUbfzqDxjrJ4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GNkjCTTkFAfE89O7CSkd8OPIM+LP6OHO/fGvcWd2Vx8ep5+8HTwEZA3C/JoRsZsq9
+	 /cDw4G9Bp1nXa1Zh+A60Ll+Q4TJn8rGPwtmqJOJFfsC+wVO7MP4ad+FY7oazJZg/Sv
+	 mmLsjkBDJZdPvm9BmMiAMf/60Wdf3v1HdEoOYDQKBp3gObAEcJdDHmsZi+OltD5T6l
+	 kvu7Ay1cLDJKF7ssNzbHDIB3Lp2DgNDeFIVeFA0rQvUFDeAzawwAKYAqU7VFo0iUVc
+	 4Rl75VNfxDt+KF8hWOO42gBFY05z71B4X5rqZafOnf8NHKQ8BdBEkdVIOVBAgNWr99
+	 RyVxSccqkbYBg==
+Date: Thu, 21 Aug 2025 23:55:38 +0800
+From: Jisheng Zhang <jszhang@kernel.org>
+To: Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Thomas Gleixner <tglx@linutronix.de>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-watchdog@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: timer: Add ARM SSE(Subsystems for
+ Embedded) timer
+Message-ID: <aKdBejl-aC4uNjh8@xhacker>
+References: <20250821152429.26995-1-jszhang@kernel.org>
+ <20250821152429.26995-2-jszhang@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250818021826.623830-6-sw617.shin@samsung.com>
+In-Reply-To: <20250821152429.26995-2-jszhang@kernel.org>
 
-On Mon, Aug 18, 2025 at 11:18:26AM +0900, Sangwook Shin wrote:
-> Enable supported features for ExynosAutov9 SoC.
-> - QUIRK_HAS_DBGACK_BIT
-> - QUIRK_HAS_32BIT_CNT
+On Thu, Aug 21, 2025 at 11:24:28PM +0800, Jisheng Zhang wrote:
+> Add binding doc for the ARM SSE(Subsystems for Embedded) timer. Here
+> is the document URL:
+> https://developer.arm.com/documentation/107610/0000/System-timer-components?lang=en
 > 
-> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
-> Signed-off-by: Sangwook Shin <sw617.shin@samsung.com>
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
+> Although the IP is mostly seen on MCU SoC platforms, but nothing
+> prevent it from being integrated into linux capable SoC platforms.
+> 
+> The IP core may have a system counter to generate timestamp value,
+> a system timer to raise an interrupt when a period has elapsed, and
+> a System Watchdog to detect errant system behaviour then reset the
+> system if a period elapses without ping.
+> 
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 > ---
->  drivers/watchdog/s3c2410_wdt.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+>  .../bindings/timer/arm,sse_timer.yaml         | 90 +++++++++++++++++++
+>  1 file changed, 90 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/timer/arm,sse_timer.yaml
 > 
-> diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
-> index 915d3c88565a..b774477190b6 100644
-> --- a/drivers/watchdog/s3c2410_wdt.c
-> +++ b/drivers/watchdog/s3c2410_wdt.c
-> @@ -306,7 +306,8 @@ static const struct s3c2410_wdt_variant drv_data_exynosautov9_cl0 = {
->  	.cnt_en_reg = EXYNOS850_CLUSTER0_NONCPU_OUT,
->  	.cnt_en_bit = 7,
->  	.quirks = QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_PMU_MASK_RESET |
-> -		  QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_CNT_EN,
-> +		  QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_CNT_EN |
-> +		  QUIRK_HAS_DBGACK_BIT | QUIRK_HAS_32BIT_CNT,
->  };
->  
->  static const struct s3c2410_wdt_variant drv_data_exynosautov9_cl1 = {
-> @@ -318,7 +319,8 @@ static const struct s3c2410_wdt_variant drv_data_exynosautov9_cl1 = {
->  	.cnt_en_reg = EXYNOSAUTOV9_CLUSTER1_NONCPU_OUT,
->  	.cnt_en_bit = 7,
->  	.quirks = QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_PMU_MASK_RESET |
-> -		  QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_CNT_EN,
-> +		  QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_CNT_EN |
-> +		  QUIRK_HAS_DBGACK_BIT | QUIRK_HAS_32BIT_CNT,
->  };
->  
->  static const struct s3c2410_wdt_variant drv_data_gs101_cl0 = {
+> diff --git a/Documentation/devicetree/bindings/timer/arm,sse_timer.yaml b/Documentation/devicetree/bindings/timer/arm,sse_timer.yaml
+> new file mode 100644
+> index 000000000000..37a79f9052d0
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/timer/arm,sse_timer.yaml
+> @@ -0,0 +1,90 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/timer/arm,sse_timer.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: ARM SSE(Subsystems for Embedded) system timer
+> +
+> +maintainers:
+> +  - Jisheng Zhang <jszhang@kernel.org>
+> +
+> +description: |+
+> +  ARM SSE(Subsystems for Embedded) system timer core may have a system counter
+> +  to generate timestamp value, a system timer to raise an interrupt when a
+> +  period has elapsed, and a System Watchdog to detect errant system behaviour
+> +  then reset the system if a period elapses without ping.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - arm,sse-timer
+> +
+> +  reg:
+> +    maxItems: 1
+> +    description: The system counter control frame base
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  '#address-cells':
+> +    enum: [1, 2]
+> +
+> +  '#size-cells':
+> +    const: 1
+> +
+> +  ranges: true
+> +
+> +patternProperties:
+> +  '^frame@[0-9a-f]+$':
+> +    type: object
+> +    additionalProperties: false
+> +    description: A timer node has some frame sub-nodes, each frame can be timer frame or watchdog frame. Each frame has the following properties.
+> +    properties:
+> +      interrupts:
+> +        minItems: 1
+> +        items:
+> +          - description: timer irq
+> +
+> +      reg:
+> +        minItems: 1
+> +        items:
+> +          - description: 1st view base address
+> +          - description: 2nd optional view base address if this is a watchdog frame
+> +
+> +    required:
+> +      - interrupts
+> +      - reg
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - '#address-cells'
+> +  - '#size-cells'
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    timer@f7f3e000 {
+> +      compatible = "arm,sse-timer";
+> +      #address-cells = <1>;
+> +      #size-cells = <1>;
+> +      ranges;
+> +      reg = <0xf7f3e000 0x2000>;
+> +      clocks = <&core_clk>;
+> +
+> +      frame@f7f20000 {
+> +        reg = <0xf7f20000 0x1000>;
+> +        interrupts = <0 26 0x8>;
+> +      };
+> +
+> +      frame@f7f30000 {
+> +        interrupts = <0 15 0x8>;
+> +        reg = <0xf7f32000 0x1000>,
+> +              <0xf7f33000 0x1000>;
+> +      };
+> +    };
+> +
+> +...
 > -- 
-> 2.25.1
-> 
+> 2.50.1
 > 
 
