@@ -1,83 +1,83 @@
-Return-Path: <linux-watchdog+bounces-4025-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4026-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B08A6B2EC61
-	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Aug 2025 05:51:33 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EF9AB2EC64
+	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Aug 2025 05:51:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B6D3D1CC0935
-	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Aug 2025 03:51:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 279107BE22A
+	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Aug 2025 03:50:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAC472E11B6;
-	Thu, 21 Aug 2025 03:51:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5382B2E7F2D;
+	Thu, 21 Aug 2025 03:51:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MPGZZqmF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PcpDCJJi"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B6E33D81;
-	Thu, 21 Aug 2025 03:51:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF90A2E7F2C;
+	Thu, 21 Aug 2025 03:51:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755748275; cv=none; b=gujN5LRo2MBaPWnSMM5RVlySbXeD1lmORZMtbG07XAJcNW4em8tibWbwP8vvtvZSqWzuExY/hCFW7cjqANVfppReVUnPXaMh9srMCe+J8MP+DeKeVXmXQE+DjVSlWVgKuOLjm0lKY/k3cETByL05yGNCX5mlrNOqgD+nzSiXoSo=
+	t=1755748294; cv=none; b=VH21SfG7AGkNkojvb/vDWsLeffvrsviy9DK5bWdMajoh0yj3Yp6m8Rj2JEG1SiIzIVQVLzdpWw+y7rP0i6Fq4qCj8G7sQWWz7LledLhkzzcYEeGfoWrSS1ZYNBebRoqGTKMuespNxvW/5rDnAdfRmoOOy+jR/d94tm2Vh+NbzQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755748275; c=relaxed/simple;
-	bh=y3HgrJacXSy+3TjpTNLeT2q/nJUds4mB4iju+hwz02E=;
+	s=arc-20240116; t=1755748294; c=relaxed/simple;
+	bh=6H1LfiSjKuzeFAhuPE2h21cP/IGqVgBajhrQLdEXGCM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cmthew3JaUjI1Ocwx44X2iXd6bXNLpdmLiRaxBcfbcahSBPb8KUcSNN2T/hCeC+trrlKTvVB8flKTxblhtFeOu6k1HjATM/TsZLVbA2Q+UUsAzt9Yf2u3h3M07yVqt+++hfoL/K5iupvqOZdm6kjvxoCAZAulDryMRCm293Ebb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MPGZZqmF; arc=none smtp.client-ip=209.85.210.176
+	 In-Reply-To:Content-Type; b=WZn92N7ISRrNelC8cHdpkC+H425HwfdRAVQbbNvXiwIRPlAI5T1/0VwDAK/UrOpPZZAeNDwAeH58n3y/vPKwu2LsdguaiY5EewBir5voEq+6MyHXT7DIQxxOnhEQgauzGJM8KGVoBtbKJUsuVOGWr+VjSrlZXvtNx+Ab4wl+hgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PcpDCJJi; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-76e2eb9ae80so631988b3a.3;
-        Wed, 20 Aug 2025 20:51:14 -0700 (PDT)
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-323266b1d1aso428088a91.0;
+        Wed, 20 Aug 2025 20:51:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755748273; x=1756353073; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1755748292; x=1756353092; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=GV7YNpX+C4Cr//CFhW7waB4MO/4Knu3R1/dm3jX39yc=;
-        b=MPGZZqmFUAfZ08X47VWJCXVFRalElC10bJQzwok0d1GifdBLJCW7BPgreRN2ZFPFXu
-         NrcUbXlFHnKIk8GddQ90nd9pmlXyX5Vqoq/FzzuiHQ0iPePygG6Ewf42v73AKzlWKVnK
-         /D6l9ThTIM4F6wVxQSuzpT3g/SOiwn1Bw439wuD0634wQN8MTLrWQLBnOpa+lTP29LT4
-         t2s/dJ8bBDI2fAz2hRjTdNKzYjf5ibh1kORTyJyodWU+dpbTdW7Hh1NRqmCMviGiNDLO
-         hl0DuZzPGCT4D5oOT53IWlU7GOybiMV5bRgO2oac+gVENGQFnUDHyVYLJaSYNNnTywS6
-         F0FA==
+        bh=xohWFEt7IVGZCVC5pDZ611ui+ssCpcRoSOloGiU4kZ4=;
+        b=PcpDCJJitiAkbA6/sjeO4kIQGnNdAOO7GHN+syWw/9yZ6Wkspe9g5oprdpwDOHtavP
+         fsYAXtshr4IqcNsqYOX/4u5SUAM6WsxIT+IB070YBp8voReIBwbES8hkSto6HGabfQ3h
+         NNAhKv9e9RnzikH1PQkGW6cLrii/4kB+ZO+nrPmDC+ttHb3Lbjgzy8mMzs3lFqsk6uzW
+         CzWJtwX+ydSfuyxkys8OVhJ23YoIop5S8F76dmSVxmIU2yCeXPTsKiU0Z/8PDl4J3nNS
+         qn0deipCJm8h0MwSvhYFbh7eBdUjdAOb9OUSQ6ASswEXV9Z/hrGLwltWITRRgKiYdjg8
+         RNgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755748273; x=1756353073;
+        d=1e100.net; s=20230601; t=1755748292; x=1756353092;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GV7YNpX+C4Cr//CFhW7waB4MO/4Knu3R1/dm3jX39yc=;
-        b=ssy5x0PSdRGtS63Zxpiyhi5vukX3I1J+0k2UX06pVYM3Qa+0RVrkBocJVDK3ae3Cxo
-         sv2lWDW2Y1miVMRpAJZ/+5UnHVtLlZou9UMxTPkiZKEWLQXvA+FRd5lxWaY5NvMk3Mww
-         SAbjE1n/V4/nrAG7I2yXniEP5UUCcDOLttXJ5WNvfGjG87u/X+emO0BT8l4cREjVQdSm
-         8aVfJw5jaGR1Mc8FzUcjhYpU8UTe4Qy4I1gVHzebAxfD2EtkS9n9u354FxRjePBLPXS6
-         XdoQX7LpTfuuKl/GHIAMPs8tB0hkapu9skxcPORWbVjAZHvQiMDBm1gFJA04oVhH+BYr
-         3JNg==
-X-Forwarded-Encrypted: i=1; AJvYcCU0rkPaXFj/gRkN18uZChdpQgtBTSYUWpenrKul7irn+cCmn+0ABakx1VjKbQvTx+ehh7D2Ek2HieanSVEb@vger.kernel.org, AJvYcCU8xmWT4qCNnACLBTKdD9sfbIgCALdmG6XbiAaK0y1TraOvUYFoxfKkHhb1bXOgmhNcWe7JfQIskyeLWcKTyTB7PCw=@vger.kernel.org, AJvYcCX6ZZS317zC78Chr5DHNWavfNUlh5vW7zhu5Deu3RlZwlOS6xN39cSJkjMvN+fdRcRFPyFCsN6b6w3S@vger.kernel.org
-X-Gm-Message-State: AOJu0YwOwC2w/B0RvFGxKZLuXQ1LtAoh+ug19a59RzA0BSB6porXd2sJ
-	YB5oV0xCHXqWtfmRr/5qnbp6/Hh6SkLK7L+nH7hu70CKS+bRMjK9KGM+
-X-Gm-Gg: ASbGncv4xUyPp8aNmz8EH2zX7QrGbf5sbRFieAAGTdEB9MOvCD35QVN+OWBYzGaI7FX
-	DZjoVyYmpI1/v9aw5SmzZqs1eJpLhlBsEQ8LNb4ftnuHPrQa04dEdsNnB0O4eoYv8T7yFv0P9yo
-	nRC/3zhxOuIFCtNoaNJn94iNu1f2aB5r5Bri6bIGtriNlWLGErl0hWP+2C9UHb6ETwTPtNrNPZX
-	MbHCzddXsX+mtXhtmbp+kTizU32xLuGYJYfnbzOx1SaBHljYe90DPf6Z6fnsPk0FcaX5f+TJfzl
-	4+KFpwMvSHIFfLMQvRrAPKjcPkLiuIuzK6HU+eHnJKEbeaqckRgGwVkZaMvOBfdoqyhrpr50Bqt
-	0oN5Gb/wZhm0c3v0II+4uO6XO2FFtMhMUJzwap5+DtITPJXtfB3IWqi1s2s+k66kBjBImJpkOZ/
-	T3aODNMw==
-X-Google-Smtp-Source: AGHT+IE1UqvihypDlC3cNLgBuAGhSCkX+MhJuMp4hSJAY/pTWZTq3ZfGo6bhRrqZpCAaJrC4qNaALg==
-X-Received: by 2002:a05:6a00:895:b0:76b:f16b:b186 with SMTP id d2e1a72fcca58-76ea323b90amr1382784b3a.17.1755748273518;
-        Wed, 20 Aug 2025 20:51:13 -0700 (PDT)
+        bh=xohWFEt7IVGZCVC5pDZ611ui+ssCpcRoSOloGiU4kZ4=;
+        b=Vce314kt8fYknTfdYS8DsLKSwfhqyKashT7qP094yDilSOJwLuyyVbm+PnwqAm9RCA
+         4WeU8l+BaYbbJyXZRiED05zlNXPsnIvYeYBZwGv/Wz1CxEeulQGDOZgtpuwP+aIG/v13
+         rLXkbC1nfMueCRt1WGfi7lM8qWqh3P94e0eH8VRWS6JS248Z00pp1P7u7IXpBzWfG/+X
+         g1lFYZgG/glyNdXXr/VEJLLaTuC5Z3FkxEBFU5zp7sb2HlD9Af5xIAv5JMm2TXInsPyh
+         jg7u9PkwdOAS8joPx1zQ0S2JblaQ6FTGBnOoKuVOJMc70tcqgD9SVVr+31pJ4O9DmXjp
+         4jaA==
+X-Forwarded-Encrypted: i=1; AJvYcCV1tsH4HNlyloezsF7rtJJii1H9f74Z2IpgmTGFLm66emHOWMREGxe69p6tkHLwXLs4gGZ3sHqSURKZ@vger.kernel.org, AJvYcCWEZYUWvTUBAjGMvnnNq8sj6BdlbSBhRdZMsEmrSJ0OzFbB3IYkba2ECMPfvWFIE4Pzl34GSSeXx9jLGzq7s/cx1HU=@vger.kernel.org, AJvYcCXxKJfl43giRgJ/6Xy/Kr3OiJ0rhN4Fml2saxexK7XCYJjdlo+QMuXg2h+uw5m/ul4IBeJALckM4nai1S4E@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4h2ImtI3ounq5mB/p7nFAJy3R/NS/F841nprq31wi19hWo8yU
+	lk3H+L8Kmt5ReRO9xnJZmvgPBqqpzSR2OLNwFK3w26z2/r+sdbFJsteL
+X-Gm-Gg: ASbGncsXC3LyL9hmuDdKVre4SKplnLNZh0TcccsOVy7apClhWpPK5AzxoGgFmIZJcEV
+	V0lb706AeD2SuT2Gjkl+jULUYmbiTkIrb+vnNzCQhDhZHNjqMShVPzl9T/qFTCZ03HMJADWL/X/
+	ZIOnqdfNQjGN80uJ6pLg0Nic1E6ZO6T0Lckg79oFe6saezEETsQabq1gzkUe6PRECpFDnSbvsPV
+	YN1IGExQR0Oso7fwOMbHpJmDN8OAYZ8J/HnFt+UoePQdyjQsKUXMggRQgKbiBQKinnoU7e37WF2
+	udxtfMUWUO5IJ/KQ4IjfrwJs9Q0cYcB0iOK2X/FpqJmyYavUwhHif78J+VWkSGd54HqJ0rG6s/X
+	MPpX/xK67eC6WtLNB+Cr00J/3edQHGp1xDCMkhc1HIzZMwHzc0/bHsOg396HZd+Y2SlN02biIU8
+	J3mO1xneHIz9I/Er0R
+X-Google-Smtp-Source: AGHT+IG24bmcCTsS9qrbuY+7ng4cqDEGwMeLihDWRVkPoBtQcK8yc9Pm+wFe9dKnVhxdU4zK++/LjA==
+X-Received: by 2002:a17:90b:3f0e:b0:312:f0d0:bc4 with SMTP id 98e67ed59e1d1-324ed07eba3mr1432953a91.5.1755748291800;
+        Wed, 20 Aug 2025 20:51:31 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76e7d4fc0cdsm6644318b3a.52.2025.08.20.20.51.07
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-324f381812asm194846a91.0.2025.08.20.20.51.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Aug 2025 20:51:13 -0700 (PDT)
+        Wed, 20 Aug 2025 20:51:31 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <1436d16a-2574-4ee4-9158-ab45c3c7b494@roeck-us.net>
-Date: Wed, 20 Aug 2025 20:51:05 -0700
+Message-ID: <4ed34497-7f28-4520-a909-d7d2c1e50439@roeck-us.net>
+Date: Wed, 20 Aug 2025 20:51:29 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -85,8 +85,8 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 3/6] watchdog: rzv2h: Make "oscclk" and reset
- controller optional
+Subject: Re: [PATCH v4 4/6] watchdog: rzv2h: Add support for configurable
+ count clock source
 To: Prabhakar <prabhakar.csengg@gmail.com>,
  Wim Van Sebroeck <wim@linux-watchdog.org>, Rob Herring <robh@kernel.org>,
  Geert Uytterhoeven <geert+renesas@glider.be>,
@@ -100,7 +100,7 @@ Cc: linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
  Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
  Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20250820202322.2051969-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20250820202322.2051969-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20250820202322.2051969-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -146,28 +146,25 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20250820202322.2051969-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20250820202322.2051969-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 8/20/25 13:23, Prabhakar wrote:
 > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > 
-> Update the rzv2h_wdt driver to make the "oscclk" clock and reset
-> controller optional.
+> Add support for selecting the count clock source used by the watchdog
+> timer. The RZ/V2H(P) SoC uses the LOCO as the count source, whereas on
+> RZ/T2H and RZ/N2H SoCs, the count source is the peripheral clock (PCLKL).
 > 
-> Use devm_clk_get_optional_prepared() to obtain the "oscclk" clock,
-> allowing the driver to work on platforms that do not provide this clock,
-> such as the RZ/T2H SoC.
-> 
-> Similarly, use devm_reset_control_get_optional_exclusive() to allow the
-> driver to function on platforms that lack a reset controller.
-> 
-> These changes are preparatory steps for supporting the RZ/T2H SoC, which
-> does not provide an "oscclk" clock or a reset controller.
+> Introduce a `count_source` field in the SoC-specific data structure and
+> refactor the clock rate selection logic accordingly. This prepares the
+> driver for supporting the RZ/T2H and RZ/N2H SoCs, which differ in their
+> watchdog clocking architecture from RZ/V2H(P).
 > 
 > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 
