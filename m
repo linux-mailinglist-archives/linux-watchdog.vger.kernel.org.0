@@ -1,138 +1,146 @@
-Return-Path: <linux-watchdog+bounces-4047-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4048-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82D49B323B3
-	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Aug 2025 22:40:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0599B32496
+	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Aug 2025 23:33:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 564B21D639BE
-	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Aug 2025 20:40:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2F581B21837
+	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Aug 2025 21:31:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E49002D7DEF;
-	Fri, 22 Aug 2025 20:40:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 478CB33EB0D;
+	Fri, 22 Aug 2025 21:27:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q5KQQ1ia"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E3/tgXbp"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96E72273D8D;
-	Fri, 22 Aug 2025 20:40:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12EC73218AE;
+	Fri, 22 Aug 2025 21:27:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755895228; cv=none; b=NCmyCDnnxd+Y0JhGMOaxTsXLKT3L6r1vQ9yvMYURmX/469yQhBg7PF23HgpijLld+SbIP+rxNeKKO3Ul6pHtwzq8QkPkcRM/2M2cUM47xClKvJ0yzTz0icKwNW3M1Oj6oiArzQgL+BXOHIZZ2bJMkBBWmIUT1bX7kscnakf8LHw=
+	t=1755898060; cv=none; b=D0z6tMl7+xsNEj9P0BpXF7ml2bME7i094geGcq/zqgjWOPZ3v92jQHedB2SSySMjy35UDNY+qZtMc0rXsOaIYAYbq11zCi34Ge7eO1Y3/PQL1ECWYV5yret90BJkjRBJ0nTTjHsqJ+zyXpkzqlUg+3rjjjyqS59OAJp9eLaP2PA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755895228; c=relaxed/simple;
-	bh=cQaigDBTxzr1UzSEKTyGQ6sShaL7mmiAEnUOGpm19DU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MeW3pFmOC0l/mAli5hBRZgi/ssPCEH/SSSXcqnbbKHfPXvGVLn3pxJ9iuDiAWwy7kWFpCCdQFCqooR/HTMKnZz4/czj749FBjgNOLiAiHb032XHh+p6oXV7AO+xyoLBhKLxycLCVtSvVkpsJFHLaOi9u54zzcZX1qqIzvGxx8RI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q5KQQ1ia; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FF79C4CEED;
-	Fri, 22 Aug 2025 20:40:28 +0000 (UTC)
+	s=arc-20240116; t=1755898060; c=relaxed/simple;
+	bh=nkuC/QN2afmhmsTiI8HvmEF61S+v7E9xYf8SQ5cRt6M=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=mbEy4fZGGzyUTra8D8loK5LBrojJGNRbUx2D+Nvo7vfl7OqjUmb0anO5erIQhmON5rC3p36OgFAVIa8RKfvSRjwPyel8Wd1PZ1bGprQkn2lblaSPh4rL21SD1tfSP1y/ZMOY0ztImyENjmJcz0gAVh2PUKqRCnItMyUR5hrUt2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E3/tgXbp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00515C4CEED;
+	Fri, 22 Aug 2025 21:27:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755895228;
-	bh=cQaigDBTxzr1UzSEKTyGQ6sShaL7mmiAEnUOGpm19DU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Q5KQQ1ia/LPE0jWIdLX92S6hU598Aa9oRK7q68PJvX9I1fP/wu2jVpxXUu4ZcRWWh
-	 2TfX6N8DyNb10amwbNWFA89/+lM2wvkQBHmBTik/BEEjHPWC89iPGf1jrn5rclz1fe
-	 wK04qZwSD+dVz269iAxvyxHAo3q2QlGOaPlxj2K0dXqlH5ssipaSd9MphPUHImfv/h
-	 wYEz0UMcT/FekQnw959WOP+qoCbpI8+JNc7ficN2QdOaD2Klz2HXJf3uIhOLMZqlwA
-	 PmsO23d3FLfEGROqaXKZp6Fu18+lGDNCv1rzjKbVQ/7OzPzkDeuueIY5lZZ9wjDiWA
-	 EQ61a7HDJl4ZQ==
-Date: Fri, 22 Aug 2025 15:40:27 -0500
-From: Rob Herring <robh@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Benson Leung <bleung@chromium.org>,
-	Guenter Roeck <groeck@chromium.org>,
-	Tim Harvey <tharvey@gateworks.com>,
-	Michael Walle <mwalle@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Jean Delvare <jdelvare@suse.com>,
-	Thomas Gleixner <tglx@linutronix.de>, Lee Jones <lee@kernel.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Cheng-Yi Chiang <cychiang@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Tinghan Shen <tinghan.shen@mediatek.com>,
-	devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org,
-	linux-remoteproc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-sound@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	Mathew McBride <matt@traverse.com.au>
-Subject: Re: [PATCH v2] dt-bindings: mfd: Move embedded controllers to own
- directory
-Message-ID: <20250822204027.GA319356-robh@kernel.org>
-References: <20250822075712.27314-2-krzysztof.kozlowski@linaro.org>
+	s=k20201202; t=1755898058;
+	bh=nkuC/QN2afmhmsTiI8HvmEF61S+v7E9xYf8SQ5cRt6M=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=E3/tgXbpRMu3Jcn/e6bgT7QiCHcfx2wM4TCrsGb/8gZv5JDfPWyxwDMZ5ppT0xNvK
+	 u4djSFIuLPt2BvQoIzHYeGHUMcDffld2eS2waOSvuesBgujMfAVOjT/ccIVv5zNjz/
+	 tC0no6QO9MV1LSH35dzDZfgoMCYbZN1GPZs+M0VJJ2GcUZsCSVJepwXWj2brfUVP0h
+	 PTynPT6mvCVuv0hvUBZzhsJED8Hl6OhWEo7SAPxlSCzSVS+MN/u3M4Hf9DNIfQObEq
+	 GC5L4y733QqJF22tvgJMI6eF8rno+tO9NvO29zcimkkkP2RQvkVcZRoswmmDMJ0fzN
+	 +7VxZ9LFNK17w==
+Date: Fri, 22 Aug 2025 16:27:35 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250822075712.27314-2-krzysztof.kozlowski@linaro.org>
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: devicetree@vger.kernel.org, Tero Kristo <kristo@kernel.org>, 
+ Jean Delvare <jdelvare@suse.com>, Srinivas Kandagatla <srini@kernel.org>, 
+ linux-arm-kernel@lists.infradead.org, linux-watchdog@vger.kernel.org, 
+ Wim Van Sebroeck <wim@linux-watchdog.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, 
+ linux-hwmon@vger.kernel.org, Vignesh Raghavendra <vigneshr@ti.com>, 
+ Nishanth Menon <nm@ti.com>, linux-kernel@vger.kernel.org, 
+ Guenter Roeck <linux@roeck-us.net>
+To: Michael Walle <mwalle@kernel.org>
+In-Reply-To: <20250822131531.1366437-1-mwalle@kernel.org>
+References: <20250822131531.1366437-1-mwalle@kernel.org>
+Message-Id: <175589786195.518444.15005080125108403794.robh@kernel.org>
+Subject: Re: [PATCH v1 0/7] Initial Kontron SMARC-sAM67 support
 
-On Fri, Aug 22, 2025 at 09:57:13AM +0200, Krzysztof Kozlowski wrote:
-> Move ChromeOS Embedded Controller, Gateworks System Controller and
-> Kontron sl28cpld Board Management Controller to new subdirectory
-> "embedded-controller" matching their purpose.  MFD is coming from Linux
-> and does not really fit the actual purpose of this hardware.
-> 
-> Rename Gateworks GSC filename to match compatible, as preferred for
-> bindings.
-> 
-> Acked-by: Michael Walle <mwalle@kernel.org> # for sl28cpld
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-> 
-> Cc: Mathew McBride <matt@traverse.com.au>
-> 
-> Lee,
-> Can you take it via MFD?
-> 
-> Changes in v2:
-> 1. Correct remaining paths in other schemas ($ref and descriptions)
-> ---
->  .../bindings/{mfd => embedded-controller}/google,cros-ec.yaml | 2 +-
->  .../gateworks-gsc.yaml => embedded-controller/gw,gsc.yaml}    | 2 +-
->  .../{mfd => embedded-controller}/kontron,sl28cpld.yaml        | 2 +-
->  .../devicetree/bindings/gpio/kontron,sl28cpld-gpio.yaml       | 2 +-
->  .../devicetree/bindings/hwmon/kontron,sl28cpld-hwmon.yaml     | 2 +-
->  .../bindings/interrupt-controller/kontron,sl28cpld-intc.yaml  | 2 +-
->  Documentation/devicetree/bindings/pwm/google,cros-ec-pwm.yaml | 2 +-
->  .../devicetree/bindings/pwm/kontron,sl28cpld-pwm.yaml         | 2 +-
->  Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml     | 4 ++--
->  .../devicetree/bindings/sound/google,cros-ec-codec.yaml       | 2 +-
->  .../devicetree/bindings/watchdog/kontron,sl28cpld-wdt.yaml    | 2 +-
->  MAINTAINERS                                                   | 4 ++--
->  12 files changed, 14 insertions(+), 14 deletions(-)
->  rename Documentation/devicetree/bindings/{mfd => embedded-controller}/google,cros-ec.yaml (99%)
->  rename Documentation/devicetree/bindings/{mfd/gateworks-gsc.yaml => embedded-controller/gw,gsc.yaml} (98%)
->  rename Documentation/devicetree/bindings/{mfd => embedded-controller}/kontron,sl28cpld.yaml (97%)
 
-Who's the maintainer for the 'embedded-controller' directory? Fine if 
-me, just need to know.
+On Fri, 22 Aug 2025 15:15:24 +0200, Michael Walle wrote:
+> Now that the PMIC support is there, we can finally, upstream the
+> support for this board. Besides the usual device tree, this
+> patchset contains the support for the on-board house keeping MCU. It
+> make extensive reuse of the drivers for the former SMARC-sAL28
+> board. Besides different hwmon sensors, all the dt binding patches
+> will just add a board specific compatible (in addition to the old
+> sl28 compatible) to make any future board specific quirks possible.
+> 
+> I'm aware that there is a patch [1] which moves the sl28cpld MFD
+> schema to a different directory. Once that patch is merged, I'll
+> repost this series. But I already want to get some early feedback.
+> 
+> [1] https://lore.kernel.org/r/20250822075712.27314-2-krzysztof.kozlowski@linaro.org/
+> 
+> Michael Walle (7):
+>   dt-bindings: arm: ti: Add bindings for Kontron SMARC-sAM67 module
+>   dt-bindings: mfd: sl28cpld: add sa67mcu compatible
+>   dt-bindings: hwmon: sl28cpld: add sa67mcu compatible
+>   dt-bindings: watchdog: add SMARC-sAM67 support
+>   dt-bindings: nvmem: sl28cpld: add sa67mcu compatible
+>   hwmon: sl28cpld: add SMARC-sAM67 support
+>   arm64: dts: ti: Add support for Kontron SMARC-sAM67
+> 
+>  .../devicetree/bindings/arm/ti/k3.yaml        |    1 +
+>  .../hwmon/kontron,sl28cpld-hwmon.yaml         |    1 +
+>  .../bindings/mfd/kontron,sl28cpld.yaml        |    7 +-
+>  .../nvmem/layouts/kontron,sl28-vpd.yaml       |    7 +-
+>  .../watchdog/kontron,sl28cpld-wdt.yaml        |    7 +-
+>  arch/arm64/boot/dts/ti/Makefile               |    6 +
+>  .../dts/ti/k3-am67a-kontron-sa67-base.dts     | 1092 +++++++++++++++++
+>  .../dts/ti/k3-am67a-kontron-sa67-gbe1.dtso    |   19 +
+>  .../ti/k3-am67a-kontron-sa67-rtc-rv8263.dtso  |   24 +
+>  drivers/hwmon/sl28cpld-hwmon.c                |   76 +-
+>  10 files changed, 1234 insertions(+), 6 deletions(-)
+>  create mode 100644 arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-base.dts
+>  create mode 100644 arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-gbe1.dtso
+>  create mode 100644 arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-rtc-rv8263.dtso
+> 
+> --
+> 2.39.5
+> 
+> 
+> 
 
-Other candidates:
-Documentation/devicetree/bindings/platform/*
-Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.yaml
-Documentation/devicetree/bindings/misc/ge-achc.yaml ?
 
-Rob
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
+
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
+
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
+
+  pip3 install dtschema --upgrade
+
+
+This patch series was applied (using b4) to base:
+ Base: attempting to guess base-commit...
+ Base: tags/next-20250822 (exact match)
+
+If this is not the correct base, please add 'base-commit' tag
+(or use b4 which does this automatically)
+
+New warnings running 'make CHECK_DTBS=y for arch/arm64/boot/dts/ti/' for 20250822131531.1366437-1-mwalle@kernel.org:
+
+arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-base.dtb: pmic@44 (ti,tps652g1): 'gpio-line-names' does not match any of the regexes: '^buck([1-5]|12|34|123|1234)-supply$', '^ldo[1-4]-supply$', '^pinctrl-[0-9]+$'
+	from schema $id: http://devicetree.org/schemas/mfd/ti,tps6594.yaml#
+
+
+
+
+
 
