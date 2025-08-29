@@ -1,151 +1,173 @@
-Return-Path: <linux-watchdog+bounces-4129-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4130-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5ABF4B3C2A2
-	for <lists+linux-watchdog@lfdr.de>; Fri, 29 Aug 2025 20:46:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72A62B3C356
+	for <lists+linux-watchdog@lfdr.de>; Fri, 29 Aug 2025 21:51:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9ED797A2184
-	for <lists+linux-watchdog@lfdr.de>; Fri, 29 Aug 2025 18:45:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E938116C46A
+	for <lists+linux-watchdog@lfdr.de>; Fri, 29 Aug 2025 19:51:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5149641C63;
-	Fri, 29 Aug 2025 18:46:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64DA2243958;
+	Fri, 29 Aug 2025 19:51:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fvp6/HBR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uPYEnPUU"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BA5A30CD8A;
-	Fri, 29 Aug 2025 18:46:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7D68224B09;
+	Fri, 29 Aug 2025 19:51:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756493212; cv=none; b=GnOf67ylfoIbo3TQOmBosgzkgcJ/meMGOEFB7x6AFOou9kR06DAIChTTA25l7xZe/k3TP2/qqM/tqN+JzI63/wsI8k59U+hSiZf0GFRUhWWlu/NNLsMi68fYR1MHkramTvFDO54+2C4VmqCxWB4/sK3vYgdR48jtETA8l7l/Sro=
+	t=1756497084; cv=none; b=I4P70kSM/UbuEPJGCwvWVZTRmf7sNrLXJa/F0QKIaAhPuiG8DubsD/C9agQ3S+ZRu+yJ3Huj+5I2d3HUrLvpOnNfkEl9Z3BhMCURd09D66U5iIbaxtPsXX++qmGBNnpqn3gqIcqfc2bI6zRIxTBrUEsWUcAdKhZ13ZtkbGQ2R54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756493212; c=relaxed/simple;
-	bh=v1CXCLkc3V2gOKTrIvLbzThifD/xfD1NRiFqcp7amsM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UmixdLqbae/gucD5LlvoSQMZUL4HHrTmo2wl0glxp72WcUR9xmMFReDRwQmGWsmjQ6adu7LofoWBBByHxco62eQQh6mdduiXONqbL0K2sci2npiN1/L5akoq8FLBKW90c0ZtTqZPEFR26dN7qHq0haUCEWTrLM9G+4EWtLMeY9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fvp6/HBR; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-77238a3101fso341758b3a.0;
-        Fri, 29 Aug 2025 11:46:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756493210; x=1757098010; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=v1CXCLkc3V2gOKTrIvLbzThifD/xfD1NRiFqcp7amsM=;
-        b=fvp6/HBRSBVjm/7wYiH4TlOo6893gh3tRBMlyT56adl3rA2BKz92ZNxOSlAazIrHdj
-         ZpZNUe/bOfW4HF0xe0+xYZGrlY9t8GLqQVMKvRZSGsJliLC8H4ZCq8P0rwZCLZo5FW6z
-         1E4KYMxe8bn06FRc3g7Vy18eTadX4NpZMuhMWmiegPUJWMDZ8dPuK+osoLpN+AVE9X4U
-         FFGkAaQiIcaLaK+dAGE6dFdx3QhZTmo3ZASREP9tYZkcleZqp1AZEurtv8zE7vCDngqM
-         fDUbTiA1X8O+L7nfvMWBRx3rTlmyma3Gr1qfNSjFf1CTQGfgxn3kGmAncY297EQ6yF/q
-         RWTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756493210; x=1757098010;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=v1CXCLkc3V2gOKTrIvLbzThifD/xfD1NRiFqcp7amsM=;
-        b=J2euwqbx2BzTtsMWDBRSCHplSFeMYh/jT6CZiPSi0zbrWUv8wHDNXaFzXKSIgfE8ei
-         7XCtjykV1y3R1joha9iEP4sEhjh+Let1bnDEeEciI008YdbHVLu2el3wMCU9ysCWB+O/
-         /8eIA/cd1yN3CRPRdK7fvK0m9y2pQOlpQsYUJPk5MxvLf7qrPIXJFADH4fju3BSpYRK7
-         NKAhV5guTdT60wZ/KCjrjHomYLChBqXlZqjtFsOhEKUPviCsgvFkBBVqYXy5PeQPi/GI
-         yzfIRlD70C1pWPHMzPq3PkrfKKnGz1YBf/7fGKHiTF2f45r4XORiT4vYVax7VCfv0FCR
-         uKjw==
-X-Forwarded-Encrypted: i=1; AJvYcCUHAyROUzVSGJMPncVQvcdbbDE3PkAXjNfc5TH9aowlQSbtM1jq5tqUIi1jfxFuQ/hOaEQwmQ/3F/o/rLk=@vger.kernel.org, AJvYcCUJWslJM78a6oF3+jTo/SzzmvX6F4LF1ncHG0oLqxAZtFqW64hpaPUfIHKlj6Wg8sSt/9H8o9/HivL5j4W9fJ8=@vger.kernel.org, AJvYcCVQlkkYwnKOwCj/JSKGT2ZzxO7uEzIGMUt+q6frVpZmk4UkO47Shssf9dwWyooO4ogB4lz1CQoOY2aDcqqJtxj5nmA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHEXli1AWcPGddoweg/TfUXHBQPXQfqGqUIvepihfQVDSZj02X
-	JeeBY4gbbObQumgqaTa6QOzpzVWeSwlMCN3uhRHIsANpiXFjGKIzGcQl7xAjMw==
-X-Gm-Gg: ASbGnct+CJvPWzItWMVH4befXzPXt4hFCUt8BvQco18dLjpi60uThMJHKi20SkUnvxT
-	LIz3BB2lkpB/r97nOcu/0KMehFZ5b1VghhslGrvnhihPOq6Vn2KZQG+rsNN8oN1NOrlG5Fu86Vv
-	u79LYxwNZhtveUt6+Dm9UCMaM9FnuxTND31Rm7FGzSJZ1UESA3aVZMjQq6IwJg7oWtPbSA+Sw6X
-	E1+Wev0F2JWyE0EwVLKKBDH67CtHc4Jq52Q3vJ8w+L9EvkBBar+DmT78ikAcl00+iHT7mTtDbr3
-	vsxddf2YSwCS3CvRks06nHKQGIJ2ILwjoUbf5mdmyG319DObk8SG5u+x3InM7MjYoyLXJh+woKD
-	NuWRHOdPkjymRE6SKEV60hNnJ2x8HJUTmj3GVg7KTGmnUSZrzZN6XLe9z4IGRuZRozEgo9g8=
-X-Google-Smtp-Source: AGHT+IFkDUn0Bj27WhzY121M482vhMayXfNAABYTgrCz865mRDEJIuDhY4dOuhuI9V5Yw9Osyp3N2w==
-X-Received: by 2002:a05:6a20:65a4:b0:243:a251:cf5b with SMTP id adf61e73a8af0-243a251d425mr11908511637.57.1756493209662;
-        Fri, 29 Aug 2025 11:46:49 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7722a5f7a9csm3051681b3a.91.2025.08.29.11.46.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Aug 2025 11:46:48 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <3d6c251f-bd3b-4f9a-aa3a-edb9da0caced@roeck-us.net>
-Date: Fri, 29 Aug 2025 11:46:47 -0700
+	s=arc-20240116; t=1756497084; c=relaxed/simple;
+	bh=iE1fOPe+H/DOT9l+qqw7zhT3aTQ0dSMmo1kdS8d+f20=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FVoFiEY1/cOidwb5l7UbAnM/1QTc+m0Y7YN/xOXHOdRctYzwsNfS7hnUsAKBHvkXvCYayeo7cea5hHIWUJXK3zcXvhmP3Sr9eTLPQ7u1OIVF83kOvmXuo+mBEaRN2g12kJkIXRIGdCzrY1zXvXEkhf15h9XTeQQE+5677mu/DNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uPYEnPUU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 346BBC4CEF0;
+	Fri, 29 Aug 2025 19:51:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756497082;
+	bh=iE1fOPe+H/DOT9l+qqw7zhT3aTQ0dSMmo1kdS8d+f20=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=uPYEnPUUg4/LuQVFtqhOOS0tGS/0OVJpM+KchdKwqnpfkH0/J3whjo1E0NBxW4gpi
+	 uJDXfPT2+7W9SvWuvKxITtr+9wgDa0PLPjlOlPveFqy+zGxeJXRW3bmLtv6e6tXZkm
+	 Lt0jKmNEbrsoJG57fd3KAzrHhMHII+VJCvAN8o9yIncXsE2LjVvdVRlbplw8VmHBsq
+	 nEieoqr4Hd58x1XnW+1xWPl9IbBCsaBFlrOtBOQRsS5iKDBvoMcj7GYIAOBvWu/48K
+	 9ZUoI9CDe2TXQXinfy+0J0W3S8zuoPtSs1TE+Ci/Y2CLPC2Ymd1DL36wGlg46kmRHz
+	 JZChNYlMpZoRQ==
+Date: Fri, 29 Aug 2025 14:51:19 -0500
+From: Rob Herring <robh@kernel.org>
+To: Janne Grunau <j@jannau.net>
+Cc: Sven Peter <sven@kernel.org>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Neal Gompa <neal@gompa.dev>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Hector Martin <marcan@marcan.st>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Mark Kettenis <kettenis@openbsd.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Jassi Brar <jassisinghbrar@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Sasha Finkelstein <fnkl.kernel@gmail.com>,
+	Marcel Holtmann <marcel@holtmann.org>,
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	van Spriel <arend@broadcom.com>, Lee Jones <lee@kernel.org>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
+	Vinod Koul <vkoul@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+	Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, iommu@lists.linux.dev,
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linux-bluetooth@vger.kernel.org,
+	linux-wireless@vger.kernel.org, linux-pwm@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-clk@vger.kernel.org,
+	dmaengine@vger.kernel.org, linux-sound@vger.kernel.org,
+	linux-spi@vger.kernel.org, linux-nvme@lists.infradead.org
+Subject: Re: [PATCH 00/37] arm64: Add initial device trees for Apple M2
+ Pro/Max/Ultra devices
+Message-ID: <20250829195119.GA1206685-robh@kernel.org>
+References: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] watchdog: s3c2410: Add FSD support
-To: Varada Pavani <v.pavani@samsung.com>, krzk@kernel.org,
- alim.akhtar@samsung.com, wim@linux-watchdog.org
-Cc: linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
- gost.dev@samsung.com, aswani.reddy@samsung.com
-References: <CGME20250829140010epcas5p1bc06faf0001ab2695f0199db65fe678d@epcas5p1.samsung.com>
- <20250829140003.109588-1-v.pavani@samsung.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20250829140003.109588-1-v.pavani@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net>
 
-On 8/29/25 07:00, Varada Pavani wrote:
-> FSD SoC has 3 CPU clusters, each has its own WDT instance.\
+On Thu, Aug 28, 2025 at 04:01:19PM +0200, Janne Grunau wrote:
+> This series adds device trees for Apple's M2 Pro, Max and Ultra based
+> devices. The M2 Pro (t6020), M2 Max (t6021) and M2 Ultra (t6022) SoCs
+> follow design of the t600x family so copy the structure of SoC *.dtsi
+> files.
+> 
+> t6020 is a cut-down version of t6021, so the former just includes the
+> latter and disables the missing bits.
+> 
+> t6022 is two connected t6021 dies. The implementation seems to use
+> t6021 and disables blocks based on whether it is useful to carry
+> multiple instances. The disabled blocks are mostly on the second die.
+> MMIO addresses on the second die have a constant offset. The interrupt
+> controller is multi-die aware. This setup can be represented in the
+> device tree with two top level "soc" nodes. The MMIO offset is applied
+> via "ranges" and devices are included with preprocessor macros to make
+> the node labels unique and to specify the die number for the interrupt
+> definition.
+> 
+> The devices itself are very similar to their M1 Pro, M1 Max and M1 Ultra
+> counterparts. The existing device templates are SoC agnostic so the new
+> devices can reuse them and include their t602{0,1,2}.dtsi file. The
+> minor differences in pinctrl and gpio numbers can be easily adjusted.
+> 
+> With the t602x SoC family Apple introduced two new devices:
+> 
+> The M2 Pro Mac mini is similar to the larger M1 and M2 Max Mac Studio. The
+> missing SDHCI card reader and two front USB3.1 type-c ports and their
+> internal USB hub can be easily deleted.
+> 
+> The M2 Ultra Mac Pro (tower and rack-mount cases) differs from all other
+> devices but may share some bits with the M2 Ultra Mac Studio. The PCIe
+> implementation on the M2 Ultra in the Mac Pro differs slightly. Apple
+> calls the PCIe controller "apcie-ge" in their device tree. The
+> implementation seems to be mostly compatible with the base t6020 PCIe
+> controller. The main difference is that there is only a single port with
+> with 8 or 16 PCIe Gen4 lanes. These ports connect to a Microchip
+> Switchtec PCIe switch with 100 lanes to which all internal PCIe devices
+> and PCIe slots connect too.
+> 
+> This series does not include PCIe support for the Mac Pro for two
+> reasons:
+> - the linux switchtec driver fails to probe and the downstream PCIe
+>   connections come up as PCIe Gen1
+> - some of the internal devices require PERST# and power control to come
+>   up. Since the device are connected via the PCIe switch the PCIe
+>   controller can not do this. The PCI slot pwrctrl can be utilized for
+>   power control but misses integration with PERST# as proposed in [1].
+> 
+> This series depends on "[PATCH v2 0/5] Apple device tree sync from
+> downstream kernel" [2] due to the reuse of the t600x device templates
+> (patch dependencies and DT compilation) and 4 page table level support
+> in apple-dart and io-pgtable-dart [3] since the dart instances report
+> 42-bit IAS (IOMMU device attach fails without the series).
+> 
+> After discussion with the devicetree maintainers we agreed to not extend
+> lists with the generic compatibles anymore [1]. Instead either the first
+> compatible SoC or t8103 is used as fallback compatible supported by the
+> drivers. t8103 is used as default since most drivers and bindings were
+> initially written for M1 based devices.
 
-Full Self Driving ?
+An issue here is any OS without the compatibles added to the drivers 
+won't work. Does that matter here? Soon as you need any new drivers or 
+significant driver changes it won't. The compatible additions could be 
+backported to stable. They aren't really any different than new PCI IDs 
+which get backported.
 
-Guenter
-
+Rob
 
