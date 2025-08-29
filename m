@@ -1,48 +1,48 @@
-Return-Path: <linux-watchdog+bounces-4127-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4128-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2743DB3BD28
-	for <lists+linux-watchdog@lfdr.de>; Fri, 29 Aug 2025 16:08:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21EF3B3BD2B
+	for <lists+linux-watchdog@lfdr.de>; Fri, 29 Aug 2025 16:09:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE2B4A47611
-	for <lists+linux-watchdog@lfdr.de>; Fri, 29 Aug 2025 14:08:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DF94416779A
+	for <lists+linux-watchdog@lfdr.de>; Fri, 29 Aug 2025 14:09:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7759631E0EA;
-	Fri, 29 Aug 2025 14:08:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6F9231DDB4;
+	Fri, 29 Aug 2025 14:09:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cSE0djRP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jll9oeLF"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B5AF31AF21;
-	Fri, 29 Aug 2025 14:08:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AF4F31AF21;
+	Fri, 29 Aug 2025 14:09:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756476512; cv=none; b=k8fJUjpe2eyKY9WLMOHSDBWtaAUJ2STM9XtbV+FDwno7nuSUXd4j2vwW4SemRJcMKa5zeNfk9XPHlpfgw1GLU8XQFx/I5KraEjeNwkkaRRr4481mdU8K9vyL4P+Vpv5hbe114TS/iB4iM1vo5VQCxTxjJE/OGoTYs3GSmCRLPuU=
+	t=1756476568; cv=none; b=BF84DDFxr+ZRTU/hyT4v9CuVmWPKOQrBNJ6rvuTJZXGPg0vMwsLet4HI85/0cCGTaOuicIGUBMIf8ThH2NtZFUp1VhXW8xwC0h0E+VMFLBvuS2+XQ3v50MrGgc4z88WwLhlYAmYLJNoHnKWGdls009WlqtkHS9PbE348ozhCruY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756476512; c=relaxed/simple;
-	bh=IGa1wXzUuxm/JAmmEyNFjDan3E+nHzgxQoSepLQnSvw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MQQqvyMMsgLJ/tqW5CBCMZNFmqOJoJ/+MP8Gaz2Hx/fYQ0cITlFV68jpyIME/R5UvEjkGEnJkWhs6u3AguyudZltV03FKXwE6HcrN3OekdhL56Fjv9j666sGanVE4P2GVJC0buieODWWvBMWIh4jO0UdwB8zIs1auxcCIJFKiZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cSE0djRP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90310C4CEF0;
-	Fri, 29 Aug 2025 14:08:29 +0000 (UTC)
+	s=arc-20240116; t=1756476568; c=relaxed/simple;
+	bh=zUyyHtz3yNl9hgWSh+d6EmM+LNMHHRIqJg6Arj2Vbls=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=FZUrTsMaKsi5b2jkMBndyh6T5tILfoeEdNnVK79O6SWUnQzzuqbGLw/db9xNeQs9b82PgEhxWyJ+ZIrUfzX58OfBwAxM6+zLYY+DffvdQoJXmzdb/LtDIkw8/4TluV/CnAz7INQyocEZFFO8gxmsvMd+8gMJbOvDbWe9IzcUtn4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jll9oeLF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C8C1C4CEF0;
+	Fri, 29 Aug 2025 14:09:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756476512;
-	bh=IGa1wXzUuxm/JAmmEyNFjDan3E+nHzgxQoSepLQnSvw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=cSE0djRPJp7LahSKQwnuDTlRlYq9yRdoPMFOkm9qsBWfipWQ1Y+0iIixD022dCf+s
-	 d+rNzzYB4tCzvZduh1mT5cplV03O41tZE+lsANB6a9cwbzctH1D7iLIXKt/E5TewDd
-	 h+zr5PlF9lg5lvD6yWd1mqCgmstTK6nDh8eg/nLNjCmPIhaKbjV2KcEIV5/L0MVsjO
-	 7H99hwQSnKQkbLB2Xz+yyMC/AOjyFaXUsn/dnH6wW9CYIrDEu7Wmu7gaxt58Whdm22
-	 dmQZG4HwP/6/7pSdLgi5d613nbT9kBp142d2/CJrHZjJluiYnmCph9DYODHmWWi2t5
-	 L1AviF6yOKgCg==
-Message-ID: <ad42068f-8528-4974-80cc-2f99cd628809@kernel.org>
-Date: Fri, 29 Aug 2025 16:08:27 +0200
+	s=k20201202; t=1756476567;
+	bh=zUyyHtz3yNl9hgWSh+d6EmM+LNMHHRIqJg6Arj2Vbls=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=Jll9oeLF7L20DVNhJV9Ql2FmqOjXsaD/BAdEVTCz7v92XHdfz3JAjOavrPEVbJ4hM
+	 xduV4aDpKmUZFuT43nE+dRk51Z8mPKJGecSg/bQw9C7xpYvl54ganV8VlVrbw+GG6/
+	 eOHjf4Xd6GOsr/k80qQguU4+cQ+b4BHm8g4nH6wiwBZJbbzmTVu1VIWu0eSKjdVIUW
+	 WJlxuXt7OHlDWf0f+SaOEc1cSzzx70r2cnD0P7bDrBgJreUa5IvlTo116YfXeF0fWY
+	 MSUBXVhj3DMujWW+y8Aqg+a+TbUlz2JM0lrmi4UQr+FhVaEzziJEk+eOOfpKACKaJl
+	 FEkWI9OjVmcpQ==
+Message-ID: <df779830-ff74-4cb6-be8a-796149aa0fec@kernel.org>
+Date: Fri, 29 Aug 2025 16:09:23 +0200
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -51,6 +51,7 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] watchdog: s3c2410: Add FSD support
+From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Varada Pavani <v.pavani@samsung.com>, alim.akhtar@samsung.com,
  wim@linux-watchdog.org, linux@roeck-us.net
 Cc: linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
@@ -58,7 +59,7 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
  gost.dev@samsung.com, aswani.reddy@samsung.com
 References: <CGME20250829140010epcas5p1bc06faf0001ab2695f0199db65fe678d@epcas5p1.samsung.com>
  <20250829140003.109588-1-v.pavani@samsung.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <ad42068f-8528-4974-80cc-2f99cd628809@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -103,27 +104,29 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250829140003.109588-1-v.pavani@samsung.com>
+In-Reply-To: <ad42068f-8528-4974-80cc-2f99cd628809@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 29/08/2025 16:00, Varada Pavani wrote:
-> +
->  static const struct of_device_id s3c2410_wdt_match[] = {
->  	{ .compatible = "google,gs101-wdt",
->  	  .data = &drv_data_gs101_cl0 },
-> @@ -352,6 +380,8 @@ static const struct of_device_id s3c2410_wdt_match[] = {
->  	  .data = &drv_data_exynosautov9_cl0 },
->  	{ .compatible = "samsung,exynosautov920-wdt",
->  	  .data = &drv_data_exynosautov920_cl0 },
-> +	{ .compatible = "tesla,fsd-wdt",
+On 29/08/2025 16:08, Krzysztof Kozlowski wrote:
+> On 29/08/2025 16:00, Varada Pavani wrote:
+>> +
+>>  static const struct of_device_id s3c2410_wdt_match[] = {
+>>  	{ .compatible = "google,gs101-wdt",
+>>  	  .data = &drv_data_gs101_cl0 },
+>> @@ -352,6 +380,8 @@ static const struct of_device_id s3c2410_wdt_match[] = {
+>>  	  .data = &drv_data_exynosautov9_cl0 },
+>>  	{ .compatible = "samsung,exynosautov920-wdt",
+>>  	  .data = &drv_data_exynosautov920_cl0 },
+>> +	{ .compatible = "tesla,fsd-wdt",
+> 
+> Please run scripts/checkpatch.pl on the patches and fix reported
+> warnings. After that, run also 'scripts/checkpatch.pl --strict' on the
+> patches and (probably) fix more warnings. Some warnings can be ignored,
+> especially from --strict run, but the code here looks like it needs a
+> fix. Feel free to get in touch if the warning is not clear.
 
-Please run scripts/checkpatch.pl on the patches and fix reported
-warnings. After that, run also 'scripts/checkpatch.pl --strict' on the
-patches and (probably) fix more warnings. Some warnings can be ignored,
-especially from --strict run, but the code here looks like it needs a
-fix. Feel free to get in touch if the warning is not clear.
-
+Sorry, that's wrong, I missed it is already documented.
 
 Best regards,
 Krzysztof
