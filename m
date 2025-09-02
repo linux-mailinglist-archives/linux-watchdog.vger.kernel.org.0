@@ -1,99 +1,100 @@
-Return-Path: <linux-watchdog+bounces-4140-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4141-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C94EB3EF41
-	for <lists+linux-watchdog@lfdr.de>; Mon,  1 Sep 2025 22:13:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4818FB3F74E
+	for <lists+linux-watchdog@lfdr.de>; Tue,  2 Sep 2025 10:00:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E60BB485A33
-	for <lists+linux-watchdog@lfdr.de>; Mon,  1 Sep 2025 20:13:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BDDCD189A690
+	for <lists+linux-watchdog@lfdr.de>; Tue,  2 Sep 2025 08:00:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA1FE263C75;
-	Mon,  1 Sep 2025 20:13:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 588FB2E88B9;
+	Tue,  2 Sep 2025 07:59:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AihmJg3l"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vJG3GOiE"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77DBE25A642;
-	Mon,  1 Sep 2025 20:13:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF38A2E7F2C;
+	Tue,  2 Sep 2025 07:59:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756757599; cv=none; b=I1Sk5S8AlHwq3zTUuCpZICg2ljhQy+7Tpw0xK8srYJVjciVZQWjl2NZTSw/xSWZVk87tJAUjzJgzw4kV4wNU83Wb/2JccfoIzcWL4CnpSc0a0XwnzEvJ3pPaeXg6luWGPFECpp8EPilCGQOg6hpqaEsyct5YapOU+oPpdB9SH2g=
+	t=1756799975; cv=none; b=dvbNhLG6MKEOUB6WPEVvyl8iFpyXFMT/z44fp9eUw1xkrXhaM7zjF8EwKnfIA+p8ofGu3qkXzyx/ykCJRtq6+brQYGVu+YDUkSVtP8szz/wl5FbzgH1ob1hys9jbQGNd6G8QuEUzJ8Ydt4J3R1mEpnL3QoL4Qhe5g8zEuqMy0Yc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756757599; c=relaxed/simple;
-	bh=h5AbjiFUdzaBGXkC/aYLxuY1L3PZiTGgFQvMvER9rQo=;
+	s=arc-20240116; t=1756799975; c=relaxed/simple;
+	bh=EF1op+eddct4pM3ZB2o0aAETXERusr9OmQud0x6jKd8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eOZ0XReFodIkKYV/y9rRBjdsGLC4EViL6qUxJ9pmIMTx54KQtMHhhCAvh6mZ+X97htzvz4s7xvogOpOBQhrGXqJFVKo/9Sk76uQ9/kU8yIJ5jvwZumIWBDrBjJfmnoWIJF41LBSO6ms61qbBZyrAgJ65ToC8gxcU/+K0Brbuo+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AihmJg3l; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75F58C4CEF0;
-	Mon,  1 Sep 2025 20:13:06 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=V8jLBox9bL4chOKTNuHuU+CinIqWf9lzULjF9kKODd++fra3MRP9euRLNDM+m/PIWA9lPmWosgZISR3szSkwRPhodmCu2QKxUR41Ckf/WU1oG26uyfL4AzlHVl/u04uppJqvtKRIuIF9HToc7+5bMMg/2thvkrz6id+TpTnKDow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vJG3GOiE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B101FC4CEF5;
+	Tue,  2 Sep 2025 07:59:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756757596;
-	bh=h5AbjiFUdzaBGXkC/aYLxuY1L3PZiTGgFQvMvER9rQo=;
+	s=k20201202; t=1756799974;
+	bh=EF1op+eddct4pM3ZB2o0aAETXERusr9OmQud0x6jKd8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AihmJg3lsTCEBkSxMfHKhh+P6mwwk0am25MaHURkDsLk8GGB9uDPiOGpgqNxeU1sO
-	 wZ3Unga3Rv4j6Kr3xmTSaHK+vbalvqaPskUbFyc5RrVizYYDia4GlTtlqE640hQuzO
-	 5OrSHvklJzETgpdUb0GYBL1f+kko8wH1aBcrQwWoT5W9OjhT8h/GkwLJlQPdRrFCrS
-	 lklnbsOoEomgoDYKvStsTX92LymTL/rRFPr3xgkBbRlambEl8tm3jtdRsI9gPl1mwA
-	 INOEgQK2T0/gXsVM8GmTzyjFQ3g/OENO+YBtj9+o+hBQK9EF3tdAfEaQwkoDzpq5MP
-	 bYPRKr7d0jYcQ==
-Date: Mon, 1 Sep 2025 15:13:05 -0500
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: linux-arm-kernel@lists.infradead.org,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	linux-samsung-soc@vger.kernel.org,
-	Guenter Roeck <linux@roeck-us.net>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Conor Dooley <conor+dt@kernel.org>
-Subject: Re: [PATCH 4/4] dt-bindings: watchdog: samsung-wdt: Split if:then:
- and constrain more
-Message-ID: <175675758490.265131.17956569668520199935.robh@kernel.org>
-References: <20250830-watchdog-s3c-cleanup-v1-0-837ae94a21b5@linaro.org>
- <20250830-watchdog-s3c-cleanup-v1-4-837ae94a21b5@linaro.org>
+	b=vJG3GOiE51Copquw/et4yKR2MBNqyeTR1IAPc0P1wxza24c8Bq4Zc/8Q7eKkeJOJ8
+	 pYWFTt1JmIPWALpvCaXjNsP99j/f0dLV/DYLcnsQ3vBiopJOhJLZBr6W/QP40TczLY
+	 s4mj9mZjOSnLBdFU1bnx5nhOyDJcF93bwPlgmYGWl3pCuhraZsFOltCb77vP8GOf5t
+	 12ryEquytxYXA5Le3xuYe8epm+vJQDqaCgoRv6HGXdjCf7BWZqERl7WQ97+WKzu8y8
+	 +FrcNp9sY8CK3kbN/yxn0KKBCpQodqKbLOJCPqhdlq76MB+N2NhN1BGCu2b3GIzIWi
+	 ewGqlCi6YaApQ==
+Date: Tue, 2 Sep 2025 09:59:31 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Janne Grunau <j@jannau.net>
+Cc: Sven Peter <sven@kernel.org>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, 
+	Neal Gompa <neal@gompa.dev>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Hector Martin <marcan@marcan.st>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, 
+	Robin Murphy <robin.murphy@arm.com>, Linus Walleij <linus.walleij@linaro.org>, 
+	Mark Kettenis <kettenis@openbsd.org>, Andi Shyti <andi.shyti@kernel.org>, 
+	Jassi Brar <jassisinghbrar@gmail.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Sasha Finkelstein <fnkl.kernel@gmail.com>, Marcel Holtmann <marcel@holtmann.org>, 
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, Johannes Berg <johannes@sipsolutions.net>, 
+	van Spriel <arend@broadcom.com>, Lee Jones <lee@kernel.org>, 
+	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, Stephen Boyd <sboyd@kernel.org>, 
+	Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
+	Michael Turquette <mturquette@baylibre.com>, Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>, 
+	Vinod Koul <vkoul@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+	Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>, 
+	Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>, 
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, asahi@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, iommu@lists.linux.dev, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-bluetooth@vger.kernel.org, 
+	linux-wireless@vger.kernel.org, linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org, 
+	linux-clk@vger.kernel.org, dmaengine@vger.kernel.org, linux-sound@vger.kernel.org, 
+	linux-spi@vger.kernel.org, linux-nvme@lists.infradead.org
+Subject: Re: [PATCH 01/37] dt-bindings: arm: apple: Add t6020x compatibles
+Message-ID: <20250902-optimal-copperhead-of-chemistry-ebd7fa@kuoka>
+References: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net>
+ <20250828-dt-apple-t6020-v1-1-507ba4c4b98e@jannau.net>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250830-watchdog-s3c-cleanup-v1-4-837ae94a21b5@linaro.org>
+In-Reply-To: <20250828-dt-apple-t6020-v1-1-507ba4c4b98e@jannau.net>
+
+On Thu, Aug 28, 2025 at 04:01:20PM +0200, Janne Grunau wrote:
+> This adds the following apple,t6020/t6021/t6022 platforms:
+
+"Add..."
 
 
-On Sat, 30 Aug 2025 12:19:00 +0200, Krzysztof Kozlowski wrote:
-> Binding defined two if:then: blocks covering different conditions but
-> not fully constraining the properties per each variant:
-> 1. "if:" to require samsung,syscon-phandle,
-> 2. "if:" with "else:" to narrow number of clocks and require or disallow
->    samsung,cluster-index.
-> 
-> This still did not cover following cases:
-> 1. Disallow samsung,syscon-phandle when not applicable,
-> 2. Narrow samsung,cluster-index to [0, 1], for SoCs with only two
->    clusters.
-> 
-> Solving this in current format would lead to spaghetti code, so re-write
-> entire "if:then:" approach into mutually exclusive cases so each SoC
-> appears only in one "if:" block.  This allows to forbid
-> samsung,syscon-phandle for S3C6410, and narrow samsung,cluster-index
-> to [0, 1].
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../devicetree/bindings/watchdog/samsung-wdt.yaml  | 70 ++++++++++++++++------
->  1 file changed, 52 insertions(+), 18 deletions(-)
-> 
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Acked-by: Rob Herring (Arm) <robh@kernel.org>
+Best regards,
+Krzysztof
 
 
