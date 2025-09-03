@@ -1,107 +1,114 @@
-Return-Path: <linux-watchdog+bounces-4156-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4157-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19EA3B416C5
-	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Sep 2025 09:35:54 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11C41B416EB
+	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Sep 2025 09:39:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2EEC55E149A
-	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Sep 2025 07:35:25 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D4E5E4E46CA
+	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Sep 2025 07:39:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EAF72DC336;
-	Wed,  3 Sep 2025 07:35:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4498E2DCF56;
+	Wed,  3 Sep 2025 07:39:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M73gP3w1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qoDk0nl6"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9C4E2D1F5E;
-	Wed,  3 Sep 2025 07:35:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFD362D73B2;
+	Wed,  3 Sep 2025 07:39:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756884912; cv=none; b=EQr0+zlVTpwtPp3hCr1FpiPtKzh3WhdEBHi7Ivl+BJIaQaPZUtMMhVj7cJKOLNWKXn5axSgPwhp7dZ2pDf2/A7lVo+G4nEewdERr7G8Wz9LTePeAxwibvvTsyVUKEmWZrJ0FwGIZMwb8oXZvG2WdXklxTLB6u/TYy+DAZTUce0c=
+	t=1756885170; cv=none; b=WfBtjbpphX0IgXY4WYkGl8JBprfRVpTz0rk3tdbMhqeAHXezWuoXt48ccBwm0VgBboaX9Q5ypA5f/6o8fSABXReiGW7GOQ6I3/1xJeIz2xCkzYY/XygLEsIezY6q2COduw9SOIcxZJoyukTzO6wwkHF/7nLQpyLaq/DPunEECic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756884912; c=relaxed/simple;
-	bh=8C3xjebS5A1uXK6PAJoBtn+sEHJWk+k90S1IcWEwjIA=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=Sta/TAg2uHOFatbp/dOwx29n2sQ6MRF//OFA17n/Mnz0MlapieCq21GSL33bkwzFEUIM4ktebNiJh7MyOp2K7VA41PKDec1Mb+a11Kc69BJw7afiUWxqN7ilS77OzqdQGYS7991rtCp4QivFGlu/W9kpqFIaOvdCil27+Son2CA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M73gP3w1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AC3CC4CEF1;
-	Wed,  3 Sep 2025 07:35:04 +0000 (UTC)
+	s=arc-20240116; t=1756885170; c=relaxed/simple;
+	bh=nabVaKDp95bXX1pjLpK4nzWf1nseMWBruv5tgZaJBoA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RgLSo4t9RnL2L+JF4an+eVqMdPBh1rtIXER+V/S9sbvnXb+k1NqL6WRuwPspTYV66mcMM27zLuIVDaADulwlmU+XNeZ082KD0yNliA72zJEDa0JPCqzX+D7j1m+BwbkhG+dRWUiFHhPdtE1qwVi9IFNUgxlLzyB3pJr/ahGExq4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qoDk0nl6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EA52C4CEF0;
+	Wed,  3 Sep 2025 07:39:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756884911;
-	bh=8C3xjebS5A1uXK6PAJoBtn+sEHJWk+k90S1IcWEwjIA=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=M73gP3w1W942MyxGPW01eX6vsT8OmQh3y23c5PTiaE+RaIv38yilqSRlEaMYQKisS
-	 YPdKyJmmD9bnCNvETJSIsXUAZGH52h91XwQkJJQrcgFxmDXzLKckKLQXZALgPEo+OQ
-	 nAng21hE2oG2216hOXxbcdI0y9pEaDwXOqhWlNC+GD4JrOm2eFbNv3iSS+QTkv040m
-	 6SASxWlOltZNjIwKIOuxAXYvVYg430sLqYlXJ7OFX2KySajblgm3sxfhB/wkncPO9z
-	 hdDQmpHAQ0ivmz2DeRoTJuEBxcWr8c0knan/GO3i1Xm5opx5zj19pjPkra2g4EnXYv
-	 N0/Naf28FshuA==
+	s=k20201202; t=1756885169;
+	bh=nabVaKDp95bXX1pjLpK4nzWf1nseMWBruv5tgZaJBoA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qoDk0nl6DGMhrsb9Zero2GRf3mxlO2Zkmtca2Z/KeKD/A+oBDZ96dYcBPT94dwlkU
+	 f0DLzIj/ZwhCrb5B4tPNd/VVQsfYxVSV2/QOOMs9cLSO9APl7W8P7vIBAVhCCtvHGN
+	 Wtzw48LeMkWre+8zpgwv+Li+KmKBA5Y9dXQUwTFoIo9DK79zaqWKJYA9eeL0JZADFS
+	 qD9EiS0+jbqaNpPL+mO71C0U1WpdfN7z2meHxEAo+95mgjgwwldX3TLfUrljS59Nku
+	 X8Zz7gNiYLjBFpa/8drEj34cjLfh0bA/7FZxXieklmnEs9cQou/+e+pY9sOk2PlsS3
+	 SwaRwN9OWsD2w==
+Date: Wed, 3 Sep 2025 08:39:20 +0100
 From: Lee Jones <lee@kernel.org>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Benson Leung <bleung@chromium.org>, 
- Guenter Roeck <groeck@chromium.org>, Tim Harvey <tharvey@gateworks.com>, 
- Pengyu Luo <mitltlatltl@gmail.com>, Michael Walle <mwalle@kernel.org>, 
- Linus Walleij <linus.walleij@linaro.org>, 
- Bartosz Golaszewski <brgl@bgdev.pl>, Jean Delvare <jdelvare@suse.com>, 
- Thomas Gleixner <tglx@linutronix.de>, Lee Jones <lee@kernel.org>, 
- =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, 
- Bjorn Andersson <andersson@kernel.org>, 
- Mathieu Poirier <mathieu.poirier@linaro.org>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Cheng-Yi Chiang <cychiang@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
- Wim Van Sebroeck <wim@linux-watchdog.org>, Nikita Travkin <nikita@trvn.ru>, 
- Konrad Dybcio <konradybcio@kernel.org>, 
- Thierry Reding <thierry.reding@gmail.com>, 
- Tinghan Shen <tinghan.shen@mediatek.com>, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev, 
- linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org, 
- linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
- linux-sound@vger.kernel.org, linux-watchdog@vger.kernel.org, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Mathew McBride <matt@traverse.com.au>
-In-Reply-To: <20250825081201.9775-2-krzysztof.kozlowski@linaro.org>
-References: <20250825081201.9775-2-krzysztof.kozlowski@linaro.org>
-Subject: Re: (subset) [PATCH v3] dt-bindings: mfd: Move embedded
- controllers to own directory
-Message-Id: <175688490483.2489808.1034690962892116559.b4-ty@kernel.org>
-Date: Wed, 03 Sep 2025 08:35:04 +0100
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Benson Leung <bleung@chromium.org>,
+	Guenter Roeck <groeck@chromium.org>,
+	Tim Harvey <tharvey@gateworks.com>,
+	Michael Walle <mwalle@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Jean Delvare <jdelvare@suse.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Mathieu Poirier <mathieu.poirier@linaro.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Cheng-Yi Chiang <cychiang@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Tinghan Shen <tinghan.shen@mediatek.com>,
+	devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org,
+	linux-remoteproc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-sound@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Mathew McBride <matt@traverse.com.au>
+Subject: Re: (subset) [PATCH v2] dt-bindings: mfd: Move embedded controllers
+ to own directory
+Message-ID: <20250903073920.GA2163762@google.com>
+References: <20250822075712.27314-2-krzysztof.kozlowski@linaro.org>
+ <175682479961.2401991.17056649550187344851.b4-ty@kernel.org>
+ <63e43445-ef5f-49b2-85c1-f85d95426d5d@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.15-dev-c81fc
+In-Reply-To: <63e43445-ef5f-49b2-85c1-f85d95426d5d@kernel.org>
 
-On Mon, 25 Aug 2025 10:12:02 +0200, Krzysztof Kozlowski wrote:
-> Move several embedded controller bindings (like ChromeOS EC, Gateworks
-> System Controller and Kontron sl28cpld Board Management) to new
-> subdirectory "embedded-controller" matching their purpose.
+On Tue, 02 Sep 2025, Krzysztof Kozlowski wrote:
+
+> On 02/09/2025 16:53, Lee Jones wrote:
+> >> [...]
+> > 
+> > Applied, thanks!
+> > 
+> > [1/1] dt-bindings: mfd: Move embedded controllers to own directory
+> >       commit: 152afab28f7659a4292c9f7d3324eaeb49a55b8b
 > 
-> An embedded controller (EC) is a discrete component that contains a
-> microcontroller (i.e. a small CPU running a small firmware without
-> operating system) mounted into a larger computer system running
-> a fully fledged operating system that needs to utilize the embedded
-> controller as part of its operation.
 > 
-> [...]
+> There was a v3 here:
+> 
+> https://lore.kernel.org/r/20250825081201.9775-2-krzysztof.kozlowski@linaro.org/
 
-Applied, thanks!
+Drop this, applied that!
 
-[1/1] dt-bindings: mfd: Move embedded controllers to own directory
-      commit: e19df0d928a7d4a6dda919bb486e1ac2251f384f
-
---
+-- 
 Lee Jones [李琼斯]
-
 
