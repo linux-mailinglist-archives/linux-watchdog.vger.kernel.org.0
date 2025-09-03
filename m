@@ -1,86 +1,63 @@
-Return-Path: <linux-watchdog+bounces-4157-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4158-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11C41B416EB
-	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Sep 2025 09:39:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F30C4B419F8
+	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Sep 2025 11:28:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D4E5E4E46CA
-	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Sep 2025 07:39:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A12851BA37FC
+	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Sep 2025 09:28:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4498E2DCF56;
-	Wed,  3 Sep 2025 07:39:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DD792F2916;
+	Wed,  3 Sep 2025 09:27:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qoDk0nl6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aaJiHxMm"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFD362D73B2;
-	Wed,  3 Sep 2025 07:39:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E1952EB5BD;
+	Wed,  3 Sep 2025 09:27:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756885170; cv=none; b=WfBtjbpphX0IgXY4WYkGl8JBprfRVpTz0rk3tdbMhqeAHXezWuoXt48ccBwm0VgBboaX9Q5ypA5f/6o8fSABXReiGW7GOQ6I3/1xJeIz2xCkzYY/XygLEsIezY6q2COduw9SOIcxZJoyukTzO6wwkHF/7nLQpyLaq/DPunEECic=
+	t=1756891678; cv=none; b=e7EzWgq2MNihAEdzbpe7OnWjfNha5VsEwhYRFCDzTyuRTvwPsm2oa4jGgiMHhpLqP6NDdd8sWnZKZo207whlrKGBsLiqNEo8tTNpz9LXNLfX8bUUc2ME/S+KdRn3MPKvJ8XEBUYs0GhzILeBTd0qoyaPV+DLrsRdMgZ8KyV1h48=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756885170; c=relaxed/simple;
-	bh=nabVaKDp95bXX1pjLpK4nzWf1nseMWBruv5tgZaJBoA=;
+	s=arc-20240116; t=1756891678; c=relaxed/simple;
+	bh=zoygvyrvbpRQP0lvFaQr5ZvBPQrrVcLHonREwQLABLU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RgLSo4t9RnL2L+JF4an+eVqMdPBh1rtIXER+V/S9sbvnXb+k1NqL6WRuwPspTYV66mcMM27zLuIVDaADulwlmU+XNeZ082KD0yNliA72zJEDa0JPCqzX+D7j1m+BwbkhG+dRWUiFHhPdtE1qwVi9IFNUgxlLzyB3pJr/ahGExq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qoDk0nl6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EA52C4CEF0;
-	Wed,  3 Sep 2025 07:39:23 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=O1fxwRSilvqOszdpkL1hYBIDVSkQNt+pzpB130KhXKmhpap8ryjjiVrm1WlqssNg2Ki9XN0zo1z3vwlszlgRjzXJykI/kqyqv8Az5FE44PUVlVhCDEpb+0zFv8m6Z+XFd0JNF1BDthpljebKmYhWAln1aKPBjuCKFm8I3O/FdL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aaJiHxMm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 094DEC4CEF0;
+	Wed,  3 Sep 2025 09:27:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756885169;
-	bh=nabVaKDp95bXX1pjLpK4nzWf1nseMWBruv5tgZaJBoA=;
+	s=k20201202; t=1756891677;
+	bh=zoygvyrvbpRQP0lvFaQr5ZvBPQrrVcLHonREwQLABLU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qoDk0nl6DGMhrsb9Zero2GRf3mxlO2Zkmtca2Z/KeKD/A+oBDZ96dYcBPT94dwlkU
-	 f0DLzIj/ZwhCrb5B4tPNd/VVQsfYxVSV2/QOOMs9cLSO9APl7W8P7vIBAVhCCtvHGN
-	 Wtzw48LeMkWre+8zpgwv+Li+KmKBA5Y9dXQUwTFoIo9DK79zaqWKJYA9eeL0JZADFS
-	 qD9EiS0+jbqaNpPL+mO71C0U1WpdfN7z2meHxEAo+95mgjgwwldX3TLfUrljS59Nku
-	 X8Zz7gNiYLjBFpa/8drEj34cjLfh0bA/7FZxXieklmnEs9cQou/+e+pY9sOk2PlsS3
-	 SwaRwN9OWsD2w==
-Date: Wed, 3 Sep 2025 08:39:20 +0100
+	b=aaJiHxMmxm+KDWV54GEw0wFKqHa23MozUT9t1F6E6ykgPQidtVov9eFpwyt2PT/e1
+	 ykvXi8dABrzbhFHZac+ksIqZX5jqvgdo+i/bFDYYqs72VAONSagJP7/hSdvvYCxKz1
+	 eI1/thKT/ROliJ9DvpqJgMsGdmQ2Nm7CxoQr1q03RenOSahf10HJFkPQBnUPtjYevu
+	 7P7PWKjHLGsxIaf3fDgTDHGDy72eJAoJ0j0J3xFjm2UsyWc53a8WTuSfAJkdS7HDlA
+	 Rn/Cqm6KHIE+bQpWm2+d5YOls7aiPXWdMtpkunQRf6ofwIiK55Vv7GdgjI45bB7G7g
+	 0BP6SbigvujPw==
+Date: Wed, 3 Sep 2025 10:27:50 +0100
 From: Lee Jones <lee@kernel.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Benson Leung <bleung@chromium.org>,
-	Guenter Roeck <groeck@chromium.org>,
-	Tim Harvey <tharvey@gateworks.com>,
-	Michael Walle <mwalle@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Jean Delvare <jdelvare@suse.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Cheng-Yi Chiang <cychiang@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Tinghan Shen <tinghan.shen@mediatek.com>,
-	devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
+To: a0282524688@gmail.com
+Cc: tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl,
+	andi.shyti@kernel.org, mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
+	jdelvare@suse.com, alexandre.belloni@bootlin.com,
 	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org,
-	linux-remoteproc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-sound@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Mathew McBride <matt@traverse.com.au>
-Subject: Re: (subset) [PATCH v2] dt-bindings: mfd: Move embedded controllers
- to own directory
-Message-ID: <20250903073920.GA2163762@google.com>
-References: <20250822075712.27314-2-krzysztof.kozlowski@linaro.org>
- <175682479961.2401991.17056649550187344851.b4-ty@kernel.org>
- <63e43445-ef5f-49b2-85c1-f85d95426d5d@kernel.org>
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH RESEND v14 0/7] Add Nuvoton NCT6694 MFD drivers
+Message-ID: <20250903092750.GG2163762@google.com>
+References: <20250825092403.3301266-1-a0282524688@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -90,24 +67,20 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <63e43445-ef5f-49b2-85c1-f85d95426d5d@kernel.org>
+In-Reply-To: <20250825092403.3301266-1-a0282524688@gmail.com>
 
-On Tue, 02 Sep 2025, Krzysztof Kozlowski wrote:
+On Mon, 25 Aug 2025, a0282524688@gmail.com wrote:
 
-> On 02/09/2025 16:53, Lee Jones wrote:
-> >> [...]
-> > 
-> > Applied, thanks!
-> > 
-> > [1/1] dt-bindings: mfd: Move embedded controllers to own directory
-> >       commit: 152afab28f7659a4292c9f7d3324eaeb49a55b8b
+> From: Ming Yu <a0282524688@gmail.com>
 > 
-> 
-> There was a v3 here:
-> 
-> https://lore.kernel.org/r/20250825081201.9775-2-krzysztof.kozlowski@linaro.org/
+> This patch series introduces support for Nuvoton NCT6694, a peripheral
+> expander based on USB interface. It models the chip as an MFD driver
+> (1/7), GPIO driver(2/7), I2C Adapter driver(3/7), CANfd driver(4/7),
+> WDT driver(5/7), HWMON driver(6/7), and RTC driver(7/7).
 
-Drop this, applied that!
+Doesn't apply.
+
+Please rebase onto v6.17-rc1 and submit a [RESEND].
 
 -- 
 Lee Jones [李琼斯]
