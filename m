@@ -1,87 +1,73 @@
-Return-Path: <linux-watchdog+bounces-4158-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4159-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F30C4B419F8
-	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Sep 2025 11:28:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 412E5B41DA4
+	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Sep 2025 13:54:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A12851BA37FC
-	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Sep 2025 09:28:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 847067A3D44
+	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Sep 2025 11:52:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DD792F2916;
-	Wed,  3 Sep 2025 09:27:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76F241DB375;
+	Wed,  3 Sep 2025 11:49:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aaJiHxMm"
+	dkim=pass (2048-bit key) header.d=siemens.com header.i=diogo.ivo@siemens.com header.b="WvveLKes"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mta-64-227.siemens.flowmailer.net (mta-64-227.siemens.flowmailer.net [185.136.64.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E1952EB5BD;
-	Wed,  3 Sep 2025 09:27:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 468D42FD7D7
+	for <linux-watchdog@vger.kernel.org>; Wed,  3 Sep 2025 11:49:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.136.64.227
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756891678; cv=none; b=e7EzWgq2MNihAEdzbpe7OnWjfNha5VsEwhYRFCDzTyuRTvwPsm2oa4jGgiMHhpLqP6NDdd8sWnZKZo207whlrKGBsLiqNEo8tTNpz9LXNLfX8bUUc2ME/S+KdRn3MPKvJ8XEBUYs0GhzILeBTd0qoyaPV+DLrsRdMgZ8KyV1h48=
+	t=1756900180; cv=none; b=q1O37tM7Bbfce0cA3VMHz7OBrOxWalKeI6K51B2VhfbrEWenF7vqJotSVJhfPeoYt+R/r9zew7pB82vkvMCRLLuFp2mHmmnMf3DI4mIgUFYl9a/AvQ0G5DDTsbTV43zmv487b0guAAkvic6VvK4CVsmNeFzzMIRdtG7HMrcOMys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756891678; c=relaxed/simple;
-	bh=zoygvyrvbpRQP0lvFaQr5ZvBPQrrVcLHonREwQLABLU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O1fxwRSilvqOszdpkL1hYBIDVSkQNt+pzpB130KhXKmhpap8ryjjiVrm1WlqssNg2Ki9XN0zo1z3vwlszlgRjzXJykI/kqyqv8Az5FE44PUVlVhCDEpb+0zFv8m6Z+XFd0JNF1BDthpljebKmYhWAln1aKPBjuCKFm8I3O/FdL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aaJiHxMm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 094DEC4CEF0;
-	Wed,  3 Sep 2025 09:27:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756891677;
-	bh=zoygvyrvbpRQP0lvFaQr5ZvBPQrrVcLHonREwQLABLU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aaJiHxMmxm+KDWV54GEw0wFKqHa23MozUT9t1F6E6ykgPQidtVov9eFpwyt2PT/e1
-	 ykvXi8dABrzbhFHZac+ksIqZX5jqvgdo+i/bFDYYqs72VAONSagJP7/hSdvvYCxKz1
-	 eI1/thKT/ROliJ9DvpqJgMsGdmQ2Nm7CxoQr1q03RenOSahf10HJFkPQBnUPtjYevu
-	 7P7PWKjHLGsxIaf3fDgTDHGDy72eJAoJ0j0J3xFjm2UsyWc53a8WTuSfAJkdS7HDlA
-	 Rn/Cqm6KHIE+bQpWm2+d5YOls7aiPXWdMtpkunQRf6ofwIiK55Vv7GdgjI45bB7G7g
-	 0BP6SbigvujPw==
-Date: Wed, 3 Sep 2025 10:27:50 +0100
-From: Lee Jones <lee@kernel.org>
-To: a0282524688@gmail.com
-Cc: tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl,
-	andi.shyti@kernel.org, mkl@pengutronix.de,
-	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
-	jdelvare@suse.com, alexandre.belloni@bootlin.com,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH RESEND v14 0/7] Add Nuvoton NCT6694 MFD drivers
-Message-ID: <20250903092750.GG2163762@google.com>
-References: <20250825092403.3301266-1-a0282524688@gmail.com>
+	s=arc-20240116; t=1756900180; c=relaxed/simple;
+	bh=lAES3l1X86OVKuPilKHpXG8FldhrlZD7TQNJOVUKmI0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=JS0wUdV5ZMwSYgp4whpAvoLpxI3nI2G0LDM5Cs99fBddKC8rFW3KRIbBw0SgUZXezk4Z2q5NjJkwkxY2mN0reiPAAhSRc0LfjTeinnrXyS3w3oLv7kve/rwU7YN8veAmZOIedFnN+jBHjzNEvj73wl/80IhtOPSQCtL3aWVqIYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com; dkim=pass (2048-bit key) header.d=siemens.com header.i=diogo.ivo@siemens.com header.b=WvveLKes; arc=none smtp.client-ip=185.136.64.227
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
+Received: by mta-64-227.siemens.flowmailer.net with ESMTPSA id 2025090311492628deaa0c6e0002070e
+        for <linux-watchdog@vger.kernel.org>;
+        Wed, 03 Sep 2025 13:49:27 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=diogo.ivo@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
+ bh=lAES3l1X86OVKuPilKHpXG8FldhrlZD7TQNJOVUKmI0=;
+ b=WvveLKes9QJ/d2n1BsRan1Y5xhEsGirWF5TZRyHSElxQPmolzm18gU+WN7j+1s9+CoJKKQ
+ RHrSL+pf0belzVDD697IPN4iYqjkc5LaeTDK3hx9OsuBdfm6ohrRwL+JJMXksnOqbxaQdEd6
+ 36n402rVxNEhwxigbEk62RB6iUhPCicbyqszbM9cOtJ2njXWokYHWhXyD75WhP1MRpTfeIWU
+ rXgfTwRyiLmp4BlRl/1+OhpNcAKdcbSRxWp+3nFnx1EbjWGMr7RdLl8fMQlw1ie0FelZ/xEz
+ ItHN76kI48UeHYZPQ2YYIS/avFxnXOz2/YETfBxOmww86IkcOYpBMIKw==;
+From: Diogo Ivo <diogo.ivo@siemens.com>
+To: linux@roeck-us.net
+Cc: cooleech@gmail.com,
+	diogo.ivo@siemens.com,
+	linux-watchdog@vger.kernel.org,
+	wim@linux-watchdog.org
+Subject: Re: [PATCH] watchdog: intel_oc_wdt: Do not try to write into const memory
+Date: Wed,  3 Sep 2025 12:49:05 +0100
+Message-ID: <20250903114905.40656-1-diogo.ivo@siemens.com>
+In-Reply-To: <20250817144817.1451377-1-linux@roeck-us.net>
+References: <20250817144817.1451377-1-linux@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250825092403.3301266-1-a0282524688@gmail.com>
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-1328357:519-21489:flowmailer
 
-On Mon, 25 Aug 2025, a0282524688@gmail.com wrote:
+To make it explicit with my comments on [1]:
 
-> From: Ming Yu <a0282524688@gmail.com>
-> 
-> This patch series introduces support for Nuvoton NCT6694, a peripheral
-> expander based on USB interface. It models the chip as an MFD driver
-> (1/7), GPIO driver(2/7), I2C Adapter driver(3/7), CANfd driver(4/7),
-> WDT driver(5/7), HWMON driver(6/7), and RTC driver(7/7).
+Reviewed-by: Diogo Ivo <diogo.ivo@siemens.com>
+Tested-by: Diogo Ivo <diogo.ivo@siemens.com>
 
-Doesn't apply.
-
-Please rebase onto v6.17-rc1 and submit a [RESEND].
-
--- 
-Lee Jones [李琼斯]
+[1]: https://lore.kernel.org/linux-watchdog/20250818031838.3359-1-diogo.ivo@tecnico.ulisboa.pt/T/#t
 
