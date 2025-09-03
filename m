@@ -1,92 +1,52 @@
-Return-Path: <linux-watchdog+bounces-4161-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4164-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3AD4B421B9
-	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Sep 2025 15:33:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 695B3B429FF
+	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Sep 2025 21:34:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8AA92683AC8
-	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Sep 2025 13:33:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E2BE21BC6CA8
+	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Sep 2025 19:34:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D7E1308F34;
-	Wed,  3 Sep 2025 13:33:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A490C3629AC;
+	Wed,  3 Sep 2025 19:34:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nqEESknj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l5N2FwVO"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A7071F4701;
-	Wed,  3 Sep 2025 13:33:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 707782D94A2;
+	Wed,  3 Sep 2025 19:34:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756906408; cv=none; b=DtDC744BbIvRDlpI82zSS4r5EGDY4qsRzy93HanBXWG6Wx8xCSLuHpCxCbwQgNvaddWtFmbTmjAw18OinaUuh3A7U25/CFPfmztP29N7yN0CG5WeHk+/fKv9AEVaqY+8GPSJcTNkgkxYIKBwXKmq6+bpOlIPCJ/PGDL04xDs4M0=
+	t=1756928067; cv=none; b=ROcFcBjTHpkFmNtyBcuZTx7i2cic3QC9MsRUUxS9ox59zKeeaml335sbCLGWobiiBM+ra2I2MkSsM1LuUDmh6IAnVgXTc0q6m28PhfF+5lX/FXjWXArfBxKfvVRwD4NaR5CmCkO7aSoKww1jFa9zKPt9aLMKSGK62Xk3PVBDQLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756906408; c=relaxed/simple;
-	bh=APA+IKhQAivDdhc8vaL3FsIWLj0FCAXAMDhHWsCuKXQ=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=d8KTlxDE06rlcFqYjfah5n86MVNiBodWTFZxPn+mDftPeX46W6QL3rAoVtmCI9J6XfGnRuFwdEh59qrIg1gdUmanWxr3kvEm/KS9W+ID6RSOu3deVvINK/WhXQQQ6Z4h2qB92pqLvtc6VFIpilpxy8NvMxDKIqHoQenXSn4d9TQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nqEESknj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5133DC4CEF0;
-	Wed,  3 Sep 2025 13:33:16 +0000 (UTC)
+	s=arc-20240116; t=1756928067; c=relaxed/simple;
+	bh=DnLt/SBMSfTZBgk5JWHNT9RMOyUX2bInZRqm44ui51g=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=W6uHaDFjJmXQ/hfS0xjbLz4C+iNXf/gXS0p+z9saWN8UISFp88QxTJ/8Yldms2jIfIM853Hfz/XUbpWN6yCcP5CzEP5jbpRn6sr1m05hPuBzff5ZDJMMLu+LXAob4LMkQ5GjVxmCQFdSfH8ym6CnyzD/yBcugDed97Zd1EA2/AY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l5N2FwVO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0148BC4CEE7;
+	Wed,  3 Sep 2025 19:34:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756906407;
-	bh=APA+IKhQAivDdhc8vaL3FsIWLj0FCAXAMDhHWsCuKXQ=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=nqEESknjcE7bjyogwRRHk5Ac1+O6YIAgKS9ID41Agw+gj1ML6szAioiAxoEwVPU1l
-	 Rs4O3IWVEyPaLUfn3ucjNCBdEM0jZ7qVEQOqFRZgHMl73bkop1oNdOjcBypQy/KDmY
-	 +yYrKUeVnGvPHEmSDq3dlNGyxs3TiB55gqVP0Mkh3wHUhGzZrb8jzq1r/kzrzrgaSe
-	 Sx8RFcBj5RwoYNnz8acrzmuqdg8YFFUkSOr1mbHeeboFs0QxqjRfdAq0hN2uLw03U3
-	 gSabtOra4+cRiKIRuFdWa7WbmJf9NW9/jT2Hdq21Hbk8moSetyHxC9xSA2qgIufyi6
-	 n4Ha+QYUx/PNg==
-From: Lee Jones <lee@kernel.org>
-To: Sven Peter <sven@kernel.org>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, 
- Neal Gompa <neal@gompa.dev>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Hector Martin <marcan@marcan.st>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Viresh Kumar <viresh.kumar@linaro.org>, 
- Thomas Gleixner <tglx@linutronix.de>, Joerg Roedel <joro@8bytes.org>, 
- Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
- Linus Walleij <linus.walleij@linaro.org>, 
- Mark Kettenis <kettenis@openbsd.org>, Andi Shyti <andi.shyti@kernel.org>, 
- Jassi Brar <jassisinghbrar@gmail.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
- Sasha Finkelstein <fnkl.kernel@gmail.com>, 
- Marcel Holtmann <marcel@holtmann.org>, 
- Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
- Johannes Berg <johannes@sipsolutions.net>, van Spriel <arend@broadcom.com>, 
- Lee Jones <lee@kernel.org>, 
- =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, 
- Stephen Boyd <sboyd@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>, 
- Guenter Roeck <linux@roeck-us.net>, 
- Michael Turquette <mturquette@baylibre.com>, 
- =?utf-8?q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>, 
- Vinod Koul <vkoul@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
- Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>, 
- Ulf Hansson <ulf.hansson@linaro.org>, Keith Busch <kbusch@kernel.org>, 
- Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>, 
- Sagi Grimberg <sagi@grimberg.me>, Jaroslav Kysela <perex@perex.cz>, 
- Takashi Iwai <tiwai@suse.com>, Janne Grunau <j@jannau.net>
-Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-pm@vger.kernel.org, iommu@lists.linux.dev, linux-gpio@vger.kernel.org, 
- linux-i2c@vger.kernel.org, dri-devel@lists.freedesktop.org, 
- linux-bluetooth@vger.kernel.org, linux-wireless@vger.kernel.org, 
- linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org, 
- linux-clk@vger.kernel.org, dmaengine@vger.kernel.org, 
- linux-sound@vger.kernel.org, linux-spi@vger.kernel.org, 
- linux-nvme@lists.infradead.org
-In-Reply-To: <20250828-dt-apple-t6020-v1-18-507ba4c4b98e@jannau.net>
-References: <20250828-dt-apple-t6020-v1-18-507ba4c4b98e@jannau.net>
-Subject: Re: (subset) [PATCH 18/37] mfd: macsmc: Add "apple,t8103-smc"
- compatible
-Message-Id: <175690639604.2768491.7365862081844880171.b4-ty@kernel.org>
-Date: Wed, 03 Sep 2025 14:33:16 +0100
+	s=k20201202; t=1756928067;
+	bh=DnLt/SBMSfTZBgk5JWHNT9RMOyUX2bInZRqm44ui51g=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=l5N2FwVOOx4Ag7agp4LqOUzyk/gvZqe7/JMHLHMnLp4QQjwZkbO783EpsFXxZ2u8n
+	 iSUPrj0o2osvU31x2H8sTyCq+oIwwPqk7cdvOcS3u/kK3VDkkwHW8liCsAoraoKX3f
+	 Lcs5ahLhDWdjgdnFJScbvfI3prEPPzsZyMILIVy9BBYo8yZBPXv5KNocgSkBXs5i2z
+	 u6nOpMV0hslZoSA0wr8KGiFoauXT7uetF5GIqT4Okxg33RzfwTHTJnzvAie8D5daon
+	 GFGmA8xRReT3TdK9U+wQNo7Hb6VAkj9yhhx36MWdYsqZe3ME3o3ZyAgeY1IPYtdJB1
+	 LSBhHT4BrZTZw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB8BFCA1014;
+	Wed,  3 Sep 2025 19:34:26 +0000 (UTC)
+From: Hrishabh Rajput via B4 Relay <devnull+hrishabh.rajput.oss.qualcomm.com@kernel.org>
+Subject: [PATCH 0/2] Add support for Gunyah Watchdog
+Date: Wed, 03 Sep 2025 19:33:58 +0000
+Message-Id: <20250903-gunyah_watchdog-v1-0-3ae690530e4b@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -94,25 +54,76 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.15-dev-c81fc
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACaYuGgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDSwNj3fTSvMrEjPjyxJLkjJT8dF2jFCMzE0sTY4tUI0sloK6CotS0zAq
+ widGxtbUAB4BPbWEAAAA=
+To: Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>, 
+ Wim Van Sebroeck <wim@linux-watchdog.org>, 
+ Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Hrishabh Rajput <hrishabh.rajput@oss.qualcomm.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1756928065; l=1783;
+ i=hrishabh.rajput@oss.qualcomm.com; s=20250903; h=from:subject:message-id;
+ bh=DnLt/SBMSfTZBgk5JWHNT9RMOyUX2bInZRqm44ui51g=;
+ b=XfShsxJHzpWyLh8U+wdwsMZp+lUR39UftpyXcbGXlJCSLDWuRvECb2OHQJI4v/e7bkdo904ft
+ opn6k/cpcYBBAwwkPc/Ntqekh16g1Xcy97UMuJnKkeYuFAOMfxuEqYv
+X-Developer-Key: i=hrishabh.rajput@oss.qualcomm.com; a=ed25519;
+ pk=syafMitrjr3b/OYAtA2Im06AUb3fxZY2vJ/t4iCPmgw=
+X-Endpoint-Received: by B4 Relay for
+ hrishabh.rajput@oss.qualcomm.com/20250903 with auth_id=509
+X-Original-From: Hrishabh Rajput <hrishabh.rajput@oss.qualcomm.com>
+Reply-To: hrishabh.rajput@oss.qualcomm.com
 
-On Thu, 28 Aug 2025 16:01:37 +0200, Janne Grunau wrote:
-> After discussion with the devicetree maintainers we agreed to not extend
-> lists with the generic compatible "apple,smc" anymore [1]. Use
-> "apple,t8103-smc" as base compatible as it is the SoC the driver and
-> bindings were written for.
-> 
-> [1]: https://lore.kernel.org/asahi/12ab93b7-1fc2-4ce0-926e-c8141cfe81bf@kernel.org/
-> 
-> [...]
+Gunyah is a Type-I hypervisor which was introduced in the patch series
+[1]. It is an open source hypervisor. The source repo is available at
+[2].
 
-Applied, thanks!
+The Gunyah Hypervisor doesn't allow its Virtual Machines to directly
+access the MMIO watchdog. It either provides the fully emulated MMIO
+based watchdog interface or the SMC-based watchdog interface depending
+on the hypervisor configuration.
+The SMC-based watchdog follows ARM's SMC Calling Convention (SMCCC)
+version 1.1 and uses Vendor Specific Hypervisor Service Calls space.
 
-[18/37] mfd: macsmc: Add "apple,t8103-smc" compatible
-        commit: 667ec87a2cfa50a528aaece758271794a1932141
+This patch series adds support for the SMC-based watchdog interface
+provided by the Gunyah Hypervisor. The driver supports start/stop
+operations, timeout and pretimeout configuration, pretimeout interrupt
+handling and system restart via watchdog.
 
---
-Lee Jones [李琼斯]
+This series is tested on SM8750 platform.
+
+[1]
+https://lore.kernel.org/all/20240222-gunyah-v17-0-1e9da6763d38@quicinc.com/
+
+[2]
+https://github.com/quic/gunyah-hypervisor
+
+Signed-off-by: Hrishabh Rajput <hrishabh.rajput@oss.qualcomm.com>
+---
+Hrishabh Rajput (2):
+      dt-bindings: Add binding for gunyah watchdog
+      watchdog: Add driver for Gunyah Watchdog
+
+ .../bindings/watchdog/qcom,gh-watchdog.yaml        |  76 ++++++
+ MAINTAINERS                                        |   3 +
+ drivers/watchdog/Kconfig                           |  13 +
+ drivers/watchdog/Makefile                          |   1 +
+ drivers/watchdog/gunyah_wdt.c                      | 268 +++++++++++++++++++++
+ include/linux/gunyah_errno.h                       |  77 ++++++
+ 6 files changed, 438 insertions(+)
+---
+base-commit: 038d61fd642278bab63ee8ef722c50d10ab01e8f
+change-id: 20250903-gunyah_watchdog-2d2649438e29
+
+Best regards,
+-- 
+Hrishabh Rajput <hrishabh.rajput@oss.qualcomm.com>
+
 
 
