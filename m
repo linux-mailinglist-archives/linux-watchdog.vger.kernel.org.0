@@ -1,201 +1,239 @@
-Return-Path: <linux-watchdog+bounces-4154-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4155-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8313B40E2C
-	for <lists+linux-watchdog@lfdr.de>; Tue,  2 Sep 2025 21:54:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29717B41214
+	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Sep 2025 03:51:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 66F7C5E1FBB
-	for <lists+linux-watchdog@lfdr.de>; Tue,  2 Sep 2025 19:54:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D6C97560156
+	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Sep 2025 01:51:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 664C235085A;
-	Tue,  2 Sep 2025 19:54:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00C3E1D79A5;
+	Wed,  3 Sep 2025 01:50:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZrJeisJC"
+	dkim=pass (2048-bit key) header.d=mail.toshiba header.i=nobuhiro.iwamatsu.x90@mail.toshiba header.b="YcIQV+av"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mo-csw-fb.securemx.jp (mo-csw-fb1121.securemx.jp [210.130.202.129])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF0E326C3A5;
-	Tue,  2 Sep 2025 19:54:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756842876; cv=none; b=sxRAoAAyEtZFev17KptWrqIyb3VrWDDAQbtK8iU9j7bSroojv9MyRUn/3J5RbjZBCkIAYNBDmAE1yYKK5Sbl2dK54YM2FVurwbYDzVjF49M3FHYbzgHi52CaHQ9e5uqCfk5vhV6CKe8t931QZgpauCB97yTeCkSY8Myt3wCoO4Y=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756842876; c=relaxed/simple;
-	bh=oJOLNYG2Y3DXMCSgbwODVJA8SAuDYi5Dbvsh+hG6M4Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pTeAwe3H0ZfTbDJRRZWdM2xfd7eeEpnNtL9F+QPxdolsSSKSGVg2KssdqxuJvRFGlI5KGDCu5vrRtsKYB7eKris3kTBG9bP51RP8Q3AaoEHEOpuKMIM8oWx/tcTVmXEbAotzkNR8T4NOFEuVAdNms1mXBJiFmjXY3v5zT96bZJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZrJeisJC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D07CC4CEED;
-	Tue,  2 Sep 2025 19:54:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756842875;
-	bh=oJOLNYG2Y3DXMCSgbwODVJA8SAuDYi5Dbvsh+hG6M4Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZrJeisJCeZBLdRd9piYISWxH6ectOKfLkCBAI45oB9yskyvBJx+HrHbj0QupA23QY
-	 HMwYW+4SpxkS1Px4DFX1y0PnsLKuIvMupIqIiKRi5+/yisqqzHEEZpEI+OC+GPQMt+
-	 Ih9UPZZxLrikazCJPDm6WovmTyFRm0ulZKF/oPzplGj21mx5CKCfRPvb9oo4xKL1nz
-	 Qojwko0xFxCfGWgdvCBAYT8/hAuaZcNeMu33YO6xDjk/8M8E6xVx4H6De8eZjysot9
-	 apZ9PSugbHYcTWyIOnwbJIoCz8GthLjCfl1K6nrT8bke0E+1MO5eocgkH5TUTef2/d
-	 X7vBDpLUcS7MA==
-Date: Tue, 2 Sep 2025 14:54:34 -0500
-From: Rob Herring <robh@kernel.org>
-To: Janne Grunau <j@jannau.net>
-Cc: Sven Peter <sven@kernel.org>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Neal Gompa <neal@gompa.dev>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Hector Martin <marcan@marcan.st>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Mark Kettenis <kettenis@openbsd.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Sasha Finkelstein <fnkl.kernel@gmail.com>,
-	Marcel Holtmann <marcel@holtmann.org>,
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	van Spriel <arend@broadcom.com>, Lee Jones <lee@kernel.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
-	Vinod Koul <vkoul@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-	Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, iommu@lists.linux.dev,
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-bluetooth@vger.kernel.org,
-	linux-wireless@vger.kernel.org, linux-pwm@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-clk@vger.kernel.org,
-	dmaengine@vger.kernel.org, linux-sound@vger.kernel.org,
-	linux-spi@vger.kernel.org, linux-nvme@lists.infradead.org
-Subject: Re: [PATCH 00/37] arm64: Add initial device trees for Apple M2
- Pro/Max/Ultra devices
-Message-ID: <20250902194528.GA1014943-robh@kernel.org>
-References: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net>
- <20250829195119.GA1206685-robh@kernel.org>
- <20250830071620.GD204299@robin.jannau.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53F1181749
+	for <linux-watchdog@vger.kernel.org>; Wed,  3 Sep 2025 01:50:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=210.130.202.129
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1756864248; cv=fail; b=pJwwa3I0QXoJGcWOfUxBgwabvKiorE9u5gxk3FFghtcMLP1T4md/89ulLXDOjwIS3p9nOMqHzlQk6304EeQbVwBO60TTMRlrfTCuP3qvXeqCjZ4qErZDw+feBVhqHO+YP9XHL4Dmk/xBTtupMOIzPlZh7rJ1ny8+zQLek/hS6nE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1756864248; c=relaxed/simple;
+	bh=wHoBHaMb3wTtOPZxNj/o4FDw75ICtXrcHYeXNmpv/zE=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=NCKp6a9RruQPBcSeH91TjcP4JYdn2jM7oSxyupLkXgHnH7RxU+v4mosPgdq1JtXTOUZeIu6MrhbzrmW203rWtYfgLm+FeofbEUvJ0G5epxsCpbZCcjqsw5sGS1cLyXYWpoRFGAZiuEnzoVdRVZd5uKvUAfoupFZwc1DVG5bcIy4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.toshiba; spf=pass smtp.mailfrom=mail.toshiba; dkim=pass (2048-bit key) header.d=mail.toshiba header.i=nobuhiro.iwamatsu.x90@mail.toshiba header.b=YcIQV+av; arc=fail smtp.client-ip=210.130.202.129
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.toshiba
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.toshiba
+Received: by mo-csw-fb.securemx.jp (mx-mo-csw-fb1121) id 5830F9Sq3705046; Wed, 3 Sep 2025 09:15:09 +0900
+DKIM-Signature: v=1;a=rsa-sha256;c=relaxed/simple;d=mail.toshiba;h=From:To:CC:
+	Subject:Date:Message-ID:References:In-Reply-To:Content-Type:
+	Content-Transfer-Encoding:MIME-Version;i=nobuhiro.iwamatsu.x90@mail.toshiba;
+	s=key1.smx;t=1756858460;x=1758068060;bh=wHoBHaMb3wTtOPZxNj/o4FDw75ICtXrcHYeXN
+	mpv/zE=;b=YcIQV+avjS4T/VwjyCbtZl1lgjSSH0K+FTTpkjQmvVKLZ8etXJyPDNeoK5MuY/alVT9
+	+dwBUD2qQGyclB9uq7a/aFcCf3HFQYou4C1b8Y8aUxwFM20/4AkUgZEEvoRifgrW6/BJJBKCE0BMU
+	DMC6QO3jg00x26UGly9TKwvvmvzsQvK/s5tlm6VygLnnsfM75kHeXZVnWpM93YOWw+wDHZMU+uHJA
+	6ByzmK4MombrJBoJjkOu+pLsuQy0Wqy123xiq+e+j+apBfT48xk9fPSCywakLsekrOcYAjo5Osy77
+	TH809EzGpvDwCmwHGkZ0L820hcYm6zQZjg3wtLet8qKg==;
+Received: by mo-csw.securemx.jp (mx-mo-csw1122) id 5830EHlx2044769; Wed, 3 Sep 2025 09:14:17 +0900
+X-Iguazu-Qid: 2rWgrrz1nRng6MxW34
+X-Iguazu-QSIG: v=2; s=0; t=1756858456; q=2rWgrrz1nRng6MxW34; m=TdE0wluIWRwvhLN7r9isGhZGrSlnxfunLKlADzOVj8o=
+Received: from imx12-a.toshiba.co.jp (unknown [38.106.60.135])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	 id 4cGjlW5sp0z1xnZ; Wed,  3 Sep 2025 09:14:15 +0900 (JST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=DyTeU9T6yuO8G5TlaGPNgiqZiZCt2aG2yN86aaw0CL/P2j+TZmCeXcSsd6qnye0VgSVfPR34zc8vDLtLMEJGg8UoLcmHGlavTlZg2Yskdd2TzqgGV1RQes2ZjYwUEwtvYtF1djT3ML3goZlP/8BQ8VVYC3w0ENHvUX939i9eJx6iwSqmiFmT+PzTvgqEkJOD9CAM/0HbDeC+vSlJ8U5PEtYiwgQo8/zCUDGTV5XqWM++DwhpZPETybjB1fHs8cDgnPvQcwKHv4e+5b/RanNHMS458jwU824G+I5jyK957wywbXTgKdanqtQD/tF0KNnSkYb0cieyOjaWT3cV8T+pAg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ey9xtORR265JOPZk60Nu4X9Gvkpkj2jAPJ1pyJrrVhw=;
+ b=tbxJUMeI/Q5fHTiJgVD0iJDEhX1T0BL/PeA98kt+VM49nivPdDiM5G6c1QZtj8rcsOzAJUBajn9WSouCdtAAM7X//Mi8jBMf7/dg1N24Lf93wfa3Fj18TOP3Hco/eTI1E9oDzTMZUOl7o90OXbcK5N/zi2lP5QPT2ygH/FfTOk0Jw9B0KyxvzcvJK9o0it0I+UWd/4zCaD36fgiNnNG18205+GbQUcUHdUouUgijl1dAMxPFRk8ZELbjWm4gnvvC7LCRmh3rjeWDGoLBsZ/7/HDUgVrZyinCJi/5QbmPLGfkoX8vnKgLLLjTlA4Czbo8zqt3+30VUwpplhMrZmw4Zg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=mail.toshiba; dmarc=pass action=none header.from=mail.toshiba;
+ dkim=pass header.d=mail.toshiba; arc=none
+From: <nobuhiro.iwamatsu.x90@mail.toshiba>
+To: <wsa+renesas@sang-engineering.com>, <linux-watchdog@vger.kernel.org>
+CC: <wim@linux-watchdog.org>, <linux@roeck-us.net>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: RE: [PATCH 3/3] watchdog: visconti: don't print superfluous errors
+Thread-Topic: [PATCH 3/3] watchdog: visconti: don't print superfluous errors
+Thread-Index: AQHcDIVSKkLyYGvHnU2OilDfoBTzybSAtdLQ
+Date: Wed, 3 Sep 2025 00:14:12 +0000
+X-TSB-HOP2: ON
+Message-ID: 
+ <TY7PR01MB1481808EE139CEA836D4775B4CD01A@TY7PR01MB14818.jpnprd01.prod.outlook.com>
+References: <20250813190507.3408-5-wsa+renesas@sang-engineering.com>
+ <20250813190507.3408-8-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20250813190507.3408-8-wsa+renesas@sang-engineering.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=mail.toshiba;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TY7PR01MB14818:EE_|OSCPR01MB14438:EE_
+x-ms-office365-filtering-correlation-id: 6cf09e3e-9a95-4860-0953-08ddea7ecf8c
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|366016|1800799024|376014|38070700018;
+x-microsoft-antispam-message-info: 
+ =?iso-2022-jp?B?MVRBdFFnNUJDUTBFcStaY0cvQ3lCNnB6QjhYRy9SS1NsUUp1ZklSTk5z?=
+ =?iso-2022-jp?B?U0gzWW9DbktYN0FHeG0vb0JIUjRHQWhYMElLa2Zuc0hEbzFvZDRDRGNx?=
+ =?iso-2022-jp?B?emJPTk5YZHZKZXdyOXgzR2JVNlREeWFQNWk5TkY2bmJqTjJ5ODYwYlQ4?=
+ =?iso-2022-jp?B?NGpJTkJ2eDkxczFwNnIwTDZTK1Rudzgxc3Y0bCtsZlB5VThMM2ZJTEM1?=
+ =?iso-2022-jp?B?YW1vSGRtbXNVUU9VVzdZNVE3VDFTejFidjhRcWtqbUN5SXBUWkhrNHQ5?=
+ =?iso-2022-jp?B?d3dIeXlpK3BWU2hjQSsyb1RNcVY3SGdvdHJRL1EvSnNuVWtLUnhlQWlW?=
+ =?iso-2022-jp?B?enovUzZvQWdnSjRoS3JteWxwOWFDaHNHc3hYZ25DSUNDbXgyaWpVTUwz?=
+ =?iso-2022-jp?B?QnVxaUNuZVVlZ3V3b2hpdFdVcktYUWpWSDBzQlhLSUdTUzZUbUhobmNo?=
+ =?iso-2022-jp?B?MDI1RnZraGEwNHQ2UHljL1pnck14SnZjaDVWNXplUE85V2lCL1JYb1ZK?=
+ =?iso-2022-jp?B?WTdvdE9aOXdmMTBiVDhwVDZZZExzS0F6VGQwSHNEWENWVHlVeXVMNERH?=
+ =?iso-2022-jp?B?bXdyWlN1VXpZRm5JZEIzeXlhWnRYSlhPak9KamtmaHk2MGpsOTUyMjUy?=
+ =?iso-2022-jp?B?eitqMkt2NHpEY0hmYU9WaU9idWYxMzdtWHQ4N3NxaDcybDJzckJ3MFhR?=
+ =?iso-2022-jp?B?Z2sxdWRRRXI3N1ROQzJUbHh2RTBIVnhOajJpQmFuaUNBSVUycVBsZ2tx?=
+ =?iso-2022-jp?B?NXNFRHpYWVA4NTY0NGl3VkhDNGUreGEvNVVDeWtCVm5PSXNjRHJTSitx?=
+ =?iso-2022-jp?B?Tnl6UnoweURUbW1RenVJeTBhcWM0bS9qVTd6VEF3TDYxcys2ZVl3R21S?=
+ =?iso-2022-jp?B?ZFQyZzlmdWNhSFRONGlQaEtMczFXQlRoTEluSk55M01FNnA1MTJuaFE0?=
+ =?iso-2022-jp?B?RFhwQXdmdGltMngyNlRtVnMyUW9Ya09xUlJtRWRrSzNGOVdWUEZSQ2lv?=
+ =?iso-2022-jp?B?WEVVbTlKQlB4aC9OSUhMODh0dktqSXZnTjIyUGdWTEd6QmtlQWg0NkNQ?=
+ =?iso-2022-jp?B?Y21XNHlrdTYwdmJ2MmlsUlhwYWNsY0p3T09OcnlZeFhVMjBCTm5ZcS9r?=
+ =?iso-2022-jp?B?SGZVd0tmM0Y5b0lDc0IzQ082dEpUNHdDY1VBTTF0UUFZQU1yamVnYnZJ?=
+ =?iso-2022-jp?B?WHVKU2dVWUVYL0RoYkYrM0l0MG5saEN0anZ5V0J6RU8vZFpHOVZaYUVx?=
+ =?iso-2022-jp?B?VHBEUHRjeTN2TWUwbGNhZFhUcFZEUEJGUXRZK0h2SVVnbHVIT1F0K3F0?=
+ =?iso-2022-jp?B?QktSdS9jZG5Kcm5nVk5XbWZJc2dmcXI0UUVodTVHUUFKYkhDbmlzNjVn?=
+ =?iso-2022-jp?B?b2NwSmE0aDdHbzVMQnpKTkpqMzJRRnZDc3FWU1Vxdis5aTl4U2w4Rm4v?=
+ =?iso-2022-jp?B?WVIzY1hjSHh1REdLYkgvYnJqSmVERklJRGh1ZVRmMVcxaEd1cGx3SW9x?=
+ =?iso-2022-jp?B?QktYdDF2VU1rUmRiZ3hEalZ5WlU3emNlV2ZBQVJGaVROYWlaTHZENlIw?=
+ =?iso-2022-jp?B?aTFuaEFxQW4wdFdZNUowa3dCd3hkRDl6QVVlL3U3czVsYUlJdkc0djFq?=
+ =?iso-2022-jp?B?MkdFejh1SnUzZGJZenlTdjhCMlhKbjBBWmw5YUM5emlWSko2OWNNRUYy?=
+ =?iso-2022-jp?B?QVBBYmJDUCthY3ZoV3g0N25YRUttR0pCSkovekNFaEVJTTBWQ0ZwMVlH?=
+ =?iso-2022-jp?B?YW5ER3ZEejMxYlRsU2ZiUXR4N1ZEZmwzcDdhVk9GcHVPSUdRNFpRZ3Vu?=
+ =?iso-2022-jp?B?T3dWb3pGNTJYOVZmbm8ydERaL3BINTltUlNTaEtqczB1YTU1dGdNc1FF?=
+ =?iso-2022-jp?B?eGhCZTRORG1CV0ZTVzNkQ0piMXZqeGtvMmpaUm0ySyt3MUViK2FRcWN4?=
+ =?iso-2022-jp?B?d0FHd1pIYjI4NFN1YmRzTGtRV3pKV1hMZEtGK3A3R0hOQlROSjFqakdy?=
+ =?iso-2022-jp?B?RW1nN2RCTm1sQUhOYVlwc2pLUXJWQVBKa0hWN3dqR09SMzNlM3hBWXNB?=
+ =?iso-2022-jp?B?Y2I1dHFGNWdXMHJ3R2NjYUcxdW1TclNzWHFmbWhLSUhCckg4eXVyQjBP?=
+ =?iso-2022-jp?B?TTV4T3BXdTE0cjljVXRoU3ljdUVOTmNnPT0=?=
+x-forefront-antispam-report: 
+ CIP:255.255.255.255;CTRY:;LANG:ja;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY7PR01MB14818.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: 
+ =?iso-2022-jp?B?U1VSQjlLMTlEME4wbGNvMXhLV1M4L0pBWGtyaUpWR00yTXZRdmtXSEJK?=
+ =?iso-2022-jp?B?OG83T3FZVllaby9uZzBhWWcyMStzVnl5bC9aQWhJOXVNU0Fzd2xSL1Vk?=
+ =?iso-2022-jp?B?czMzanNyZHY1UGxkVmpINDMrNWVNaHJRQ1dPSHgvQlFaT0wxQjdJNElY?=
+ =?iso-2022-jp?B?eFZhbmIxM3VrVW56OHlHTFZnWXlxN3RlZjJTNitwM2R2Z29ES3dnRjNu?=
+ =?iso-2022-jp?B?dFJTZlNFc0tHQnF2dE02K2NuS1Z4cUNEamxWS0w3ODlrRlBoNWc4SzVx?=
+ =?iso-2022-jp?B?YkJhYW44WFNXNnpEVUlCVEVzTi9EVGpVUGswUUVraS9EWWNqWkcrMGho?=
+ =?iso-2022-jp?B?cTFCdEp5cVZ2MHlhTEhjYmRCa1R4RGxNK3gvZFMvRzJhVmNTYkxjeFlo?=
+ =?iso-2022-jp?B?MkJrTUdMa0lJajJEWW42S0x2QzNLaVRBUlJTL3IyOTg3cHduRjlPVFYy?=
+ =?iso-2022-jp?B?aGRabHBXRXNkdUw4TlBRYUxMb2xRdVo3TDZBYWxiT1M0dXFmUnlxOWlE?=
+ =?iso-2022-jp?B?OVo3bFRmNzNWT2s3TzNHQWVvZUtnRTN3MW1qVFJ6RCtPem9DbmYydEg1?=
+ =?iso-2022-jp?B?Q1FjWVkyM05SRVlOczFXdEF0OU9QN3lPbHFEcDlsZ2xJL094L0pUR1M3?=
+ =?iso-2022-jp?B?bWV3eVVqRFZnZ25HSy8yRnEwSHlWU2QwcWl2OTBlb3M0L0loZURES09J?=
+ =?iso-2022-jp?B?bXNrODdjMUloaTFRUUdMVHBTaHh0UUJRc3FFZ2ZhZGlKeVY3R2d4ZWpj?=
+ =?iso-2022-jp?B?VHFHOWxFQjl5M3VrSFNkWVc0SmRVQld5dy94ZC81YzFJUWE3bnZCTW15?=
+ =?iso-2022-jp?B?SWJRN0RiSVBRUG1MOVFjVXcwaFZGVDhzSXhCczV3N2RHOWRuYzFGNkQv?=
+ =?iso-2022-jp?B?MFVRTDBFbXN0WXRxN2xQOEhoL2dMS2xQL3dmREROL0kveW1OcWRkRUdR?=
+ =?iso-2022-jp?B?WEhLMC8zM280Sk1UbnRtamhDWmVza3pZRHk0bG5DT2p6WFh1UUg5NHBn?=
+ =?iso-2022-jp?B?UDRCYTZFcnovaTdna2VNenEzdXk5Vlo5VkdZajRRRG5MeTArVXE4OTQ1?=
+ =?iso-2022-jp?B?MVk3WVBFT2xPL3ovSUJpSG5tbCtlamFVUFloNjIxQmVsMXJhYURsb3V3?=
+ =?iso-2022-jp?B?bWk2S2FyV1dvRFh1Yjg2TWdlQld6Ujcza25zb0RsdUVLMGlVdmpKK09y?=
+ =?iso-2022-jp?B?a2tzUWx2ekJXTFJnSTZ2NDF1SWY3SzFDdU5vY0grWmZESEwrcjErck81?=
+ =?iso-2022-jp?B?WDRjMGdvSlFIbnlKWjZmMC9uWkRGRWNxUDZ3Q3BpWURNRmpQUHVROE9T?=
+ =?iso-2022-jp?B?QmNQcWR2cEtxZ0JSVnBVWW9SMm9hNTNKeWQxNUYxS3RGWEFKQWZvQmVP?=
+ =?iso-2022-jp?B?aEZPZEhSQzYrQnRlSThsUnZpeWg2TFZZYmZVVzkxNGx0RnZUR2NFUkFu?=
+ =?iso-2022-jp?B?MDlVMEtyMC9LYy8yejBNQ3MyMHFuaDdvSEg4cWEzVUNpN3VnK1RUYnBn?=
+ =?iso-2022-jp?B?U3V2c1JaRzYvd2F0KzhBSmpSRmRaZnlFTXFjUWxkQVNjUG01SFhkUHpY?=
+ =?iso-2022-jp?B?cmRqSEU3RU1QY3VrM3pPbjNVNm9DaEFQaU9LektMMHRzTi9vMW55ZmFn?=
+ =?iso-2022-jp?B?RkVlc1BDdlRXblBIT1NxZVhIcUZNdGJxNVVKQlpPLzBUVU9adEVZVkRt?=
+ =?iso-2022-jp?B?RDJxZWd0SVplMDNuUmR3NDVKZHI3MTl4WGRMdlIrWWFBNGZBU29zU1dp?=
+ =?iso-2022-jp?B?YUh0NVhWV29MeEZleTVLVFRVcXM0SkgvWUdmbmFQT1dRRGxRWlFYSjl0?=
+ =?iso-2022-jp?B?QnZMV1QyZzJoNnY3ckl6RGg0dFVNSFhINTZuTjU0Snhlc2VnUFFjck5j?=
+ =?iso-2022-jp?B?aHZaUXZOM05ldzM4OFJXcGRhUUt4YWllT1JEam1la1VvUThNdVd6UTI1?=
+ =?iso-2022-jp?B?eUJTUXJjNWhGdnFVWEltUmZtRVJwWitnWFR1RkRHNVJpODJIZmtzSHVG?=
+ =?iso-2022-jp?B?dWVlRE1tZ3dCK1hjbmlZU2FaWTdTQmo1Wm9lSEZuR0pycEpwRWkyRDR6?=
+ =?iso-2022-jp?B?eTNENmtBUUFLNk5XYXUybmZ0amtmSUZ5ZmtEWFZNN3lpY25DTGhkWWdC?=
+ =?iso-2022-jp?B?eEJZa0FLYlprWjJ0Vko0UitzeTdzTTNLM1hDWXJrYjBiNmJDc0lXL3lw?=
+ =?iso-2022-jp?B?RzJlTU4wZjdDNW5IcDhzUUZ1a3BMM2ZSR3BMSk1wVUFKT1d0OFN5c3Vt?=
+ =?iso-2022-jp?B?dVRpQ2ZvZCt0OE5Xb0VRUGlYR0ZDanpEUlBVQ21HdTdPY3kwUDhENTZ3?=
+ =?iso-2022-jp?B?SUl3YXRlRVNxZFdzRWJ6Y1pDS3JWWlFCZmc9PQ==?=
+Content-Type: text/plain; charset="iso-2022-jp"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250830071620.GD204299@robin.jannau.net>
+X-OriginatorOrg: mail.toshiba
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TY7PR01MB14818.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6cf09e3e-9a95-4860-0953-08ddea7ecf8c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Sep 2025 00:14:12.4950
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: f109924e-fb71-4ba0-b2cc-65dcdf6fbe4f
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: uCmVOJ/7A3lCJqkRxGRYiNOGm4E2RT3aDcB4K7Rylq2xznFlnu5Ko3zIkJesDobuznpTcu/9XiuGzgWa9mYHLJpsX5nyBXMwVXMReG9Ix+BwpSonjxPkf9l3suMbzl77
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSCPR01MB14438
 
-On Sat, Aug 30, 2025 at 09:16:20AM +0200, Janne Grunau wrote:
-> On Fri, Aug 29, 2025 at 02:51:19PM -0500, Rob Herring wrote:
-> > On Thu, Aug 28, 2025 at 04:01:19PM +0200, Janne Grunau wrote:
-> > > This series adds device trees for Apple's M2 Pro, Max and Ultra based
-> > > devices. The M2 Pro (t6020), M2 Max (t6021) and M2 Ultra (t6022) SoCs
-> > > follow design of the t600x family so copy the structure of SoC *.dtsi
-> > > files.
-> > > 
-> > > t6020 is a cut-down version of t6021, so the former just includes the
-> > > latter and disables the missing bits.
-> > > 
-> > > t6022 is two connected t6021 dies. The implementation seems to use
-> > > t6021 and disables blocks based on whether it is useful to carry
-> > > multiple instances. The disabled blocks are mostly on the second die.
-> > > MMIO addresses on the second die have a constant offset. The interrupt
-> > > controller is multi-die aware. This setup can be represented in the
-> > > device tree with two top level "soc" nodes. The MMIO offset is applied
-> > > via "ranges" and devices are included with preprocessor macros to make
-> > > the node labels unique and to specify the die number for the interrupt
-> > > definition.
-> > > 
-> > > The devices itself are very similar to their M1 Pro, M1 Max and M1 Ultra
-> > > counterparts. The existing device templates are SoC agnostic so the new
-> > > devices can reuse them and include their t602{0,1,2}.dtsi file. The
-> > > minor differences in pinctrl and gpio numbers can be easily adjusted.
-> > > 
-> > > With the t602x SoC family Apple introduced two new devices:
-> > > 
-> > > The M2 Pro Mac mini is similar to the larger M1 and M2 Max Mac Studio. The
-> > > missing SDHCI card reader and two front USB3.1 type-c ports and their
-> > > internal USB hub can be easily deleted.
-> > > 
-> > > The M2 Ultra Mac Pro (tower and rack-mount cases) differs from all other
-> > > devices but may share some bits with the M2 Ultra Mac Studio. The PCIe
-> > > implementation on the M2 Ultra in the Mac Pro differs slightly. Apple
-> > > calls the PCIe controller "apcie-ge" in their device tree. The
-> > > implementation seems to be mostly compatible with the base t6020 PCIe
-> > > controller. The main difference is that there is only a single port with
-> > > with 8 or 16 PCIe Gen4 lanes. These ports connect to a Microchip
-> > > Switchtec PCIe switch with 100 lanes to which all internal PCIe devices
-> > > and PCIe slots connect too.
-> > > 
-> > > This series does not include PCIe support for the Mac Pro for two
-> > > reasons:
-> > > - the linux switchtec driver fails to probe and the downstream PCIe
-> > >   connections come up as PCIe Gen1
-> > > - some of the internal devices require PERST# and power control to come
-> > >   up. Since the device are connected via the PCIe switch the PCIe
-> > >   controller can not do this. The PCI slot pwrctrl can be utilized for
-> > >   power control but misses integration with PERST# as proposed in [1].
-> > > 
-> > > This series depends on "[PATCH v2 0/5] Apple device tree sync from
-> > > downstream kernel" [2] due to the reuse of the t600x device templates
-> > > (patch dependencies and DT compilation) and 4 page table level support
-> > > in apple-dart and io-pgtable-dart [3] since the dart instances report
-> > > 42-bit IAS (IOMMU device attach fails without the series).
-> > > 
-> > > After discussion with the devicetree maintainers we agreed to not extend
-> > > lists with the generic compatibles anymore [1]. Instead either the first
-> > > compatible SoC or t8103 is used as fallback compatible supported by the
-> > > drivers. t8103 is used as default since most drivers and bindings were
-> > > initially written for M1 based devices.
-> > 
-> > An issue here is any OS without the compatibles added to the drivers 
-> > won't work. Does that matter here? Soon as you need any new drivers or 
-> > significant driver changes it won't. The compatible additions could be 
-> > backported to stable. They aren't really any different than new PCI IDs 
-> > which get backported.
-> 
-> I don't think backporting the driver compatible additions to stable
-> linux is very useful. It is only relevant for t602x devices and the only
-> way to interact with them is the serial console. The T602x PCIe support
-> added in v6.16 requires dart changes (the posted 4th level io page table
-> support) to be useful. After that PCIe ethernet works so there is a
-> practical way to interact with t602x systems. So there are probably zero
-> user of upstream linux on those devices 
-> I'm more concerned about other projects already supporting t602x
-> devices. At least u-boot and OpenBSD will be affected by this. As short
-> term solution m1n1 will add the generic compatibles [1] temporarily.
-> I think keeping this roughly for a year should allow to add the
-> compatibles and wait for "fixed" releases of those projects.
-> I'll send fixes for u-boot once the binding changes are reviewed.
+Hello,
 
-Honestly, at least in the cases where the generic compatible works for 
-every chip so far, I'd just stick with it. The issue with generic 
-compatibles is more that you don't really know if things are going to be 
-the same or not. And most of the time, the h/w ends up changing.
+> -----Original Message-----
+> From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Sent: Thursday, August 14, 2025 4:05 AM
+> To: linux-watchdog@vger.kernel.org
+> Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>; Wim Van
+> Sebroeck <wim@linux-watchdog.org>; Guenter Roeck <linux@roeck-us.net>;
+> iwamatsu nobuhiro(=1B$B4d>>=1B(B =1B$B?.MN=1B(B =1B$B""#D#I#T#C!{#C#P#T=
+=1B(B)
+> <nobuhiro1.iwamatsu@toshiba.co.jp>; linux-arm-kernel@lists.infradead.org
+> Subject: [PATCH 3/3] watchdog: visconti: don't print superfluous errors
+>=20
+> The watchdog core will handle error messages already.
+>=20
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>  drivers/watchdog/visconti_wdt.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/watchdog/visconti_wdt.c
+> b/drivers/watchdog/visconti_wdt.c index cef0794708e7..7795e7fbf67e 100644
+> --- a/drivers/watchdog/visconti_wdt.c
+> +++ b/drivers/watchdog/visconti_wdt.c
+> @@ -118,7 +118,6 @@ static int visconti_wdt_probe(struct platform_device
+> *pdev)
+>  	struct visconti_wdt_priv *priv;
+>  	struct device *dev =3D &pdev->dev;
+>  	struct clk *clk;
+> -	int ret;
+>  	unsigned long clk_freq;
+>=20
+>  	priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL); @@ -153,9
+> +152,7 @@ static int visconti_wdt_probe(struct platform_device *pdev)
+>  	watchdog_stop_on_unregister(wdev);
+>=20
+>  	/* This overrides the default timeout only if DT configuration was
+> found */
+> -	ret =3D watchdog_init_timeout(wdev, 0, dev);
+> -	if (ret)
+> -		dev_warn(dev, "Specified timeout value invalid, using
+> default\n");
+> +	watchdog_init_timeout(wdev, 0, dev);
+>=20
+>  	return devm_watchdog_register_device(dev, wdev);  }
 
-If you want to keep it like this since you've already done it, then for 
-all the binding patches:
+Reviewed-by: Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>
 
-Acked-by: Rob Herring (Arm) <robh@kernel.org>
+Best regards,
+  Nobuhiro
 
-Rob
 
