@@ -1,52 +1,52 @@
-Return-Path: <linux-watchdog+bounces-4164-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4163-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 695B3B429FF
-	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Sep 2025 21:34:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0A58B429FA
+	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Sep 2025 21:34:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E2BE21BC6CA8
-	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Sep 2025 19:34:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 780FC3B672D
+	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Sep 2025 19:34:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A490C3629AC;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F7D236932A;
 	Wed,  3 Sep 2025 19:34:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l5N2FwVO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XuZyfqOo"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 707782D94A2;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7069C2C18A;
 	Wed,  3 Sep 2025 19:34:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756928067; cv=none; b=ROcFcBjTHpkFmNtyBcuZTx7i2cic3QC9MsRUUxS9ox59zKeeaml335sbCLGWobiiBM+ra2I2MkSsM1LuUDmh6IAnVgXTc0q6m28PhfF+5lX/FXjWXArfBxKfvVRwD4NaR5CmCkO7aSoKww1jFa9zKPt9aLMKSGK62Xk3PVBDQLE=
+	t=1756928067; cv=none; b=mWqZhySJoJc+xXy/aMNTuppY9OcM28Y4nURMwJ6D9NWLr8gnuJxbvGEmqWcEFKHwP7a3ev/a398se9g0uwMdVhQWfHgcp/ZQhtxNV9QxkzO96rrlOT4PvuPyMFM9S+w+g5fHmGOS0I6N6gW/ogL7XzvrEilwKpvEavfU8OzleS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1756928067; c=relaxed/simple;
-	bh=DnLt/SBMSfTZBgk5JWHNT9RMOyUX2bInZRqm44ui51g=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=W6uHaDFjJmXQ/hfS0xjbLz4C+iNXf/gXS0p+z9saWN8UISFp88QxTJ/8Yldms2jIfIM853Hfz/XUbpWN6yCcP5CzEP5jbpRn6sr1m05hPuBzff5ZDJMMLu+LXAob4LMkQ5GjVxmCQFdSfH8ym6CnyzD/yBcugDed97Zd1EA2/AY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l5N2FwVO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0148BC4CEE7;
-	Wed,  3 Sep 2025 19:34:26 +0000 (UTC)
+	bh=EgDo/LLsnhBVCLOMOYaz57dVgqrxts4nTCtm2WMV5Lk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=jkNknBHenSjT/fU/qNWTymu8LY7ZpYZf8z+pRuBk6JZRzkTeB/1NFnufGHXED5vqC1sbTnxtXW+4r/ECBq9/6yL3ha2dv2O1PCaY5SHXU433byz8iETVs9D+dFGqZKZFr+h7g7uCZY4+avb3VwyS3mJtGcdXqBZExuwEd3juf0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XuZyfqOo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 10734C4CEF4;
+	Wed,  3 Sep 2025 19:34:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1756928067;
-	bh=DnLt/SBMSfTZBgk5JWHNT9RMOyUX2bInZRqm44ui51g=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=l5N2FwVOOx4Ag7agp4LqOUzyk/gvZqe7/JMHLHMnLp4QQjwZkbO783EpsFXxZ2u8n
-	 iSUPrj0o2osvU31x2H8sTyCq+oIwwPqk7cdvOcS3u/kK3VDkkwHW8liCsAoraoKX3f
-	 Lcs5ahLhDWdjgdnFJScbvfI3prEPPzsZyMILIVy9BBYo8yZBPXv5KNocgSkBXs5i2z
-	 u6nOpMV0hslZoSA0wr8KGiFoauXT7uetF5GIqT4Okxg33RzfwTHTJnzvAie8D5daon
-	 GFGmA8xRReT3TdK9U+wQNo7Hb6VAkj9yhhx36MWdYsqZe3ME3o3ZyAgeY1IPYtdJB1
-	 LSBhHT4BrZTZw==
+	bh=EgDo/LLsnhBVCLOMOYaz57dVgqrxts4nTCtm2WMV5Lk=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=XuZyfqOoorDq3EBsBqISJ6Ka+BbzKetSxm/iJv3dmuT5xo4DrrEbHIBHZDA00f0/y
+	 bRVhewjfeIwIzt77Wpchflpu/DKQg7NBCq+Q02wxJU/DBSHnZiGT5I/CzPNNiWfJSH
+	 xjGWJHGxfzoK6P9EIRt25DWp23DkhpdzjSbkQwRIuKnaljVvBCJMSmU1GWaQvUo6zj
+	 nZ0gYljYXgA9F3JSl3XQCRztUBFk32u7C1yTYE2bAnnqiiQurxXlC/PhY2ljEqA+ws
+	 BzM2Cr1H70wxbVuWtsXWUYcCTsvi7ZLkNLrh1OxqP6azaGfc1iQQshLLkDUBNdZDD7
+	 jgAau1TrtcOYg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB8BFCA1014;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EBF84CA1009;
 	Wed,  3 Sep 2025 19:34:26 +0000 (UTC)
 From: Hrishabh Rajput via B4 Relay <devnull+hrishabh.rajput.oss.qualcomm.com@kernel.org>
-Subject: [PATCH 0/2] Add support for Gunyah Watchdog
-Date: Wed, 03 Sep 2025 19:33:58 +0000
-Message-Id: <20250903-gunyah_watchdog-v1-0-3ae690530e4b@oss.qualcomm.com>
+Date: Wed, 03 Sep 2025 19:33:59 +0000
+Subject: [PATCH 1/2] dt-bindings: Add binding for gunyah watchdog
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -55,9 +55,9 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIACaYuGgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1MDSwNj3fTSvMrEjPjyxJLkjJT8dF2jFCMzE0sTY4tUI0sloK6CotS0zAq
- widGxtbUAB4BPbWEAAAA=
+Message-Id: <20250903-gunyah_watchdog-v1-1-3ae690530e4b@oss.qualcomm.com>
+References: <20250903-gunyah_watchdog-v1-0-3ae690530e4b@oss.qualcomm.com>
+In-Reply-To: <20250903-gunyah_watchdog-v1-0-3ae690530e4b@oss.qualcomm.com>
 To: Bjorn Andersson <andersson@kernel.org>, 
  Konrad Dybcio <konradybcio@kernel.org>, 
  Wim Van Sebroeck <wim@linux-watchdog.org>, 
@@ -68,11 +68,11 @@ Cc: linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Hrishabh Rajput <hrishabh.rajput@oss.qualcomm.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1756928065; l=1783;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1756928065; l=3492;
  i=hrishabh.rajput@oss.qualcomm.com; s=20250903; h=from:subject:message-id;
- bh=DnLt/SBMSfTZBgk5JWHNT9RMOyUX2bInZRqm44ui51g=;
- b=XfShsxJHzpWyLh8U+wdwsMZp+lUR39UftpyXcbGXlJCSLDWuRvECb2OHQJI4v/e7bkdo904ft
- opn6k/cpcYBBAwwkPc/Ntqekh16g1Xcy97UMuJnKkeYuFAOMfxuEqYv
+ bh=12mv1xnCm68+mV1cO5nlkW0+E3MQXZbHMWHwIp/NcZc=;
+ b=qkUoVFWdbjWAoQfKRxKiRBGxhdVw4DOqAVLkp0OdTPsi7asOUUgp2H6GBPAlISkEYQvIQLQPJ
+ 6ia4WubGpXuCD+oUMeXuoEarrwRppe27z3h0y+gtE01MxxGY/Wgvxo4
 X-Developer-Key: i=hrishabh.rajput@oss.qualcomm.com; a=ed25519;
  pk=syafMitrjr3b/OYAtA2Im06AUb3fxZY2vJ/t4iCPmgw=
 X-Endpoint-Received: by B4 Relay for
@@ -80,50 +80,116 @@ X-Endpoint-Received: by B4 Relay for
 X-Original-From: Hrishabh Rajput <hrishabh.rajput@oss.qualcomm.com>
 Reply-To: hrishabh.rajput@oss.qualcomm.com
 
-Gunyah is a Type-I hypervisor which was introduced in the patch series
-[1]. It is an open source hypervisor. The source repo is available at
-[2].
+From: Hrishabh Rajput <hrishabh.rajput@oss.qualcomm.com>
 
-The Gunyah Hypervisor doesn't allow its Virtual Machines to directly
-access the MMIO watchdog. It either provides the fully emulated MMIO
-based watchdog interface or the SMC-based watchdog interface depending
-on the hypervisor configuration.
-The SMC-based watchdog follows ARM's SMC Calling Convention (SMCCC)
-version 1.1 and uses Vendor Specific Hypervisor Service Calls space.
-
-This patch series adds support for the SMC-based watchdog interface
-provided by the Gunyah Hypervisor. The driver supports start/stop
-operations, timeout and pretimeout configuration, pretimeout interrupt
-handling and system restart via watchdog.
-
-This series is tested on SM8750 platform.
-
-[1]
-https://lore.kernel.org/all/20240222-gunyah-v17-0-1e9da6763d38@quicinc.com/
-
-[2]
-https://github.com/quic/gunyah-hypervisor
+The Gunyah Hypervisor applies a devicetree overlay providing the
+pretimeout interrupt for the Gunyah Watchdog that it will be using to
+notify watchdog's pretimeout event. Add the DT bindings that Gunyah
+adheres to for the hypervisor and watchdog.
 
 Signed-off-by: Hrishabh Rajput <hrishabh.rajput@oss.qualcomm.com>
 ---
-Hrishabh Rajput (2):
-      dt-bindings: Add binding for gunyah watchdog
-      watchdog: Add driver for Gunyah Watchdog
+ .../bindings/watchdog/qcom,gh-watchdog.yaml        | 76 ++++++++++++++++++++++
+ MAINTAINERS                                        |  1 +
+ 2 files changed, 77 insertions(+)
 
- .../bindings/watchdog/qcom,gh-watchdog.yaml        |  76 ++++++
- MAINTAINERS                                        |   3 +
- drivers/watchdog/Kconfig                           |  13 +
- drivers/watchdog/Makefile                          |   1 +
- drivers/watchdog/gunyah_wdt.c                      | 268 +++++++++++++++++++++
- include/linux/gunyah_errno.h                       |  77 ++++++
- 6 files changed, 438 insertions(+)
----
-base-commit: 038d61fd642278bab63ee8ef722c50d10ab01e8f
-change-id: 20250903-gunyah_watchdog-2d2649438e29
+diff --git a/Documentation/devicetree/bindings/watchdog/qcom,gh-watchdog.yaml b/Documentation/devicetree/bindings/watchdog/qcom,gh-watchdog.yaml
+new file mode 100644
+index 000000000000..bde8438c6242
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/qcom,gh-watchdog.yaml
+@@ -0,0 +1,76 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/qcom,gh-watchdog.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm Gunyah Virtual Watchdog
++
++maintainers:
++  - Hrishabh Rajput <hrishabh.rajput@oss.qualcomm.com>
++
++description: |+
++  The Gunyah Hypervisor provides an SMC-based watchdog interface for its virtual
++  machines. The virtual machines use this information to determine the
++  pretimeout IRQ which the hypervisor will be using to communicate pretimeout
++  event.
++  See also: [1]
++
++  [1]: https://github.com/quic/gunyah-resource-manager/blob/1b23ceb0dfa010b3b6b5a5f7a4ec1e95b93ab99d/src/vm_creation/dto_construct.c#L519
++
++properties:
++  compatible:
++    allOf:
++      - const: gunyah-hypervisor
++      - const: simple-bus
++
++  "#address-cells":
++    description: Number of cells needed to represent 64-bit capability IDs.
++    const: 2
++
++  "#size-cells":
++    description: must be 0, because capability IDs are not memory address
++                  ranges and do not have a size.
++    const: 0
++
++patternProperties:
++  "^gh-watchdog":
++    type: object
++    description:
++      Watchdog node which provides information about the pretimeout IRQ which
++      will be used to communicate the pretimeout event.
++
++    properties:
++      compatible:
++        const: qcom,gh-watchdog
++
++      interrupts:
++        items:
++          description: Interrupt for the pretimeout.
++
++    additionalProperties: false
++
++    required:
++      - compatible
++      - interrupts
++
++additionalProperties: false
++
++required:
++  - compatible
++  - "#address-cells"
++  - "#size-cells"
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    hypervisor {
++        compatible = "gunyah-hypervisor", "simple-bus";
++        #address-cells = <2>;
++        #size-cells = <0>;
++
++        gh-watchdog {
++            compatible = "qcom,gh-watchdog";
++            interrupts = <GIC_SPI 0 IRQ_TYPE_EDGE_RISING>; /* Pretimeout IRQ */
++        };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index c0b444e5fd5a..03b74513e4ac 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3076,6 +3076,7 @@ F:	Documentation/devicetree/bindings/cache/qcom,llcc.yaml
+ F:	Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+ F:	Documentation/devicetree/bindings/reserved-memory/qcom*
+ F:	Documentation/devicetree/bindings/soc/qcom/
++F:	Documentation/devicetree/bindings/watchdog/qcom,gh-watchdog.yaml
+ F:	arch/arm/boot/dts/qcom/
+ F:	arch/arm/configs/qcom_defconfig
+ F:	arch/arm/mach-qcom/
 
-Best regards,
 -- 
-Hrishabh Rajput <hrishabh.rajput@oss.qualcomm.com>
+2.43.0
 
 
 
