@@ -1,207 +1,306 @@
-Return-Path: <linux-watchdog+bounces-4180-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4181-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11C18B4387C
-	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Sep 2025 12:20:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 481A0B43914
+	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Sep 2025 12:43:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 71E80168432
-	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Sep 2025 10:19:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 676777A5CFF
+	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Sep 2025 10:41:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8C2E2FC88B;
-	Thu,  4 Sep 2025 10:17:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56C4B2FC00D;
+	Thu,  4 Sep 2025 10:42:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="b2+Ubdhu"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="p6tDNKi6"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8CFA2FAC05
-	for <linux-watchdog@vger.kernel.org>; Thu,  4 Sep 2025 10:17:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C22272FA0E1
+	for <linux-watchdog@vger.kernel.org>; Thu,  4 Sep 2025 10:42:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756981026; cv=none; b=iKp6qn/RUKJWSa0o2FGktwGtMmM8KdlG4kYdmSgt4q/T91HHXjZhtDzzW4hdZa4gjxXl1x66eSqG3r37AVuh1eAHtZ3rX5ff7krZm5HB5MJFkVBL02oukj4kZMUZt8N3jxKSJxnDwz2N8YTKL7GebtPl0zcjKXkupIA+8W/035A=
+	t=1756982560; cv=none; b=rDcHxyriRfZ6By0i0jWiDNqu3M2EcDrR39nKWFxSUH3A6Om+i4+t+IOeAcq+UXieyyK5qfNtRpWMLVOxcD9lmCk+KKfZ4XdPnAZSuBWV8hBAQxiBwL51WE9nmQx5SZKKnZzBp2+5FbcXnu7KDk5+kYLlj739HANRWcgKPuNLuNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756981026; c=relaxed/simple;
-	bh=7MJyzBaUxP9X5PagJDcFR2Xl0v9tA5iGZjMRO04beHg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qLLWkH4vMD5bt05HRbLQYc7nxKHYeuFUNB8QZGEiPIeE4OJmOEvSuq5ge9H6nfelcVPiXTp4EDoaBAO+PF7MZTSVgNZTkuvjgBpMKrdRUgrHEJWXLAaQ/8cMwAQTAhqmFtjSiZtX15J7N52ha4UpPUe+neIt4c8f+DsBJryCkMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=b2+Ubdhu; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5849XAZT007684
-	for <linux-watchdog@vger.kernel.org>; Thu, 4 Sep 2025 10:17:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=rmgllivFRv6RjPwaBGym+Zby
-	4n60SrTDmfiiEvhrg5E=; b=b2+UbdhuhLawegkDcLTK0dX7H/ggcXf3MnP37WvU
-	c2aEonH9wF0KhNcaKD6oLOfakxBTr58H8WNkcve053YRYurMvjEzksh5jwxIUozJ
-	pu2nu6SPAxDk8IAeTeaDOuIViFGlAbA6GDH9sGYi+lXbti1tNjB0IB2FqbRW2jrA
-	YNVNmCacrLyh/GYV+y8Ol4dmdbzNn/yHEKicAmEWWN88PkZlVIbEEe7nS47rbTvX
-	OYv5eLMFVOOITqurcEpiqbSnTgfHeogQWBGsH7z+A0qcEpUvtY2EMXsutsK0vSfX
-	RGCP5nM6Wh2Lgo3pR/mKoA/CpcoDH6deWIDYQhMHLFxt0A==
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48ura8y12g-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-watchdog@vger.kernel.org>; Thu, 04 Sep 2025 10:17:01 +0000 (GMT)
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2445805d386so8507005ad.1
-        for <linux-watchdog@vger.kernel.org>; Thu, 04 Sep 2025 03:17:00 -0700 (PDT)
+	s=arc-20240116; t=1756982560; c=relaxed/simple;
+	bh=iNJ4FeVeT7B6e+//AQVG1salcqyAcnoFzo0f2zbeifg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ue+pbZ5GmZVOfk3OGp46383iUo789q7W7GDTMq3s/0qVN2R8xV2q08Nre1ujWAq4eWG8zV6CjZSL7HGFTUT1FGotoAeK4vSCCqL45AtW4tQxDCY8pCzj2oif+0S2glse4dgpsognFta5BfVbYco/AIMEjkEeG3vvpQdp+cSfrBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=p6tDNKi6; arc=none smtp.client-ip=209.85.219.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-e970e624b7cso1698681276.0
+        for <linux-watchdog@vger.kernel.org>; Thu, 04 Sep 2025 03:42:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1756982555; x=1757587355; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3IXOKsIqYkTA4LRuIysZBK9RbBlxCbzGVz/R04fan+Q=;
+        b=p6tDNKi69Yb08qECMOlPAcDxB77f+UgH/9tA6Z+OaH+0w+86QaK3bEFSc3sgjZdUPU
+         jlmKA0oQkw3Mcu7l4+jmKbokfc9QzmabR435uxb3lfsSMZmjTHSEqujeFhjZ9PAgA/yc
+         QtMDvUOm+UDI5qmGiTJZ1vnJBHFWCZz24e8tyQXFZTLwQ/Iof9/lNWBmZGkV9hV4RwkK
+         9BY+PchKKit2hbeL8zRTWyZOPtCMfw+4OuixvNO8VFdxTI+0OSkfePsGS1BiZg+4XBbq
+         ZXMlNkDCfeBK5OxIvrJtisAMkMGsbIrLVzkxJa8MYYMXIDwB6rb3DMvSCDRinQiiGdbT
+         PRSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756981020; x=1757585820;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rmgllivFRv6RjPwaBGym+Zby4n60SrTDmfiiEvhrg5E=;
-        b=gEQ5gwiySBdKeA0BubsFsev/egIkiI3XiI0PR/ooVBLW6p6Un/QtXRmVuVsxLGgfjd
-         Yly8ecvJeG1UwojjKcKX9N1fRFEsKfHIzhQHqal2HxtN/XGPSJneEVGCCTvc8cHkFQ21
-         2PgEQuRSaO5kiW7BMbB08BPBFIIJLn9FFTuYlSK3PljC8str1tVlqvjKlauZjXSNNX4o
-         VH1doQ+43UWNIby0PbeO/h1/TG56P127aXtcRae6Q5IcS1+kuGyH8hvJNbxW4HVOgBV0
-         Hrl+aWaJTFoanB5RIGLdDYz/lTCX3Sy66mzjP/oKaSeH+MLJ4VVP0cDI8j2OyZWQtO19
-         sh5A==
-X-Forwarded-Encrypted: i=1; AJvYcCULqJupeMUcS1fMcuVQkEiyT/Y5mNb4UGRJNKA9FwMe6o3PZj3MGzs8Xa+3P8qFC/3Ux5csh1D7hNLrfNCRxA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxn/uorCuSiATVEah0qNa6OBPW9b3lju1/AJbnYpq3dFTT1KAmb
-	y5bJbj61jHcfN/9EYJ5ZScs97w3F474gRkWvlE+m16mmWx0U9pQTJrGuWonpWghlqaB0hq/RbvZ
-	xAdLDCphjPkK31KFSEUN2sPDR4Y393fdcbHVvDSqbnkEx2av8w+6xFn6qnGvlsBP3P0wqfg==
-X-Gm-Gg: ASbGnct7IM4LOQbHbBeQLgmFOp7c/lo2OaClm2I6BdSl7qmQKixsvqAlPfmkyOUyjXY
-	xeuvMBtt69RiDB1m5Nx6Oco0SHOW3dow9CaLBkL2shK3IfYEd/tEt4PHdpLAYi0w6fOd+2YqsBr
-	MPpPLc1C2TOdceqjFKo+NK7OpNX82S+zrhGOSSG2ajPUAgvdMOg1NX26GEsw2qT3tSsbCbny1UR
-	BqEIlc7yKduLuOvyfbo3F4kXEPWq16D/+LYQgWWVusGoZuy7oTc22SsyKC/H/Me5Ui+OsYFhs4s
-	3hATn9VoU8EGEOD8xqXtuZtvyExk3IYNYmyKiXVS+O2YuQMBhc+Ii+qO9yA+v+ApKgA6ih51tg=
-	=
-X-Received: by 2002:a17:902:f70d:b0:248:d917:a57c with SMTP id d9443c01a7336-24944ad11e1mr272852145ad.40.1756981019642;
-        Thu, 04 Sep 2025 03:16:59 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IF62jdk6gndKp8OgF73KFyvJIMRCikJPPEDPzJaEVOadSZ9EtTIxaw+Nb5rGXP78fAdDW33dA==
-X-Received: by 2002:a17:902:f70d:b0:248:d917:a57c with SMTP id d9443c01a7336-24944ad11e1mr272851775ad.40.1756981019086;
-        Thu, 04 Sep 2025 03:16:59 -0700 (PDT)
-Received: from hu-pkondeti-hyd.qualcomm.com ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24cc91987f4sm14453055ad.33.2025.09.04.03.16.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Sep 2025 03:16:58 -0700 (PDT)
-Date: Thu, 4 Sep 2025 15:46:52 +0530
-From: Pavan Kondeti <pavan.kondeti@oss.qualcomm.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: hrishabh.rajput@oss.qualcomm.com, Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: Add binding for gunyah watchdog
-Message-ID: <5210a5e2-0d75-4532-b3ca-1cbdf8ea2a9e@quicinc.com>
-References: <20250903-gunyah_watchdog-v1-0-3ae690530e4b@oss.qualcomm.com>
- <20250903-gunyah_watchdog-v1-1-3ae690530e4b@oss.qualcomm.com>
- <ea295ff6-5395-4470-afc2-76e5e2dc9fb5@kernel.org>
+        d=1e100.net; s=20230601; t=1756982555; x=1757587355;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3IXOKsIqYkTA4LRuIysZBK9RbBlxCbzGVz/R04fan+Q=;
+        b=T6ciOM9m3Lb9p7dG9V9LrfvFiyMJHgFoJVYpcAM8l6V0PZeRWnF5vYlw+TeoQB8taf
+         nkmeOeoCsJe8u8njArIoqoQw95mIb3rw3rvy2uW5PDp8P1M22nQ/HGuwyokT3rIanxNe
+         jc7+LilaOJ41hkGZB+0bE4C5jMBIfHU7Sif7LkwD9yuKaa7xRbNQeCB9yvIWOe6QdY/D
+         Ajg8KefAD0OwS8qN4tjoc9znvZac/zZUInwn8AKiuW6GEvG8kgqBcZe+xfWXlIEPLg3p
+         U9Qf6Eg+8enN71irV9bAwrTizyik0i53t3JyyuJQ9m6LwH3NKQi6Qjop9cw8X4V9H3VH
+         edCw==
+X-Forwarded-Encrypted: i=1; AJvYcCUVn8murFDQImzI8/xGBGZ6xJtoDJUPdJhOz9GExXsJVAsBCZs63HpXO838qVXfapQOjdZ9nDP9X5ORpd+utw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxWkPSpyKcjksjFykSd8DCkcoGe993KfFcPLW1gx0tO7zc789BF
+	cjJ7lTdRDG9Dgx9+Nm/vCX5Ur8M4p3MJFEwSekc2y3z2x5G08UgLrMB4sgC6i1SBg14RA/5L3Sl
+	WGfK7YimCyF+foVO5+GcBS0+SWgwRjZn1CL0bLYKidQ==
+X-Gm-Gg: ASbGnctlyABCVW6JC3E+OSTTQzJey1wzvtQ9c67sFKgli9bvqj5jdvEcQ7EA/6WpQxp
+	QNadev7dNMPu4XSA1EVpHcO6n4EwpgJSynBRhSOsW8am1afNkNeoKkXfUeAXLl4NkjFuaGzkZnN
+	/5sSd7/xwWVXYpHRL1DOz5Rl6VOg4kuHAcll/5MqwVtaM2vqCQ59h4hvoONi6ES5m/pmkcg/8pV
+	iqno8ViZRjGtDpY/1E=
+X-Google-Smtp-Source: AGHT+IEeSGB7E+U5AfztCn/a0prTDkWoIwMcrRTgDGYjoK5cQKuLypMWypNuVlG8aGFMELgSR6JxD1pZQxnU/zZ73ew=
+X-Received: by 2002:a53:a106:0:b0:5f3:317e:40a8 with SMTP id
+ 956f58d0204a3-6014a94e9c5mr1611129d50.12.1756982554409; Thu, 04 Sep 2025
+ 03:42:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ea295ff6-5395-4470-afc2-76e5e2dc9fb5@kernel.org>
-X-Proofpoint-ORIG-GUID: EKkFPIUVnL7Em1lT8JdMo0Kl8XbKT7AY
-X-Proofpoint-GUID: EKkFPIUVnL7Em1lT8JdMo0Kl8XbKT7AY
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODMwMDAyMCBTYWx0ZWRfX04jNsQkrDUnE
- IEpfFt0hsOJZXGzEbMM7eAqUjdO+qOc/aOWYTr644c+a9L4C8IwVS7llOnsJUiyzHVzTYYGRMt9
- zrZmkWpq4jAfuFi0RLc2mr5VzYol4aSdW7DA98/9l1L3efN9J5+OhOTzKUEc8LSkChhFzwYZzaM
- wYxsTXVXaq5vAdZAhbpZ8jDyDWxgLdIXcw6GCDuXmF8ZWVmSmeO7g2nH5toWnkVBLipnpz+DXwx
- eraZUtV24LdDdJDX20Y2K9q1UEoqdBBHfws6EsEGuqpzS/VBU4hH2wfZXCm/ZFoKj6FJoCHzWQ8
- 33fRUNyjujadRbGzeckqraL6LrvnWlwh/fXHObqkDlZAhB1FoeHfIk3QOFbAzbJXnGh8XnJg2cY
- IU7mTrw/
-X-Authority-Analysis: v=2.4 cv=VNndn8PX c=1 sm=1 tr=0 ts=68b9671f cx=c_pps
- a=IZJwPbhc+fLeJZngyXXI0A==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=kj9zAlcOel0A:10 a=yJojWOMRYYMA:10 a=VwQbUJbxAAAA:8 a=P-IC7800AAAA:8
- a=gEfo2CItAAAA:8 a=NEAV23lmAAAA:8 a=EUspDBNiAAAA:8 a=oqeMfTGgUyYRHvyDDiUA:9
- a=CjuIK1q_8ugA:10 a=i6qsmYmKKdoA:10 a=csto0wWSG80A:10
- a=uG9DUKGECoFWVXl0Dc02:22 a=d3PnA9EDa4IxuAV0gXij:22 a=sptkURWiP4Gy88Gu7hUp:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-09-04_03,2025-08-28_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 spamscore=0 impostorscore=0 malwarescore=0 bulkscore=0
- clxscore=1015 adultscore=0 priorityscore=1501 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2508300020
+References: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net>
+In-Reply-To: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Thu, 4 Sep 2025 12:41:58 +0200
+X-Gm-Features: Ac12FXza5NBe8gQAzu9NnR9-urtLUV1_9O5Z3gtqmfhrws2_iw3qa7_NAVfym40
+Message-ID: <CAPDyKFr3WO5nLXYWoyH13KirmfNU+sVrvhefuwC+GrpAgynBgQ@mail.gmail.com>
+Subject: Re: [PATCH 00/37] arm64: Add initial device trees for Apple M2
+ Pro/Max/Ultra devices
+To: Janne Grunau <j@jannau.net>
+Cc: Sven Peter <sven@kernel.org>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Hector Martin <marcan@marcan.st>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
+	Linus Walleij <linus.walleij@linaro.org>, Mark Kettenis <kettenis@openbsd.org>, 
+	Andi Shyti <andi.shyti@kernel.org>, Jassi Brar <jassisinghbrar@gmail.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Sasha Finkelstein <fnkl.kernel@gmail.com>, Marcel Holtmann <marcel@holtmann.org>, 
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, Johannes Berg <johannes@sipsolutions.net>, 
+	van Spriel <arend@broadcom.com>, Lee Jones <lee@kernel.org>, 
+	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <ukleinek@kernel.org>, 
+	Stephen Boyd <sboyd@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>, 
+	Guenter Roeck <linux@roeck-us.net>, Michael Turquette <mturquette@baylibre.com>, 
+	=?UTF-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>, 
+	Vinod Koul <vkoul@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+	Marc Zyngier <maz@kernel.org>, Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>, 
+	Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>, Jaroslav Kysela <perex@perex.cz>, 
+	Takashi Iwai <tiwai@suse.com>, asahi@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, iommu@lists.linux.dev, 
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linux-bluetooth@vger.kernel.org, 
+	linux-wireless@vger.kernel.org, linux-pwm@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-clk@vger.kernel.org, 
+	dmaengine@vger.kernel.org, linux-sound@vger.kernel.org, 
+	linux-spi@vger.kernel.org, linux-nvme@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Sep 04, 2025 at 11:52:32AM +0200, Krzysztof Kozlowski wrote:
-> On 03/09/2025 21:33, Hrishabh Rajput via B4 Relay wrote:
-> > From: Hrishabh Rajput <hrishabh.rajput@oss.qualcomm.com>
-> > 
-> > The Gunyah Hypervisor applies a devicetree overlay providing the
-> > pretimeout interrupt for the Gunyah Watchdog that it will be using to
-> > notify watchdog's pretimeout event. Add the DT bindings that Gunyah
-> > adheres to for the hypervisor and watchdog.
-> 
-> Wasn't tested, so limited review.
-> 
-> Please use subject prefixes matching the subsystem. You can get them for
-> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-> your patch is touching. For bindings, the preferred subjects are
-> explained here:
-> https://www.kernel.org/doc/html/latest/devicetree/bindings/submitting-patches.html#i-for-patch-submitters
-> 
-> A nit, subject: drop second/last, redundant "bindings". The
-> "dt-bindings" prefix is already stating that these are bindings.
-> See also:
-> https://elixir.bootlin.com/linux/v6.17-rc3/source/Documentation/devicetree/bindings/submitting-patches.rst#L18
-> 
-> 
-> > 
-> > Signed-off-by: Hrishabh Rajput <hrishabh.rajput@oss.qualcomm.com>
-> > ---
-> >  .../bindings/watchdog/qcom,gh-watchdog.yaml        | 76 ++++++++++++++++++++++
-> >  MAINTAINERS                                        |  1 +
-> >  2 files changed, 77 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/watchdog/qcom,gh-watchdog.yaml b/Documentation/devicetree/bindings/watchdog/qcom,gh-watchdog.yaml
-> > new file mode 100644
-> > index 000000000000..bde8438c6242
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/watchdog/qcom,gh-watchdog.yaml
-> > @@ -0,0 +1,76 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/watchdog/qcom,gh-watchdog.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Qualcomm Gunyah Virtual Watchdog
-> > +
-> > +maintainers:
-> > +  - Hrishabh Rajput <hrishabh.rajput@oss.qualcomm.com>
-> > +
-> > +description: |+
-> > +  The Gunyah Hypervisor provides an SMC-based watchdog interface for its virtual
-> > +  machines. The virtual machines use this information to determine the
-> > +  pretimeout IRQ which the hypervisor will be using to communicate pretimeout
-> > +  event.
-> > +  See also: [1]
-> > +
-> > +  [1]: https://github.com/quic/gunyah-resource-manager/blob/1b23ceb0dfa010b3b6b5a5f7a4ec1e95b93ab99d/src/vm_creation/dto_construct.c#L519
-> > +
-> > +properties:
-> > +  compatible:
-> > +    allOf:
-> > +      - const: gunyah-hypervisor
-> > +      - const: simple-bus
-> 
-> What? No.
-> 
-> Don't create patches with AI.
-> 
-I am next to Hrishabh when he is writing this patch. I can confirm he
-did not use AI :-) not sure what tool Krzysztof is using to catch
-patches being written with AI, that tool needs some improvement for
-sure. 
+On Thu, 28 Aug 2025 at 16:01, Janne Grunau <j@jannau.net> wrote:
+>
+> This series adds device trees for Apple's M2 Pro, Max and Ultra based
+> devices. The M2 Pro (t6020), M2 Max (t6021) and M2 Ultra (t6022) SoCs
+> follow design of the t600x family so copy the structure of SoC *.dtsi
+> files.
+>
+> t6020 is a cut-down version of t6021, so the former just includes the
+> latter and disables the missing bits.
+>
+> t6022 is two connected t6021 dies. The implementation seems to use
+> t6021 and disables blocks based on whether it is useful to carry
+> multiple instances. The disabled blocks are mostly on the second die.
+> MMIO addresses on the second die have a constant offset. The interrupt
+> controller is multi-die aware. This setup can be represented in the
+> device tree with two top level "soc" nodes. The MMIO offset is applied
+> via "ranges" and devices are included with preprocessor macros to make
+> the node labels unique and to specify the die number for the interrupt
+> definition.
+>
+> The devices itself are very similar to their M1 Pro, M1 Max and M1 Ultra
+> counterparts. The existing device templates are SoC agnostic so the new
+> devices can reuse them and include their t602{0,1,2}.dtsi file. The
+> minor differences in pinctrl and gpio numbers can be easily adjusted.
+>
+> With the t602x SoC family Apple introduced two new devices:
+>
+> The M2 Pro Mac mini is similar to the larger M1 and M2 Max Mac Studio. The
+> missing SDHCI card reader and two front USB3.1 type-c ports and their
+> internal USB hub can be easily deleted.
+>
+> The M2 Ultra Mac Pro (tower and rack-mount cases) differs from all other
+> devices but may share some bits with the M2 Ultra Mac Studio. The PCIe
+> implementation on the M2 Ultra in the Mac Pro differs slightly. Apple
+> calls the PCIe controller "apcie-ge" in their device tree. The
+> implementation seems to be mostly compatible with the base t6020 PCIe
+> controller. The main difference is that there is only a single port with
+> with 8 or 16 PCIe Gen4 lanes. These ports connect to a Microchip
+> Switchtec PCIe switch with 100 lanes to which all internal PCIe devices
+> and PCIe slots connect too.
+>
+> This series does not include PCIe support for the Mac Pro for two
+> reasons:
+> - the linux switchtec driver fails to probe and the downstream PCIe
+>   connections come up as PCIe Gen1
+> - some of the internal devices require PERST# and power control to come
+>   up. Since the device are connected via the PCIe switch the PCIe
+>   controller can not do this. The PCI slot pwrctrl can be utilized for
+>   power control but misses integration with PERST# as proposed in [1].
+>
+> This series depends on "[PATCH v2 0/5] Apple device tree sync from
+> downstream kernel" [2] due to the reuse of the t600x device templates
+> (patch dependencies and DT compilation) and 4 page table level support
+> in apple-dart and io-pgtable-dart [3] since the dart instances report
+> 42-bit IAS (IOMMU device attach fails without the series).
+>
+> After discussion with the devicetree maintainers we agreed to not extend
+> lists with the generic compatibles anymore [1]. Instead either the first
+> compatible SoC or t8103 is used as fallback compatible supported by the
+> drivers. t8103 is used as default since most drivers and bindings were
+> initially written for M1 based devices.
+>
+> The series adds those fallback compatibles to drivers where necessary,
+> annotates the SoC lists for generic compatibles as "do not extend" and
+> adds t6020 per-SoC compatibles.
+>
+> [1]: https://lore.kernel.org/linux-pci/20250819-pci-pwrctrl-perst-v1-0-4b74978d2007@oss.qualcomm.com/
+> [2]: https://lore.kernel.org/asahi/20250823-apple-dt-sync-6-17-v2-0-6dc0daeb4786@jannau.net/
+> [3]: https://lore.kernel.org/asahi/20250821-apple-dart-4levels-v2-0-e39af79daa37@jannau.net/
+> [4]: https://lore.kernel.org/asahi/12ab93b7-1fc2-4ce0-926e-c8141cfe81bf@kernel.org/
+>
+> Signed-off-by: Janne Grunau <j@jannau.net>
 
-I will let Hrishabh share why he put simple-bus here.
+Is it okay for me to pick up the pmdomain patches (patch3 and patch4)
+by now - or what route are you planning to get this merged through?
 
-Thanks,
-Pavan
+Kind regards
+Uffe
+
+> ---
+> Hector Martin (3):
+>       arm64: dts: apple: Add initial t6020/t6021/t6022 DTs
+>       arm64: dts: apple: Add J414 and J416 Macbook Pro device trees
+>       arm64: dts: apple: Add J180d (Mac Pro, M2 Ultra, 2023) device tree
+>
+> Janne Grunau (34):
+>       dt-bindings: arm: apple: Add t6020x compatibles
+>       dt-bindings: arm: apple: apple,pmgr: Add t6020-pmgr compatible
+>       pmdomain: apple: Add "apple,t8103-pmgr-pwrstate"
+>       dt-bindings: power: apple,pmgr-pwrstate: Add t6020 compatible
+>       dt-bindings: cpufreq: apple,cluster-cpufreq: Add t6020 compatible
+>       dt-bindings: interrupt-controller: apple,aic2: Add apple,t6020-aic compatible
+>       dt-bindings: iommu: dart: Add apple,t6020-dart compatible
+>       pinctrl: apple: Add "apple,t8103-pinctrl" as compatible
+>       dt-bindings: pinctrl: apple,pinctrl: Add apple,t6020-pinctrl compatible
+>       dt-bindings: i2c: apple,i2c: Add apple,t6020-i2c compatible
+>       dt-bindings: mailbox: apple,mailbox: Add t6020 compatible
+>       dt-bindings: gpu: apple,agx: Add agx-{g14s,g14c,g14d} compatibles
+>       dt-bindings: iommu: apple,sart: Add apple,t6020-sart compatible
+>       nvme-apple: Add "apple,t8103-nvme-ans2" as compatible
+>       dt-bindings: nvme: apple: Add apple,t6020-nvme-ans2 compatible
+>       dt-bindings: net: bcm4377-bluetooth: Add BCM4388 compatible
+>       dt-bindings: net: bcm4329-fmac: Add BCM4388 PCI compatible
+>       mfd: macsmc: Add "apple,t8103-smc" compatible
+>       dt-bindings: mfd: apple,smc: Add t6020-smc compatible
+>       dt-bindings: pwm: apple,s5l-fpwm: Add t6020-fpwm compatible
+>       spmi: apple: Add "apple,t8103-spmi" compatible
+>       dt-bindings: spmi: apple,spmi: Add t6020-spmi compatible
+>       watchdog: apple: Add "apple,t8103-wdt" compatible
+>       dt-bindings: watchdog: apple,wdt: Add t6020-wdt compatible
+>       clk: clk-apple-nco: Add "apple,t8103-nco" compatible
+>       dt-bindings: clock: apple,nco: Add t6020-nco compatible
+>       dmaengine: apple-admac: Add "apple,t8103-admac" compatible
+>       dt-bindings: dma: apple,admac: Add t6020-admac compatible
+>       ASoC: apple: mca: Add "apple,t8103-mca" compatible
+>       ASoC: dt-bindings: apple,mca: Add t6020-mca compatible
+>       spi: apple: Add "apple,t8103-spi" compatible
+>       spi: dt-bindings: apple,spi: Add t6020-spi compatible
+>       arm64: dts: apple: Add ethernet0 alias for J375 template
+>       arm64: dts: apple: Add J474s, J475c and J475d device trees
+>
+>  Documentation/devicetree/bindings/arm/apple.yaml   |   39 +-
+>  .../devicetree/bindings/arm/apple/apple,pmgr.yaml  |   33 +-
+>  .../devicetree/bindings/clock/apple,nco.yaml       |   17 +-
+>  .../bindings/cpufreq/apple,cluster-cpufreq.yaml    |    3 +
+>  .../devicetree/bindings/dma/apple,admac.yaml       |   17 +-
+>  .../devicetree/bindings/gpu/apple,agx.yaml         |    6 +
+>  .../devicetree/bindings/i2c/apple,i2c.yaml         |   27 +-
+>  .../bindings/interrupt-controller/apple,aic2.yaml  |    1 +
+>  .../devicetree/bindings/iommu/apple,dart.yaml      |   14 +-
+>  .../devicetree/bindings/iommu/apple,sart.yaml      |    4 +-
+>  .../devicetree/bindings/mailbox/apple,mailbox.yaml |    1 +
+>  .../devicetree/bindings/mfd/apple,smc.yaml         |   17 +-
+>  .../net/bluetooth/brcm,bcm4377-bluetooth.yaml      |    1 +
+>  .../bindings/net/wireless/brcm,bcm4329-fmac.yaml   |    1 +
+>  .../devicetree/bindings/nvme/apple,nvme-ans.yaml   |   29 +-
+>  .../devicetree/bindings/pinctrl/apple,pinctrl.yaml |   27 +-
+>  .../bindings/power/apple,pmgr-pwrstate.yaml        |   27 +-
+>  .../devicetree/bindings/pwm/apple,s5l-fpwm.yaml    |    3 +-
+>  .../devicetree/bindings/sound/apple,mca.yaml       |   17 +-
+>  .../devicetree/bindings/spi/apple,spi.yaml         |   16 +-
+>  .../devicetree/bindings/spmi/apple,spmi.yaml       |   17 +-
+>  .../devicetree/bindings/watchdog/apple,wdt.yaml    |   27 +-
+>  arch/arm64/boot/dts/apple/Makefile                 |    8 +
+>  arch/arm64/boot/dts/apple/t600x-j375.dtsi          |    1 +
+>  arch/arm64/boot/dts/apple/t6020-j414s.dts          |   26 +
+>  arch/arm64/boot/dts/apple/t6020-j416s.dts          |   26 +
+>  arch/arm64/boot/dts/apple/t6020-j474s.dts          |   47 +
+>  arch/arm64/boot/dts/apple/t6020.dtsi               |   22 +
+>  arch/arm64/boot/dts/apple/t6021-j414c.dts          |   26 +
+>  arch/arm64/boot/dts/apple/t6021-j416c.dts          |   26 +
+>  arch/arm64/boot/dts/apple/t6021-j475c.dts          |   37 +
+>  arch/arm64/boot/dts/apple/t6021.dtsi               |   69 +
+>  arch/arm64/boot/dts/apple/t6022-j180d.dts          |  121 ++
+>  arch/arm64/boot/dts/apple/t6022-j475d.dts          |   42 +
+>  arch/arm64/boot/dts/apple/t6022-jxxxd.dtsi         |   38 +
+>  arch/arm64/boot/dts/apple/t6022.dtsi               |  347 +++
+>  arch/arm64/boot/dts/apple/t602x-common.dtsi        |  465 ++++
+>  arch/arm64/boot/dts/apple/t602x-die0.dtsi          |  577 +++++
+>  arch/arm64/boot/dts/apple/t602x-dieX.dtsi          |  129 ++
+>  arch/arm64/boot/dts/apple/t602x-gpio-pins.dtsi     |   81 +
+>  arch/arm64/boot/dts/apple/t602x-j414-j416.dtsi     |   45 +
+>  arch/arm64/boot/dts/apple/t602x-j474-j475.dtsi     |   38 +
+>  arch/arm64/boot/dts/apple/t602x-nvme.dtsi          |   42 +
+>  arch/arm64/boot/dts/apple/t602x-pmgr.dtsi          | 2268 ++++++++++++++++++++
+>  drivers/clk/clk-apple-nco.c                        |    1 +
+>  drivers/dma/apple-admac.c                          |    1 +
+>  drivers/mfd/macsmc.c                               |    1 +
+>  drivers/nvme/host/apple.c                          |    1 +
+>  drivers/pinctrl/pinctrl-apple-gpio.c               |    1 +
+>  drivers/pmdomain/apple/pmgr-pwrstate.c             |    1 +
+>  drivers/spi/spi-apple.c                            |    1 +
+>  drivers/spmi/spmi-apple-controller.c               |    1 +
+>  drivers/watchdog/apple_wdt.c                       |    1 +
+>  sound/soc/apple/mca.c                              |    1 +
+>  54 files changed, 4722 insertions(+), 113 deletions(-)
+> ---
+> base-commit: 50ee15a27ec4cc41e99ee5e9011de7875569cd52
+> change-id: 20250811-dt-apple-t6020-1359ce9bf2e7
+> prerequisite-change-id: 20250813-apple-dt-sync-6-17-d1fc1c89f7ca:v2
+> prerequisite-patch-id: 1405c7c78139704a4cbeb1adc67786b2c7971a3f
+> prerequisite-patch-id: 65865050e9e7427bac04f47d0b7927aacaac19bd
+> prerequisite-patch-id: 9240e5f435fb3406e77b4e4e9b02eb3d52e660e6
+> prerequisite-patch-id: c16715c9a9fcb396b7e4365fd767b05604b8de81
+> prerequisite-patch-id: a675ad20c2b427a021dafb5d6c8716497741604c
+>
+> Best regards,
+> --
+> Janne Grunau <j@jannau.net>
+>
 
