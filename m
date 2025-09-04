@@ -1,179 +1,152 @@
-Return-Path: <linux-watchdog+bounces-4176-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4177-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7ECD9B43381
-	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Sep 2025 09:13:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A99CAB433B7
+	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Sep 2025 09:22:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C63AC7A0529
-	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Sep 2025 07:11:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 379DC188E537
+	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Sep 2025 07:22:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D4A5289E17;
-	Thu,  4 Sep 2025 07:13:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC51929ACFD;
+	Thu,  4 Sep 2025 07:22:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KhgggBwm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NiAO/8dj"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7557228934D
-	for <linux-watchdog@vger.kernel.org>; Thu,  4 Sep 2025 07:13:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DABDD531;
+	Thu,  4 Sep 2025 07:22:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756970008; cv=none; b=Sseh8ubNiQtt0/jInXkvSwDyXDw6m6ZjTpjYfWCIlt3jwm++mCY0uXOonPzHcNzsq9zDIpQQjGLCAcv5kS5CQHq8DG7Mr0dTCNUiChxid1tfL50GFc5kvdgCRAtH4s0vHRw6uGS/QKRNG6nlycYD2f6+ZJywB3y2kqzWqCesd6I=
+	t=1756970538; cv=none; b=qERaGFvS+0Ts1UjPzI2S2zs/3diJ478bjFIYh1I1uuSmS+Lqzy4UMcMj+9pBr3TZb8eLfUkUq/1blYou4iAFTDuHHXZgWZzK8zrIU4l1n2wf3y10xtNGRqlOmGg810k9E8OG4xs4+fsBDsQijNjJQC/vFXvGQAsZ5Q0DuhHLwHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756970008; c=relaxed/simple;
-	bh=Z6oVMvamvALbeWSeiu3YA/SgCjbLhboLt7zCNcJbNrI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gIw6W63g4knlEmaml4/uCJWiRExLlMWijDEypuZew7lA9DrmmIo6PTedcI/JVNDobuCDsrRanUCb2cHLWg08c6zCUWCi2bKauRii41WyN77mEI3slbDXr2g3d7JxFkN5umM/dVsyg1e41RDCjcZZIgV5kNBx3uiMAZ2mog/s4E4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=KhgggBwm; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-45b8b2712d8so5356585e9.3
-        for <linux-watchdog@vger.kernel.org>; Thu, 04 Sep 2025 00:13:26 -0700 (PDT)
+	s=arc-20240116; t=1756970538; c=relaxed/simple;
+	bh=RyWCIrsgET8kslvpMGuw9gArjjQ1Zyz1qGo8PdRMxBw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LBKXYMU6UtKfdwKKQxWB//hxgkooOZ3AZnPjY3KRtIxPVixA7U10u12m/nUPaQoIO8RM16UfJ0nRlyy8iL5lz3pKXnbFCn5hHVP9arxjlEPSfvjI14qbV8/mDEH62V5tbSVdow+HPnszQs/EOGIlmniRs2xA9TLx5BeOjX8F+f4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NiAO/8dj; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-3d2564399a5so363681f8f.1;
+        Thu, 04 Sep 2025 00:22:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1756970005; x=1757574805; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:reply-to:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fenp/X6RqR1DwQ+CRZ8K7U4zGb71u1QKHuWPuUkXtC4=;
-        b=KhgggBwm2Fpi8KcxFt/0kk7XrDYXJJJlLby4/SJ1RubniOglZhUYwGNPFoTr3qAoKV
-         lNPh6efabpAOGlTddDGetP975XKygSAF2AvzaAgApjchkykRoBVKhW86wyz8WoG+3Lcw
-         IGhmyF6EMyb34aYi+4X3efJJF8KKaB8jnl56uEgKAXhM/KCyy2SYodonXA5S2LODgcnS
-         OAQvmzwDUsEXV++jyNJG24sfEYwBx1thawDmkCxkD/Xz9760jh/8+eJhR2Y3kvZaUaOE
-         PKgDoi2tXznz8559p5amKbd7OcDbZynuQYMbf063Z62gmdL0dfv5dax7kLnUdYyKHSwV
-         1pcg==
+        d=gmail.com; s=20230601; t=1756970535; x=1757575335; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7xkYk10jYxxNS+x7WRe35lpSvnGGZC6S/4eKOH88rmU=;
+        b=NiAO/8djCXDvW67W4n38nmrvjuR/G8kthy/c7PRIZKDGjUriXaxziRFmbZjquKVBwZ
+         T7u7T2LP5XGeZK8gaUCYLpxslpyoEZ54wJiIF+CI8wvXhqCZm1I0ekBXVgmxcZNulKVR
+         ufqAVu49KqGigWwt1+ELvHPNsc8A/hgvKLa6NEl9guz7OuRp88bAatvy6rDanjE5lf+s
+         Ztgib08NSDKwbAkopgVkGgzsYXvkA7iiUa1MB2JRxxKryj8hFJrRwJ+ya2qcd88I6OUb
+         YGB6GqIICB7SwmcSeFsaRFmx2gyY9GXPZVJ6vb1rU4Im+TB4UtvMYdJlMlkFn7xjQ6fQ
+         N+mQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756970005; x=1757574805;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:reply-to:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=fenp/X6RqR1DwQ+CRZ8K7U4zGb71u1QKHuWPuUkXtC4=;
-        b=QepowgSE+9wfQSNISs2vPhvvNoNezTvA+cgLN/UaB0b/PpMk9deFqFHovmZIe4E4tr
-         XraC52QEnpVx2Ar2+5wC87PhXFdsELxtO4bfwdNPz7OsT9gGsE6lgrQ/uTViQi+vJwpN
-         w/oFI51OMBc1mY1Ov3GLOy57NGMUEsqE6+DqrC4onKTNVprSgNLwvH7CTB1wfv8w0aD7
-         eZRziebikJO1WG+KSDpV/x1YopcwYNi2nZ/iS9SLj39BVdblIBF1FPNCdREo8/iGFhrV
-         BtDnnnrFUDCuEOCd7gaF++EiFvm1D8ymXgUJldTg10mqjSCoNWSC/TFp3nMR1Uaa1DAa
-         BVcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXQNnGcokflQwWnsh0tPwONuoq8ITjUAwqMzgOejFohFrXpZGdFTG2ApEVlyBM7cEiphMXqgN/8fVqYXalr8Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YytGKpBH/1gxKVAb8ZBDzUAY0s2wHM6LHGqTbct+auzfwO9eDsa
-	HLQdEG8hQH2U1p/q1R8x82BFb0eIvPaVoCCEr+qVzdzeWOBosfu/m4zaDB2xyYiwO1g=
-X-Gm-Gg: ASbGnct6oqF7uO3LkWiayFnjZ1yEm+giyvzIT5v+8mXm+CpMlN1SJql5eIX8+ssg1KZ
-	UflBAB7D//juaKGHX9HXf/O2iJZDyOPkJX1jLGIYgKkN41r0qp5QJ891C69SqjLaDBFTJ92rjbW
-	UkeZzVxfgO6A/iiWMifCLdFLw4skYMv+L6FTp3w+bX9bEwIpfXqPFdo3X8khkAlv1oqGl4gdQNt
-	UYd+j9JcQFBr4pCvMPeLdiS5gQaqm8OOTzepqQ5e2ioqNNeYcSx0dVxbsv7tphSTqWehmaCVzH3
-	ROIbw0jUpLVHLca8YBpiuKmfCjHXk+WYooG4nWGhkeW/xb9xoYQUIslPeCe8S4kEkRZGJP6GUzv
-	QEz5ddl91cAnNJFiXst0ap81LYBKDMLe8NqoR3CL5ejcT3fztGve+/kDJarKWNUEaF9iXBClcBw
-	zgIcPjpiPqEQ==
-X-Google-Smtp-Source: AGHT+IHu1KVv6buqQsAeYyC+dtdchIYeBk2biQaH2Sq8CbqeIix4PZZ4xQr9UmtL7cObG1OaNDoI0w==
-X-Received: by 2002:a05:600c:45ce:b0:45b:8d8d:58b5 with SMTP id 5b1f17b1804b1-45b9ab8a216mr76402875e9.15.1756970004660;
-        Thu, 04 Sep 2025 00:13:24 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:3d9:2080:8c14:335d:24b1:fa98? ([2a01:e0a:3d9:2080:8c14:335d:24b1:fa98])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b93fae643sm117882305e9.3.2025.09.04.00.13.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Sep 2025 00:13:24 -0700 (PDT)
-Message-ID: <a3af076b-ca0b-4d5e-8294-2bf5a9814959@linaro.org>
-Date: Thu, 4 Sep 2025 09:13:23 +0200
+        d=1e100.net; s=20230601; t=1756970535; x=1757575335;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7xkYk10jYxxNS+x7WRe35lpSvnGGZC6S/4eKOH88rmU=;
+        b=nrIAGHYO0fEaT+338fz86sBFobyKKoQ1qL38X016/++D9dcOB16KuQP47Gm8X9jpdA
+         lxLW5JWU5SP0qpzkY1NABEsg9LvbaPckEojMuQA8doStwME2Xik/LU3qd7tYUcXMoWJZ
+         iazRhoUx1rkgPtkfEV2GztZdQnDAqCjjZMYx1lwG53+DFsyPzgjW10KM8bnm1HhKsxHS
+         5gwOTrLicFD1GdkU2bG7V38DJ+wwwRbmQ32zNr2/GkEQfXC9pPuM6NEr5KiwOJ3WVWXN
+         0u0GZY5u6sWYXjG5A1u1sZNEmHzX0O9aoFLnYiCkCRqoirW+uHTeTZ2EOBvFsCI4f9Eb
+         d1PQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUazC8VxPJxpDtCGNd9bBGLm1IqZ7rgVSsBbRK4aIVzsgtC3ZgXY6qFLAmyNWjeUydQPRGqHRTQ1IzFaDwp79Y=@vger.kernel.org, AJvYcCVVuAd6SbsX3NyQtzcGogNfbi0SuBnaeZOKN8oMt5mBOPo84qKfo6CLo2JaBvhGh3kFvyOhWuV6QgeE@vger.kernel.org, AJvYcCXI4wuOgCUD4Mov1sTmBqDBsoUZcqaVcQAATyfOji9X00JYUttwdflNTy3OYo00RoqnM/NGSGIWwe6bqi2C@vger.kernel.org, AJvYcCXdqZF3Z7ZnOzENiMA4k8HALvDpX7+Tt8GIUcFr/FDdQpquBP/WGhtIC750HEcWCJpYIFZr6D7UhlLJQbhKEX2jJ9s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzgQc2UAqIpOZ7wdI+dNX5VeHbTOQ/S/gXPLDBYjy0ag5gHxsfA
+	gJ8wweE1H9JGUDBGPG9eotS94iXkBARS+cGRLQ8wqwY0CvptZ9Hwk1d06F3pxNJFgPMFZWvvq+s
+	t6hTq11kTfBLMtqsMsKdOzcgHrmpK7UQ=
+X-Gm-Gg: ASbGnctBn6p4ymGGeZs9uAfSq+1H3zkWk8XAD+m94BYW+o3FOAY9QOGOtP1YICGxp+5
+	86d7NBcstQEnUT/y8vR+hlcPWADo/9a36Z8vfXp3Sbrii7YcENLqzq6VwKy0YHf9sbn2PuiLLzZ
+	KThHDxYqO0mYMIIiY2pEBP4dDSadaVLg9myS9PMy019noLbKqAK+xqD4ymlbVBD8xjxU0kEs7Wa
+	SzMdnw=
+X-Google-Smtp-Source: AGHT+IH4ScoC3WTLnEoHbynJDRFmSpztapTFDWI9D5R9ZcuYD+nzV3+iFBGFGYBQeD9KR3MKQ7hSuiXtmpt9Xct62Pc=
+X-Received: by 2002:a05:6000:2504:b0:3df:4fd3:6e95 with SMTP id
+ ffacd0b85a97d-3df4fd3743dmr3510437f8f.34.1756970535418; Thu, 04 Sep 2025
+ 00:22:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH 0/2] Add support for Gunyah Watchdog
-To: hrishabh.rajput@oss.qualcomm.com, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
- <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250903-gunyah_watchdog-v1-0-3ae690530e4b@oss.qualcomm.com>
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <20250903-gunyah_watchdog-v1-0-3ae690530e4b@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20250820202322.2051969-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20250820202322.2051969-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date: Thu, 4 Sep 2025 08:21:49 +0100
+X-Gm-Features: Ac12FXzk_nCuYd0etn5cQ2l2wyLXHuC4HYD3WUBKlR1R8iDwZrQcgWjyM69DAdM
+Message-ID: <CA+V-a8sJXyw298cZFyezqnyHsAroz5A0T5d6mv+4PAtHk=DJtA@mail.gmail.com>
+Subject: Re: [PATCH v4 0/6] Add watchdog driver support for RZ/T2H and RZ/N2H SoCs
+To: Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: Rob Herring <robh@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>, Magnus Damm <magnus.damm@gmail.com>, 
+	Guenter Roeck <linux@roeck-us.net>, Conor Dooley <conor+dt@kernel.org>, linux-watchdog@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 03/09/2025 21:33, Hrishabh Rajput via B4 Relay wrote:
-> Gunyah is a Type-I hypervisor which was introduced in the patch series
-> [1]. It is an open source hypervisor. The source repo is available at
-> [2].
-> 
-> The Gunyah Hypervisor doesn't allow its Virtual Machines to directly
-> access the MMIO watchdog. It either provides the fully emulated MMIO
-> based watchdog interface or the SMC-based watchdog interface depending
-> on the hypervisor configuration.
-> The SMC-based watchdog follows ARM's SMC Calling Convention (SMCCC)
-> version 1.1 and uses Vendor Specific Hypervisor Service Calls space.
-> 
-> This patch series adds support for the SMC-based watchdog interface
-> provided by the Gunyah Hypervisor. The driver supports start/stop
-> operations, timeout and pretimeout configuration, pretimeout interrupt
-> handling and system restart via watchdog.
-> 
-> This series is tested on SM8750 platform.
+Hi Wim,
 
-Would this driver work on older platforms like SM8550 & SM8650 ?
+On Wed, Aug 20, 2025 at 9:23=E2=80=AFPM Prabhakar <prabhakar.csengg@gmail.c=
+om> wrote:
+>
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Hi All,
+>
+> This patch series adds watchdog driver support for the Renesas RZ/T2H
+> (R9A09G077) and RZ/N2H (R9A09G087) SoCs. The necessary device tree
+> bindings and driver modifications are included.
+>
+> v3->v4:
+> - Updated commit message for patch 1/6 to include an example node.
+> - Added reviewed-by from Geert for patch 1/6.
+>
+> v2->v3:
+> - Fixed commit header for the patches rzv2h_wdt->rzv2h
+> - Added reviewed-by from Wolfram
+> - Merged "watchdog: rzv2h_wdt: Make reset controller optional"
+>   patch with "watchdog: rzv2h: Make "oscclk" and reset controller optiona=
+l"
+> - Dropped patch "watchdog: rzv2h: Set min_timeout based on
+>   max_hw_heartbeat_ms" instead updated the period for RZ/T2H.
+> - Updated rzv2h_of_data structure to include tops and timeout_cycles
+>   for RZ/T2H.
+>
+> v1->v2:
+> - Dropped items from clock-names and instead added maxItems: 1.
+> - Added reviewed-by from Rob.
+>
+> v1: https://lore.kernel.org/all/20250707200111.329663-1-prabhakar.mahadev=
+-lad.rj@bp.renesas.com/
+> v2: https://lore.kernel.org/all/20250729155915.67758-1-prabhakar.mahadev-=
+lad.rj@bp.renesas.com/
+> v3: https://lore.kernel.org/all/20250804195723.3963524-1-prabhakar.mahade=
+v-lad.rj@bp.renesas.com/
+>
+> Cheers,
+> Prabhakar
+>
+> Lad Prabhakar (6):
+>   dt-bindings: watchdog: renesas,wdt: Add support for RZ/T2H and RZ/N2H
+>   watchdog: rzv2h: Obtain clock-divider and timeout values from OF match
+>     data
+>   watchdog: rzv2h: Make "oscclk" and reset controller optional
+>   watchdog: rzv2h: Add support for configurable count clock source
+>   watchdog: rzv2h: Add support for RZ/T2H
+>   watchdog: rzv2h: Improve error strings and add newlines
+>
+Gentle ping.
 
-Thanks,
-Neil
-
-> 
-> [1]
-> https://lore.kernel.org/all/20240222-gunyah-v17-0-1e9da6763d38@quicinc.com/
-> 
-> [2]
-> https://github.com/quic/gunyah-hypervisor
-> 
-> Signed-off-by: Hrishabh Rajput <hrishabh.rajput@oss.qualcomm.com>
-> ---
-> Hrishabh Rajput (2):
->        dt-bindings: Add binding for gunyah watchdog
->        watchdog: Add driver for Gunyah Watchdog
-> 
->   .../bindings/watchdog/qcom,gh-watchdog.yaml        |  76 ++++++
->   MAINTAINERS                                        |   3 +
->   drivers/watchdog/Kconfig                           |  13 +
->   drivers/watchdog/Makefile                          |   1 +
->   drivers/watchdog/gunyah_wdt.c                      | 268 +++++++++++++++++++++
->   include/linux/gunyah_errno.h                       |  77 ++++++
->   6 files changed, 438 insertions(+)
-> ---
-> base-commit: 038d61fd642278bab63ee8ef722c50d10ab01e8f
-> change-id: 20250903-gunyah_watchdog-2d2649438e29
-> 
-> Best regards,
-
+Cheers,
+Prabhakar
 
