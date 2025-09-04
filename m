@@ -1,89 +1,48 @@
-Return-Path: <linux-watchdog+bounces-4188-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4189-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C04B2B43C98
-	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Sep 2025 15:08:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A18AEB43CE0
+	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Sep 2025 15:18:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 75A373B03AD
-	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Sep 2025 13:08:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 61322168E05
+	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Sep 2025 13:18:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B6733002C3;
-	Thu,  4 Sep 2025 13:07:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 144F3272E51;
+	Thu,  4 Sep 2025 13:18:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Q2YlZfvG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CwVFousB"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 960892EE262
-	for <linux-watchdog@vger.kernel.org>; Thu,  4 Sep 2025 13:07:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D938A198851;
+	Thu,  4 Sep 2025 13:17:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756991279; cv=none; b=sJJanjDehLh761XuxKqU3qL5pfzB0ugnWDz3pCnooNfxWgDNza0Oe3ZbsRWps/ggAnKlwg2Ln/ysLGDaFbgIQHDY2jh34NsnRVK4l6TjRGbrnMeoDwBJAJtLbqHWIVmVzkHVOyq+1hXkYGqzIYNG0ruH81nPU+91re1DW3ukzsY=
+	t=1756991880; cv=none; b=Ht7LgSIk6NbkbJlvAmngneuvEGQ323s2O9dDea7xSmkgEnY9C7WYVK39LXSaPEfOWgIZvUZNyKRkrWKlveuasNZxWGktvCSw9I8X4jdqc6CEavy/AVSsWfhjDfK7sfI0EE3nxb5IuEDX8q+g6AWwU3bZYVMyquK3po/0R1AT5Go=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756991279; c=relaxed/simple;
-	bh=i7Wda34KnkW6Mxr7vtlQckQo/CbsEm0PTQVYdp+T5xs=;
+	s=arc-20240116; t=1756991880; c=relaxed/simple;
+	bh=WxaD6gphkJ2Gk/Jf0nfE5M7L6/fiMPCyPbZwunINGek=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AAt8CrbbjtlCrNqmN466EHv0gmoriN+DaoGz3+4cAhtyQgUjk/gcY7naj4I83SaszONlnKZZ1iey8TVCYFYN9TM45ehAD/Fy2jFKi84mFr4SsVyGeRDwc7kyeMY0BP/OzCUg3PGRZjKlqW12apholKW8TEw+FYZ/wqAaT5S5l1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Q2YlZfvG; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5849X6Jw013960
-	for <linux-watchdog@vger.kernel.org>; Thu, 4 Sep 2025 13:07:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	9Mtw+zFHKgxX84KUgMXqN5jBwQU2U9/gl7V5VWSgAWU=; b=Q2YlZfvG4o9UW02k
-	2VII0m74/LXq2+KAz6t97mFJwlCCvWTVWyu2yKNWFrEiniPlrSQS7SWDh/DDl7Tc
-	Mvn410RPsrzMgBUjY3DG7QomEUsl8s3V3bpEQxLvcQhm7YiY0mg5OgqyQygwwpNP
-	jDyue7AxlEs2eQ6S3lAHmUknWcGJk+w/VRhTUrry+XZsk288P68dgnhQbBR4lpxx
-	ZELotPA66tWDVikcgeTAyXvVsgS6ftKwhseBvTaPFqxK3jXX8Yk/ae4VDReawUQu
-	fIQGDh4FxfbMSdK8tDMAp6Ohsu0WgHBud/KILIxsv0tR6ONxAjwbhFdHmZioy3tD
-	9b0bqw==
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48uscv7psy-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-watchdog@vger.kernel.org>; Thu, 04 Sep 2025 13:07:56 +0000 (GMT)
-Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-77264a9408cso1815245b3a.3
-        for <linux-watchdog@vger.kernel.org>; Thu, 04 Sep 2025 06:07:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756991275; x=1757596075;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9Mtw+zFHKgxX84KUgMXqN5jBwQU2U9/gl7V5VWSgAWU=;
-        b=YTxYAhA8A3M0osb892PFRoHJ6Z1wVb75WJ1WWjiPyaMhtztFlOglCu7Ny/Igs+PnHu
-         xO9434BubkvBdieU/btmcJyu6aG8CQk2SHXRhD9Z+3eJX738icSJoa7OPZhy27mGiR73
-         7q1E04NJlUwXQiMRZons7Q/lI+Tp/Q3P04PftxzpNA3MPOJQ92t3x7YoP/wIubinLIc4
-         oUL6ZgsS4NNWtDSWVN2rCsQ/GJMz55L9vom/Ac93SXpHIaNImNxisfUmlRmAlQgB1XCo
-         DeLHcTkT02YBXwynPGj9HKxEjwPad4hQlJVHdXBO+FINbhwrikHHhANZeVsQ1l2WgEAJ
-         cAfQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWpKQjMl2JHftrqZ2l5iftF6pieA8SiddhFd4DsoiJQqW0xskNWWE8E+1+P4Xdm0facZc0Ul+YzkIEFZYp6Sw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxwJrzbgBABtOt5w1WnXB3FrZwjxAd15VujB9I/dVzbBKVEsP2F
-	2nLxQkxjeVYtDtv2DT4jPn/V0nyFNYmA7wS3bqtuU4JADfVWck3I9Mqjt74zyHnGKPhV2FCn6BO
-	zH5K2pFh0iIxqmR28J/YfhzbUBPBiHSAOvWjZ+Exk6rzKAr4XL+YtDHT6KOEN/LlzXAXLZTSmfS
-	OfYg==
-X-Gm-Gg: ASbGncuetKpy7dVv27j4dduhUolbhXnUT6/s9rNc/pdwZCAMB3vESvqbTQNcP1nmCS9
-	+YQTj119+AfOrAuK5zd/whCiymg8984T6+4gt/Kayy6Y7YYKWSD6A1UqLCperi2jh33AIb8qyKS
-	/LUeQ1dqZpqZk6/SYJjAUphZyTPcYul0LEoQHrX7pEDQZTkGBWI7uh8C9sIn7VL7lkht6EWtmdL
-	i2S722pN5HoJADl+crzTeXMbdQSOnCi25I/At1J90dIQeuF+elnePbbpfjBWBVdylH7nwKoz4rM
-	f7cr5qLpOzZfpGWvNU+7GHsmpK4h7hbHltflz6RLBrQYlszTfvDAwwo7c30A1aHR5g6yW5WsuIo
-	T
-X-Received: by 2002:aa7:8895:0:b0:772:3b9d:70f0 with SMTP id d2e1a72fcca58-7723e21a808mr24935254b3a.2.1756991274701;
-        Thu, 04 Sep 2025 06:07:54 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEOsIwWe48mV57+hdURmb7F/1RRflaAlxIyQfsmlF9Uie2Mg78PBmOG7S/u4oBd2+T479KtpA==
-X-Received: by 2002:aa7:8895:0:b0:772:3b9d:70f0 with SMTP id d2e1a72fcca58-7723e21a808mr24935209b3a.2.1756991274177;
-        Thu, 04 Sep 2025 06:07:54 -0700 (PDT)
-Received: from [192.168.215.112] ([106.206.58.2])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-772590e0519sm11838396b3a.84.2025.09.04.06.07.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Sep 2025 06:07:53 -0700 (PDT)
-Message-ID: <099a7c48-c447-40d4-9076-570f5a5058a2@oss.qualcomm.com>
-Date: Thu, 4 Sep 2025 18:37:40 +0530
+	 In-Reply-To:Content-Type; b=nL+QZsplbjgjorEO6kP1TDgbHwub8KFq4c/SsvAbDuxLsy96lpX5h7Wp/gpnBCrYRVjiDCmBawSe3suds3h/tqNGv9LCj3WxF8VBazHu81mJeM0wYTgfI1oGNmcRm/VNTCXRv3yCZNCG2pcrM9V6paE+vHY7mGlGARyyBcVccyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CwVFousB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1CAAC4CEF0;
+	Thu,  4 Sep 2025 13:17:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756991879;
+	bh=WxaD6gphkJ2Gk/Jf0nfE5M7L6/fiMPCyPbZwunINGek=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=CwVFousBcrdbNKei8QUIwVjeqiVm/FHgN3lSpNE0OWBvxkiLb7JPZh9S3DvUrggva
+	 9IJEromdZCrdwMI3zLk6PCQfRt3OoPdsH5Kz6pLxLD7CvlKf3xEk2HlNMl/SUNSaYK
+	 NWZI73AXgi7V0x1dyxQhs2plRNOZcZvfrf85ho5166BZqN5tag0YATIj1LXkS0lIDx
+	 Bq9JvKh6pzxJHWZz8orVT/jS0TVUe0Xw0oX73quG8ZPwjJjI114f23b94q5UPP+OzS
+	 MxjXIE+aimWLVNiRSgTtm5PNPWYRoDltG+w5gx2q3nFh/ACUgJZF6BgHmJChqE/Uy8
+	 Wudd3C/BIu0pg==
+Message-ID: <29a91114-d862-452e-b7bf-1b659ad7d831@kernel.org>
+Date: Thu, 4 Sep 2025 15:17:55 +0200
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -92,150 +51,112 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 1/2] dt-bindings: Add binding for gunyah watchdog
-To: Krzysztof Kozlowski <krzk@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck
+To: Hrishabh Rajput <hrishabh.rajput@oss.qualcomm.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
  <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
 Cc: linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20250903-gunyah_watchdog-v1-0-3ae690530e4b@oss.qualcomm.com>
  <20250903-gunyah_watchdog-v1-1-3ae690530e4b@oss.qualcomm.com>
  <ea295ff6-5395-4470-afc2-76e5e2dc9fb5@kernel.org>
+ <099a7c48-c447-40d4-9076-570f5a5058a2@oss.qualcomm.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-From: Hrishabh Rajput <hrishabh.rajput@oss.qualcomm.com>
-In-Reply-To: <ea295ff6-5395-4470-afc2-76e5e2dc9fb5@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <099a7c48-c447-40d4-9076-570f5a5058a2@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODMwMDAzMSBTYWx0ZWRfXybxkGNVFqAvf
- Vgkb+aWQCJK5xBIp5+7MjxplLK7z2O4q6MKidyd5ZH/l/8UEDXlA0Wg1ozwxhZpUTJ2JNHwn5uC
- B6IUL1gw5WU0BE7MNO5c30CWKlKv6e0MYVvjvr4WBCu9rpkhKdtDMQu70+IdDg/b8ttgcF1iSzT
- nSOhNEWJNXYhpOTO/CKLh81mFhExH+8L1UfNT5BxswRXX1Rcfd6KemdF9Y7fuvFne4hVXBwSgYH
- oonx1M7sDJ7FRHaItAHYZPh3Fs5EeOcWs6rASeKROINpLJdyKy9Hc7f2WTjMLdahf66uL7+R1X+
- 9PWXLnvgy7f9uk7sZRmJ5GHePOrvw4Wqfl+RG76DbfwAsnSEau0Uqi4b+WZy8K3C6HUMzAbjYCL
- Mk+1ND5u
-X-Authority-Analysis: v=2.4 cv=A8xsP7WG c=1 sm=1 tr=0 ts=68b98f2c cx=c_pps
- a=WW5sKcV1LcKqjgzy2JUPuA==:117 a=0ySTwGsjrHEnVRIoGa4+sA==:17
- a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=VwQbUJbxAAAA:8 a=P-IC7800AAAA:8
- a=gEfo2CItAAAA:8 a=NEAV23lmAAAA:8 a=COk6AnOGAAAA:8 a=EUspDBNiAAAA:8
- a=7snBibKccnROOREnhvIA:9 a=QEXdDO2ut3YA:10 a=i6qsmYmKKdoA:10
- a=csto0wWSG80A:10 a=OpyuDcXvxspvyRM73sMx:22 a=d3PnA9EDa4IxuAV0gXij:22
- a=sptkURWiP4Gy88Gu7hUp:22 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-ORIG-GUID: M4lvrbHIRKv3_BGIie0cAukRo6kt4dV3
-X-Proofpoint-GUID: M4lvrbHIRKv3_BGIie0cAukRo6kt4dV3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-09-04_04,2025-09-04_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 spamscore=0 impostorscore=0 bulkscore=0 clxscore=1015
- suspectscore=0 malwarescore=0 priorityscore=1501 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2508300031
 
-
-On 9/4/2025 3:22 PM, Krzysztof Kozlowski wrote:
-> On 03/09/2025 21:33, Hrishabh Rajput via B4 Relay wrote:
->> From: Hrishabh Rajput <hrishabh.rajput@oss.qualcomm.com>
+On 04/09/2025 15:07, Hrishabh Rajput wrote:
+>>> +properties:
+>>> +  compatible:
+>>> +    allOf:
+>>> +      - const: gunyah-hypervisor
+>>> +      - const: simple-bus
+>> What? No.
 >>
->> The Gunyah Hypervisor applies a devicetree overlay providing the
->> pretimeout interrupt for the Gunyah Watchdog that it will be using to
->> notify watchdog's pretimeout event. Add the DT bindings that Gunyah
->> adheres to for the hypervisor and watchdog.
-> Wasn't tested, so limited review.
->
-> Please use subject prefixes matching the subsystem. You can get them for
-> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-> your patch is touching. For bindings, the preferred subjects are
-> explained here:
-> https://www.kernel.org/doc/html/latest/devicetree/bindings/submitting-patches.html#i-for-patch-submitters
->
-> A nit, subject: drop second/last, redundant "bindings". The
-> "dt-bindings" prefix is already stating that these are bindings.
-> See also:
-> https://elixir.bootlin.com/linux/v6.17-rc3/source/Documentation/devicetree/bindings/submitting-patches.rst#L18
->
-Noted. Will go through the referenced links and update accordingly.
->> Signed-off-by: Hrishabh Rajput <hrishabh.rajput@oss.qualcomm.com>
->> ---
->>   .../bindings/watchdog/qcom,gh-watchdog.yaml        | 76 ++++++++++++++++++++++
->>   MAINTAINERS                                        |  1 +
->>   2 files changed, 77 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/watchdog/qcom,gh-watchdog.yaml b/Documentation/devicetree/bindings/watchdog/qcom,gh-watchdog.yaml
->> new file mode 100644
->> index 000000000000..bde8438c6242
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/watchdog/qcom,gh-watchdog.yaml
->> @@ -0,0 +1,76 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/watchdog/qcom,gh-watchdog.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Qualcomm Gunyah Virtual Watchdog
->> +
->> +maintainers:
->> +  - Hrishabh Rajput <hrishabh.rajput@oss.qualcomm.com>
->> +
->> +description: |+
->> +  The Gunyah Hypervisor provides an SMC-based watchdog interface for its virtual
->> +  machines. The virtual machines use this information to determine the
->> +  pretimeout IRQ which the hypervisor will be using to communicate pretimeout
->> +  event.
->> +  See also: [1]
->> +
->> +  [1]: https://github.com/quic/gunyah-resource-manager/blob/1b23ceb0dfa010b3b6b5a5f7a4ec1e95b93ab99d/src/vm_creation/dto_construct.c#L519
->> +
->> +properties:
->> +  compatible:
->> +    allOf:
->> +      - const: gunyah-hypervisor
->> +      - const: simple-bus
-> What? No.
->
-> Don't create patches with AI.
+>> Don't create patches with AI.
+> 
+> This patch was not created with AI. Reference was taken from the patch [1].
 
-This patch was not created with AI. Reference was taken from the patch [1].
+There is no such syntax like allOf in [1]. Nowhere in Linux kernel, btw,
+that's some total invention, thus my gut told me - it must be made with
+poor AI tools.
 
-That being said, I see your point about the mistakes which were made 
-while adding the compatible "simple-bus".
-I apologize for the same.
+> 
+> That being said, I see your point about the mistakes which were made 
+> while adding the compatible "simple-bus".
+> I apologize for the same.
+> 
+> I will make sure `make dt_binding_check` passes with latest versions of 
+> dtschema and yamllint as pointed out by Rob and as should have been done 
+> with this patch as well.
 
-I will make sure `make dt_binding_check` passes with latest versions of 
-dtschema and yamllint as pointed out by Rob and as should have been done 
-with this patch as well.
+No, that's not enough.
 
+You should ask for internal review. I did an extra effort, I checked
+that and:
 
-[1] 
-https://lore.kernel.org/all/20240222-gunyah-v17-2-1e9da6763d38@quicinc.com/
+1. You did post it for internal review, BUT:
 
+2. Your internal testing system pointed out errors (schema failure) or
+failed itself,
 
-Thanks,
+3. You did not ask your internal testing system to RETEST the patch, in
+case this was a system failure. That's your mistake. If this was true
+failure of schema, then you obviously should not send it, but
+investigate why schema fails on your patch.
 
-Hrishabh
+4. You did not receive review (at least no track of it) but decided to
+post it on mailing list. That's also your mistake, because lack of
+internal review does not mean you can post it to the mailing lists. Talk
+with your managers or colleagues about missing review, for example.
 
->> +
->> +  "#address-cells":
->> +    description: Number of cells needed to represent 64-bit capability IDs.
->> +    const: 2
->> +
->> +  "#size-cells":
->> +    description: must be 0, because capability IDs are not memory address
->> +                  ranges and do not have a size.
->> +    const: 0
->> +
->> +patternProperties:
->> +  "^gh-watchdog":
->
-> I could not express more: NAK. Does not match any DT style. Please do
-> some internal reviews first. This patch does not meet minimum quality
-> criteria for public posting.
->
->
-> Best regards,
-> Krzysztof
+Best regards,
+Krzysztof
 
