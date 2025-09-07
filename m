@@ -1,82 +1,83 @@
-Return-Path: <linux-watchdog+bounces-4206-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4207-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0092B45BA3
-	for <lists+linux-watchdog@lfdr.de>; Fri,  5 Sep 2025 17:07:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30F02B47C08
+	for <lists+linux-watchdog@lfdr.de>; Sun,  7 Sep 2025 17:28:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ED5A07B9125
-	for <lists+linux-watchdog@lfdr.de>; Fri,  5 Sep 2025 15:05:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E08C67A9A1C
+	for <lists+linux-watchdog@lfdr.de>; Sun,  7 Sep 2025 15:26:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F39AE2FB0B2;
-	Fri,  5 Sep 2025 15:02:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B99B27EFFE;
+	Sun,  7 Sep 2025 15:28:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ItcMRHAB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YBNKIBsQ"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42C162FB0A8;
-	Fri,  5 Sep 2025 15:02:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EF111C6A3;
+	Sun,  7 Sep 2025 15:28:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757084559; cv=none; b=NRGY9iWm9aBHeWAeSawrmmpxrzp6pJ7rUL/YfVfKnzLOMQWcQoUuMCoaWp3h+yEFXmqw5IaC7jF3zvrtixJsmF2jaRhJFIqiPWsy1+qejyuz7Ol1LagaHjY1BWYRVpSZR3UGwmqqzo4pCmIJJ+R62U/SSeKuphEvMHxQSqGYtZw=
+	t=1757258903; cv=none; b=JZCeXLXZFJK5nGub3IIEsdC3WdaxUeGanSDLlfJM08w3TFp7gI9SpbbnPcsemtRYQx1zm/uBlxawgBFHjhzlnX9l19ifVzV4BRZrcWTlMQplZNr8P2/LO93jk8Np0D+INtwe4qRaqdHeVDgQJwvAqIQKB4eHiG0Dd0atZXd4ygY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757084559; c=relaxed/simple;
-	bh=SV/uSJSAnJnN0O8ZhM5BN/MzfL+AMIQqys6mRrI0IUU=;
+	s=arc-20240116; t=1757258903; c=relaxed/simple;
+	bh=32SAFrGqPnfqUlDQMicbyrfxFbEz2J3dVLd3bF1iLyA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Y4QH74GJm0piAPqBTOyNPFEATo2zRRn7n8G16IfKKTZYOuBVZT+hJVX+I5U69q5HU40QGgymOrc718wVdLZIjqIhklvFiTPfLCXt6KMp2ayklDumWKvnm3A5l1kinBhFTsWLWXr7JeH+5USPyJPSuJrxBNaxEUA3XRaqOZSiTlk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ItcMRHAB; arc=none smtp.client-ip=209.85.215.171
+	 In-Reply-To:Content-Type; b=OmvFnENBmTsUU1ijiClIijvAotsv1E7RDwmZehizIAz1tAKlpzBDwY3YIV6YwbxQmJiD264J54sxuvV1ot30/6pr2CRyw6U/xAmZL11fXWjC4DebOKU/RE/FwXVtng5bfGa2dfKEY3kdOx2+VnCVOA01yyd7hgJLJ4+7ppO26cM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YBNKIBsQ; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-b47475cf8ecso1459110a12.0;
-        Fri, 05 Sep 2025 08:02:37 -0700 (PDT)
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-7704f3c46ceso2755025b3a.2;
+        Sun, 07 Sep 2025 08:28:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757084557; x=1757689357; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1757258902; x=1757863702; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=Iyfq6Rc3M6L0n/jhYOE8/JhQfgkrj0ZVobkNN46EyM4=;
-        b=ItcMRHABxY9K1PjCP0Emg93sUzMJ76NNp6ke5puMAxUnkVZlTziXCozrMKuaJbIOmt
-         9ZQuxt3DeSCryxObKX10/vdMROYMUFhXa9Yzmhe1vp6KCpvQz7QVXowmpL0qr3VgJzeT
-         ThfMoIaJev/uylxJpys4cdXz2THwgjFIHUc4SweILvRn3OUKZXpnszs4z5JLCx3X9lOo
-         pkHBNZdHIM5/NriAKLekAeI5nDUlfE9X40j9uVinw+6Q+vLFeaUFhR92+s9Oj3G3wfPT
-         QufXmo4Bebjy/bBV+XiK+v9PoNWo9mtsZd/cu6pcxhS7CZTseszBZfbYZU9OcZ0N+wjp
-         KG5g==
+        bh=4t1NPXSpsgumuAbcGzE1EyiDPKl7vf9eJ/hyZgqkMpM=;
+        b=YBNKIBsQRim1mVJz+0bjl/EMIjqkMOTlruELeGMNLfqorTELnFrWV+uEfVP94fQoRM
+         JLeSPb7uDGFBYFCYV+1qrClEmKyUtgBpPvPYSAA4VQrH8opk+2AcyXWJIo9gDncaajJq
+         hQg3G82oamwxEnm8DsBV7eOxCtSxOmv3srOZ4BGbSVHulx4q/5m+A3eKAfZ//hlV/IqZ
+         ethIIZ3LkuM+8hcolvUXGMO8a3/Fhe3C/ftob1eZoOSXHazQN7oyxM97+Yrwz/01nuYv
+         Wk6pWZrb5MoBI6XpBdQVwrOVWYOKE4j39BXO96j/fmhFdhPx+DxYX7/7YSCYgBKeUKtj
+         iizQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757084557; x=1757689357;
+        d=1e100.net; s=20230601; t=1757258902; x=1757863702;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Iyfq6Rc3M6L0n/jhYOE8/JhQfgkrj0ZVobkNN46EyM4=;
-        b=UrW1qonLCFzcmly5+7+4XCgA1XgH1PpYFFsn8jTp/LaT0GFZGf8FDbpdugg8TQZDY9
-         WHnIqj9mZxAOOQXC33TwrkjqgS6ygNzeIDwcOaiKsJeyP9xMLtiL9xLydZiykzDvNoI5
-         g/E1JRK9+651mGneJzCTIl+E0rRWuyjgBhE5LakZ6IpxL3fpgSJXydk1bwPq/Ab/9DIi
-         wP4NLD4AVYTyW1/XifxOSJrOfSe0Gayj9HRhD12PVJlyrswzIWBBb2/ErIHwCVVK5l7N
-         RtdL2sJ7xUI4w67U0iL30+jll3drLF4scB/+9qKd5JpVaaKpn/vH7VmncmRHOXf4TEDE
-         ktrg==
-X-Forwarded-Encrypted: i=1; AJvYcCUmchwgr2YCTUgRefCvclleFiwX3YKFFy0NF3+MgCU3FsQA754Q6FTinwe4dZjEl520ZufLV5mXNkEIHyKGXQGk+KY=@vger.kernel.org, AJvYcCVrQvhv3X637MWTZvoaKzB1gjZMtc1SGSjopJ7FndvxnfZ/6sgCuvyOoynxSexWFNr1JfD+RrJiUG3ZZxzj@vger.kernel.org, AJvYcCXi2zab0vfesme73jUwMGUDc94cvP7HPuPKe7msoVMtPKsFw2j/GWhCPW4h/WD0Ei5/l90mHm7pl1YP@vger.kernel.org
-X-Gm-Message-State: AOJu0YyrPm3gSGA4ZuPOSWfZ00xN+mR2rAoOrtmMGPWvo5wgFZOTEjrg
-	9ppbWK5EOS7OiQ2uUXgFhwc0jI4V7VhafVyQ/D1/H+moRblnG2evX1xD
-X-Gm-Gg: ASbGncuduy/ESjQ9HnHLH2495jMHvPAOFI3BKICZsSx9i4yDsDSa0RgTwAdqzNdl6EP
-	MjZcEvWlJb498GHIHR+VKylaEv5q10r2UU+eT99MNJmgyxi1wpUvR8oHlHfp9u8I2loMPFAmSlP
-	AIoU7d4YUHcc/Gx7qCysPC+sgoNVwgiUTQx5shZguRE66sOc3cYnzj6vw+lDZPRL6lQrhAGDsfL
-	N1KG6nwrUFlXX8vFEyURpn9eGq4JY19BwrDJ1DyMbNyVruDdriPBH6bo6ZaWq+QbLc4Uy69Sjc+
-	u1ByQJN7w/4C+YoYkDOkWWKL4B8nNx2/TUSHwMnYooKg/Cr2AhKSpvfxMjU2f7Je6PlbrEa9pdz
-	/iF84gZBGb8ZKmprM3c2/P7dFKE2Neewbh68dmXdplm1VXxAIt83zZhTj3eVSRb97EhzpGF4=
-X-Google-Smtp-Source: AGHT+IHRL3xwlyFDJAlvY4dcnk1fhydvNnnfxChZhso1KhvSXqtgNOxI+PY1QLR7ctUyr8T6Ru9oFA==
-X-Received: by 2002:a17:90b:2689:b0:327:e0c7:1e63 with SMTP id 98e67ed59e1d1-328154373afmr30523984a91.14.1757084527174;
-        Fri, 05 Sep 2025 08:02:07 -0700 (PDT)
+        bh=4t1NPXSpsgumuAbcGzE1EyiDPKl7vf9eJ/hyZgqkMpM=;
+        b=GIpbeETJy40/IhzPpwPoVyrfzUti5gPJNuERoDZhkIEl/l4qO8hjFgP7gvxy36zsnz
+         65h9kIvFf0bfq4p9hDK7Qq7OQw23GijiDgz/ReXjAm/N0J36ZRR5wZLkm2gbvn5l7YH4
+         T9yC8EXAqv8kfS3rG0dA/I7hXa6AEVz3rNXyrOuHMMp7uKCKGFgRJ4knhgpRSpNHQfC0
+         6QXifzXtEuDM1v3eR7oz3FnAgkhavAy59XwI8bF6wmyQKtFlSQdvAMPKhPXMembbOkP+
+         kvbyfQ1sMEyMKpEUYfnRpcas8cMJJ4t68Mj5cxGVjEOvKHsMwUILBOTYnI353l84xypb
+         VdEw==
+X-Forwarded-Encrypted: i=1; AJvYcCUoaL6xWzKkkFcnKEIh0EoQWSngQvSyLXHN4U3ABEFVoGFIPj2A7Z7g56lk1HG854kkQTWwT7BUC4JK@vger.kernel.org, AJvYcCWBCBmUJSYmFJJ8aQ1MLQi93FyjeHOAz08L9HHPCEk8TDwzGk5xWZaILrpWt4BjZmMt/BLNPJBCauHk9asPqOQ=@vger.kernel.org, AJvYcCWJDaITdn0jawsAm2TMbFZ0SB9pOO0gBbPeaWJI5GTf7xPmNFOc42pHD91ThcgxmjkT5NOnUsZTuW8VZqCx@vger.kernel.org, AJvYcCWK6szy1EgbB8bq3znYZvXbdpqnv8vJom1eEXBPvWyOwxttAYGvSMTQ2Xq68Nj+eRDbBLKMOOSAqVFsCDs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJaKMEkVIoiyDTHuQdmOYVPEm4a4wgpsDAyspKFK3CcgrqbAHV
+	wEmnS0Mc23399y/R46kaUjCoYP5Tj4ka9MUHitTBO11/GKEXnvmN8nNA
+X-Gm-Gg: ASbGncvC8by6ewxTHtOdhB4/0tobqF5dvJA25qFcSKXx7KYEOe/98hySIZ3F+c1uqO5
+	6wfJLZDsvvqtUkqfhPZNlR6tI5KRwUM458chqlR2I9jmCP8x5qPvdeMIJIuHeUiISNVWc2b/zDv
+	Jbe/cEbp87SFsU/Pg4pg217rtL3HzA+XXZfXLhxnI3OmgIP6yMgoQqpUMiFCiTrlzEj0zdFvNOS
+	Mt4R5yh31YalOrUWBaPb5gZ+Ok9yO5O+TCVoCOYVbw+FEXn7VL0F8eUJTCMcfKYfzMK9gAoV9mD
+	zmcxchIAwf87Ch7Iwdba2zgU1VbnSzEj9i/r0AIeUWt5X9olJFgygMhVcYloTX5v8LXq+ETKeX+
+	htX/xWk9qXb1BJw3W2Jqdlf/1pM+TNMzKTwj4S8hCXE+jBQlnWg2mp5ipeXHO2YuKJ+vAb24pDP
+	869FLH/A==
+X-Google-Smtp-Source: AGHT+IGE6MiuigF2nMYzx+KzSDUOLA3WaN9Jrarc3HfPkx+hCejQIAa0ADWq74RTvhd9q/v/3azFVQ==
+X-Received: by 2002:a05:6a20:9183:b0:246:9192:2789 with SMTP id adf61e73a8af0-2534441fa83mr7672424637.49.1757258901631;
+        Sun, 07 Sep 2025 08:28:21 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b4e5684da06sm16482808a12.17.2025.09.05.08.02.05
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b4f8a0a2851sm15985846a12.37.2025.09.07.08.28.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Sep 2025 08:02:06 -0700 (PDT)
+        Sun, 07 Sep 2025 08:28:21 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <947a6ca2-a1fa-44f8-a114-1737e475b4ce@roeck-us.net>
-Date: Fri, 5 Sep 2025 08:02:05 -0700
+Message-ID: <83189bf7-6831-4373-a352-2a3a05526e08@roeck-us.net>
+Date: Sun, 7 Sep 2025 08:28:19 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -84,22 +85,18 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 6/6] watchdog: rzv2h: Improve error strings and add
- newlines
-To: Prabhakar <prabhakar.csengg@gmail.com>,
- Wim Van Sebroeck <wim@linux-watchdog.org>,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
+Subject: Re: [PATCH v1 6/7] hwmon: sl28cpld: add SMARC-sAM67 support
+To: Michael Walle <mwalle@kernel.org>, Nishanth Menon <nm@ti.com>,
+ Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
- Magnus Damm <magnus.damm@gmail.com>
-Cc: linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
- Biju Das <biju.das.jz@bp.renesas.com>,
- Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
- Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20250804195723.3963524-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20250804195723.3963524-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+ Lee Jones <lee@kernel.org>, Srinivas Kandagatla <srini@kernel.org>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-watchdog@vger.kernel.org
+References: <20250822131531.1366437-1-mwalle@kernel.org>
+ <20250822131531.1366437-7-mwalle@kernel.org>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -145,20 +142,32 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20250804195723.3963524-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20250822131531.1366437-7-mwalle@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 8/4/25 12:57, Prabhakar wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On 8/22/25 06:15, Michael Walle wrote:
+> The on-board uC on the SMARC-sAM67 board is compatible with the older
+> CPLD implementation on the SMARC-sAL28 board, but has different sensors,
+> namely two voltage sensors and one temperature sensor. Add support for it.
 > 
-> Update rzv2h_wdt_probe() to provide clearer error strings when retrieving
-> the pclk, oscclk, and reset controller, and append missing newline
-> characters to dev_err_probe() and dev_warn() calls for proper log
-> formatting.
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Signed-off-by: Michael Walle <mwalle@kernel.org>
+> ---
+>   drivers/hwmon/sl28cpld-hwmon.c | 76 ++++++++++++++++++++++++++++++++--
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Documentation/hwmon/sl28cpld.rst would have to be updated as well.
+
+...
+
+>   static const struct of_device_id sl28cpld_hwmon_of_match[] = {
+> -	{ .compatible = "kontron,sl28cpld-fan" },
+> +	{ .compatible = "kontron,sl28cpld-fan", .data = &sl28cpld_hwmon_chip_info },
+> +	{ .compatible = "kontron,sa67mcu-hwmon", .data = &sa67mcu_hwmon_chip_info },
+
+Effectively this means that the two chips have completely different functionality.
+One reports fan speeds, the other reports voltages and current.
+This should be a separate driver.
+
+Guenter
+
 
