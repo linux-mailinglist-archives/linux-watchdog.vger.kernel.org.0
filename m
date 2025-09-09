@@ -1,187 +1,157 @@
-Return-Path: <linux-watchdog+bounces-4212-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4213-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 219A3B4FF38
-	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Sep 2025 16:22:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01F49B501CB
+	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Sep 2025 17:46:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C7EF0365EFC
-	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Sep 2025 14:22:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15EFD4E46DE
+	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Sep 2025 15:46:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17B4D3451A3;
-	Tue,  9 Sep 2025 14:22:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB4C327A925;
+	Tue,  9 Sep 2025 15:46:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lijg5Xxh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lDnnIUAO"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF46F32252E;
-	Tue,  9 Sep 2025 14:22:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40E78274FCE
+	for <linux-watchdog@vger.kernel.org>; Tue,  9 Sep 2025 15:46:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757427727; cv=none; b=BMlG3H2hi0kP/Ys2n41LVnx5GUw3+lGGoff92drqbJPcnTgKHU/a+B1u9C/eHyuMFj9P7hBYQsiQUfXbH6BtkJZRqSYF8T0YIIWjL2dV6ccplN/RRoLS6SuORksJpw8K83ITrFPThKehMJF4rL4OmnklVo81zqPy3UpKNxpyBXk=
+	t=1757432763; cv=none; b=Qg1szlOEVLtzolIvYDsgvi+HnFPg2fnqJNqEdDANWxMNAN5fOjqo8jruxgl5XqVhDjmy4UleBNNzECtjXGF8Lcek0KSd9I8XpVUp0v8vX0BRfaLs4xmCsZsDqZhIXvnDKyLjjtqUyiBgj57agEuS1MuBXX53lIScatFGZSI3gXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757427727; c=relaxed/simple;
-	bh=hcsO+0CDu8ebk5l7xQEiuvFomx6Jn3bzyePgBxbYNfA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Jk/CPiZn7G5spLERyV7Y5xl7EwDBsksApbYKbco6kiy/iSMIBxDBHLzOrhHlN6/bQSCEvJZVYj/TaC+lO6Qsv8lvw3ehNHzkV6IcOGXnXoUWGjsD1qhvfXI5BhlZoJfAmzbH5jRy3nN0jNER6YtWltnkq7skM0VIgNHvZRfor+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lijg5Xxh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A6D0C4CEF4;
-	Tue,  9 Sep 2025 14:22:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757427726;
-	bh=hcsO+0CDu8ebk5l7xQEiuvFomx6Jn3bzyePgBxbYNfA=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Lijg5Xxhk1ndqA8YsuTfBeLqkWzIrQloB4O6QQHsC7UOsWD/DnAW4cfZ7CSNrBgPh
-	 TMjyuG7AKDCV/XwzIBXauLf1RDk7g34JLK03efmZyFBF6l5Jm5af+1T1+L2cHUWd9q
-	 EtcGOys1wz0Mmb0pB3f9HTm5hXixAl/55644e0PTGR+/yLdlZi45KFBzhdKRF04ZNt
-	 0jmryVkcm2SPC63DgbVuPwzOCw84RPbvcBHTIDL2l793Tdtwv+gZsihhlzKwCZxEHL
-	 8hvA7ydUlWyRYf0v2Dc5rpBtH/A64D/ESUQCjZo5VIooHXPh6DL9hz3F6sfbmQ2NWj
-	 ra68COBXtoOxg==
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Avi Fishman <avifishman70@gmail.com>,
-	Tomer Maimon <tmaimon77@gmail.com>,
-	Tali Perry <tali.perry1@gmail.com>,
-	Patrick Venture <venture@google.com>,
-	Nancy Yuen <yuenn@google.com>,
-	Benjamin Fair <benjaminfair@google.com>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Joel Stanley <joel@jms.id.au>
-Cc: openbmc@lists.ozlabs.org,
-	linux-watchdog@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: watchdog: Convert nuvoton,npcm-wdt to DT schema
-Date: Tue,  9 Sep 2025 09:21:59 -0500
-Message-ID: <20250909142201.3209482-1-robh@kernel.org>
-X-Mailer: git-send-email 2.51.0
+	s=arc-20240116; t=1757432763; c=relaxed/simple;
+	bh=eFTweerjZKoxxZ9uYEQWOOFH2mTOPUrpeBxfdknONn0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VyhYYu6Z49SYjWy0FLoTFOOczUm/MTymwt3il+DBja00HoWO6ytWFhA/bI47xxIw6eGOKQIOXbJIJdUtTscuU1+D5daZkrGJPsA41M9N3Yy9j+yNP/lds5Dr6CXwFLMzuP2uNDdvTdeCWdNSFgZU8es7bfmaoYbXcjgf8dvH/nM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lDnnIUAO; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-25634c5ebdeso26004025ad.0
+        for <linux-watchdog@vger.kernel.org>; Tue, 09 Sep 2025 08:46:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757432761; x=1758037561; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=uNQdE5yOZswVE6LCOBdtsDcL2XOY1LZAHNkE5x3LHnI=;
+        b=lDnnIUAOtFgMexvNa+Ivr5YnQets4hc5S31jsEvw6+cEA5R2DNLzm9CfX/kGJk4kj6
+         LU6idXKFRy1wnNX4nQrmDJoOdBAy9Sn6RYi03lrWSJRqv15cODL6rtLXZYiItjEPCgft
+         g4d86WvO9foxPyddhqczIgbvevvxls6HmIjysXDuPZF4UuLYekJwUKjKK08LJ37sKD7g
+         Lj6CbqTGiGhpwkAdNQgyb8QYF56O79fWUIrix2W5StybQuKEmhlcwSX0rORNuFftWSPx
+         gQr+lIt9wi7vzbd7ZmPppyYyqzxIHbBWvlO911Hc0MSLvDry25GUkROuE2pHi9hcujYO
+         rPdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757432761; x=1758037561;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uNQdE5yOZswVE6LCOBdtsDcL2XOY1LZAHNkE5x3LHnI=;
+        b=E9aazoBbkRbZVp0Ls6RzaPdiA6y865DieVEDXYMuWyo8J7WnQTba9cNeIsgB74CZRi
+         bLNRdOVxZs8LofPKcMGNBab2RJK4QkTVdrppWc9NZ9EyjFKH1H2/7kVObbi92LWubV5b
+         +ikpQlyUFUG+FD5wKaSy4KmWcRQU9okBX3MbuY+Hm88bAMKPOLP9Ni+vficd5rgJYd0R
+         4dZRogHUqNog3K3a/+waqeaVRQramd7DwSM5pBo+5V8+ZRXWtFWKGgSRdkyDt+FfMQj8
+         lNiONFtWcOVopVl3QTKRJuSfkWlxPDZD1wHcMyWvibA2ftWRbZGVo+H2/6fjtwSREJTT
+         v+Nw==
+X-Forwarded-Encrypted: i=1; AJvYcCUIDXvYn6s73oVZsjov1WzZmpq7NZffQ+tuCY5hmegtDmt/Y834YPAvVNT9sYZcPJnXsftvRPE/B2h0Qvscjg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzesvESSWG+CbNV9Qshh8BBlu4lg5G2CLBguFU82cmkUZsFPtl0
+	qCyj3n9itYnAxlXdOESTLjFEz6QYmuf3w1ZaVq2nGUt/oOdU/GUKfK2M
+X-Gm-Gg: ASbGncsuCZhQyvFeMlXnMEsumXeJLaWdLR38/vTKQef8npU/I3SmGeTjNdkVe6DSt2v
+	e/8yDZgaQKzRDF03+gLPr5F3qkysvB6k+lNQcclIk4/WGUoDLK8nWEnKkI8nxL/DoZM/Rf16FoD
+	4Inza82cNeywAtue16Opto2rt9mlZbcLHYW8Qe/5S5HhgqESjV3C9nIeyIV31J3RceK0ngOiISy
+	hq31U6nGV0p1stWnMID3TFN3mWAi8+kx9nbzWnOTX9x1GWNWAFULGchORNSY3V3JAifAt9gXqWn
+	/b2h5kDtXKpQV7GtO/AcxceFPdkoIUteuhaag6uOsCi2GWFQBa8D5R7TNyxPNK5M2KDQUGqUoqw
+	ppylwOjgg3jvNBUUr35dnNcZAf6sbRdgVXN1vNQhvpr0YyJel+pxbAQ4DguJ3jkIhff2nLVqodA
+	Ov9I6Okw==
+X-Google-Smtp-Source: AGHT+IHEDLcvBUxgy4It5qzR9ySfj35Jxho02ojFfBjGPyU0POXrSQw6ivP4uGSFnQuh/rPMRMmzJw==
+X-Received: by 2002:a17:902:d2c2:b0:24d:3ae4:1175 with SMTP id d9443c01a7336-2516c895b06mr197733895ad.5.1757432761326;
+        Tue, 09 Sep 2025 08:46:01 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-25a2ab0d88asm1270235ad.111.2025.09.09.08.45.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Sep 2025 08:46:00 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <f03fead0-39c4-4d06-8934-bbc388d614fc@roeck-us.net>
+Date: Tue, 9 Sep 2025 08:45:58 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] dt-bindings: watchdog: Convert nuvoton,npcm-wdt to DT
+ schema
+To: "Rob Herring (Arm)" <robh@kernel.org>,
+ Avi Fishman <avifishman70@gmail.com>, Tomer Maimon <tmaimon77@gmail.com>,
+ Tali Perry <tali.perry1@gmail.com>, Patrick Venture <venture@google.com>,
+ Nancy Yuen <yuenn@google.com>, Benjamin Fair <benjaminfair@google.com>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>
+Cc: openbmc@lists.ozlabs.org, linux-watchdog@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250909142201.3209482-1-robh@kernel.org>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20250909142201.3209482-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Convert the Nuvoton watchdog binding to DT schema format. It's a
-straight-forward conversion.
+On 9/9/25 07:21, Rob Herring (Arm) wrote:
+> Convert the Nuvoton watchdog binding to DT schema format. It's a
+> straight-forward conversion.
+> 
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 
-Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
----
- .../bindings/watchdog/nuvoton,npcm-wdt.txt    | 30 ----------
- .../watchdog/nuvoton,npcm750-wdt.yaml         | 60 +++++++++++++++++++
- 2 files changed, 60 insertions(+), 30 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt
- create mode 100644 Documentation/devicetree/bindings/watchdog/nuvoton,npcm750-wdt.yaml
-
-diff --git a/Documentation/devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt b/Documentation/devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt
-deleted file mode 100644
-index 866a958b8a2b..000000000000
---- a/Documentation/devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt
-+++ /dev/null
-@@ -1,30 +0,0 @@
--Nuvoton NPCM Watchdog
--
--Nuvoton NPCM timer module provides five 24-bit timer counters, and a watchdog.
--The watchdog supports a pre-timeout interrupt that fires 10ms before the
--expiry.
--
--Required properties:
--- compatible      : "nuvoton,npcm750-wdt" for NPCM750 (Poleg), or
--                    "nuvoton,wpcm450-wdt" for WPCM450 (Hermon), or
--                    "nuvoton,npcm845-wdt" for NPCM845 (Arbel).
--- reg             : Offset and length of the register set for the device.
--- interrupts      : Contain the timer interrupt with flags for
--                    falling edge.
--
--Required clocking property, have to be one of:
--- clocks          : phandle of timer reference clock.
--- clock-frequency : The frequency in Hz of the clock that drives the NPCM7xx
--                    timer (usually 25000000).
--
--Optional properties:
--- timeout-sec : Contains the watchdog timeout in seconds
--
--Example:
--
--timer@f000801c {
--    compatible = "nuvoton,npcm750-wdt";
--    interrupts = <GIC_SPI 47 IRQ_TYPE_LEVEL_HIGH>;
--    reg = <0xf000801c 0x4>;
--    clocks = <&clk NPCM7XX_CLK_TIMER>;
--};
-diff --git a/Documentation/devicetree/bindings/watchdog/nuvoton,npcm750-wdt.yaml b/Documentation/devicetree/bindings/watchdog/nuvoton,npcm750-wdt.yaml
-new file mode 100644
-index 000000000000..7aa30f5b5c49
---- /dev/null
-+++ b/Documentation/devicetree/bindings/watchdog/nuvoton,npcm750-wdt.yaml
-@@ -0,0 +1,60 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/watchdog/nuvoton,npcm750-wdt.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Nuvoton NPCM Watchdog
-+
-+maintainers:
-+  - Joel Stanley <joel@jms.id.au>
-+
-+description:
-+  Nuvoton NPCM timer module provides five 24-bit timer counters, and a watchdog.
-+  The watchdog supports a pre-timeout interrupt that fires 10ms before the
-+  expiry.
-+
-+allOf:
-+  - $ref: watchdog.yaml#
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - enum:
-+          - nuvoton,npcm750-wdt
-+          - nuvoton,wpcm450-wdt
-+      - items:
-+          - enum:
-+              - nuvoton,npcm845-wdt
-+          - const: nuvoton,npcm750-wdt
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-frequency:
-+    description: Frequency in Hz of the clock that drives the NPCM timer.
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/nuvoton,npcm7xx-clock.h>
-+
-+    watchdog@f000801c {
-+        compatible = "nuvoton,npcm750-wdt";
-+        interrupts = <GIC_SPI 47 IRQ_TYPE_LEVEL_HIGH>;
-+        reg = <0xf000801c 0x4>;
-+        clocks = <&clk NPCM7XX_CLK_TIMER>;
-+    };
--- 
-2.51.0
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
 
