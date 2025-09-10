@@ -1,58 +1,59 @@
-Return-Path: <linux-watchdog+bounces-4214-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4215-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32AF1B52307
-	for <lists+linux-watchdog@lfdr.de>; Wed, 10 Sep 2025 22:54:23 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA3D8B5231F
+	for <lists+linux-watchdog@lfdr.de>; Wed, 10 Sep 2025 22:55:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F5FF587338
-	for <lists+linux-watchdog@lfdr.de>; Wed, 10 Sep 2025 20:54:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 38AA57B68D1
+	for <lists+linux-watchdog@lfdr.de>; Wed, 10 Sep 2025 20:53:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DFF82F3632;
-	Wed, 10 Sep 2025 20:54:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0091E2FB629;
+	Wed, 10 Sep 2025 20:55:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HpyqPUro"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FjQYb7Is"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 109ED2EE60E;
-	Wed, 10 Sep 2025 20:54:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C95982F39A5;
+	Wed, 10 Sep 2025 20:55:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757537643; cv=none; b=PWqAX/Nmk8k1qWSwR1FyYqUh/H6XI/7X8oz0uu1uzyrz/5GxFe1qTRwx0PSRQeF+hD17wlB6I9WpkMAsxP46SfXY4Jswkak1lxOoBAOlzqoDczB52Sml+hn1IwsfpOeY5Y/q13Fruy2FK+k1jeRXj7UBmEvmfJnY727Ugq4lIqw=
+	t=1757537719; cv=none; b=RLbomLs0FwdvrJu6tuXSTMpqHKNiHG07MtbGiTxPANH08ONUj0uS/0mvntLOFdyj3usOfCMcMop5dAaQhVGO0jQWKRCzbI4GWRMxIUDQ1Jaa3S8DwRbeLp1V2NmgTJfJPwcCssDOj9gbtu2xSQ28TTGbuyVGIyISdMUKPm9mbrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757537643; c=relaxed/simple;
-	bh=5OnkuBJyue+zQyX6Q2eCfHtTU3Z+nyV5kgiMTsJaO1Y=;
+	s=arc-20240116; t=1757537719; c=relaxed/simple;
+	bh=gvT9FuWxfZPeqzMQVg7GrtSY0I8p+kp7K2Qrz5hOw1Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=srxV2hUYT6nvvtDGx/y0BOAitK28cYokcq1cAj58dHzDGgJmXKnRpXQdRkY0P6sNHtCc3jCP6ClKZNtqdPFksQuMwOb9kqkix710AF2MGxVIiQ2dB/04GAQLnh31rLb4brXC99SgLWVmuhpy/xqCSgz41fwlfm6QSKn55SZk4nI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HpyqPUro; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83208C4CEEB;
-	Wed, 10 Sep 2025 20:54:00 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=m8m5F6JuZzR7DmRhO0aYdEqniTjsduygGpZrNCAqiYBiyOGXV6+v+l1w4MLGqUmYguMdOtUhfWIGt9zlEmYRbS58soGlWarvk+Feh/SI0QSjaXuT+/912TM2FAIVvCU7Qff8zbKwo2NS51Erw4GpLQwxjP8SQB4+Kf6OgjLtOb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FjQYb7Is; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C4BEC4CEF7;
+	Wed, 10 Sep 2025 20:55:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757537640;
-	bh=5OnkuBJyue+zQyX6Q2eCfHtTU3Z+nyV5kgiMTsJaO1Y=;
+	s=k20201202; t=1757537719;
+	bh=gvT9FuWxfZPeqzMQVg7GrtSY0I8p+kp7K2Qrz5hOw1Y=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HpyqPUroqt68uLM2rNNFEMdXw3AX+sWGNucFF/ESuJHuDRJO9bIVzG9cuVb+NLEeQ
-	 4TNJ7mp1BIr3t3wyMCK4b/M+vSwhp8dzJ8L0p306SV8VCatWseWWqGzR3cqOdcnDuH
-	 nsOxauTwdZz9vo7Zf7DQwVaSD7boLxqQaOpx7D05s6s2LiPHBv7gqMawHIxbuc9vfu
-	 l6lmNOzyQgQVhdqxatA2Ix1+2LLoD35XL86UkU+sEck0cgdOvePgE0DRGZRtJM7tbY
-	 qmwkn1HLaU2aoL/nEzl82qQ2TRhH+1Yeoeo1RjAXPnpbjJaRphYKXdruhiTmQjLjRZ
-	 Dy2OM4gzl2cBQ==
-Date: Wed, 10 Sep 2025 15:53:59 -0500
+	b=FjQYb7IsfJnAIuyyBxN9tylvu4CPrjT2KQzODDUVZ/mB+RChZrFX4TXJcNajCA2cc
+	 P0bU7zrxL5PsQm8t3jqzpBGFbhQ8obdRWTK8AlOBGgAUxGJumDEyRpujIvGxy7zWIi
+	 zBbVYSOFcGWKFiqebAGtlGUYtTmUCiPwHCkxITKjkvniidTH0MIURbk+GYeCJoBbSV
+	 8uPvhngmkiOQEnwzeUSY3sdKvz05h/BC+CA0cNnVKCcHtxsKCEBbt3RRfxEO95a43W
+	 F2UIxVjpNV4YZ1xhqgMF1pkZBjjSbzF50qDsDY1fWDP1cu3kXGJLpm/inRtmD4BssX
+	 RbDq5B36odSNg==
+Date: Wed, 10 Sep 2025 15:55:18 -0500
 From: "Rob Herring (Arm)" <robh@kernel.org>
 To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, linux-kernel@vger.kernel.org,
-	linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: watchdog: Drop duplicate
- moxa,moxart-watchdog.txt
-Message-ID: <175753763932.388606.6667909056688824715.robh@kernel.org>
-References: <20250807214222.4170236-1-robh@kernel.org>
+Cc: linux-watchdog@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
+	linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+	devicetree@vger.kernel.org,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>
+Subject: Re: [PATCH] dt-bindings: watchdog: Convert marvell,armada-3700-wdt
+ to DT schema
+Message-ID: <175753771781.400321.13844352093310893008.robh@kernel.org>
+References: <20250812203301.726374-1-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -61,18 +62,21 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250807214222.4170236-1-robh@kernel.org>
+In-Reply-To: <20250812203301.726374-1-robh@kernel.org>
 
 
-On Thu, 07 Aug 2025 16:42:21 -0500, Rob Herring (Arm) wrote:
-> "moxa,moxart-watchdog" is already documented in faraday,ftwdt010.yaml,
-> so drop the old text binding.
+On Tue, 12 Aug 2025 15:32:57 -0500, Rob Herring (Arm) wrote:
+> Convert the Marvell Armada 3700 watchdog binding to DT schema format.
+> It's a straight-forward conversion.
 > 
 > Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 > ---
->  .../bindings/watchdog/moxa,moxart-watchdog.txt    | 15 ---------------
->  1 file changed, 15 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/moxa,moxart-watchdog.txt
+>  .../bindings/watchdog/armada-37xx-wdt.txt     | 23 -----------
+>  .../watchdog/marvell,armada-3700-wdt.yaml     | 41 +++++++++++++++++++
+>  MAINTAINERS                                   |  2 +-
+>  3 files changed, 42 insertions(+), 24 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/watchdog/armada-37xx-wdt.txt
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/marvell,armada-3700-wdt.yaml
 > 
 
 Applied, thanks!
