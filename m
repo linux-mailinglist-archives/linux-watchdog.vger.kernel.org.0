@@ -1,46 +1,46 @@
-Return-Path: <linux-watchdog+bounces-4240-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4241-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54D38B54D39
-	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Sep 2025 14:20:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61D5EB54D2D
+	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Sep 2025 14:19:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B66E3177F3C
-	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Sep 2025 12:15:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A6CB3188C7C2
+	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Sep 2025 12:16:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF02F31DD9F;
-	Fri, 12 Sep 2025 12:08:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A462F31E117;
+	Fri, 12 Sep 2025 12:08:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c8HLletF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VnO+Zw+v"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFF0130648B;
-	Fri, 12 Sep 2025 12:08:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F40C31DDB4;
+	Fri, 12 Sep 2025 12:08:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757678903; cv=none; b=hptH/xeCcMGgUhWnLy6f+xhUcgz6/kAFWVM/Ps7dQ2zdAcGxnblcSghWamaerLtVxt3xcyFYfQkfxTfLVE9IdR9ELHFkd677l8U0CL+TWxcf7hJQ+E3uVecCytNQ8mlJtIeUFJIHHNJbHJY/NxuGuxe7Ws8paPTULheMs7ORk+M=
+	t=1757678907; cv=none; b=Vgu5ysAGhJU/LzWtpVXuM1FbL9sWyvPgAdtSMEJauu1uawhXSlk7/6U9xnvCXkSgBYsUoXdHQZnqpJa3J6Me9Tb5wumX97BnGsbAqBFyVP53f9qE/1ttoqPUaMQsraRUdakay6s4Dh2bTQsHxIuN0v4QM0umfaEtGF2iFwMHbJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757678903; c=relaxed/simple;
-	bh=DY2XJDeEOrzHxg96FTirSDzFFXROFVOwi0JgFBjMnyk=;
+	s=arc-20240116; t=1757678907; c=relaxed/simple;
+	bh=be+bUwk0HwrL17vqiPMMJhD52aY5E7ndhs1cUU5HK6Q=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=F4a4Wn7idvwZVNDiJQg7YDuzHKJriEMm0beZOTaf8+HFZCA59ROF47igeBm8Z0DaUqQ6gKffRFWMyGbJzosTbNvkSbZ3ZPHSb2W/Sj3iSdNh9HxZ26KDXImhZjwsW4oI3N+96yuJRVGV8svvIgZD7Qto1JQorOS4q3ClrRpgwIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c8HLletF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C14DCC4CEF4;
-	Fri, 12 Sep 2025 12:08:19 +0000 (UTC)
+	 MIME-Version; b=sic0mzzMC1gPqWv+YEmEmzoaW9kgg+w6qTbuHD9iVrPawA51mgO/FO87RfnDKjmChlxJXy1sQwabeJ8Och26hxB9OQzhtU1Tv7NatzEzIjRbYaOV+CrITrSfTtmbljNkB4/+WYgAlX0XnqZ59rLsE5Rqw8t+OIpwgvVfZRvcZVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VnO+Zw+v; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEC21C4CEF9;
+	Fri, 12 Sep 2025 12:08:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757678903;
-	bh=DY2XJDeEOrzHxg96FTirSDzFFXROFVOwi0JgFBjMnyk=;
+	s=k20201202; t=1757678907;
+	bh=be+bUwk0HwrL17vqiPMMJhD52aY5E7ndhs1cUU5HK6Q=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=c8HLletFv8+PYS3mud5TlJ74kQnGGkI9mA0vhirZjyr3LjhNOJqVksvR6M7zyZjdZ
-	 SYQvUVzc0Hh67Lc+6p420KQVyrMhYDgF3aiu+vG2CV0CegTMrbr9XRj+Jz54zrbXRf
-	 RHoSgpiFD3uiyAiBrh3+ePi+efbbDRe9OjRr9bb6okSpkGvi8g8NacL9KcQdCkveOb
-	 klnBk3/YuanWt5sX+aj6UwHmGQxt1JBBp+lcZkbxKishmGXxyR9uaTc6HA6AC8fekS
-	 kJIghL3cEnZPpLQQyi5zpBCvQKcrWiYjXPANjUorED64ArvrKxP1lMsPX1fxeDCAp+
-	 fzDGhvYDQxbjw==
+	b=VnO+Zw+vEeP2fK22pSjN3uy6nADz7y2IRjKwkvi4geRwoqcPOklI4xhf5362H6wSk
+	 oRRj5PfC3Z+k1P8gLptL44nLQAavAVqPJyokURmtahqFKXkE9NZ+18ZrV6jGRWGGIp
+	 5P2DPPROwqIX57gAOPKn2aTyDHKHb3BhRlfToES99CXMIP33Nq/+F9m359MSfPNiL3
+	 0Cg4sZIgWcbdFgXEEL0q+eh/+FY4ipZ2sCkXUzngH76Pt5k/9jaf5xVhvRDkyk4GCw
+	 U3WMKC3lkMHf36hDUEqgKrW2P/lsfzwvu9XyQBKIgF1Nl60bC16GEeNoDs8MWinlpC
+	 +qd/B7BHuf/4A==
 From: Michael Walle <mwalle@kernel.org>
 To: Nishanth Menon <nm@ti.com>,
 	Vignesh Raghavendra <vigneshr@ti.com>,
@@ -61,9 +61,9 @@ Cc: linux-arm-kernel@lists.infradead.org,
 	linux-watchdog@vger.kernel.org,
 	Andrew Davis <afd@ti.com>,
 	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 4/7] dt-bindings: hwmon: sl28cpld: add sa67mcu compatible
-Date: Fri, 12 Sep 2025 14:07:42 +0200
-Message-Id: <20250912120745.2295115-5-mwalle@kernel.org>
+Subject: [PATCH v2 5/7] dt-bindings: watchdog: add SMARC-sAM67 support
+Date: Fri, 12 Sep 2025 14:07:43 +0200
+Message-Id: <20250912120745.2295115-6-mwalle@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250912120745.2295115-1-mwalle@kernel.org>
 References: <20250912120745.2295115-1-mwalle@kernel.org>
@@ -75,29 +75,35 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The Kontron SMARC-sAM67 module features an on-board house keeping uC.
-It is designed to be compatible with the older sl28cpld implementation,
-but has different sensors, like voltage and temperature monitoring. Add
-a new compatible for that board.
+The SMARC-sAM67 board has an on-board uC which has the same register
+interface as the older CPLD implementation on the SMARC-sAL28 board.
+Although the MCU emulates the same behavior, be prepared for any quirks
+and add a board specific compatible.
 
 Signed-off-by: Michael Walle <mwalle@kernel.org>
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../devicetree/bindings/hwmon/kontron,sl28cpld-hwmon.yaml        | 1 +
- 1 file changed, 1 insertion(+)
+ .../devicetree/bindings/watchdog/kontron,sl28cpld-wdt.yaml | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/kontron,sl28cpld-hwmon.yaml b/Documentation/devicetree/bindings/hwmon/kontron,sl28cpld-hwmon.yaml
-index 5803a1770cad..966b221b6caa 100644
---- a/Documentation/devicetree/bindings/hwmon/kontron,sl28cpld-hwmon.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/kontron,sl28cpld-hwmon.yaml
-@@ -16,6 +16,7 @@ description: |
+diff --git a/Documentation/devicetree/bindings/watchdog/kontron,sl28cpld-wdt.yaml b/Documentation/devicetree/bindings/watchdog/kontron,sl28cpld-wdt.yaml
+index 872a8471ef65..0821ba0e84a3 100644
+--- a/Documentation/devicetree/bindings/watchdog/kontron,sl28cpld-wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/kontron,sl28cpld-wdt.yaml
+@@ -18,7 +18,12 @@ allOf:
+ 
  properties:
    compatible:
-     enum:
-+      - kontron,sa67mcu-hwmon
-       - kontron,sl28cpld-fan
+-    const: kontron,sl28cpld-wdt
++    oneOf:
++      - items:
++          - enum:
++              - kontron,sa67mcu-wdt
++          - const: kontron,sl28cpld-wdt
++      - const: kontron,sl28cpld-wdt
  
    reg:
+     maxItems: 1
 -- 
 2.39.5
 
