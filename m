@@ -1,287 +1,171 @@
-Return-Path: <linux-watchdog+bounces-4233-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4234-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A79E1B54798
-	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Sep 2025 11:32:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 653EDB547C0
+	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Sep 2025 11:34:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6B06E1BC4455
-	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Sep 2025 09:31:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F21A16732A
+	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Sep 2025 09:34:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E3F52857CB;
-	Fri, 12 Sep 2025 09:26:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4609C286429;
+	Fri, 12 Sep 2025 09:31:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SWwBZZnt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oDl2A0LO"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF10A285045
-	for <linux-watchdog@vger.kernel.org>; Fri, 12 Sep 2025 09:26:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1F9E2848B4;
+	Fri, 12 Sep 2025 09:31:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757669217; cv=none; b=c/aRjriEAdz7CgkafYqkGi6x2UTUDE/7esd8oXLgzrnyIeahJ2C/Utm/GYuWXofJIrrXehIIFZfTb4AJJpocd9n4kaMmUVpYhJJsrkKZMXvcuQGD0yX8nV/z8codN14Fzo/NdUMOX48Qm+sPQlbc7dz851++S8DSWyMlJvbD6mY=
+	t=1757669507; cv=none; b=UKZIA24I3cgOiR5xHITFq3td6ODh/lt5xPLFJQ++49ANkIiaOES2EGOgDtfIJxTJriAkU6LLZwARKPefdt67vDKXDrhTqxPpY3ugHqeflgWfPnZKe7FmJvt82CstGHTy22fUV5daefjy7tqFoncbF+Tl8qDLxo7JYYFNN1KR/fc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757669217; c=relaxed/simple;
-	bh=irMuxUdQPpGhXnllWkfIl5RxD59rygWBGq/5/FrxZwo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IxKtVP4ub+9pANrRgTEuOQBvMKOgaszdTShErESvJDPClt4ktMr/qjuMLwd0OufUQXSzJr5leqFc6cCnYVUbwPHD7tMrHgTDC0n1yv7JIenCLLU5Ymg+f9eGpmvWh7wBXE3JpMQu7JjdhdlHuA9Rqd9Ay/5LJrPiLww29Bpg+u8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SWwBZZnt; arc=none smtp.client-ip=209.85.219.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-e96ff16fea1so1147289276.0
-        for <linux-watchdog@vger.kernel.org>; Fri, 12 Sep 2025 02:26:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757669214; x=1758274014; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SjqJ6sVZBbW+81hjVC4Gz65qKs1cRms0/JSBsC2JkMM=;
-        b=SWwBZZnt4TAEHY6dVYGZPfvXPxsnEE3t65WVR7lBoQTJalDSLZTTXLKZ1CeNA6InuJ
-         fPDz4kEvv/n9CymWiGEuoAiO8Dtv8ausTe7z98WFJNoXfXgysrBj50HdyZ5h3s7s7Jo7
-         0vzPWiRlsvgJKw64MEFtKThfj1wUEnmf6IsDzI/0DFjuGsUPQ4RKg7sg3YM/U8BXQcBS
-         gPWblGlQNlOkZ4GPEaxJQV6NNy9gBkFgiL5/Gc3eT7gjTDwC2/bljO5lKm59x4IEfqZw
-         24BqMC3E+SCfVIP0Rm9FqPd/DjEEfVfA856m9du0hFalEXK6IsWc5vh309oox3gVnp9/
-         XQMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757669214; x=1758274014;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SjqJ6sVZBbW+81hjVC4Gz65qKs1cRms0/JSBsC2JkMM=;
-        b=NkpSmAe8sYcBpB9LhtSgXtXAIEy1o9qNbakHWn/Nxn5T5cHHE1v9krnRrqrjUvF07k
-         lyodtaaCncxaehUJmX/ZNntYyoWyuutq+hiQSpx+nRYIPGlJfUK+WhsP7kzaZxJ/cdvH
-         bNwHuESH0pxY7+KNEz3jB7jLgaVFAPbelYtGYbTJlU9vveNyenmri4l77FzOlFlcXUjb
-         +RBVmT3ajZTphU0hCbylT2cOrRO3Odzr9J25IFIMCz3a8lke+LJL9Uj9kEg9/BTm5Sni
-         9jtVLLtjzmWKHU3xXeHYjWhuOzIvw4x7kDFfhSpJlaZ5UN7MGt9nldZYotBhiVY1yOZH
-         3K9Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWyjkM/LkSir/PiIh5Dmyh7he0MLUVJp5aaLoMv+KvD1Hk+zfraIOp6SHo1yci5jOUIqMh9DlsfAH2T0I7wXQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7Emvd7JdJFVsVPJHA51AEF1CWvUJcdPiQShO/g4FCAD8CHfKf
-	eDuUT2DVZctWGAawqXlnGGmMBRT/yIjQ7BljznLmlVXDhknHLGt675W+L12h4gFmPmuvklzy/5r
-	O6lg+q7UQmSNIE1ugSwUQqJrT0TYRA4c=
-X-Gm-Gg: ASbGncuMnxEUVZA55xnCrQH7XL28JidVa7nDE1KeoObnlGohq3NEuCLWbXKc0WVb6MM
-	5ANcifBj8erdl3TrdOkcC9MN876iW8fGFXwZJJgxAYZ0f1oEBOfaASeGwg1Zzo2lSmG3BIHjgVQ
-	JarcE5sUUa+go2OB20qjah34l2ZxInXKkT3KKg75mKu7mTfCrA7o6E72m0mxH3O87a1EtT7w+4Q
-	S/BetjdzPHQMkRht9heEKVJGxiW319slc8UNI6s8w==
-X-Google-Smtp-Source: AGHT+IG61YFPc3YGuNiMETzC0WD9PzNGrl373v6tL4lQFqcwQxvrhZOjgmVX4wLgLgCCLbEF0I9n9Kd7vwxOoB3218U=
-X-Received: by 2002:a05:6902:6c04:b0:e9b:b6a6:216d with SMTP id
- 3f1490d57ef6-ea3d99deb44mr1421038276.6.1757669213539; Fri, 12 Sep 2025
- 02:26:53 -0700 (PDT)
+	s=arc-20240116; t=1757669507; c=relaxed/simple;
+	bh=cZZSj/PLAmvPikniIesMdJfhqh3VOpUH71TpGrecZ8M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tIUScZ6Gzx9bxdDLH7qle5FByA8HOy260Awo0S7Oxp4PHfo+Ao6tQmigQBbIokDw0n6b0hp6GeL5M5lk5HzJ2BvuStC1kygrHoCX5vof//FsXAzmY+OrKjvhDBl4NyqVaa0zCR/EMPEbydokKZyLJO15Mdm+U2v+NSDoqSEsKsc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oDl2A0LO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB683C4CEF1;
+	Fri, 12 Sep 2025 09:31:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757669506;
+	bh=cZZSj/PLAmvPikniIesMdJfhqh3VOpUH71TpGrecZ8M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oDl2A0LOXO/1X2zNKv7aRnP0NHdkbAsbDDgwtZzvwmo12fpeFM2E3/tK2+Vtp6jDf
+	 LtHjqH3FhqX9XCd49ZEoi9d2wFua1A1xl2NpXDXII2TJgNe2FaEGcY3H9R3K+d/kSk
+	 i5GbpzjLt0Me2HD69Wbc5uGIc3TwgDS6JZFlUf4XXoZCI/2uPJn9w8cEPAn3NjkatI
+	 mrNqigkcd6DbPU1UEsK3MA+M2bqLjMfjb8ArXgRSIyAq3CjGnxkE8s7LGICh/mIf7j
+	 5pUu4Qe144CAGGymifmDXQ3yvwNpleByOIrvrEZ2XoQVUNyLe8+LbR96tJeBNXKw/y
+	 Se8H2lBXfymbQ==
+Date: Fri, 12 Sep 2025 11:31:43 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+To: Janne Grunau <j@jannau.net>
+Cc: Sven Peter <sven@kernel.org>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, 
+	Neal Gompa <neal@gompa.dev>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Hector Martin <marcan@marcan.st>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, 
+	Robin Murphy <robin.murphy@arm.com>, Linus Walleij <linus.walleij@linaro.org>, 
+	Mark Kettenis <kettenis@openbsd.org>, Andi Shyti <andi.shyti@kernel.org>, 
+	Jassi Brar <jassisinghbrar@gmail.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Sasha Finkelstein <fnkl.kernel@gmail.com>, Marcel Holtmann <marcel@holtmann.org>, 
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, Johannes Berg <johannes@sipsolutions.net>, 
+	van Spriel <arend@broadcom.com>, Lee Jones <lee@kernel.org>, Stephen Boyd <sboyd@kernel.org>, 
+	Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
+	Michael Turquette <mturquette@baylibre.com>, Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>, 
+	Vinod Koul <vkoul@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+	Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>, 
+	Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>, 
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, asahi@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, iommu@lists.linux.dev, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-bluetooth@vger.kernel.org, 
+	linux-wireless@vger.kernel.org, linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org, 
+	linux-clk@vger.kernel.org, dmaengine@vger.kernel.org, linux-sound@vger.kernel.org, 
+	linux-spi@vger.kernel.org, linux-nvme@lists.infradead.org
+Subject: Re: [PATCH 20/37] dt-bindings: pwm: apple,s5l-fpwm: Add t6020-fpwm
+ compatible
+Message-ID: <ahxdf3l6zvmjp2nlgklg3go7biaimuz7qh5upnhohrrbrg62e6@gmi3pmbccwwe>
+References: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net>
+ <20250828-dt-apple-t6020-v1-20-507ba4c4b98e@jannau.net>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250912091952.1169369-1-a0282524688@gmail.com>
-In-Reply-To: <20250912091952.1169369-1-a0282524688@gmail.com>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Fri, 12 Sep 2025 17:26:42 +0800
-X-Gm-Features: AS18NWD_I7dWfOitUs6oodsBaA3yGv6PNX81cd4GGbkJxsl0noZ-MKhhm4cuxwk
-Message-ID: <CAOoeyxWwJGCQLDPZLLYMODnKGT22aMEgpCrTireLZkOukAg5vQ@mail.gmail.com>
-Subject: Re: [PATCH RESEND v14 0/7] Add Nuvoton NCT6694 MFD drivers
-To: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
-	linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com
-Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="hd4ybrkt7tr5jevb"
+Content-Disposition: inline
+In-Reply-To: <20250828-dt-apple-t6020-v1-20-507ba4c4b98e@jannau.net>
+
+
+--hd4ybrkt7tr5jevb
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 20/37] dt-bindings: pwm: apple,s5l-fpwm: Add t6020-fpwm
+ compatible
+MIME-Version: 1.0
 
-<a0282524688@gmail.com> =E6=96=BC 2025=E5=B9=B49=E6=9C=8812=E6=97=A5 =E9=80=
-=B1=E4=BA=94 =E4=B8=8B=E5=8D=885:20=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> From: Ming Yu <a0282524688@gmail.com>
->
-> This patch series introduces support for Nuvoton NCT6694, a peripheral
-> expander based on USB interface. It models the chip as an MFD driver
-> (1/7), GPIO driver(2/7), I2C Adapter driver(3/7), CANfd driver(4/7),
-> WDT driver(5/7), HWMON driver(6/7), and RTC driver(7/7).
->
-> The MFD driver implements USB device functionality to issue
-> custom-define USB bulk pipe packets for NCT6694. Each child device can
-> use the USB functions nct6694_read_msg() and nct6694_write_msg() to issue
-> a command. They can also request interrupt that will be called when the
-> USB device receives its interrupt pipe.
->
-> The following introduces the custom-define USB transactions:
->         nct6694_read_msg - Send bulk-out pipe to write request packet
->                            Receive bulk-in pipe to read response packet
->                            Receive bulk-in pipe to read data packet
->
->         nct6694_write_msg - Send bulk-out pipe to write request packet
->                             Send bulk-out pipe to write data packet
->                             Receive bulk-in pipe to read response packet
->                             Receive bulk-in pipe to read data packet
->
-> Changes since version 13:
-> - Update to guard(spinlock_irqsave)() in nct6694.c
-> - Add struct i2c_adapter_quirks in i2c-nct6694.c
-> - Rebased on top of v6.17-rc3 as requested
+Hello,
 
-typo: v6.17-rc1
+On Thu, Aug 28, 2025 at 04:01:39PM +0200, Janne Grunau wrote:
+> The PWM controller on Apple's M2 Pro/Max SoCs behaves in the same way as
+> on previous M1 and M2 SoCs. Add its per SoC compatible.
+>=20
+> At the same time fix the order of existing entries. The sort order logic
+> is having SoC numeric code families in release order, and SoCs within
+> each family in release order:
+>=20
+> - t8xxx (Apple HxxP/G series, "phone"/"tablet" chips)
+>   - t8103 (Apple H13G/M1)
+>   - t8112 (Apple H14G/M2)
+> - t6xxx (Apple HxxJ series, "desktop" chips)
+>   - t6000/t6001/t6002 (Apple H13J(S/C/D) / M1 Pro/Max/Ultra)
+>   - t6020/t6021/t6022 (Apple H14J(S/C/D) / M2 Pro/Max/Ultra)
+>=20
+> Note that SoCs of the t600[0-2] / t602[0-2] family share the
+> t6000 / t6020 compatible where the hardware is 100% compatible, which is
+> usually the case in this highly related set of SoCs.
+>=20
+> Signed-off-by: Janne Grunau <j@jannau.net>
+> ---
+>  Documentation/devicetree/bindings/pwm/apple,s5l-fpwm.yaml | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/pwm/apple,s5l-fpwm.yaml b/=
+Documentation/devicetree/bindings/pwm/apple,s5l-fpwm.yaml
+> index 142157bff0cd851c85fbf0132d734d470c5a0761..04519b0c581d0e9fb1ae6aa21=
+9a4e850027de6a2 100644
+> --- a/Documentation/devicetree/bindings/pwm/apple,s5l-fpwm.yaml
+> +++ b/Documentation/devicetree/bindings/pwm/apple,s5l-fpwm.yaml
+> @@ -17,8 +17,9 @@ properties:
+>      items:
+>        - enum:
+>            - apple,t8103-fpwm
+> -          - apple,t6000-fpwm
+>            - apple,t8112-fpwm
+> +          - apple,t6000-fpwm
+> +          - apple,t6020-fpwm
+>        - const: apple,s5l-fpwm
+> =20
+>    reg:
 
->
-> Changes since version 12:
-> - Implement IDA in MFD driver to handle per-device IDs
-> - Use spinlock to replace irq mutex lock
-> - Use same email address in the signature
->
-> Changes since version 11:
-> - Use platform_device's id to replace IDA
-> - Modify the irq_domain_add_simple() to irq_domain_create_simple() in
->   nct6694.c
-> - Update struct data_bittiming_params related part in nct6694_canfd.c
-> - Fix the typo in the header in nct6694-hwmon.c
->
-> Changes since version 10:
-> - Add change log for each patch
-> - Fix mfd_cell to MFD_CELL_NAME() in nct6694.c
-> - Implement IDA to allocate id in gpio-nct6694.c, i2c-nct6694.c,
->   nct6694_canfd.c and nct6694_wdt.c
-> - Add header <linux/bitfield.h> in nct6694_canfd.c
-> - Add support to config tdc in nct6694_canfd.c
-> - Add module parameters to configure WDT's timeout and pretimeout value
->   in nct6694_wdt.c
->
-> Changes since version 9:
-> - Add devm_add_action_or_reset() to dispose irq mapping
-> - Add KernelDoc to exported functions in nct6694.c
->
-> Changes since version 8:
-> - Modify the signed-off-by with my work address
-> - Rename all MFD cell names to "nct6694-xxx"
-> - Add irq_dispose_mapping() in the error handling path and in the remove
->   function
-> - Fix some comments in nct6694.c and in nct6694.h
-> - Add module parameters to configure I2C's baudrate in i2c-nct6694.c
-> - Rename all function names nct6694_can_xxx to nct6694_canfd_xxx in
->   nct6694_canfd.c
-> - Fix nct6694_canfd_handle_state_change() in nct6694_canfd.c
-> - Fix nct6694_canfd_start() to configure NBTP and DBTP in nct6694_canfd.c
-> - Add can_set_static_ctrlmode() in nct6694_canfd.c
->
-> Changes since version 7:
-> - Add error handling for devm_mutex_init()
-> - Modify the name of the child devices CAN1 and CAN2 to CAN0 and CAN1.
-> - Fix multiline comments to net-dev style in nct6694_canfd.c
->
-> Changes since version 6:
-> - Fix nct6694_can_handle_state_change() in nct6694_canfd.c
-> - Fix warnings in nct6694_canfd.c
-> - Move the nct6694_can_priv's bec to the end in nct6694_canfd.c
-> - Fix warning in nct6694_wdt.c
-> - Fix temp_hyst's data type to signed variable in nct6694-hwmon.c
->
-> Changes since version 5:
-> - Modify the module name and the driver name consistently
-> - Fix mfd_cell to MFD_CELL_NAME() and MFD_CELL_BASIC()
-> - Drop unnecessary macros in nct6694.c
-> - Update private data and drop mutex in nct6694_canfd.c
-> - Fix nct6694_can_handle_state_change() in nct6694_canfd.c
->
-> Changes since version 4:
-> - Modify arguments in read/write function to a pointer to cmd_header
-> - Modify all callers that call the read/write function
-> - Move the nct6694_canfd.c to drivers/net/can/usb/
-> - Fix the missing rx offload function in nct6694_canfd.c
-> - Fix warngings in nct6694-hwmon.c
->
-> Changes since version 3:
-> - Modify array buffer to structure for each drivers
-> - Fix defines and comments for each drivers
-> - Add header <linux/bits.h> and use BIT macro in nct6694.c and
->   gpio-nct6694.c
-> - Modify mutex_init() to devm_mutex_init()
-> - Add rx-offload helper in nct6694_canfd.c
-> - Drop watchdog_init_timeout() in nct6694_wdt.c
-> - Modify the division method to DIV_ROUND_CLOSEST() in nct6694-hwmon.c
-> - Drop private mutex and use rtc core lock in rtc-nct6694.c
-> - Modify device_set_wakeup_capable() to device_init_wakeup() in
->   rtc-nct6694.c
->
-> Changes since version 2:
-> - Add MODULE_ALIAS() for each child driver
-> - Modify gpio line names be a local variable in gpio-nct6694.c
-> - Drop unnecessary platform_get_drvdata() in gpio-nct6694.c
-> - Rename each command in nct6694_canfd.c
-> - Modify each function name consistently in nct6694_canfd.c
-> - Modify the pretimeout validation procedure in nct6694_wdt.c
-> - Fix warnings in nct6694-hwmon.c
->
-> Changes since version 1:
-> - Implement IRQ domain to handle IRQ demux in nct6694.c
-> - Modify USB_DEVICE to USB_DEVICE_AND_INTERFACE_INFO API in nct6694.c
-> - Add each driver's command structure
-> - Fix USB functions in nct6694.c
-> - Fix platform driver registration in each child driver
-> - Sort each driver's header files alphabetically
-> - Drop unnecessary header in gpio-nct6694.c
-> - Add gpio line names in gpio-nct6694.c
-> - Fix errors and warnings in nct6694_canfd.c
-> - Fix TX-flow control in nct6694_canfd.c
-> - Fix warnings in nct6694_wdt.c
-> - Drop unnecessary logs in nct6694_wdt.c
-> - Modify start() function to setup device in nct6694_wdt.c
-> - Add voltage sensors functionality in nct6694-hwmon.c
-> - Add temperature sensors functionality in nct6694-hwmon.c
-> - Fix overwrite error return values in nct6694-hwmon.c
-> - Add write value limitation for each write() function in nct6694-hwmon.c
-> - Drop unnecessary logs in rtc-nct6694.c
-> - Fix overwrite error return values in rtc-nct6694.c
-> - Modify to use dev_err_probe API in rtc-nct6694.c
->
->
-> Ming Yu (7):
->   mfd: Add core driver for Nuvoton NCT6694
->   gpio: Add Nuvoton NCT6694 GPIO support
->   i2c: Add Nuvoton NCT6694 I2C support
->   can: Add Nuvoton NCT6694 CANFD support
->   watchdog: Add Nuvoton NCT6694 WDT support
->   hwmon: Add Nuvoton NCT6694 HWMON support
->   rtc: Add Nuvoton NCT6694 RTC support
->
->  MAINTAINERS                         |  12 +
->  drivers/gpio/Kconfig                |  12 +
->  drivers/gpio/Makefile               |   1 +
->  drivers/gpio/gpio-nct6694.c         | 499 +++++++++++++++
->  drivers/hwmon/Kconfig               |  10 +
->  drivers/hwmon/Makefile              |   1 +
->  drivers/hwmon/nct6694-hwmon.c       | 949 ++++++++++++++++++++++++++++
->  drivers/i2c/busses/Kconfig          |  10 +
->  drivers/i2c/busses/Makefile         |   1 +
->  drivers/i2c/busses/i2c-nct6694.c    | 196 ++++++
->  drivers/mfd/Kconfig                 |  15 +
->  drivers/mfd/Makefile                |   2 +
->  drivers/mfd/nct6694.c               | 388 ++++++++++++
->  drivers/net/can/usb/Kconfig         |  11 +
->  drivers/net/can/usb/Makefile        |   1 +
->  drivers/net/can/usb/nct6694_canfd.c | 832 ++++++++++++++++++++++++
->  drivers/rtc/Kconfig                 |  10 +
->  drivers/rtc/Makefile                |   1 +
->  drivers/rtc/rtc-nct6694.c           | 297 +++++++++
->  drivers/watchdog/Kconfig            |  11 +
->  drivers/watchdog/Makefile           |   1 +
->  drivers/watchdog/nct6694_wdt.c      | 307 +++++++++
->  include/linux/mfd/nct6694.h         | 102 +++
->  23 files changed, 3669 insertions(+)
->  create mode 100644 drivers/gpio/gpio-nct6694.c
->  create mode 100644 drivers/hwmon/nct6694-hwmon.c
->  create mode 100644 drivers/i2c/busses/i2c-nct6694.c
->  create mode 100644 drivers/mfd/nct6694.c
->  create mode 100644 drivers/net/can/usb/nct6694_canfd.c
->  create mode 100644 drivers/rtc/rtc-nct6694.c
->  create mode 100644 drivers/watchdog/nct6694_wdt.c
->  create mode 100644 include/linux/mfd/nct6694.h
->
-> base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
-> --
-> 2.34.1
->
+The patch is fine for me. There was no merge plan sketched out in the
+cover letter and I don't spot any dependencies this patch is a part of.
+So I applied this patch to
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/ukleinek/linux.git pwm/for=
+-next
+
+as 6.18-rc1 material.
+
+Best regards
+Uwe
+
+--hd4ybrkt7tr5jevb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmjD6HwACgkQj4D7WH0S
+/k5dDwf/ZhdoZ04wcFscsQjfQPV9sY5Kzs8OxPgL+m4AV85SDwzSuZybeACCfsL2
+U+r2uMlK/Q21DJwXbTJjmnyAe19XWYtcvtUfKd50OAsoPnpijd6XN/VzkpPwSI1v
+MM1rZmYLCNhucLOPo87uqSwtHmOGOiHGefUgolr3pa9kl2VjNfe2U9byQTQegxaK
+CxeDN6bZEPo8n7PoU1mmnwFDouEZD1xzQt3FdvPpL2XORk2Ye5r89n1q02uTLbkj
+EsQ7IOSbpp2UDyIkxF0ESV6nWtpLn7AIB0rNABUH7JZA9FQ29vzAc9a3FRiLJsUa
+2cvxXsdWOdhpncFiR4L1mRq39BoLAQ==
+=7x/6
+-----END PGP SIGNATURE-----
+
+--hd4ybrkt7tr5jevb--
 
