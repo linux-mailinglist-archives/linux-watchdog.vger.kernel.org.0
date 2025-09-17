@@ -1,141 +1,95 @@
-Return-Path: <linux-watchdog+bounces-4253-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4256-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99115B59AA7
-	for <lists+linux-watchdog@lfdr.de>; Tue, 16 Sep 2025 16:45:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53C89B8166A
+	for <lists+linux-watchdog@lfdr.de>; Wed, 17 Sep 2025 20:57:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 943CC166CF8
-	for <lists+linux-watchdog@lfdr.de>; Tue, 16 Sep 2025 14:39:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 08E1A7B036C
+	for <lists+linux-watchdog@lfdr.de>; Wed, 17 Sep 2025 18:55:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FE4B334723;
-	Tue, 16 Sep 2025 14:39:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7DD93002C7;
+	Wed, 17 Sep 2025 18:57:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mL2ctDOg"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="mJ0+g/gb"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E31CC30C357;
-	Tue, 16 Sep 2025 14:39:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AFF33002D9
+	for <linux-watchdog@vger.kernel.org>; Wed, 17 Sep 2025 18:57:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758033592; cv=none; b=jijTMJvdKffBUY2YhjiT1AeO7sTXZ9h3E/iFzbcPK4Y2OFHm+TLE10SYxJJRU+K0qiLpS7ziQobpxoa2YRrAFKyVDDVThYNI5F8s/GQjROZOnMaY98PYUo9IiVd6boGbiPVcS1ocO9h2yewm6CdvExEdw8X6YA1ZcK6KcjcfE5o=
+	t=1758135426; cv=none; b=AlFccJgx/FgV0cyJ0Xq47CNE7JaHrHvj1XXCin6p2qe99pJNOFXTQraJQWgaSd6GLu3/fUy3L7h6IaikjWY02sepaDG7Zuvs7mG8iSI/pB9yuUMcXGwIzewptRInKEs6BTr3MO/PgIwgfUlEh+aHUTP0NO/XBeWEyq9U2DN0NM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758033592; c=relaxed/simple;
-	bh=EDfRX0RIkPJUTOzyTgi+O83Ih7FSf4+t7TnGTIzv5YY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C/33kfJolMkdU6A3P0qQmtB0tV0ZbXMb9PslMtStFtskhhPgPXcqueepuc0PneGweOkVL6TLN9o9bhj2LI7L9Imvf8/s/PDoWEd0WCtNtSTEkxmFIhPMlBf0rCLYQeE0VHuPEElLNlQrqFHzZvf63rOjXqASiHDK+1b8YSvg+uk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mL2ctDOg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4495C4CEEB;
-	Tue, 16 Sep 2025 14:39:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758033591;
-	bh=EDfRX0RIkPJUTOzyTgi+O83Ih7FSf4+t7TnGTIzv5YY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mL2ctDOgNiUrtib5Onat+P6I+mOGVVODkCpHQQYsGq98p2Yv+8VmQRrnw7PKghuWy
-	 N938OCWn3kYfO2X0JmKhWohOjBvAoYP5k2oH4Q/5Xwsl0TWQIsLs4TnO7/A8ocIHLn
-	 r444P8KtJASp2xl4+ZhYXRlqNT+EeYV7MC4wQc+m9WnLMCN+skLBEwl3vzB7ykxERE
-	 oCYgzPNR7BQnJfyA2/UMW0juU4iKyKH1eZD/sIwahhSeIkhCeZH8ycgyM4NReAvoUH
-	 CUQya1qaY/ZXD1n5oXZGHdw38FWd21saHMt+hG/NKpKQMjO5sCz9qfXxLPuvhspFnq
-	 TfeRsjdJS5F7Q==
-Date: Tue, 16 Sep 2025 15:39:44 +0100
-From: Lee Jones <lee@kernel.org>
-To: a0282524688@gmail.com
-Cc: tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl,
-	andi.shyti@kernel.org, mkl@pengutronix.de,
-	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
-	jdelvare@suse.com, alexandre.belloni@bootlin.com,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [GIT PULL] Immutable branch between MFD, GPIO, HWMON, I2C, CAN, RTC
- and Watchdog due for the v6.18 merge window
-Message-ID: <20250916143944.GG3585920@google.com>
-References: <20250912091952.1169369-1-a0282524688@gmail.com>
- <20250916143847.GF3585920@google.com>
+	s=arc-20240116; t=1758135426; c=relaxed/simple;
+	bh=rGHIg49NqT/vw8VGSZsrsfHcMRmvB0DOxfh5E1K8G3E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fipZt6//2XFIy3qHUR2/HqQpAbMNNwspYoxFSUPvwKWqxHBa2fu/Xky5MSMj1tNJS4AarfI9hq1u6VX4193rMFRJ/tCkaDv+IYeBmgJJbbFuyR4+zjPx8Cirohllrwo8iA3fDuiKwdzC8l0IxBThXbxObZ+AS3x2eR/4PNM7ALQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=mJ0+g/gb; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=from:to:cc:subject:date:message-id
+	:mime-version:content-transfer-encoding; s=k1; bh=YW/nOjUofYiXh8
+	O/soaQF4m/L42j3TGPSSIIRZmVY/A=; b=mJ0+g/gbf/0ZIq7utou8o46LYxvPsW
+	3kR6OAZunOOke44zZOi7J9vB6BgnqCqMkaolWhLUTVHEO8HmVBQRqRrrTalnskIA
+	tpra8bYaopFrFJZbMOeGlG78GYyHB7+i2mx445hib9NsvCJf1MjmEe+UOP0LqQ5r
+	1Z/kOrm/iP3rOSXT1i+1+bNWZ1Hm4OhlbX5RSR9ArvurKQIKuhyNPfKutZJnbpxR
+	v65iGkkmGGnLtnoq43KWp3MmqlpyR827SIL2gdiPfw2PyrHbWdbiH0sYJPqHbg0P
+	YTyk36HcmmFf2BiUleaTnqEvd9eyI1fueqnu5PueP7KQdr6ZWPUStqSg==
+Received: (qmail 3238961 invoked from network); 17 Sep 2025 20:56:59 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 17 Sep 2025 20:56:59 +0200
+X-UD-Smtp-Session: l3s3148p1@qDAazQM/ZMUujnvK
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: linux-renesas-soc@vger.kernel.org
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Conor Dooley <conor+dt@kernel.org>,
+	devicetree@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	linux-watchdog@vger.kernel.org,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Rob Herring <robh@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>
+Subject: [PATCH 0/2] watchdog: add Renesas Window Watchdog support
+Date: Wed, 17 Sep 2025 20:56:47 +0200
+Message-ID: <20250917185651.12428-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250916143847.GF3585920@google.com>
 
-Sorry, fingers faster than brain!  With the corrected subject this time.
+This Window Watchdog is a little peculiar because it can only be setup
+once but we cannot find out if this write already happened. So,
+configuration is delegated to the firmware/bootloader and the driver
+will adapt to whatever is configured. The driver handles all bits
+described in the datasheets. This is really all there is.
 
-> Enjoy!
-> 
-> The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
-> 
->   Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-gpio-hwmon-i2c-can-rtc-watchdog-v6.18
-> 
-> for you to fetch changes up to d463bb140583609f78f61d48c3dfb6f46c5cb062:
-> 
->   rtc: Add Nuvoton NCT6694 RTC support (2025-09-16 14:41:58 +0100)
-> 
-> ----------------------------------------------------------------
-> Immutable branch between MFD, GPIO, HWMON, I2C, CAN, RTC and Watchdog due for the v6.18 merge window
-> 
-> ----------------------------------------------------------------
-> Ming Yu (7):
->       mfd: Add core driver for Nuvoton NCT6694
->       gpio: Add Nuvoton NCT6694 GPIO support
->       i2c: Add Nuvoton NCT6694 I2C support
->       can: Add Nuvoton NCT6694 CANFD support
->       watchdog: Add Nuvoton NCT6694 WDT support
->       hwmon: Add Nuvoton NCT6694 HWMON support
->       rtc: Add Nuvoton NCT6694 RTC support
-> 
->  MAINTAINERS                         |  12 +
->  drivers/gpio/Kconfig                |  12 +
->  drivers/gpio/Makefile               |   1 +
->  drivers/gpio/gpio-nct6694.c         | 499 +++++++++++++++++++
->  drivers/hwmon/Kconfig               |  10 +
->  drivers/hwmon/Makefile              |   1 +
->  drivers/hwmon/nct6694-hwmon.c       | 949 ++++++++++++++++++++++++++++++++++++
->  drivers/i2c/busses/Kconfig          |  10 +
->  drivers/i2c/busses/Makefile         |   1 +
->  drivers/i2c/busses/i2c-nct6694.c    | 196 ++++++++
->  drivers/mfd/Kconfig                 |  15 +
->  drivers/mfd/Makefile                |   2 +
->  drivers/mfd/nct6694.c               | 388 +++++++++++++++
->  drivers/net/can/usb/Kconfig         |  11 +
->  drivers/net/can/usb/Makefile        |   1 +
->  drivers/net/can/usb/nct6694_canfd.c | 832 +++++++++++++++++++++++++++++++
->  drivers/rtc/Kconfig                 |  10 +
->  drivers/rtc/Makefile                |   1 +
->  drivers/rtc/rtc-nct6694.c           | 297 +++++++++++
->  drivers/watchdog/Kconfig            |  11 +
->  drivers/watchdog/Makefile           |   1 +
->  drivers/watchdog/nct6694_wdt.c      | 307 ++++++++++++
->  include/linux/mfd/nct6694.h         | 102 ++++
->  23 files changed, 3669 insertions(+)
->  create mode 100644 drivers/gpio/gpio-nct6694.c
->  create mode 100644 drivers/hwmon/nct6694-hwmon.c
->  create mode 100644 drivers/i2c/busses/i2c-nct6694.c
->  create mode 100644 drivers/mfd/nct6694.c
->  create mode 100644 drivers/net/can/usb/nct6694_canfd.c
->  create mode 100644 drivers/rtc/rtc-nct6694.c
->  create mode 100644 drivers/watchdog/nct6694_wdt.c
->  create mode 100644 include/linux/mfd/nct6694.h
-> 
-> -- 
-> Lee Jones [李琼斯]
+Tested on a SparrowHawk board (Renesas R-Car V4H).
+
+Looking forward to comments!
+
+
+Wolfram Sang (2):
+  dt-bindings: watchdog: Add Renesas WWDT
+  watchdog: renesas_wwdt: add driver
+
+ .../bindings/watchdog/renesas,wwdt.yaml       |  78 +++++++++
+ drivers/watchdog/Kconfig                      |   8 +
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/renesas_wwdt.c               | 156 ++++++++++++++++++
+ 4 files changed, 243 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/renesas,wwdt.yaml
+ create mode 100644 drivers/watchdog/renesas_wwdt.c
 
 -- 
-Lee Jones [李琼斯]
+2.47.2
+
 
