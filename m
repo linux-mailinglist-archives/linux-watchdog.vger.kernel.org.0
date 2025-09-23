@@ -1,80 +1,118 @@
-Return-Path: <linux-watchdog+bounces-4266-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4267-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B023B8DF0A
-	for <lists+linux-watchdog@lfdr.de>; Sun, 21 Sep 2025 18:12:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6C8FB97465
+	for <lists+linux-watchdog@lfdr.de>; Tue, 23 Sep 2025 21:04:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 818BF189D4BF
-	for <lists+linux-watchdog@lfdr.de>; Sun, 21 Sep 2025 16:12:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 057224C6C82
+	for <lists+linux-watchdog@lfdr.de>; Tue, 23 Sep 2025 19:04:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E800275B1A;
-	Sun, 21 Sep 2025 16:08:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3C272DECBA;
+	Tue, 23 Sep 2025 19:04:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k9VA4+Ov"
+	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="eVY6MhV1"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48053275B15;
-	Sun, 21 Sep 2025 16:08:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2606F30274D;
+	Tue, 23 Sep 2025 19:04:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.143.35
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758470923; cv=none; b=XPZUOraAUtJWu+rAcss5RuL8XTCy3wV9Q8EO9bZtfDcZl7Xb+eG9XwyNJaHNlh5D+jvlmvTQWtYWu5NpiuPH0wOS7xyEtWwrwk0w6KlnFVuracks1Ac/qy5kGLzNxCVwv6XYRNY9TrOrEwVhyXDwHO5lR05ygSz2H4To6W6WXik=
+	t=1758654247; cv=none; b=L6LCkZLywb/G0BJn0BtXoUAiYep1B7F+KDsVdKz4PKQ2N45D7yknZMx8tWOnCAdX+xK2aA+6qbi0+aTGZl4ZuQfMyx1hVyBxdaARjFUSXReRFe7ohQXnM7fASlPmJcPjeR9RsRuJGvau+mAvDSVURnR6rNGLiAzbvkhgXV2u3F8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758470923; c=relaxed/simple;
-	bh=WAbk4PWWXEXWUyECLBWj+jZRHQjNujjT1F6/7IR7Wkc=;
-	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
-	 To:Date:Message-ID; b=Bw914eV9xNhY0DbIO7dYgnjKMbsASZAsHUNYOahoQlICDghZNAFOPK1SI7NQZtA5qFhtgX0MY3rqlYAFjoPNl6De8l+N1gsBpeMVRc3siWjKtD6Inlm9PDF5M1ih4vaZQrhOLQCY23U8+3eHN/zwKqTUE3oXvCkFzsQQ9j0tGy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k9VA4+Ov; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F8CDC4CEE7;
-	Sun, 21 Sep 2025 16:08:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758470922;
-	bh=WAbk4PWWXEXWUyECLBWj+jZRHQjNujjT1F6/7IR7Wkc=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=k9VA4+OvtF9WMxvlQ8gfo6xoYVgPhME93HuDeyjVf3VJQKg5L51KazbJGvnQm02j3
-	 GEWkqrPtWUqFxr15WM4BpVIZ9dGHMDnsux1aleg52r5KyYv+LHxTGl3b169Cwpso2A
-	 yUbcEIYwho2ZjYgeMp0c05LtDAyQHhYgWuVOQykRCV8P/ZAO0A2xrsHUFcZ1ZYVztd
-	 hVuGVTIdguTJgiGej5woK5cjYGCQTRMU+ddYcO0s3teIMgUWENJJnMWoMVmgI+Xo//
-	 WXIz1Ll5H7P+4YaCUMRhwXoBllRaGg+2qQdNCRdAyyrY7rJGZ0a5/DxMDhjkybdc75
-	 H1Hi9m6Bn3eAQ==
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1758654247; c=relaxed/simple;
+	bh=iMGcfHiJFEzcrBGSC0A065gE5cSTWvePIhBxJ8aX0XI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UT721mZ2pHBy0YKCzOaUwTR9HImaZ+oCBRIDK1H1UyYQzqdJXL+FKI7Lh5JYlq0moHHvlcC2KEUT9Hb2DUF+eKG2Q0ZIvPnWHjF7YGj7sI8WIrNayAe8tgSOmh4rne27iR7MuMGYGPGaZxtUF8Cj4/0XmJhYjNRWkMvO8klaBxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=eVY6MhV1; arc=none smtp.client-ip=148.163.143.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpe.com
+Received: from pps.filterd (m0134425.ppops.net [127.0.0.1])
+	by mx0b-002e3701.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58NG3NZT011844;
+	Tue, 23 Sep 2025 19:04:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pps0720; bh=4BwTFdkbHJSk0Q56PrE2/lJUlyGwEUPgxIQ/B
+	rK7PV8=; b=eVY6MhV1+vmuFNr/GXU61mczd+I4ufr6/2+nSHfWIa6dsK8iWd1zx
+	s2+IKHZP5cfqwoQ3WAr3fQ7EybskBdXnIgkhouOkt1wcwNnmy+t112yLZJiTLzRW
+	6lTUxrFGUz54M79Ry6hG0KrjjAmP70f68RBfGwRYSQo8nXyc40/xlutQy7CEYMEc
+	mwtIT5IZGBnEYGtCYR/MTsu8YHElQ2Utvo4UMypzDAhEI9Lahm4LYI1DfHWNujhk
+	7htUETE8fXKdT3mfChklPKRpzWvuzioToS5ht+aswC4cN2D4+70sw/g59+Svx8Tv
+	0TiNxUBuxSMaihYujHbOT/URtLlO6Wrvg==
+Received: from p1lg14881.it.hpe.com (p1lg14881.it.hpe.com [16.230.97.202])
+	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 49bqvewx74-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 23 Sep 2025 19:04:03 +0000 (GMT)
+Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by p1lg14881.it.hpe.com (Postfix) with ESMTPS id 10BB58059C2;
+	Tue, 23 Sep 2025 19:03:59 +0000 (UTC)
+Received: from anatevka.americas.hpqcorp.net (unknown [16.231.227.36])
+	by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id EB502810AD6;
+	Tue, 23 Sep 2025 19:03:58 +0000 (UTC)
+From: Jerry Hoemann <jerry.hoemann@hpe.com>
+To: linux-watchdog@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, craig.lamparter@hpe.com,
+        Jerry Hoemann <jerry.hoemann@hpe.com>
+Subject: [PATCH 1/1] watchdog/hpwdt New maintianer
+Date: Tue, 23 Sep 2025 13:03:52 -0600
+Message-ID: <20250923190352.2517220-1-jerry.hoemann@hpe.com>
+X-Mailer: git-send-email 2.50.0
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20250828-dt-apple-t6020-v1-26-507ba4c4b98e@jannau.net>
-References: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net> <20250828-dt-apple-t6020-v1-26-507ba4c4b98e@jannau.net>
-Subject: Re: [PATCH 26/37] dt-bindings: clock: apple,nco: Add t6020-nco compatible
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, iommu@lists.linux.dev, linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-bluetooth@vger.kernel.org, linux-wireless@vger.kernel.org, linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org, linux-clk@vger.kernel.org, dmaengine@vger.kernel.org, linux-sound@vger.kernel.org, linux-spi@vger.kernel.org, linux-nvme@lists.infradead.org, Janne Grunau <j@jannau.net>
-To: Alyssa Rosenzweig <alyssa@rosenzweig.io>, Andi Shyti <andi.shyti@kernel.org>, Christoph Hellwig <hch@lst.de>, Conor Dooley <conor+dt@kernel.org>, David Airlie <airlied@gmail.com>, Guenter Roeck <linux@roeck-us.net>, Hector Martin <marcan@marcan.st>, Janne Grunau <j@jannau.net>, Jaroslav Kysela <perex@perex.cz>, Jassi Brar <jassisinghbrar@gmail.com>, Jens Axboe <axboe@kernel.dk>, Joerg Roedel <joro@8bytes.org>, Johannes Berg <johannes@sipsolutions.net>, Keith Busch <kbusch@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Linus Walleij <linus.walleij@linaro.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Marc Zyngier <maz@kernel.org>, Marcel Holtmann <marcel@holtmann.org>, Mark Brown <broonie@kernel.org>, Mark Kettenis <kettenis@openbsd.org>, Martin =?utf-8?q?Povi=C5=A1er?= <povik+lin@cutebit.org>, Maxime Ripard <mripard@kernel.org>, Michael Turquette <
- mturquette@baylibre.com>, Neal Gompa <neal@gompa.dev>, Rafael J. Wysocki <rafael@kernel.org>, Rob Herring <robh@kernel.org>, Robin Murphy <robin.murphy@arm.com>, Sagi Grimberg <sagi@grimberg.me>, Sasha Finkelstein <fnkl.kernel@gmail.com>, Simona Vetter <simona@ffwll.ch>, Sven Peter <sven@kernel.org>, Takashi Iwai <tiwai@suse.com>, Thomas Gleixner <tglx@linutronix.de>, Thomas Zimmermann <tzimmermann@suse.de>, Ulf Hansson <ulf.hansson@linaro.org>, Uwe =?utf-8?q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, Vinod Koul <vkoul@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, Will Deacon <will@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>, van Spriel <arend@broadcom.com>
-Date: Sun, 21 Sep 2025 09:08:41 -0700
-Message-ID: <175847092150.4354.4054733553683969208@lazor>
-User-Agent: alot/0.11
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: fle3bPANs2Gop6V5MtsIEBqsL3Jm31YD
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTIzMDA3NSBTYWx0ZWRfX8yC5LwLcDGas
+ l/nS3beP56mr6aimqO/LE97vyzSU9Nrrimdq+986DFLPEl1dhj9nNxN1VGYrwzJLQSMvvh/Kz6k
+ hbpDyapstelT8VdksI8VctTbmQTi4kNjVhks4rlXaFF+bnvTGu/GQ6vN1ou4EWtLbXlgkSreZAM
+ NI+IlXW1HjtwTtsxjTZErrIIqIv+3ZzKC3+rPllTdlEfonIIMNPd7Jnffk5svJuYsK9ci11BZ6b
+ nmUQffk9nxVdw6feXumQtLfmQoSH9F67iM3ZAu6vt4nmA73QUhVs39oL3wnPHpkRmzO17R1/6y0
+ 4VK9fLhItw4w9KXgzlGP0UJlbNfIsSiOIk2rkMoD5aogJFx0oTX4D2y3nlYlBcqo0ldLJ60Cuuo
+ 8Gw6ytCT
+X-Authority-Analysis: v=2.4 cv=Mq5S63ae c=1 sm=1 tr=0 ts=68d2ef23 cx=c_pps
+ a=FAnPgvRYq/vnBSvlTDCQOQ==:117 a=FAnPgvRYq/vnBSvlTDCQOQ==:17
+ a=yJojWOMRYYMA:10 a=MvuuwTCpAAAA:8 a=x2aMLugKpHOe8UzfQVUA:9
+X-Proofpoint-ORIG-GUID: fle3bPANs2Gop6V5MtsIEBqsL3Jm31YD
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-23_05,2025-09-22_05,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1011 impostorscore=0 suspectscore=0 priorityscore=1501
+ malwarescore=0 bulkscore=0 phishscore=0 adultscore=0 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509230075
 
-Quoting Janne Grunau (2025-08-28 07:01:45)
-> After discussion with the devicetree maintainers we agreed to not extend
-> lists with the generic compatible "apple,nco" anymore [1]. Use
-> "apple,t8103-nco" as base compatible as it is the SoC the driver and
-> bindings were written for.
->=20
-> The block found on Apple's M2 Pro/Max/Ultra SoCs is compatible with
-> "apple,t8103-nco" so add its per-SoC compatible with the former as
-> fallback used by the existing driver.
->=20
-> [1]: https://lore.kernel.org/asahi/12ab93b7-1fc2-4ce0-926e-c8141cfe81bf@k=
-ernel.org/
->=20
-> Signed-off-by: Janne Grunau <j@jannau.net>
-> ---
+Update MAINTAINERS file with new contact.
 
-Acked-by: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Jerry Hoemann <jerry.hoemann@hpe.com>
+---
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 520fb4e379a3..11839d5f1c2e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10784,7 +10784,7 @@ S:	Supported
+ F:	drivers/misc/hpilo.[ch]
+ 
+ HEWLETT PACKARD ENTERPRISE ILO NMI WATCHDOG DRIVER
+-M:	Jerry Hoemann <jerry.hoemann@hpe.com>
++M:	Craig Lamparter <craig.lamparter@hpe.com>
+ S:	Supported
+ F:	Documentation/watchdog/hpwdt.rst
+ F:	drivers/watchdog/hpwdt.c
+-- 
+2.50.0
+
 
