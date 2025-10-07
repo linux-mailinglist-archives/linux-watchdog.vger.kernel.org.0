@@ -1,83 +1,83 @@
-Return-Path: <linux-watchdog+bounces-4341-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4342-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8745FBC18AE
-	for <lists+linux-watchdog@lfdr.de>; Tue, 07 Oct 2025 15:41:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 64F21BC1CA6
+	for <lists+linux-watchdog@lfdr.de>; Tue, 07 Oct 2025 16:46:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 521971884957
-	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Oct 2025 13:42:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 580ED188C90A
+	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Oct 2025 14:46:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB0891A2398;
-	Tue,  7 Oct 2025 13:41:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A76F72E267D;
+	Tue,  7 Oct 2025 14:46:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bCdjMsf4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cJRzAuWj"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E30E32D77E6
-	for <linux-watchdog@vger.kernel.org>; Tue,  7 Oct 2025 13:41:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03C192E22B4
+	for <linux-watchdog@vger.kernel.org>; Tue,  7 Oct 2025 14:46:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759844511; cv=none; b=ONaQ9zfa0z86l0nBN4j1tzxNsIKkq1NK4s5U9d8xlnIqktkPmGi7m21C6K2F751Pq2oqIxMYr3rr6cKXMAyPFCrpiRrOH2wGWZ0FgQpiPSWZdN6rW6CNu9p4YffACMze2ULkEoL4gOJ+25HhSaBlhhxgIeDU1qtOJjWMCmoVRl4=
+	t=1759848383; cv=none; b=SUQF3BIrpAAAPLzEp/d3pbosNlG/F6iZRN4uO9eklMY6IpQkbMMCTQqlD1VJ9wyiBOonaCO3/Yt2Qebs0zDeuAdrUYnoDICM4xQJLGAAOA+oqx5AbBnUIoQMlpS1xYbASI6g4Q4zK0n6eC/hHswyCvnKmySdjsTGpzp62HdDdsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759844511; c=relaxed/simple;
-	bh=nkeOwih2wxnDJdpLI6Dz/78w4EhHeT1xmOgbx9n/oo8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZMxzNoE8WagbtdiafrWwmVnbA9aXCIlnmAFcHzoUR1ul/E1BqTnSodDU5w1vRj5DbTurmQYHey1zZOpHGVZHq5eKdjq5Z7hxMpFEFCStjR4lRhhNDcqeIEY7nU1RfA/gfUyjPTgARqMwAzPFjzonlmIu/oUDYHQYUDjsFln3KAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bCdjMsf4; arc=none smtp.client-ip=209.85.210.180
+	s=arc-20240116; t=1759848383; c=relaxed/simple;
+	bh=hN2prB9LUKJ+cS3hM4Hb3e6Lx7vIkqmVkLn74pdKqUM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=eXb+UXy8wHU/xDO6tF01D+NHyy+1ZtleqPTa/smam2kheH0ZGEaKCU48hPRlWQsqKNt7jQW8QDcCA0l5FZX7WNhCJqePjthj9STNiIDtLf3K/N86V4maRvQsKodzXJ4V8H+oL/srq3YRfDJjUSqR1Rm87/DZnWGaN2UWZ7l4TY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cJRzAuWj; arc=none smtp.client-ip=209.85.215.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-781db5068b8so5223805b3a.0
-        for <linux-watchdog@vger.kernel.org>; Tue, 07 Oct 2025 06:41:49 -0700 (PDT)
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-b555ab7fabaso6284894a12.0
+        for <linux-watchdog@vger.kernel.org>; Tue, 07 Oct 2025 07:46:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759844509; x=1760449309; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1759848381; x=1760453181; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=rnHeuaAxXkLy83WQ0FvFcsx02OTH0C9r7FOqh/BgxF0=;
-        b=bCdjMsf42+G+Iq+ji/1GArMqIcWj6oKTYVK5orzQHtLUCGvOtSAqA0dWkLF7sUP8sw
-         eX0k534hyD/mknL1wCoSQY3fh4bnndYZAM70huiMM1u1ZuwTEPzsO8AwOOhByerVfwLz
-         dlJyJ1pGXnFUBytFoyPKhqjp/oo/uHDN9YRmMqoETyy5iTXJWmadXhS5fvupeixoG85U
-         3/Jld1ZzIZkZ1GxAJrVRH4QK/jJ4QUVEnV01dgQfKxpyZKOFt2Vxgf/UxqS2gYydZJk7
-         /d2HK7FfobHLCQQDDDYpA+5J6aOYqaocVz38qWolaC7tV0yUpSTBNl7brMas23/uwshM
-         K0xw==
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=x7a7yYa2BC6M94EJB0V15A3UsNpa5OhhLhNC4izb/8o=;
+        b=cJRzAuWjzHxR2z0x3ir7nncBb6UBJZ9LRoXArPtRHdJ7FHUBqsbaYfZr9ZFu2j3Y8D
+         0tlK4S/yfewOFv171y0r5dCI+Gm7RmbIhvjCQVFXKrNhom6MYkTwTl3Va3OW6+6wOteX
+         5wKn+nVDMc4T9YjNs1L3420oKLCNgDA35U+O6uXRA/Oa0fc4K0CTuSyBXGte9pvSfxkO
+         JM12VReOW48nSxnjmnkKs1JZp12idGY55H80XKgVN17v6UHOMR+lFx4+zygm946d7OUB
+         DJkG+/UC5O1l1uBiZNZucufyHarm9j5w0aDyy5s8XYMgeGDLqBYlq6pW/0CfaTpctzCF
+         LDjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759844509; x=1760449309;
+        d=1e100.net; s=20230601; t=1759848381; x=1760453181;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rnHeuaAxXkLy83WQ0FvFcsx02OTH0C9r7FOqh/BgxF0=;
-        b=ZB8ljKWVhKr6V0XmKnNJUhXkVwuaU+jRaz/YJ5nOdTGlauxmxVDwiKqvcZu4OekLFM
-         zizXbH0JwzKmtZBnw98VvOrtoNx3MZyyr7b1N2ZUAzpkZRTfSh8HKue6bRRaQ+lLnTXu
-         SHJujX74XrVb+aUx07vfX1o9mSZebskQYGTWFmkzrPjuunlKN04M2Bxig1cY8juWjSZi
-         pp2GuAzjXenk+GRXCvMMzzI36boV8AG6jOX5H+UNVM/jLyMkEvRwdwBQWv0zru4LNY7k
-         J8Dy0V8BDr87zH5non9PEgShGuH5M9a9K59+z3IOMVcMUk7sCaIaQENeKlUGyvzc8OnV
-         J9mw==
-X-Forwarded-Encrypted: i=1; AJvYcCUnggX3D+iQPe7CB7Bqtqj8hzmcBinNsQ9xmrNmnMpHbKkJvzblCe2X8m08DZrFykEFL6QOrvYv3HnmmqTpWg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzzrwvcccEm5yr6XOyhLOBxE3TQnO2Ii0Dx89Qkn/sBLWiMOtTm
-	fjrylu9FhzDx0n19yiLsUvreuZ8103GTN8lf9OO+nZufjzcoRXFMr1KD
-X-Gm-Gg: ASbGncvhHxW+gHJMto0vaI3vbmbuVR1whi23SItoULw7561TC6Cmv+L2u80bB5uW7DU
-	FTxIh8SyOEG/J8zw8ULZ58XLluGH50SeTA7pABD+f2ygkFAMx1YksuWoxiUvpjImFdthhXPic+3
-	nWiyrKVekKBhcBEDm4OLfBRdaljJSF6N+TBnWYf6FRVs89bkB9wRo4MGzroyGNRFs+yXG1Tc9Qn
-	Cq0g7Ewh2DhnrLMR/vRlaG6mXIpYrq2Q2sto2V7q1gFDigdHuXc2SzW9b1SofSYR1ZNKnA+yfMK
-	vXUih9HkrBEVpIrIhHbcBLW73SRPjUfsVte65vHnuwVv1KtLvSkbrAQGDj3a+9XHWM8JhaVnjXH
-	1zkRmEVRLEYLZwZT05y6Ydk1bRJRLm2tKgY4VH0ZUrd/0jjwuZJwxVjcw7h7zpRBwuhb+pkRG03
-	L6gPB5nNoIOsSD8P7WCE4=
-X-Google-Smtp-Source: AGHT+IFVJf+JxdKIUBEal2NKbaOSA5Jm7ewMijN3A3/MHNXXdwLzwZQSOta0mANRwv7CKcqgs4HloQ==
-X-Received: by 2002:a05:6a00:2ea9:b0:77f:6971:c590 with SMTP id d2e1a72fcca58-78c98dd92bcmr19639116b3a.22.1759844509033;
-        Tue, 07 Oct 2025 06:41:49 -0700 (PDT)
+        bh=x7a7yYa2BC6M94EJB0V15A3UsNpa5OhhLhNC4izb/8o=;
+        b=fcZVAYB+77P7Buabyn0tvYsYQhGnj6g//UkoDRaJ3BWBr0fgmiFj/G2E9ZWTnTthGq
+         AmowtmXihoT1o9SPAi/Hr5vcH7v8iFs9Z51rKObCqryK5tD8dl7wEbZfQnD7meWbuOSM
+         ncMHUyUdBD7Eif0lH5CwBBrBi1033R3QhSBUriWeeCLvQsnb1sMq5aoJNZPNfk8d33tw
+         FlC/hQ0sEjlXGyAo3u56dAJIK61IoGydH7o/4MQ2kFRefs0OBo5+Tbv1P0zyV2vxVJ/E
+         wgwTkivU3gZK10qkhCbtBOVMB4b7+4ZskmgndJWxQxBV6m6gfM8bSj5D+4lhFKfX83yu
+         hbQw==
+X-Forwarded-Encrypted: i=1; AJvYcCVdhEH0XSoUAvlSVcDuz/Zgj07cW2pTlGtQlI3Cj3rthMiiVY8FGBCVUGM3/58ZzrvQIhZzKPUBEVev56wCDA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzgpfaeAoLezz52MiZku3JFkz4Cf3Lq89OhAHG6gnTfPwOdwxVt
+	uIAhhwPZ4f116pmZSQajgbRdzBYztdSrOfYYsefTkqr4KapJgi824vfX
+X-Gm-Gg: ASbGncuqKscEvfxjXvHjzT0XQ8zjSCI8iOgZfIweje6tXqc3fXz0wvjZZzblLHz0skW
+	MnbmQ6FCLlOu+YXj2e6weHCAzg5AhITdgz2SuFB8eYEfwHFVjiA/stYPXl+cNWhc/4KnWrFV6+X
+	N75V5w/mDrZhNddf1c2lIh3nZXBUfDtlsxnOEFv0aVr5YfKn/46p74Irm5+Wpffl7f5VXqlSlV9
+	dMYzDq1fhvFKx8CizVIvxu5kWwsRdmz7n6IokZEVfs36ofcystP+0h/FCQ8LxJzMFyhoNcTnQVx
+	wxkdoAhwhz52LUH+POdH6TMvO5W7XU6ebQNkJWe5zwVjxhfPPjq/e0hJ4IHL6McMDmYITxZNFe2
+	Gi01J+pXSiSUX32F0IKZhilcD96fV2zShFBOZ98nB1H9+6Et/tRP1YSYEFQ2nAjXOUu9n0dBajH
+	thbjqRrCqcN8Xik5aiBaM=
+X-Google-Smtp-Source: AGHT+IHkTsFD9LWAFhO0iOSkzrJT/uIU3911ebutolUwZI//wZBM03f90uGhttRLUzWdNvxdYPBNOw==
+X-Received: by 2002:a17:90b:180d:b0:338:26e3:ffb6 with SMTP id 98e67ed59e1d1-339c27b82c3mr23254788a91.26.1759848380860;
+        Tue, 07 Oct 2025 07:46:20 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-78b01f9a364sm15776636b3a.6.2025.10.07.06.41.47
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-339a6ebdac1sm20685978a91.9.2025.10.07.07.46.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Oct 2025 06:41:48 -0700 (PDT)
+        Tue, 07 Oct 2025 07:46:20 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <57d0775a-0450-4384-b4ab-b6f2d976499f@roeck-us.net>
-Date: Tue, 7 Oct 2025 06:41:46 -0700
+Message-ID: <97b3872b-7f4f-482a-ab89-5b345ea0ffb2@roeck-us.net>
+Date: Tue, 7 Oct 2025 07:46:10 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -85,19 +85,16 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] watchdog: Add driver for Gunyah Watchdog
-To: Hrishabh Rajput <hrishabh.rajput@oss.qualcomm.com>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- Pavan Kondeti <pavan.kondeti@oss.qualcomm.com>,
- Neil Armstrong <neil.armstrong@linaro.org>
-References: <20251006-gunyah_watchdog-v2-1-b99d41d45450@oss.qualcomm.com>
- <6e7eaac2-0859-4bfd-b76b-2f81e384a91c@roeck-us.net>
- <166a0b99-879c-43cd-b3c0-37eb04afca5a@oss.qualcomm.com>
+Subject: Re: [PATCH 2/3] watchdog: aspeed: Support variable number of reset
+ mask registers
+To: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>, wim@linux-watchdog.org,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, joel@jms.id.au,
+ andrew@codeconstruct.com.au, linux-watchdog@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+ BMC-SW@aspeedtech.com
+References: <20251007083650.2155317-1-chin-ting_kuo@aspeedtech.com>
+ <20251007083650.2155317-3-chin-ting_kuo@aspeedtech.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -143,71 +140,84 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <166a0b99-879c-43cd-b3c0-37eb04afca5a@oss.qualcomm.com>
+In-Reply-To: <20251007083650.2155317-3-chin-ting_kuo@aspeedtech.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 10/6/25 23:52, Hrishabh Rajput wrote:
+On 10/7/25 01:36, Chin-Ting Kuo wrote:
+> Starting from the AST2600 platform, the SoC design has become more
+> complex, with an increased number of reset mask registers.
+> To support this, introduce a new field 'num_reset_masks' in the
+> 'aspeed_wdt_config' structure to specify the number of reset mask
+> registers per platform. This change removes the need for hardcoded
+> platform-specific logic and improves scalability for future SoCs.
 > 
-> On 10/6/2025 7:48 PM, Guenter Roeck wrote:
->> On 10/6/25 00:37, Hrishabh Rajput via B4 Relay wrote:
->>> From: Hrishabh Rajput <hrishabh.rajput@oss.qualcomm.com>
->>>
->>> On Qualcomm SoCs running under the Gunyah hypervisor, access to watchdog
->>> through MMIO is not available on all platforms. Depending on the
->>> hypervisor configuration, the watchdog is either fully emulated or
->>> exposed via ARM's SMC Calling Conventions (SMCCC) through the Vendor
->>> Specific Hypervisor Service Calls space.
->>>
->>> When Gunyah is not present or Gunyah emulates MMIO-based watchdog, we
->>> expect MMIO watchdog device to be present in the devicetree. If we
->>> detect this device node, we don't proceed ahead. Otherwise, we go ahead
->>> and invoke GUNYAH_WDT_STATUS SMC to initiate the discovery of the
->>> SMC-based watchdog.
->>>
->>> Add driver to support the SMC-based watchdog provided by the Gunyah
->>> Hypervisor. module_exit() is intentionally not implemented as this
->>> driver is intended to be a persistent module.
->>>
->>> Signed-off-by: Hrishabh Rajput <hrishabh.rajput@oss.qualcomm.com>
->>> ---
->>> Gunyah is a Type-I hypervisor which was introduced in the patch series
->>> [1]. It is an open source hypervisor. The source repo is available at
->>> [2].
->>>
->>> The Gunyah Hypervisor doesn't allow its Virtual Machines to directly
->>> access the MMIO watchdog. It either provides the fully emulated MMIO
->>> based watchdog interface or the SMC-based watchdog interface depending
->>> on the hypervisor configuration.
->>> The SMC-based watchdog follows ARM's SMC Calling Convention (SMCCC)
->>> version 1.1 and uses Vendor Specific Hypervisor Service Calls space.
->>>
->>> This patch series adds support for the SMC-based watchdog interface
->>> provided by the Gunyah Hypervisor.
->>>
->>> This series is tested on SM8750 platform.
->>>
->>> [1]
->>> https://lore.kernel.org/all/20240222-gunyah-v17-0-1e9da6763d38@quicinc.com/
->>>
->>> [2]
->>> https://github.com/quic/gunyah-hypervisor
->>> ---
->>> Changes in v2:
->>> - Move away from platform driver model since the devicetree overlay does
->>>    not happen by default.
->>
->> This is just wrong. Platform drivers do not depend on devicetree. I am not even
->> going to review the rest of the driver. 
-> 
-> Thanks for pointing out the mistake here. Platform drivers are independent of devicetree. Therefore the line you've pointed to is wrong as it erroneously portrays that the platform drivers are dependent on devicetrees. It is a mistake and I would rephrase it to following to make the intent clearer:
-> 
-> "Do not depend on devicetree to discover (and probe) watchdog as devicetree overlay does not happen by default. Instead invoke GUNYAH_WDT_STATUS SMC Call to discover (and initialize) the watchdog."
-> 
+> Signed-off-by: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
 
-Let _me_ rephrase: A platform driver does not depend on devicetree.
-This can and should be a platform driver.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Guenter
+> ---
+>   drivers/watchdog/aspeed_wdt.c | 12 ++++++++----
+>   1 file changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/watchdog/aspeed_wdt.c b/drivers/watchdog/aspeed_wdt.c
+> index 837e15701c0e..e15f70c5e416 100644
+> --- a/drivers/watchdog/aspeed_wdt.c
+> +++ b/drivers/watchdog/aspeed_wdt.c
+> @@ -35,6 +35,7 @@ struct aspeed_wdt_config {
+>   	u32 irq_shift;
+>   	u32 irq_mask;
+>   	struct aspeed_wdt_scu scu;
+> +	u32 num_reset_masks;
+>   };
+>   
+>   struct aspeed_wdt {
+> @@ -54,6 +55,7 @@ static const struct aspeed_wdt_config ast2400_config = {
+>   		.wdt_reset_mask = 0x1,
+>   		.wdt_reset_mask_shift = 1,
+>   	},
+> +	.num_reset_masks = 1,
+>   };
+>   
+>   static const struct aspeed_wdt_config ast2500_config = {
+> @@ -66,6 +68,7 @@ static const struct aspeed_wdt_config ast2500_config = {
+>   		.wdt_reset_mask = 0x1,
+>   		.wdt_reset_mask_shift = 2,
+>   	},
+> +	.num_reset_masks = 1,
+>   };
+>   
+>   static const struct aspeed_wdt_config ast2600_config = {
+> @@ -78,6 +81,7 @@ static const struct aspeed_wdt_config ast2600_config = {
+>   		.wdt_reset_mask = 0xf,
+>   		.wdt_reset_mask_shift = 16,
+>   	},
+> +	.num_reset_masks = 2,
+>   };
+>   
+>   static const struct of_device_id aspeed_wdt_of_table[] = {
+> @@ -482,8 +486,9 @@ static int aspeed_wdt_probe(struct platform_device *pdev)
+>   	if ((of_device_is_compatible(np, "aspeed,ast2500-wdt")) ||
+>   		(of_device_is_compatible(np, "aspeed,ast2600-wdt"))) {
+>   		u32 reset_mask[2];
+> -		size_t nrstmask = of_device_is_compatible(np, "aspeed,ast2600-wdt") ? 2 : 1;
+> +		size_t nrstmask = wdt->cfg->num_reset_masks;
+>   		u32 reg = readl(wdt->base + WDT_RESET_WIDTH);
+> +		int i;
+>   
+>   		reg &= wdt->cfg->ext_pulse_width_mask;
+>   		if (of_property_read_bool(np, "aspeed,ext-active-high"))
+> @@ -503,9 +508,8 @@ static int aspeed_wdt_probe(struct platform_device *pdev)
+>   
+>   		ret = of_property_read_u32_array(np, "aspeed,reset-mask", reset_mask, nrstmask);
+>   		if (!ret) {
+> -			writel(reset_mask[0], wdt->base + WDT_RESET_MASK1);
+> -			if (nrstmask > 1)
+> -				writel(reset_mask[1], wdt->base + WDT_RESET_MASK2);
+> +			for (i = 0; i < nrstmask; i++)
+> +				writel(reset_mask[i], wdt->base + WDT_RESET_MASK1 + i * 4);
+>   		}
+>   	}
+>   
 
 
