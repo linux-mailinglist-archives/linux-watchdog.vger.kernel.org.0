@@ -1,113 +1,127 @@
-Return-Path: <linux-watchdog+bounces-4365-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4366-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8F10BC8906
-	for <lists+linux-watchdog@lfdr.de>; Thu, 09 Oct 2025 12:45:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 47F62BC8999
+	for <lists+linux-watchdog@lfdr.de>; Thu, 09 Oct 2025 12:52:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 92B9B4E294B
-	for <lists+linux-watchdog@lfdr.de>; Thu,  9 Oct 2025 10:45:35 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0EC804E8752
+	for <lists+linux-watchdog@lfdr.de>; Thu,  9 Oct 2025 10:52:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F8AA2BE04B;
-	Thu,  9 Oct 2025 10:45:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DEA12DD5EB;
+	Thu,  9 Oct 2025 10:52:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Yhqt0vP7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rQqoWIR9"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 587E22C21F9
-	for <linux-watchdog@vger.kernel.org>; Thu,  9 Oct 2025 10:45:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CEC62D94A6;
+	Thu,  9 Oct 2025 10:52:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760006731; cv=none; b=YMyqUMdopoZ9PMxR4Taa8tqKNfWRkOtGxCk9OLMbIav0EE+bGrn3vHccQATDB+hw9DdzKjbV0KmeAK3CL7ptpPh4BGalt5zEZsCfsMBdUPlZ+H8tjkw0Brjnhi1SWvgagrqr/ZyOvnl67e+z6mVU8iCi0XklXw+YrvpRo23AJS4=
+	t=1760007158; cv=none; b=Yg+fvs26mFKVjvJRfhrSliNUJOtzXzz1REAV0T3UBXlsFR6zrP8NYj9BuBNUpZ2gO6vur2/jiHNlLPBRv5GV2ih479Ajf0OKjnvRPP/w+FANyydhft1nA+xoqjxrPNpszrLZMQnU3Flq4KyoVIRMCPr2bSFaOjN797w4hjBWoy4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760006731; c=relaxed/simple;
-	bh=+B6DukldXJVBE1RqN/SyaNypJxIyi15yQYg2A2Go0+w=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=c4NeqrYhnnk9+vai59k0I7xCzRzIYqEGlohZNEllrZ8zXn48Djupqn+aXnyOOCJCckKVd28OTP4k6sdbkLuwy0A16MOKS3v+c5LpHXROCbrXuipEKFDiC5fhuzOci6bbPl2bzRxV90LRCI2bPa/VTRTCZ/d+LTvYIwJ5cscuZsw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Yhqt0vP7; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=ZmLPdS7qBuSlyyQgt3NI7LxPAJPa4sXuQbbk1En+yQA=; b=Yhqt0v
-	P7Eryb7RmUC+6uPHf09qF8W7DZfZU+GdN6Pa13MQCZ/5uxbVdGBlgHgKow/AaI22
-	ABnjsllP7/8YK4nIwDJ3mEq9xn14jzwY7GGEjdyMk5qAxJZmaHXUi4zPUYF2NaDD
-	7Yd7OJErREazBvZt0SqzTR6Z3NNNhIvt+pyRKllcdxdQztEmhk7QmH/jeUuU4Kfn
-	jHHoDKn6GmGsK0xlIfxcj29YqNGC6Vrl49MvAIrnM0m73fZV52iXFtoW1XYCOkTO
-	q/SxM5jvcLiSv0OV7PkRzwFQpmICL1L42kOKlLBb4twNWgUsdF6xmb6Sd+A7ykhP
-	1L4X3HtL3bIAjNkQ==
-Received: (qmail 1043427 invoked from network); 9 Oct 2025 12:45:21 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 9 Oct 2025 12:45:21 +0200
-X-UD-Smtp-Session: l3s3148p1@r8dlf7dAiK0gAwDPXwQHAL/S9V79e5yL
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-renesas-soc@vger.kernel.org
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	linux-watchdog@vger.kernel.org,
-	devicetree@vger.kernel.org
-Subject: [PATCH v4 5/5] dt-bindings: watchdog: renesas,wdt: add SWDT exception for V3H
-Date: Thu,  9 Oct 2025 12:45:03 +0200
-Message-ID: <20251009104500.69787-12-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20251009104500.69787-7-wsa+renesas@sang-engineering.com>
-References: <20251009104500.69787-7-wsa+renesas@sang-engineering.com>
+	s=arc-20240116; t=1760007158; c=relaxed/simple;
+	bh=zlk/D8EdGtqF8mWpAN7+Ox4syswJTWb2DXWR7kpmDEM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OxCNDE3gQtNQTgo1+MW6C+6dJk03PviXTyprBYFd8whH41wDCOVL+sgtOmF+JerwgypZQolmXsu4opPD1G6ka1hy8fvkGPTBMEwIJcK9lpIaia3Ffk92KU+139Cf+9nu0jODaCXmjFi0rpsMrd2XManiGnkKiv4MW/UDW7J6bGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rQqoWIR9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89040C4CEE7;
+	Thu,  9 Oct 2025 10:52:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760007157;
+	bh=zlk/D8EdGtqF8mWpAN7+Ox4syswJTWb2DXWR7kpmDEM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=rQqoWIR9gETeCULW1tjBeMoPZP5jpEzcIIEFbZByFjtFmNxzsX1ZKbaLv12GLABtZ
+	 gbvAkJnDfmmzr/U/NmmDS+dcHulowhujKl9+ETm9GnwC7apunl5oJLRxduAFQycthw
+	 8U9NLjayb/zL+LblzvqRad3OjvtefYurd6G3Pwa5sKx+bv0Viwvac4xbbmVI9qQAXo
+	 tpnIPd3e0jFFV7o7QJIadNq8/GelaR+Cn3HwOL0AjT4OrckNnqYERJnHqSdIUl1YPC
+	 HtccW/Ql22EGrBOD82AqGClOtc5hoz/HzwOrKgWBb0Uw9jkxPTkUqYGzdmGKxQigVQ
+	 g3KLyMp8MPY6A==
+Message-ID: <0cbb4a8d-d410-416d-a17e-5ddfa0632394@kernel.org>
+Date: Thu, 9 Oct 2025 19:52:29 +0900
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] dt-bindings: watchdog: Document Qualcomm Kaanapali
+ watchdog
+To: Jingyi Wang <jingyi.wang@oss.qualcomm.com>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
+ <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Rajendra Nayak <quic_rjendra@quicinc.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ aiqun.yu@oss.qualcomm.com, tingwei.zhang@oss.qualcomm.com,
+ trilok.soni@oss.qualcomm.com, yijie.yang@oss.qualcomm.com
+References: <20250924-knp-watchdog-v1-1-fd8f3fa0ae7e@oss.qualcomm.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250924-knp-watchdog-v1-1-fd8f3fa0ae7e@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The SWDT on V3H has no reset bit. Make resets optional on this SoC.
+On 25/09/2025 08:24, Jingyi Wang wrote:
+> Add devicetree binding for watchdog present on Qualcomm Kaanapali SoC.
+> 
+> Signed-off-by: Jingyi Wang <jingyi.wang@oss.qualcomm.com>
+> ---
+>  Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 1 +
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
 
-Changes since v3:
-* don't introduce new compatible, just make resets optional (Geert)
 
- .../devicetree/bindings/watchdog/renesas,wdt.yaml     | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
-index 08ba128bf442..7aebc5a5cf17 100644
---- a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
-@@ -74,11 +74,20 @@ required:
-   - clocks
-   - interrupts
-   - power-domains
--  - resets
- 
- allOf:
-   - $ref: watchdog.yaml#
- 
-+  - if:
-+      not:
-+        properties:
-+          compatible:
-+            contains:
-+              const: renesas,r8a77980-wdt
-+    then:
-+      required:
-+        - resets
-+
- additionalProperties: false
- 
- examples:
--- 
-2.47.2
-
+Best regards,
+Krzysztof
 
