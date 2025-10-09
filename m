@@ -1,115 +1,142 @@
-Return-Path: <linux-watchdog+bounces-4369-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4370-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 385C5BC92DB
-	for <lists+linux-watchdog@lfdr.de>; Thu, 09 Oct 2025 15:05:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E7684BCABDB
+	for <lists+linux-watchdog@lfdr.de>; Thu, 09 Oct 2025 22:01:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E64463E39B4
-	for <lists+linux-watchdog@lfdr.de>; Thu,  9 Oct 2025 13:05:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 10C8B3BC170
+	for <lists+linux-watchdog@lfdr.de>; Thu,  9 Oct 2025 20:01:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8FA12DCC04;
-	Thu,  9 Oct 2025 13:05:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C237125D1E9;
+	Thu,  9 Oct 2025 20:00:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CYdVk91l"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-vs1-f46.google.com (mail-vs1-f46.google.com [209.85.217.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53D2F2D77FF
-	for <linux-watchdog@vger.kernel.org>; Thu,  9 Oct 2025 13:05:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 933D52475C8;
+	Thu,  9 Oct 2025 20:00:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760015115; cv=none; b=CcftVrBHnrMsvb/E8HzfTLHjeg6x2ML0D6xqJ4wiexkrlNuqb3EkbgYmVaNOrJuDccrFelozJHDalmIf8wOYWFpydTMBgDz4ODY9eirRIwyL29J8lYrfKayLHimbzl2LNarMA+H8cLGiUiCDRI67hY+vb2bJS/xgR9jb3e7qTxk=
+	t=1760040056; cv=none; b=mB7Ri2TO+FCbtA1YY7hNcvtIahkgpoiE/513BeaPVMS2OaFsAFWUjysbH/cvkh0mWMqQJVzqBnwoccXDz31ckF4CQUmMsCAwYf8+coGS8p4s7lCMBEmpvs10HBBd3dEsd4AS8goLV5BOZB+ZznCR08BsoyWj/DxTv23uU1BQllI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760015115; c=relaxed/simple;
-	bh=xD6NRTXf9K2gq7W3hAHzUvosh1ygHLtSYWKi0Ow6kC8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sJoQ/geS7jTdUznZoTTeMmvKcN5UgIf0p36jFy36fdmDENqn4TBSs/Kg+FfoXMhoF5Ylr02QhM/0b8btPqY/xzYjUBZkKogfWXpr3WF8StqSxvY8pfdqwxoD+hZY9lrfOEYYIytT5YlLvbpasLJ+QNu59tCwG3NLmMQyHR61kpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f46.google.com with SMTP id ada2fe7eead31-5b62ab6687dso1011427137.0
-        for <linux-watchdog@vger.kernel.org>; Thu, 09 Oct 2025 06:05:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760015113; x=1760619913;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hVdYrb04OGpyzIab7Gx3IKAauwKdWRH6vKgRJNRIq/Q=;
-        b=IpI1EIJBDgnKmGH3/BuAOOjpSCnBk3y1wU5b/nVvO5hIBSpqNVB0kZ9HlMsyETKc8v
-         zZZRrqxb4TDkweTuxxSWqqUTHD252XuZ0URQwaEDOGTIjYQFVVdwEN46WKDrxA7sd9/v
-         DS8aiZygEH8MHxGu+P/2gJTQuXkvuNk9eApFt6sYvMlBiANg+g/iUWG5XfoyKyENxEjG
-         MvNYYQUzZgSy44Ll6TA4t4J4bnf/feyRKoPlIbUiec2BIE0M4SE3eyINtVhtMLhTsb3T
-         gwQ+VHmg/XgNsIIAoKeI9aJyirRkDVYzL9wH44nSJD5ImLm7QrZJ9PyWzsbNhkn8vZ5Z
-         FhIg==
-X-Forwarded-Encrypted: i=1; AJvYcCVCKZhhBEYzCkJpCdUpTBPTIc2lMS0eRlhMZ7UVJ1GZ1IpOrtoIaAY07qzDnQ0V7tKCvg6DbnZHKhcTHtEKrA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx1YQw0wlsGVYlf/i9w9iVOoj6gifHduMy/pKOqgD535gFky8w3
-	eBw1EQt5uDSJw6jCEH/I37iXWQKmtX/ZqrQMJQxqKE7qKRHyLEHEeQggqxcw9peN
-X-Gm-Gg: ASbGncuQHw9KAmDPWwYcZ/hG4noYV21P/dvQjVxliALGASPDip2MVxiQHMhHYNpGyin
-	DKbfIl9dcbRcIpwjO2TeuhjGj4EdYQIJti5vrPV9uo+x4Z79/3kKBkHTDi7HRlyH4NA6PPnfVIB
-	XpmIVlaEfMAMQzn9j42LCY7DSk4bobSJbe/DUnJS7RVgY84p8yHND7lH0OLsLsjbOMLvOSnZxlQ
-	P50Jdh1/ANijrkAlI9BKIh4Uy7V69PtfjlPlXxhwR5DYnF8/hwqHjHSAB8v3B0C6Bu3FgoiXns0
-	XIW9seW3BSqJavC3klNzUf4DPDfvHsSnMYb0Y02AtYLWO1JN+XpCyVvPiDF5llZmL1+giE2PoOG
-	92hWFrPJdstVe9Lt0CCDA+3R5e4tRubCtGoX8D5iQm+Nby+pm//VK0L/10Aut1s3gFqUPRbbd1h
-	4kPpVw2qBj
-X-Google-Smtp-Source: AGHT+IH/3ILuGxcU6S9h58UIYHve7ZcOGkQ5c4bXhhYGJd6rU5s44KkKyc4ROVc2qPREZV50hZKbHw==
-X-Received: by 2002:a05:6102:8014:b0:523:e010:df0f with SMTP id ada2fe7eead31-5d5e1fbd98dmr3808638137.0.1760015112776;
-        Thu, 09 Oct 2025 06:05:12 -0700 (PDT)
-Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com. [209.85.217.42])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-92eb67dec87sm4574187241.11.2025.10.09.06.05.12
-        for <linux-watchdog@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Oct 2025 06:05:12 -0700 (PDT)
-Received: by mail-vs1-f42.google.com with SMTP id ada2fe7eead31-5b62ab6687dso1011412137.0
-        for <linux-watchdog@vger.kernel.org>; Thu, 09 Oct 2025 06:05:12 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWDX+mLwbj/bcHRFK5gL9HyfcLbvslbwWlUWp6+FV+13fOlSCOtlaLg9SCd5PLsRoRMFUQRhDofuwVtLIOQIg==@vger.kernel.org
-X-Received: by 2002:a05:6102:54a3:b0:5d5:f6ae:3908 with SMTP id
- ada2fe7eead31-5d5f6ae3db3mr457996137.38.1760015111607; Thu, 09 Oct 2025
- 06:05:11 -0700 (PDT)
+	s=arc-20240116; t=1760040056; c=relaxed/simple;
+	bh=E/XuTfDMqDxIylA8lkbRA66SI99SurnbJ5bNXOHutYo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VCk5CTHTnU+BhBh52Wu50nbzaL3gCR3Ja00dFxBdk+6mIRUKNbyOa3kj7LfIcI1pfXD9x59vHFW6QJpkTEBetdtZvcsQyFWeQiAVZGqRKRQvzpDw3ZCTW5Fcnqk8AeuECNJwzGULwjdEzCVhUHykoy0GkwAeK+emVhmnmbN+GYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CYdVk91l; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D47B0C4CEE7;
+	Thu,  9 Oct 2025 20:00:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760040056;
+	bh=E/XuTfDMqDxIylA8lkbRA66SI99SurnbJ5bNXOHutYo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CYdVk91lsmhuDd0uIHEWxCumIJuGANSnrn9lhViNYVXdLrv1L5y45/rHQPGmyY47a
+	 2gogPTP04ewnTjqd2ngEYmxjCr2WZHSIUpzvpAR4oIFLmwNobdMqJsRRgfrgfywi5G
+	 ihGv6Jl9lSib7LmmhPD6dbM66KoY4BTxwsvMnaNP/tR53HkJGGOJT9qTH4YcVm1hYC
+	 IxrvGVrxittGYRT/7oAtoNf1lF7zSeNdUd6UujSSat8i7ZLT1x5hDkR8B9S/Vk5RHh
+	 XUlRB+Nec6wXDOG3ZtKAORAe/BKp+dDioy55nRakHMJ+VfUy8v1IfXgLC/a/4M0Nrq
+	 +rgmK2/CnyFgw==
+Date: Thu, 9 Oct 2025 15:00:54 -0500
+From: Rob Herring <robh@kernel.org>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: wsa+renesas <wsa+renesas@sang-engineering.com>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	"magnus.damm" <magnus.damm@gmail.com>,
+	"linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v2 4/4] dt-bindings: watchdog: factor out RZ/V2H(P)
+ watchdog
+Message-ID: <20251009200054.GA3245555-robh@kernel.org>
+References: <20251005144416.3699-6-wsa+renesas@sang-engineering.com>
+ <20251005144416.3699-10-wsa+renesas@sang-engineering.com>
+ <TY3PR01MB11346E3690F0E74C5E1AF9B7586E2A@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <aOKajKzRlrQD7plt@shikoro>
+ <TY3PR01MB113460EB1918AD06D8F2ADD0C86E3A@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <aONh89-5-llFZWue@shikoro>
+ <CAMuHMdVUbENsdjCCqrn7e9=mWbs+J1kcat6LYU6vAcrBHzawBw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251009104500.69787-7-wsa+renesas@sang-engineering.com> <20251009104500.69787-12-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20251009104500.69787-12-wsa+renesas@sang-engineering.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 9 Oct 2025 15:05:00 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUXmBgHv7=8NTCJwZguFAKeWyWu9dWkQxa_0kKpBVC=jA@mail.gmail.com>
-X-Gm-Features: AS18NWCUrBtX_uO-fi06wEi1p8_gUsISME0n2FhoKXZozrGR11xEwQp2ykYneWo
-Message-ID: <CAMuHMdUXmBgHv7=8NTCJwZguFAKeWyWu9dWkQxa_0kKpBVC=jA@mail.gmail.com>
-Subject: Re: [PATCH v4 5/5] dt-bindings: watchdog: renesas,wdt: add SWDT
- exception for V3H
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-renesas-soc@vger.kernel.org, 
-	Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Magnus Damm <magnus.damm@gmail.com>, linux-watchdog@vger.kernel.org, 
-	devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdVUbENsdjCCqrn7e9=mWbs+J1kcat6LYU6vAcrBHzawBw@mail.gmail.com>
 
-On Thu, 9 Oct 2025 at 12:45, Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> The SWDT on V3H has no reset bit. Make resets optional on this SoC.
->
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->
-> Changes since v3:
-> * don't introduce new compatible, just make resets optional (Geert)
+On Mon, Oct 06, 2025 at 11:25:11AM +0200, Geert Uytterhoeven wrote:
+> Hi Wolfram,
+> 
+> On Mon, 6 Oct 2025 at 08:30, wsa+renesas
+> <wsa+renesas@sang-engineering.com> wrote:
+> > > > > > +      - enum:
+> > > > > > +          - renesas,r9a09g057-wdt    # RZ/V2H(P)
+> > > > > > +          - renesas,r9a09g077-wdt    # RZ/T2H
+> > > > > > +
+> > > > > > +      - items:
+> > > > > > +          - const: renesas,r9a09g087-wdt # RZ/N2H
+> > > > > > +          - const: renesas,r9a09g077-wdt # RZ/T2H
+> > >
+> > > I guess a comment like # fallback RZ/T2H here will avoid confusion.
+> >
+> > Hmmm, if we add such a comment for every fallback, this will be quite
+> > some churn, I would think. My favourite solution would be to swap the
+> > 'items' entry with the 'enum'. So, everything with a fallback comes
+> > first, and the 'plain' entries last. But what do others think?
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+That's probably what I'd pick, but I try not to define rules we can't 
+check with tools. Otherwise, I get tired of having to review that rule. 
 
-Gr{oetje,eeting}s,
+And adding a rule to tools has the cost of fixing the existing cases 
+everywhere.
 
-                        Geert
+> We do have "fallback" comments in other places, and I think they do
+> help in understanding compatible naming schemes.
+> 
+> Would it be possible to handle this in dt-schema?
+> Currently we have to write:
+> 
+>       - const: vendor,soc1-ip
+> 
+>       - items:
+>           - enum:
+>               - vendor,soc2-ip
+>               - vendor,soc3-ip
+>           - const: vendor,soc1-ip       # fallback
+> 
+> If dt-schema would automatically drop duplicates of the fallback,
+> we could just write:
+> 
+>       - items:
+>           - enum:
+>               - vendor,soc1-ip
+>               - vendor,soc2-ip
+>               - vendor,soc3-ip
+>           - const: vendor,soc1-ip       # fallback
+> 
+> What do you think?
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+It would almost work with just 'minItems: 1' added. That's because we 
+require strings to be unique entries, so soc1 twice will be rejected. 
+But then that allows for no fallback with soc2 and soc3.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+So I don't see a way to do this other than transforming the above back 
+into what we have today under a oneOf. That's a bit more deviation from 
+json-schema than I'm comfortable with. Mostly the tools just add 
+properties (like 'additionalItems: false' here) where the default is not 
+what we want.
+
+Rob
 
