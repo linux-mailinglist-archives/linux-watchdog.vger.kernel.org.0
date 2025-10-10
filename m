@@ -1,31 +1,31 @@
-Return-Path: <linux-watchdog+bounces-4373-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4374-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04FEFBCC0DA
-	for <lists+linux-watchdog@lfdr.de>; Fri, 10 Oct 2025 10:03:38 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75E3ABCC0DD
+	for <lists+linux-watchdog@lfdr.de>; Fri, 10 Oct 2025 10:03:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C95C34F6FB0
-	for <lists+linux-watchdog@lfdr.de>; Fri, 10 Oct 2025 08:03:36 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 319BA4E6F53
+	for <lists+linux-watchdog@lfdr.de>; Fri, 10 Oct 2025 08:03:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE09C27B329;
-	Fri, 10 Oct 2025 08:03:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA05527EFEE;
+	Fri, 10 Oct 2025 08:03:26 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from TWMBX01.aspeed.com (mail.aspeedtech.com [211.20.114.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5A5227A917;
-	Fri, 10 Oct 2025 08:03:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D08E827AC31;
+	Fri, 10 Oct 2025 08:03:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.20.114.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760083404; cv=none; b=neWMpqVSNiqeBulFDL+RCYbWU8L+IzryiypssjCcNfK2j19HVqUoocasrq0ceccIuchmHsVCUVrKEoDv7QrwBXtQsMCFTqJsnzFIZh572hTX7uStdUIBZ/IsFIXp+a3/bV6W+dBcyHacBmEjBFew5RmIT9uvg2JVWY6jXgcOgPE=
+	t=1760083406; cv=none; b=thYMi3Gv3sA06fpoWM8UBBqNOhqeJLn804lBw3Az3gq2CxCe5B1UthzJ5V5roz7bpy3t7hg1zEpDGyg7vH8FsD/a+b0tCZ7Dw1TSRIaXgVKkKYfEe4lNaS4XT01udFmFcjpzp0pGtCeN13CYJNADILPnNdzz3MU4szfzcZ3UOjE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760083404; c=relaxed/simple;
-	bh=p2afy0+Yw7LwfB6K3ETNrRzTriaaPjMQCA2XTOPUDQg=;
+	s=arc-20240116; t=1760083406; c=relaxed/simple;
+	bh=3uQ+hglIqHXJTJg+gQ6Yg+4ETaiQ+eeaaAdy0Jp4ITM=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CRvadDXJGbPV26RZlxD7ZHI0tMFapsQp85lT5TCkOzsIT7sQf8JE9A4ZvlLzML3DcR6ZBaW2uXjEGGnLFs4FZEh4fSRnqzfbkVjUFTuKCLapvnXNdxziie7xrgEvzQEPYmShKjnSqWCMNro3IWhSN60TGyVmajwh4KOj6hI8XlI=
+	 MIME-Version:Content-Type; b=K6Ns3o2fXSGHFlhqki4tK9cWfdL5jHnUua0fFkLv9Qgy7If1JBc26QQEGqJABxjZBWTvlwn97RcA6JUyzqwDUJJd6JpsuCc3G7DAq1RSqFJcLoq6kyno0lIs2hG2HrQ65WhLCf3PJKuF142ryjtOwjB857W/y6i7SsLGDkngir0=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; arc=none smtp.client-ip=211.20.114.72
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
@@ -43,9 +43,9 @@ To: <wim@linux-watchdog.org>, <linux@roeck-us.net>, <robh@kernel.org>,
 	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
 	<linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
 	<BMC-SW@aspeedtech.com>
-Subject: [PATCH v2 2/3] watchdog: aspeed: Support variable number of reset mask registers
-Date: Fri, 10 Oct 2025 16:03:14 +0800
-Message-ID: <20251010080315.816628-3-chin-ting_kuo@aspeedtech.com>
+Subject: [PATCH v2 3/3] watchdog: aspeed: Add support for AST2700 platform
+Date: Fri, 10 Oct 2025 16:03:15 +0800
+Message-ID: <20251010080315.816628-4-chin-ting_kuo@aspeedtech.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20251010080315.816628-1-chin-ting_kuo@aspeedtech.com>
 References: <20251010080315.816628-1-chin-ting_kuo@aspeedtech.com>
@@ -58,73 +58,53 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 
-Starting from the AST2600 platform, the SoC design has become more
-complex, with an increased number of reset mask registers.
-To support this, introduce a new field 'num_reset_masks' in the
-'aspeed_wdt_config' structure to specify the number of reset mask
-registers per platform. This change removes the need for hardcoded
-platform-specific logic and improves scalability for future SoCs.
+Add AST2700 platform support to the ASPEED watchdog driver. This includes
+a new per-platform configuration with SCU reset status register at
+SCU1_070 and support for 5 reset mask registers.
 
 Signed-off-by: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
 ---
- drivers/watchdog/aspeed_wdt.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ drivers/watchdog/aspeed_wdt.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/watchdog/aspeed_wdt.c b/drivers/watchdog/aspeed_wdt.c
-index 837e15701c0e..d23e565f30a8 100644
+index d23e565f30a8..c9e79851504c 100644
 --- a/drivers/watchdog/aspeed_wdt.c
 +++ b/drivers/watchdog/aspeed_wdt.c
-@@ -35,6 +35,7 @@ struct aspeed_wdt_config {
- 	u32 irq_shift;
- 	u32 irq_mask;
- 	struct aspeed_wdt_scu scu;
-+	u32 num_reset_masks;
+@@ -83,10 +83,24 @@ static const struct aspeed_wdt_config ast2600_config = {
+ 	.num_reset_masks = 2,
  };
  
- struct aspeed_wdt {
-@@ -66,6 +67,7 @@ static const struct aspeed_wdt_config ast2500_config = {
- 		.wdt_reset_mask = 0x1,
- 		.wdt_reset_mask_shift = 2,
- 	},
-+	.num_reset_masks = 1,
- };
- 
- static const struct aspeed_wdt_config ast2600_config = {
-@@ -78,6 +80,7 @@ static const struct aspeed_wdt_config ast2600_config = {
- 		.wdt_reset_mask = 0xf,
- 		.wdt_reset_mask_shift = 16,
- 	},
-+	.num_reset_masks = 2,
- };
- 
++static const struct aspeed_wdt_config ast2700_config = {
++	.ext_pulse_width_mask = 0xfffff,
++	.irq_shift = 0,
++	.irq_mask = GENMASK(31, 10),
++	.scu = {
++		.compatible = "aspeed,ast2700-scu0",
++		.reset_status_reg = 0x70,
++		.wdt_reset_mask = 0xf,
++		.wdt_reset_mask_shift = 0,
++	},
++	.num_reset_masks = 5,
++};
++
  static const struct of_device_id aspeed_wdt_of_table[] = {
-@@ -479,11 +482,11 @@ static int aspeed_wdt_probe(struct platform_device *pdev)
- 		set_bit(WDOG_HW_RUNNING, &wdt->wdd.status);
+ 	{ .compatible = "aspeed,ast2400-wdt", .data = &ast2400_config },
+ 	{ .compatible = "aspeed,ast2500-wdt", .data = &ast2500_config },
+ 	{ .compatible = "aspeed,ast2600-wdt", .data = &ast2600_config },
++	{ .compatible = "aspeed,ast2700-wdt", .data = &ast2700_config },
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(of, aspeed_wdt_of_table);
+@@ -483,7 +497,7 @@ static int aspeed_wdt_probe(struct platform_device *pdev)
  	}
  
--	if ((of_device_is_compatible(np, "aspeed,ast2500-wdt")) ||
--		(of_device_is_compatible(np, "aspeed,ast2600-wdt"))) {
-+	if (!of_device_is_compatible(np, "aspeed,ast2400-wdt")) {
- 		u32 reset_mask[2];
--		size_t nrstmask = of_device_is_compatible(np, "aspeed,ast2600-wdt") ? 2 : 1;
-+		size_t nrstmask = wdt->cfg->num_reset_masks;
+ 	if (!of_device_is_compatible(np, "aspeed,ast2400-wdt")) {
+-		u32 reset_mask[2];
++		u32 reset_mask[5];
+ 		size_t nrstmask = wdt->cfg->num_reset_masks;
  		u32 reg = readl(wdt->base + WDT_RESET_WIDTH);
-+		int i;
- 
- 		reg &= wdt->cfg->ext_pulse_width_mask;
- 		if (of_property_read_bool(np, "aspeed,ext-active-high"))
-@@ -503,9 +506,8 @@ static int aspeed_wdt_probe(struct platform_device *pdev)
- 
- 		ret = of_property_read_u32_array(np, "aspeed,reset-mask", reset_mask, nrstmask);
- 		if (!ret) {
--			writel(reset_mask[0], wdt->base + WDT_RESET_MASK1);
--			if (nrstmask > 1)
--				writel(reset_mask[1], wdt->base + WDT_RESET_MASK2);
-+			for (i = 0; i < nrstmask; i++)
-+				writel(reset_mask[i], wdt->base + WDT_RESET_MASK1 + i * 4);
- 		}
- 	}
- 
+ 		int i;
 -- 
 2.34.1
 
