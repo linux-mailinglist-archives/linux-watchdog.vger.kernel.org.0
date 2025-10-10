@@ -1,142 +1,80 @@
-Return-Path: <linux-watchdog+bounces-4370-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4371-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7684BCABDB
-	for <lists+linux-watchdog@lfdr.de>; Thu, 09 Oct 2025 22:01:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CFE8BCC0BF
+	for <lists+linux-watchdog@lfdr.de>; Fri, 10 Oct 2025 10:03:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 10C8B3BC170
-	for <lists+linux-watchdog@lfdr.de>; Thu,  9 Oct 2025 20:01:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B25C7423A3B
+	for <lists+linux-watchdog@lfdr.de>; Fri, 10 Oct 2025 08:03:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C237125D1E9;
-	Thu,  9 Oct 2025 20:00:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CYdVk91l"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BFE327602A;
+	Fri, 10 Oct 2025 08:03:20 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from TWMBX01.aspeed.com (mail.aspeedtech.com [211.20.114.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 933D52475C8;
-	Thu,  9 Oct 2025 20:00:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E720326E6F8;
+	Fri, 10 Oct 2025 08:03:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.20.114.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760040056; cv=none; b=mB7Ri2TO+FCbtA1YY7hNcvtIahkgpoiE/513BeaPVMS2OaFsAFWUjysbH/cvkh0mWMqQJVzqBnwoccXDz31ckF4CQUmMsCAwYf8+coGS8p4s7lCMBEmpvs10HBBd3dEsd4AS8goLV5BOZB+ZznCR08BsoyWj/DxTv23uU1BQllI=
+	t=1760083400; cv=none; b=Tu3tVa71i7DFEKB09ULOLrezUCJg5BoiqWCPx9Fk0Ft9RNLVsFCvUSkz1bmgT+g0RtVHNK9NwJrSCfgoXzYMpB/PPh+Berta9F+HFFZOWmI9YJbzaGQRbIzrL8bo/9WGNTFNKD7eb576YymqtD7pbJ6HDaJiUcqDB3ZARAoIllU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760040056; c=relaxed/simple;
-	bh=E/XuTfDMqDxIylA8lkbRA66SI99SurnbJ5bNXOHutYo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VCk5CTHTnU+BhBh52Wu50nbzaL3gCR3Ja00dFxBdk+6mIRUKNbyOa3kj7LfIcI1pfXD9x59vHFW6QJpkTEBetdtZvcsQyFWeQiAVZGqRKRQvzpDw3ZCTW5Fcnqk8AeuECNJwzGULwjdEzCVhUHykoy0GkwAeK+emVhmnmbN+GYs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CYdVk91l; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D47B0C4CEE7;
-	Thu,  9 Oct 2025 20:00:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760040056;
-	bh=E/XuTfDMqDxIylA8lkbRA66SI99SurnbJ5bNXOHutYo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CYdVk91lsmhuDd0uIHEWxCumIJuGANSnrn9lhViNYVXdLrv1L5y45/rHQPGmyY47a
-	 2gogPTP04ewnTjqd2ngEYmxjCr2WZHSIUpzvpAR4oIFLmwNobdMqJsRRgfrgfywi5G
-	 ihGv6Jl9lSib7LmmhPD6dbM66KoY4BTxwsvMnaNP/tR53HkJGGOJT9qTH4YcVm1hYC
-	 IxrvGVrxittGYRT/7oAtoNf1lF7zSeNdUd6UujSSat8i7ZLT1x5hDkR8B9S/Vk5RHh
-	 XUlRB+Nec6wXDOG3ZtKAORAe/BKp+dDioy55nRakHMJ+VfUy8v1IfXgLC/a/4M0Nrq
-	 +rgmK2/CnyFgw==
-Date: Thu, 9 Oct 2025 15:00:54 -0500
-From: Rob Herring <robh@kernel.org>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: wsa+renesas <wsa+renesas@sang-engineering.com>,
-	Biju Das <biju.das.jz@bp.renesas.com>,
-	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	"magnus.damm" <magnus.damm@gmail.com>,
-	"linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v2 4/4] dt-bindings: watchdog: factor out RZ/V2H(P)
- watchdog
-Message-ID: <20251009200054.GA3245555-robh@kernel.org>
-References: <20251005144416.3699-6-wsa+renesas@sang-engineering.com>
- <20251005144416.3699-10-wsa+renesas@sang-engineering.com>
- <TY3PR01MB11346E3690F0E74C5E1AF9B7586E2A@TY3PR01MB11346.jpnprd01.prod.outlook.com>
- <aOKajKzRlrQD7plt@shikoro>
- <TY3PR01MB113460EB1918AD06D8F2ADD0C86E3A@TY3PR01MB11346.jpnprd01.prod.outlook.com>
- <aONh89-5-llFZWue@shikoro>
- <CAMuHMdVUbENsdjCCqrn7e9=mWbs+J1kcat6LYU6vAcrBHzawBw@mail.gmail.com>
+	s=arc-20240116; t=1760083400; c=relaxed/simple;
+	bh=e/EXtZWCi3iK9z1nOSESHp1p8RxHwCt8mI82MrXSiuY=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Il0+KNPFyGiQjV8x1uDJwlw+rx//5fnqKqj+R+dIDAu3ezaFxUpuJaC/7pSZr3st33ALXR21V9sPH8OO+fbSMZOS7FgRbDYMj+2NRlwOJ+do4PZqidk3SiIUwu0DRoqNeossr+AdMLLRawrg2rHMcvcHcZIG9sE+Ix9utOGXezs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; arc=none smtp.client-ip=211.20.114.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
+Received: from TWMBX01.aspeed.com (192.168.0.62) by TWMBX01.aspeed.com
+ (192.168.0.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Fri, 10 Oct
+ 2025 16:03:15 +0800
+Received: from aspeedtech.com (192.168.10.13) by TWMBX01.aspeed.com
+ (192.168.0.62) with Microsoft SMTP Server id 15.2.1748.10 via Frontend
+ Transport; Fri, 10 Oct 2025 16:03:15 +0800
+From: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+To: <wim@linux-watchdog.org>, <linux@roeck-us.net>, <robh@kernel.org>,
+	<krzk+dt@kernel.org>, <conor+dt@kernel.org>, <joel@jms.id.au>,
+	<andrew@codeconstruct.com.au>, <linux-watchdog@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
+	<BMC-SW@aspeedtech.com>
+Subject: [PATCH v2 0/3] watchdog: aspeed: Add AST2700 support
+Date: Fri, 10 Oct 2025 16:03:12 +0800
+Message-ID: <20251010080315.816628-1-chin-ting_kuo@aspeedtech.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdVUbENsdjCCqrn7e9=mWbs+J1kcat6LYU6vAcrBHzawBw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-On Mon, Oct 06, 2025 at 11:25:11AM +0200, Geert Uytterhoeven wrote:
-> Hi Wolfram,
-> 
-> On Mon, 6 Oct 2025 at 08:30, wsa+renesas
-> <wsa+renesas@sang-engineering.com> wrote:
-> > > > > > +      - enum:
-> > > > > > +          - renesas,r9a09g057-wdt    # RZ/V2H(P)
-> > > > > > +          - renesas,r9a09g077-wdt    # RZ/T2H
-> > > > > > +
-> > > > > > +      - items:
-> > > > > > +          - const: renesas,r9a09g087-wdt # RZ/N2H
-> > > > > > +          - const: renesas,r9a09g077-wdt # RZ/T2H
-> > >
-> > > I guess a comment like # fallback RZ/T2H here will avoid confusion.
-> >
-> > Hmmm, if we add such a comment for every fallback, this will be quite
-> > some churn, I would think. My favourite solution would be to swap the
-> > 'items' entry with the 'enum'. So, everything with a fallback comes
-> > first, and the 'plain' entries last. But what do others think?
+This patch series improves the ASPEED watchdog driver to support newer
+AST2700 SoC. It enhances reset mask handling to accommodate platforms
+with multiple registers, adds AST2700-specific configuration, and
+updates the device tree bindings accordingly.
 
-That's probably what I'd pick, but I try not to define rules we can't 
-check with tools. Otherwise, I get tired of having to review that rule. 
+Changes in v2:
+  - Removed 'num_reset_masks' field from AST2400 platform configuration.
+  - Simplify 'if' contional statement for platforms after AST2400.
 
-And adding a rule to tools has the cost of fixing the existing cases 
-everywhere.
+Chin-Ting Kuo (3):
+  dt-bindings: watchdog: aspeed,ast2400-wdt: Add support for AST2700
+  watchdog: aspeed: Support variable number of reset mask registers
+  watchdog: aspeed: Add support for AST2700 platform
 
-> We do have "fallback" comments in other places, and I think they do
-> help in understanding compatible naming schemes.
-> 
-> Would it be possible to handle this in dt-schema?
-> Currently we have to write:
-> 
->       - const: vendor,soc1-ip
-> 
->       - items:
->           - enum:
->               - vendor,soc2-ip
->               - vendor,soc3-ip
->           - const: vendor,soc1-ip       # fallback
-> 
-> If dt-schema would automatically drop duplicates of the fallback,
-> we could just write:
-> 
->       - items:
->           - enum:
->               - vendor,soc1-ip
->               - vendor,soc2-ip
->               - vendor,soc3-ip
->           - const: vendor,soc1-ip       # fallback
-> 
-> What do you think?
+ .../bindings/watchdog/aspeed,ast2400-wdt.yaml |   8 +-
+ drivers/watchdog/aspeed_wdt.c                 |  30 +++-
+ include/dt-bindings/watchdog/aspeed-wdt.h     | 138 ++++++++++++++++++
+ 3 files changed, 167 insertions(+), 9 deletions(-)
 
-It would almost work with just 'minItems: 1' added. That's because we 
-require strings to be unique entries, so soc1 twice will be rejected. 
-But then that allows for no fallback with soc2 and soc3.
+-- 
+2.34.1
 
-So I don't see a way to do this other than transforming the above back 
-into what we have today under a oneOf. That's a bit more deviation from 
-json-schema than I'm comfortable with. Mostly the tools just add 
-properties (like 'additionalItems: false' here) where the default is not 
-what we want.
-
-Rob
 
