@@ -1,233 +1,119 @@
-Return-Path: <linux-watchdog+bounces-4379-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4380-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2FFEBD65EB
-	for <lists+linux-watchdog@lfdr.de>; Mon, 13 Oct 2025 23:32:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40C93BD88E3
+	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Oct 2025 11:49:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 838E24F30BC
-	for <lists+linux-watchdog@lfdr.de>; Mon, 13 Oct 2025 21:32:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 72E3254093D
+	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Oct 2025 09:47:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 230D12F25E8;
-	Mon, 13 Oct 2025 21:31:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5E212FD1BA;
+	Tue, 14 Oct 2025 09:45:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="loPoMt1T"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jWcRx9c/"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED9352ECD05;
-	Mon, 13 Oct 2025 21:31:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 884D32FCC01;
+	Tue, 14 Oct 2025 09:45:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760391112; cv=none; b=qNOotWo1F4Hg9GM2cFj3o7G/IOhgyR7lACYaGOT6z/ZcideXdRCO3Pr7z562AYILbfpgGZm3k9/jlmi81Nd+/LpKhu7d3zne/zOTbbDxtktA1vCEcfLAyLTUcVmzjIVOrtPjINQpaLcpjPBv7ui2WXs3sBIV2OJlSXApCd1Bvs4=
+	t=1760435157; cv=none; b=tClGsVKVEFlnAMXztrBTmchQpp1Hc3vy+nZWL9lWlmpUeIWEEJhGpVzADMNO1BsyRFounioIUheXAETA43qGNBkfhKqUya8NtZ0th90ng1t5l4ppkBGrMA1cxn60iVNdPitAkgnhTeBeShFlSeYLksNtTnhqX6ol1yMHniw1bek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760391112; c=relaxed/simple;
-	bh=o7Lpk0zL9IRIGoDOLSKoyozj76/fRmLzH3c5Hbv4gjw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=B0NBRqEkxmKEqNbuEvldpQj/6NlxCFjgOkDrMbe/YvY18XWIedB/7NKFj3z6lPmwft2ScNLhL/JP03ghyMmOuGFDP+F4cz15rdZ+5zaiAz4epU82rA3OgIbjMfKp0kdWxXWSZ27NGIlWglC+Gob6xqZpNv3Fdl2T0/h8RAj+P64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=loPoMt1T; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5E63C4CEE7;
-	Mon, 13 Oct 2025 21:31:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760391111;
-	bh=o7Lpk0zL9IRIGoDOLSKoyozj76/fRmLzH3c5Hbv4gjw=;
-	h=From:To:Cc:Subject:Date:From;
-	b=loPoMt1TTP9YJys7LaFtT7B1THPnD/S4lE51grZNAJE06MLRZfGDRjDs+gsuzL1bq
-	 Ppz61V9Yj0O8d1XqDUzaFmrTX7noo6IayyV7szEQH67m7g7rnV4XklkYRTs6IIL+9u
-	 X1iBtl0lniznFAM7GF6ys/4AMPbK/8QLoOyR120tDWuLNQTPVoBMa2KIMbA8WO34bH
-	 N40Y4HPO7k6sxbWHeGjsDxfGZvv9o5vsyEPP3qdMWS9vNWOjTbNX9CJL0zwhkPP43t
-	 H01C26c2pY7CBZkb1VWW1Ys92QNswL/I3lXhW27l5ojm195JVZRArqSlBHD5flMPPE
-	 rIjncmD+NmG9g==
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Gregory Clement <gregory.clement@bootlin.com>
-Cc: linux-watchdog@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: watchdog: Convert marvell,orion-wdt to DT schema
-Date: Mon, 13 Oct 2025 16:31:45 -0500
-Message-ID: <20251013213146.695195-1-robh@kernel.org>
-X-Mailer: git-send-email 2.51.0
+	s=arc-20240116; t=1760435157; c=relaxed/simple;
+	bh=D4al88LL8q+XHjrCSJII1dctsBxIMEvTBINPRZs5xRI=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=P6qUwuJtyg5ppl9Uisikij2pFDU0NZYZosmgCEqwDVJj1eFZj7ZLdaCd3n19G+Nx08zS+I2XK6DAHmRIwHGR+j1T/v0CE30ZFtYwpcSeBQk2wjz1YtigX5Kjy/APAzef2paP4yylDO3lXeakffdl0NKDy6JV1GJag8jdJLyclg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=jWcRx9c/; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id F3B814E4109D;
+	Tue, 14 Oct 2025 09:45:47 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id A570F606EC;
+	Tue, 14 Oct 2025 09:45:47 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 0CCA7102F228B;
+	Tue, 14 Oct 2025 11:45:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1760435146; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=pS7S3KjjjVMBjFt3EILRfWOqjVjZmOnxzSm17MhSyeA=;
+	b=jWcRx9c/oN7rXNJkrTS3XvTf3Yj7U2V6UQucGtHJWdNsTKRX0GujBStzYYNWHLLgkPLBml
+	DpWDxhT2pQvP+xFAeGKA8AEk5nCOzZvfmDpQfM7A5YWcNlt3x5Uc3zwWMYXRnlZzH2YK8T
+	0o62way7LOZThsMmD0pImhigEEsU9YQPHTJrSqIVZ8LcjbpFQnphIrVXZhziOPnJU/spfg
+	t12gFk4qj49MP4fZBjgrfiobz2I1Aas/FNllUoMGPzGeEVFT+lKep+2ktWPnuYvWY6I3io
+	86UEB0vJLmmvUiaERj+HJ8gQF3Z0aObmxF4cTP2RiKOaIIorO1zCL4yTf/HeVg==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+To: "Rob Herring (Arm)" <robh@kernel.org>, Wim Van Sebroeck
+ <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, Krzysztof
+ Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Andrew
+ Lunn <andrew@lunn.ch>
+Cc: linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: watchdog: Convert marvell,orion-wdt to DT
+ schema
+In-Reply-To: <20251013213146.695195-1-robh@kernel.org>
+References: <20251013213146.695195-1-robh@kernel.org>
+Date: Tue, 14 Oct 2025 11:45:39 +0200
+Message-ID: <87o6q9g6kc.fsf@BLaptop.bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Last-TLS-Session-Version: TLSv1.3
 
-Convert the Marvell Orion and Armada watchdog binding to DT schema
-format. It's a straight-forward conversion.
+Hello Rob,
 
-Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
----
- .../devicetree/bindings/watchdog/marvel.txt   | 45 ---------
- .../bindings/watchdog/marvell,orion-wdt.yaml  | 97 +++++++++++++++++++
- 2 files changed, 97 insertions(+), 45 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/watchdog/marvel.txt
- create mode 100644 Documentation/devicetree/bindings/watchdog/marvell,orion-wdt.yaml
+Thank you for your work. I have one question:
 
-diff --git a/Documentation/devicetree/bindings/watchdog/marvel.txt b/Documentation/devicetree/bindings/watchdog/marvel.txt
-deleted file mode 100644
-index c1b67a78f00c..000000000000
---- a/Documentation/devicetree/bindings/watchdog/marvel.txt
-+++ /dev/null
-@@ -1,45 +0,0 @@
--* Marvell Orion Watchdog Time
--
--Required Properties:
--
--- Compatibility : "marvell,orion-wdt"
--		  "marvell,armada-370-wdt"
--		  "marvell,armada-xp-wdt"
--		  "marvell,armada-375-wdt"
--		  "marvell,armada-380-wdt"
--
--- reg		: Should contain two entries: first one with the
--		  timer control address, second one with the
--		  rstout enable address.
--
--For "marvell,armada-375-wdt" and "marvell,armada-380-wdt":
--
--- reg		: A third entry is mandatory and should contain the
--                  shared mask/unmask RSTOUT address.
--
--Clocks required for compatibles = "marvell,orion-wdt",
--				  "marvell,armada-370-wdt":
--- clocks : Must contain a single entry describing the clock input
--
--Clocks required for compatibles = "marvell,armada-xp-wdt"
--				  "marvell,armada-375-wdt"
--				  "marvell,armada-380-wdt":
--- clocks : Must contain an entry for each entry in clock-names.
--- clock-names : Must include the following entries:
--  "nbclk" (L2/coherency fabric clock),
--  "fixed" (Reference 25 MHz fixed-clock).
--
--Optional properties:
--
--- interrupts	: Contains the IRQ for watchdog expiration
--- timeout-sec	: Contains the watchdog timeout in seconds
--
--Example:
--
--	wdt@20300 {
--		compatible = "marvell,orion-wdt";
--		reg = <0x20300 0x28>, <0x20108 0x4>;
--		interrupts = <3>;
--		timeout-sec = <10>;
--		clocks = <&gate_clk 7>;
--	};
-diff --git a/Documentation/devicetree/bindings/watchdog/marvell,orion-wdt.yaml b/Documentation/devicetree/bindings/watchdog/marvell,orion-wdt.yaml
-new file mode 100644
-index 000000000000..95704079463f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/watchdog/marvell,orion-wdt.yaml
-@@ -0,0 +1,97 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/watchdog/marvell,orion-wdt.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Marvell Orion Watchdog Timer
-+
-+maintainers:
-+  - Andrew Lunn <andrew@lunn.ch>
-+  - Gregory Clement <gregory.clement@bootlin.com>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - marvell,orion-wdt
-+      - marvell,armada-370-wdt
-+      - marvell,armada-xp-wdt
-+      - marvell,armada-375-wdt
-+      - marvell,armada-380-wdt
-+
-+  reg:
-+    minItems: 2
-+    items:
-+      - description: Timer control register address.
-+      - description: RSTOUT enable register address.
-+      - description: Shared mask/unmask RSTOUT register address.
-+
-+  clocks:
-+    minItems: 1
-+    items:
-+      - description: Reference 25 MHz fixed-clock supply.
-+      - description: L2/coherency fabric clock input ("nbclk").
-+
-+  clock-names:
-+    minItems: 1
-+    items:
-+      - const: nbclk
-+      - const: fixed
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  timeout-sec:
-+    description: Watchdog timeout in seconds.
-+
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - marvell,armada-375-wdt
-+              - marvell,armada-380-wdt
-+    then:
-+      properties:
-+        reg:
-+          minItems: 3
-+    else:
-+      properties:
-+        reg:
-+          maxItems: 2
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - marvell,armada-xp-wdt
-+              - marvell,armada-375-wdt
-+              - marvell,armada-380-wdt
-+    then:
-+      properties:
-+        clocks:
-+          minItems: 2
-+        clock-names:
-+          minItems: 2
-+
-+      required:
-+        - clock-names
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    watchdog@20300 {
-+        compatible = "marvell,orion-wdt";
-+        reg = <0x20300 0x28>, <0x20108 0x4>;
-+        interrupts = <3>;
-+        timeout-sec = <10>;
-+        clocks = <&gate_clk 7>;
-+    };
--- 
-2.51.0
+> +  reg:
+> +    minItems: 2
 
+Should we also include this constraint here?
+
+    maxItems: 3
+
+This would further restrict the binding.
+
+Gregory
+
+> +    items:
+> +      - description: Timer control register address.
+> +      - description: RSTOUT enable register address.
+> +      - description: Shared mask/unmask RSTOUT register address.
+> +
+
+[...]
+
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - marvell,armada-375-wdt
+> +              - marvell,armada-380-wdt
+> +    then:
+> +      properties:
+> +        reg:
+> +          minItems: 3
+> +    else:
+> +      properties:
+> +        reg:
+> +          maxItems: 2
+> +
+
+--=20
+Gr=C3=A9gory CLEMENT, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
