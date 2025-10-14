@@ -1,82 +1,83 @@
-Return-Path: <linux-watchdog+bounces-4387-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4388-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8790BDA2BB
-	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Oct 2025 16:56:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 98D52BDA47D
+	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Oct 2025 17:16:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 917924F98AF
-	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Oct 2025 14:56:49 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 172D9501295
+	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Oct 2025 15:10:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29ED72FFDCF;
-	Tue, 14 Oct 2025 14:56:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 678E62F5339;
+	Tue, 14 Oct 2025 15:10:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hqVKeuMz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fCZxAo6G"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A977A2FFDC0
-	for <linux-watchdog@vger.kernel.org>; Tue, 14 Oct 2025 14:56:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BFD22BE65B
+	for <linux-watchdog@vger.kernel.org>; Tue, 14 Oct 2025 15:10:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760453808; cv=none; b=jz0//HquVlp5CxZD5SWSt60hW9fNGvpMoqHsrzJ3JRBTji6e210E4pM9vuZ4WDZ7bxrn6Bts+tlh0965gj7DSQOvCx60RvXRNpl/dAi5bjUoCUHihtA3zP2beM46ykwspfxaKwBe4GZ7s8DwSgMvCbp3r/pSQ9WUFQ8vfpEpKYg=
+	t=1760454615; cv=none; b=s0yppBOqt9b1SA+iZxCVR0P7s3OdVu8vB+9KVfH/3g9Z3OtjYoHRFk6Gyr1/6hzs2ck/FusKYhd7GKGTqzLGiZ8KMJF4XmK7we8q3oxDXer4x3HOU3ebak4F2z7QAgZxqVDgE1mBvcpQ1Imj0aVawJqHE+wm5iJhGiwb6XmJY4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760453808; c=relaxed/simple;
-	bh=8iKGld3gcMfNcNnZPqxIDIKgD8xoq3CM10GkCPHzaSA=;
+	s=arc-20240116; t=1760454615; c=relaxed/simple;
+	bh=UJlDeUihlMJvrHmNrfgrqSjaykrXCFiaTQfMEA9Ke74=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QW31TiMCxO1WC06qEiNWwlAFHe3VOqtvZKuvVy23quvhvYdLrFnHgUMnBdml5m8CAMttCtLaZYXxekVsPgqFSapQSXsNcYysiJHRzXFoWD+FuBWItTqiMnl7SAMZ1YLDmiF4nhCTPovbWNNdRiZLBDe8+xRmXcCNt1Hz4e1pURc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hqVKeuMz; arc=none smtp.client-ip=209.85.214.174
+	 In-Reply-To:Content-Type; b=iATO/85er2i902RI6drSjD+wIc7KFUxP/vgpXg7xY1x68l/bSj7F6QxSeeYTfqTofX3f2i/W86EF//bx1f90PCGtwEKMKCqYDf01OKwI5iaI6hDb146WaTpOxMcRUCd2lacotgOfzYXeR8mf73KMG1kvznEu12eEe281JojnZKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fCZxAo6G; arc=none smtp.client-ip=209.85.216.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2698e4795ebso53358915ad.0
-        for <linux-watchdog@vger.kernel.org>; Tue, 14 Oct 2025 07:56:46 -0700 (PDT)
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-339d7c4039aso4909333a91.0
+        for <linux-watchdog@vger.kernel.org>; Tue, 14 Oct 2025 08:10:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760453806; x=1761058606; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1760454613; x=1761059413; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=IdzaK9apf88+GKRsm+oIdy934yGVJy1200lhonGLycc=;
-        b=hqVKeuMz12GWPJ3Z+crdr1Z+i1WtRvWWLQlRxCF89yGJ1aYM1DZ3ohYeHXat5RpVaD
-         DU+FTzJE74ELHYvW2svgzmtQGhDWN8yUPNWZQuTGdCZa//7VmP7iREIYLX0z1UMyIyPL
-         4gOiGGZ8ou+xiDVOOq7zWUQnmYKzGb/uaba5gMSqxvKvczJXiuGGhGrHZKiEJMy0ejON
-         TNNWydjpKcasRWdvJtGjpdRDPfFVF9poKKzO8kMD+koRPQts3GuEcoRi30BMjtdcZP8I
-         r1KPzWyZM4Jyqp/4cHvtpwQ/37STalJMiMBBu7rNFHR42qB7hH13zKjUflvrzq8DLUWM
-         BTsw==
+        bh=UZ8ZPh70/mJpLj0YE5LwnBF9XoWtiAj7tI41cmy0aqA=;
+        b=fCZxAo6GUC7C8ZgnOhnR9HiIEPQmGHER0u7/uExz4CXsWa3NN5BWS84aRG6T1fpedj
+         ZU2mtDP1vBrs9qfgRT2ktXB3r5MBR8BA6qcljjPtAS5O52ZWXdPQlAbzuQha5YcYOARv
+         SuxMzhZNoVHOGlaE2TmfXD9aEprJN8bzARVqk6fbmQ5cFvNlTiB0ARMH0IACt6dAmzb7
+         o+4CM1nE53ush+BUCUl49S8c7+8hD0k9Wp4MgpV7c7Outp6tl8bNkT8PmfXNxI3xn4Mr
+         MW+wSTiUwBsuKwOnj2jegYoe7qMOoZV3XVSCgvcDkLnhb72ROWIcXye+hf6UfmEhyEjG
+         +qyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760453806; x=1761058606;
+        d=1e100.net; s=20230601; t=1760454613; x=1761059413;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IdzaK9apf88+GKRsm+oIdy934yGVJy1200lhonGLycc=;
-        b=v71dO46xRhnH7pznVnmfZ53HaL9LylWEcebp3ntwK/32kCsBTLTMSXnxDHwNoMAT9a
-         tQqYjcLBAHK8/iVK21vgNZiOjX5dVFew+z6ircgN1ibmsjuReSfTiEjgElLxaRAHDM7B
-         KOzuNs6fPkuhPpa1bNj5ZfdtkR50c6MePIreqpal7CpVXDplj5jz+sAhQ7c8My+DESg4
-         0enX77JmBeynoNMo6H7h1DzuaRr+Nhn78wj93McHzM/q1gRX+oOobtDH/mm2E45EXeee
-         vp3zQARTdwNH+kTJoD9PaIAxDH9sFue6vJNQEyMJJiRqRRo7RFmKcE9pjjW06Sc5M39B
-         G5mA==
-X-Gm-Message-State: AOJu0YwwVTD1wcFjfU5ghsQX6Hr1YJoTu6SWMq9+FaWBGl/87UFIDx3S
-	EihfBZPDxjEhyhkcVFsSnb2bCKildOs1zpsW16RDD/8Zpp2T/WBVBK1p
-X-Gm-Gg: ASbGncuFxWum+nDHNqT6BvTGMu9Rt2/XY/eRJQ7FhnzH6OGpsEXLMJ6CY16YHSjv3SU
-	V1jqwDCVfjuDBxLmyy6UoU7gX1rIfmHToULRCyVp2FvFa1lhPmXU+Lin0PEJ/19xAvpS76RbtGD
-	taCeQkuUnRnhQWTJ/QLVohHzcFAeeDN8PJxdKILnYhjveByZCOksS8zu9c4wGOxQYmlixqu7bkI
-	0t3DwPn9vwNd4htDveHbfk87/fFwJPXG87LM9csdO5fSgJuBydEH3DGmOHSkCxvfEGInNl9Ln88
-	/rpOZJouXxL5eYKybVwob9w2eDJCywHG2Gz8+TS3Q5vutT0DG8ZLlteP6iNe18ssEeXQ6R+vpno
-	WMThvEDY6Q7vuBdQKiV/GmnA4XNNQPqgNsteeIs0e8O9BqR8EMu/zoDG4dplvNmlVb73MzMOZx7
-	IRDju69WSuTXkmhdZpbLtySztT
-X-Google-Smtp-Source: AGHT+IFj+fVzwDYH2/aRoUhxuSqaOEHAnllbtcxS4YSUx0epDNuTRY0qJYDLt0RViAs76TbbJ+PpUw==
-X-Received: by 2002:a17:903:4b04:b0:28e:80d7:662d with SMTP id d9443c01a7336-2902741e4c2mr273573785ad.58.1760453805781;
-        Tue, 14 Oct 2025 07:56:45 -0700 (PDT)
+        bh=UZ8ZPh70/mJpLj0YE5LwnBF9XoWtiAj7tI41cmy0aqA=;
+        b=WkqMPE0+uNeDH4PU7IQ49sX9Muk4I4/YvmwhdUtFWyAHu0iwAYgntG8bpkD3h5ZQQE
+         4CHwqMklA095FcmRq7ll+reIpGsSuGF1dBX2z+c6wcMKhYUYC/g6oqbU4KXQGaBPOX4J
+         jfmoDHL65yw82mSAoFpmz+4VDigqunk1TcpOpVUf7NGce/xgOEbgJl5KZuUJ2I6sLO8i
+         I2emuTyIU9Elgy08PkjAfEukOsp9LGb1rKb2Up8fbC9iEcDpB8D95DcCMjNTecI7lIuP
+         p7Yi4tn2wXFqxXhVfrZ0QFmTxPu4oQ2wP5L7xpBA/GuNgfIfuXKxLR/vVlDl+Q+ojGYt
+         kc4w==
+X-Forwarded-Encrypted: i=1; AJvYcCVXuoFrVa00nK8U3nyfjn/HI5pnOm/V8BcI64zjPtyzgr6zlJBvjVuaBTzU0GGO7Fc6r9cH2VJHeQyv9T1X8g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwjWGNJ2XMqR9Njc5EOgPTW+gkGvUJ6r7iemZIuZX3JmEf51NOW
+	HBtJS8T7aOpaS+yxJORl2SDsuiqyeBd3BClxOcDSfzXWt3YNGIMNCoVo
+X-Gm-Gg: ASbGnctUn5HYL5EKjXfCNkeXyV0ebXl2fn0ubUThvz4iFhJriZ67HYaJwve9lh8Dq5C
+	BBx9RHayP3IyAU5z/ERgo/AoOQOqlOUHzWJNq/iRX0qsO646hsAlbBuhC7KvjShcHYwYyTk52Fp
+	Pi9oruO81bGjdUJT9L7QXyB+Z5w0K1x7YCXgzWWpp3aDgpWlMEM9GtUhXR7ehKby+OCcjj8hfOH
+	/ejtUgwUF4W4BqyiUD544hY7vVMEzmVGdgH/jop6oHPeo8e1ciQ5JsCxcRYtHnNGTvu3pL/HZk9
+	oh3j1u1EqUomcWvzHGwnBD217ZPQTVgO55i9Es+h7YrzubALvAvkOoDCCcfWkHOtuzMg6qutmFY
+	/p77797SkEESC8ICrE78W58nUSRpL6+VAMrWLB0Paj8PJ2pny5PcRGBfEuNMd6ZRb42gJFkWEJ3
+	Od60KUGZ8Z6fJY5g==
+X-Google-Smtp-Source: AGHT+IFVOt/cHWI56wnImijvXKgvUtR35jCcMT32W1rlMP0piEdWnmn34RqKHc7eQN8Tm1rvjCjmsg==
+X-Received: by 2002:a17:90b:4a45:b0:329:cb75:fef2 with SMTP id 98e67ed59e1d1-33b5111731amr34514049a91.3.1760454609928;
+        Tue, 14 Oct 2025 08:10:09 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29034e1cc10sm166667895ad.31.2025.10.14.07.56.44
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33b61aabbe8sm16264509a91.12.2025.10.14.08.10.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Oct 2025 07:56:45 -0700 (PDT)
+        Tue, 14 Oct 2025 08:10:09 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <a3e84469-8108-4dac-a32b-c95de500af7a@roeck-us.net>
-Date: Tue, 14 Oct 2025 07:56:44 -0700
+Message-ID: <9c1a61f6-f9aa-40b8-9578-adf0e443d790@roeck-us.net>
+Date: Tue, 14 Oct 2025 08:10:08 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -84,16 +85,14 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt-bindings: watchdog: Convert marvell,orion-wdt to DT
- schema
-To: "Rob Herring (Arm)" <robh@kernel.org>,
- Wim Van Sebroeck <wim@linux-watchdog.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
- Gregory Clement <gregory.clement@bootlin.com>
-Cc: linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20251013213146.695195-1-robh@kernel.org>
+Subject: Re: [PATCH v2 2/2] watchdog: renesas_wwdt: add driver
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ linux-renesas-soc@vger.kernel.org
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ Magnus Damm <magnus.damm@gmail.com>, linux-watchdog@vger.kernel.org
+References: <20251014112953.25712-4-wsa+renesas@sang-engineering.com>
+ <20251014112953.25712-6-wsa+renesas@sang-engineering.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -139,16 +138,251 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20251013213146.695195-1-robh@kernel.org>
+In-Reply-To: <20251014112953.25712-6-wsa+renesas@sang-engineering.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 10/13/25 14:31, Rob Herring (Arm) wrote:
-> Convert the Marvell Orion and Armada watchdog binding to DT schema
-> format. It's a straight-forward conversion.
+On 10/14/25 04:29, Wolfram Sang wrote:
+> This driver adds support for the Renesas Window Watchdog Timer (WWDT).
+> Because it can only be setup once after boot and we cannot know if this
+> already happened in early boot stages, it is mandated that the firmware
+> configures the watchdog. Linux then adapts according to the given
+> setup. Note that this watchdog only reports an overflow to the Error
+> Control Module (ECM) and does not reset the SoC on its own.
 > 
-> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+> 
+> Changes since v1:
+> 
+> * support not only V4H but all Gen3/4 SoCs having this WWDT
+> * update commit message and add introductory comment to explain how
+>    this WWDT is handled as a "read-only" device basically
+> * dropped pretimeout flag because this feature cannot be configured
+>    from userspace
+> * added bitfield.h to prevent build failures
+> * switched to "GPL" licence string
+> * cosmetic updates
+> 
+>   drivers/watchdog/Kconfig        |   8 ++
+>   drivers/watchdog/Makefile       |   1 +
+>   drivers/watchdog/renesas_wwdt.c | 163 ++++++++++++++++++++++++++++++++
+>   3 files changed, 172 insertions(+)
+>   create mode 100644 drivers/watchdog/renesas_wwdt.c
+> 
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index 05008d937e40..792d0d831336 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -969,6 +969,14 @@ config RENESAS_WDT
+>   	  This driver adds watchdog support for the integrated watchdogs in the
+>   	  Renesas R-Car and other SH-Mobile SoCs (usually named RWDT or SWDT).
+>   
+> +config RENESAS_WWDT
+> +	tristate "Renesas Window WWDT Watchdog"
+> +	depends on ARCH_RENESAS || COMPILE_TEST
+> +	select WATCHDOG_CORE
+> +	help
+> +	  This driver adds watchdog support for a window timer found in some
+> +	  Renesas R-Car Gen3 and later SoCs.
+> +
+>   config RENESAS_RZAWDT
+>   	tristate "Renesas RZ/A WDT Watchdog"
+>   	depends on ARCH_RENESAS || COMPILE_TEST
+> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+> index b680e4d3c1bc..ba52099b1253 100644
+> --- a/drivers/watchdog/Makefile
+> +++ b/drivers/watchdog/Makefile
+> @@ -85,6 +85,7 @@ obj-$(CONFIG_DIGICOLOR_WATCHDOG) += digicolor_wdt.o
+>   obj-$(CONFIG_LPC18XX_WATCHDOG) += lpc18xx_wdt.o
+>   obj-$(CONFIG_BCM7038_WDT) += bcm7038_wdt.o
+>   obj-$(CONFIG_RENESAS_WDT) += renesas_wdt.o
+> +obj-$(CONFIG_RENESAS_WWDT) += renesas_wwdt.o
+>   obj-$(CONFIG_RENESAS_RZAWDT) += rza_wdt.o
+>   obj-$(CONFIG_RENESAS_RZN1WDT) += rzn1_wdt.o
+>   obj-$(CONFIG_RENESAS_RZG2LWDT) += rzg2l_wdt.o
+> diff --git a/drivers/watchdog/renesas_wwdt.c b/drivers/watchdog/renesas_wwdt.c
+> new file mode 100644
+> index 000000000000..0f56f5c7e407
+> --- /dev/null
+> +++ b/drivers/watchdog/renesas_wwdt.c
+> @@ -0,0 +1,163 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Driver for the Renesas Window Watchdog Timer (WWDT)
+> + *
+> + * The WWDT can only be setup once after boot. Because we cannot know if this
+> + * already happened in early boot stages, it is mandated that the firmware
+> + * configures the watchdog. Linux then adapts according to the given setup.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+What if it didn't happen ? Is WDTA0OVF set to a reasonable default in that case ?
+
+> + * Note that this watchdog only reports an overflow to the Error Control Module.
+
+Kind of unusual. Why not panic in that case, and why have the watchdog in the first
+place ?
+
+> + */
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/clk.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/io.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/watchdog.h>
+> +
+> +#define WDTA0WDTE	0x00
+> +#define WDTA0RUN	BIT(7)
+> +#define WDTA0_KEY	0x2c
+> +
+> +#define WDTA0MD		0x0c
+> +#define WDTA0OVF(x)	FIELD_GET(GENMASK(6, 4), x)
+> +#define WDTA0WIE	BIT(3)
+> +#define WDTA0ERM	BIT(2)
+> +#define WDTA0WS(x)	FIELD_GET(GENMASK(1, 0), x)
+> +
+> +struct wwdt_priv {
+> +	void __iomem *base;
+> +	struct watchdog_device wdev;
+> +};
+> +
+> +static int wwdt_start(struct watchdog_device *wdev)
+> +{
+> +	struct wwdt_priv *priv = watchdog_get_drvdata(wdev);
+> +
+Maybe use container_of() ?
+
+> +	writeb(WDTA0RUN | WDTA0_KEY, priv->base + WDTA0WDTE);
+> +	return 0;
+> +}
+> +
+> +static const struct watchdog_info wwdt_ident = {
+> +	.options = WDIOF_KEEPALIVEPING | WDIOF_ALARMONLY,
+> +	.identity = "Renesas Window Watchdog",
+> +};
+> +
+> +static const struct watchdog_ops wwdt_ops = {
+> +	.owner = THIS_MODULE,
+> +	.start = wwdt_start,
+> +};
+> +
+> +static irqreturn_t wwdt_error_irq(int irq, void *dev_id)
+> +{
+> +	struct device *dev = dev_id;
+> +
+> +	dev_warn(dev, "Watchdog timed out\n");
+
+So the pretimeout may trigger a reboot (panic) if the pretimeout
+governor is set to it, but the real watchdog just says Hi.
+Does that really make sense ?
+
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static irqreturn_t wwdt_pretimeout_irq(int irq, void *dev_id)
+> +{
+> +	struct watchdog_device *wdev = dev_id;
+> +
+> +	watchdog_notify_pretimeout(wdev);
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int wwdt_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct wwdt_priv *priv;
+> +	struct watchdog_device *wdev;
+> +	struct clk *clk;
+> +	unsigned long rate;
+> +	unsigned int interval, window_size;
+> +	int ret;
+> +	u8 val;
+> +
+> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(priv->base))
+> +		return PTR_ERR(priv->base);
+> +
+> +	clk = devm_clk_get(dev, "cnt");
+> +	if (IS_ERR(clk))
+> +		return PTR_ERR(clk);
+> +
+> +	rate = clk_get_rate(clk);
+> +	if (!rate)
+> +		return -EINVAL;
+> +
+> +	wdev = &priv->wdev;
+> +
+> +	val = readb(priv->base + WDTA0WDTE);
+> +	if (val & WDTA0RUN)
+> +		set_bit(WDOG_HW_RUNNING, &wdev->status);
+> +
+> +	val = readb(priv->base + WDTA0MD);
+> +	interval = 1 << (9 + WDTA0OVF(val));
+> +	/* size of the closed(!) window per mille */
+> +	window_size = 250 * (3 - WDTA0WS(val));
+> +
+> +	wdev->info = &wwdt_ident;
+> +	wdev->ops = &wwdt_ops;
+> +	wdev->parent = dev;
+> +	wdev->min_hw_heartbeat_ms = window_size * interval / rate;
+> +	wdev->max_hw_heartbeat_ms = 1000 * interval / rate;
+> +	wdev->timeout = DIV_ROUND_UP(wdev->max_hw_heartbeat_ms, 1000);
+> +
+> +	watchdog_set_drvdata(wdev, priv);
+> +	watchdog_set_nowayout(wdev, true);
+> +
+> +	if (!(val & WDTA0ERM)) {
+> +		ret = platform_get_irq_byname(pdev, "error");
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = devm_request_threaded_irq(dev, ret, NULL, wwdt_error_irq,
+> +						IRQF_ONESHOT, NULL, dev);
+> +		if (ret < 0)
+> +			return ret;
+> +	}
+> +
+> +	if (val & WDTA0WIE) {
+> +		ret = platform_get_irq_byname(pdev, "pretimeout");
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = devm_request_threaded_irq(dev, ret, NULL, wwdt_pretimeout_irq,
+> +						IRQF_ONESHOT, NULL, wdev);
+> +		if (ret < 0)
+> +			return ret;
+> +	}
+> +
+> +	devm_watchdog_register_device(dev, wdev);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id renesas_wwdt_ids[] = {
+> +	{ .compatible = "renesas,rcar-gen3-wwdt", },
+> +	{ .compatible = "renesas,rcar-gen4-wwdt", },
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, renesas_wwdt_ids);
+> +
+> +static struct platform_driver renesas_wwdt_driver = {
+> +	.driver = {
+> +		.name = "renesas_wwdt",
+> +		.of_match_table = renesas_wwdt_ids,
+> +	},
+> +	.probe = wwdt_probe,
+> +};
+> +module_platform_driver(renesas_wwdt_driver);
+> +
+> +MODULE_DESCRIPTION("Renesas Window Watchdog (WWDT) Driver");
+> +MODULE_LICENSE("GPL");
+> +MODULE_AUTHOR("Wolfram Sang <wsa+renesas@sang-engineering.com>");
 
 
