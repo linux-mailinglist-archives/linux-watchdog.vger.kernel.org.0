@@ -1,48 +1,48 @@
-Return-Path: <linux-watchdog+bounces-4427-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4428-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F6E0C15CBC
-	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Oct 2025 17:27:53 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 733DAC15D9E
+	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Oct 2025 17:36:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9E98D189A2C4
-	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Oct 2025 16:21:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C1C623B321D
+	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Oct 2025 16:29:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3D96285058;
-	Tue, 28 Oct 2025 16:17:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90A5A2874ED;
+	Tue, 28 Oct 2025 16:29:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pn2nQqYl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kLmpobQi"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 707B4749C;
-	Tue, 28 Oct 2025 16:17:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D0EE285CA2;
+	Tue, 28 Oct 2025 16:29:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761668269; cv=none; b=LniIi0PHtTFw2ZR4k/1ML842Y/DPc8cQznSj/xpOIOikREX+/40TUiXhwLtpKNeEUew4hXcW+O91g75PwaJkn2AIHijtPi9WbNRt3MFQsS0X9EN0vmPKxtlPJdvr6UlfzxLdG0Y9Je+5Fi+prnBn0a7tTfnv7sdhE0brrmir24o=
+	t=1761668982; cv=none; b=Rf4948a9ucEBtg/tlTGl4jIwUB1u166Fm2DBbcxO3y2n+URZfBtM5WlrKBbw7FcW2wi025deEBDTWw/ePC5yd7+v8YHBjEYZAQNQbdUP4gq23BdAnx2jBDf/+ivrv9I1/orsRpcmc8G3IGauvALPwcd9d/1jXhEm8RLyUBvJmE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761668269; c=relaxed/simple;
-	bh=VDciX31EiS2Tu+BZbfD2p61mVTFEw5DdRN7Z18SRLGs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ew2tYFHnu25dRTD7AdKnxmsGTeDpfKLUhchoxUvktfZSDCSeEfpIyZMKAF8zMPJzRUVae0Fr/Pon7jeQFRejGrLQM/fxA8FVg4Ae0JodBu8Q0EX5lsNzdsXmsitUjhARuMEl5eDDJBf4+bMJPsuHdH8SXsoZDnb+OHxwoqSkUkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pn2nQqYl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E44CDC4CEE7;
-	Tue, 28 Oct 2025 16:17:45 +0000 (UTC)
+	s=arc-20240116; t=1761668982; c=relaxed/simple;
+	bh=U/1tZgh4GgLt+Eg5UD+RF0IXw1jsdcl5mI9mP5+MA+c=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=TJd7u7tK8AOweJ4agg/L39W8lLMl4nt+LLB4ArwEZUf0upf1JmrkLMdehi61stJCck+2iidt7arXrTmFoSM4+PZ3TKqkzpMqLOAqcpDRJGcc1RlGChG4BIG8Unk8vAMtg3WXxgu1XYVNzmiX6IViCtCrWZv5Sr3WccjkYfVqT+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kLmpobQi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2875C4CEE7;
+	Tue, 28 Oct 2025 16:29:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761668269;
-	bh=VDciX31EiS2Tu+BZbfD2p61mVTFEw5DdRN7Z18SRLGs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Pn2nQqYl5TD8QrF6RxGDRmU2KebC/AkgFD1TqwFz/ONCywMXf6T7USwK+csE3Mgor
-	 reWQkZabfbJPBqTeN+wb2FhscPQMKW1Lzhtg3ycY3UX+jwMt02Dkc0kfB532FyXagf
-	 /c1f7mROioVJ5dw6GIznW10li0WyTFUbxNigUjvb5k+8MhBVi1MGPNGLxtO3p9rnv/
-	 9nVBytUmJxPp+dW2fgSqxyChZ0jM7JYJVVbnBjGsYhHoW1QSNGo+JjRIhPcjir8gbF
-	 F/1tQdRPYy5RYyznkNFjTs9HBqz3hM6yG55O+CLaO8cdAG0PupyxUOri7QBoS+VCEw
-	 OT/DeP1UQWYZg==
-Message-ID: <e03373d9-e2dd-48b6-93a6-554fcd623718@kernel.org>
-Date: Tue, 28 Oct 2025 17:17:44 +0100
+	s=k20201202; t=1761668981;
+	bh=U/1tZgh4GgLt+Eg5UD+RF0IXw1jsdcl5mI9mP5+MA+c=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=kLmpobQikDxWT7WUdhZnPPHgea1mKVAOrBKSRVvtZX69Uy8vu6zY7cZDT0q7rpCmh
+	 YRl0wLJa5t6nmpSOW+0zUrCwHR8LZXuG8ANGGOfqpIynlTOCZJAYmXEr+/GWKSm/Ul
+	 YRanH8hzVhK6TDWi82HmhL/CRvw20Jc54n1I6NYDO++3sSJcn848NGsH+EX0Vz5M+p
+	 3bB0ptknTwcE3LaPXGXfoO18aW+BsDNJsRPy4nPmWEUVMDZCj7tEr1LuF5j6sDNDM6
+	 icwM7tPD+rqkUsY7itnr66Xs8RmtHF+RPaV/UsCYcm1cN2pT8FIpRQx6ut1KuQGaus
+	 bi6wHFVnZCiCQ==
+Message-ID: <7f49e7cb-c102-4e89-9aaa-73ba2998f4fd@kernel.org>
+Date: Tue, 28 Oct 2025 17:29:37 +0100
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -51,6 +51,7 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v3] watchdog: Add driver for Gunyah Watchdog
+From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Pavan Kondeti <pavan.kondeti@oss.qualcomm.com>
 Cc: Hrishabh Rajput <hrishabh.rajput@oss.qualcomm.com>,
  Bjorn Andersson <andersson@kernel.org>,
@@ -67,7 +68,7 @@ References: <20251028-gunyah_watchdog-v3-1-e6d1ea438b1d@oss.qualcomm.com>
  <73955d58-544c-4299-a099-bfd9e5912a40@kernel.org>
  <636a1f99-acd4-4904-8fae-f159646cc1a0@kernel.org>
  <f4d80be9-986f-4d37-9c25-725eff7bb653@quicinc.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <e03373d9-e2dd-48b6-93a6-554fcd623718@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -112,74 +113,91 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <f4d80be9-986f-4d37-9c25-725eff7bb653@quicinc.com>
+In-Reply-To: <e03373d9-e2dd-48b6-93a6-554fcd623718@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 28/10/2025 13:27, Pavan Kondeti wrote:
-> On Tue, Oct 28, 2025 at 12:07:40PM +0100, Krzysztof Kozlowski wrote:
->> On 28/10/2025 12:04, Krzysztof Kozlowski wrote:
->>> On 28/10/2025 11:58, Hrishabh Rajput wrote:
->>>>
->>>> On 10/28/2025 3:10 PM, Krzysztof Kozlowski wrote:
->>>>> On 28/10/2025 10:35, Hrishabh Rajput via B4 Relay wrote:
->>>>>> +
->>>>>> +static int __init gunyah_wdt_init(void)
->>>>>> +{
->>>>>> +	struct arm_smccc_res res;
->>>>>> +	struct device_node *np;
->>>>>> +	int ret;
->>>>>> +
->>>>>> +	/* Check if we're running on a Qualcomm device */
->>>>>> +	np = of_find_compatible_node(NULL, NULL, "qcom,smem");
->>>>> I don't think you implemented my feedback. This again is executed on
->>>>> every platform, e.g. on Samsung, pointlessly.
+On 28/10/2025 17:17, Krzysztof Kozlowski wrote:
+> On 28/10/2025 13:27, Pavan Kondeti wrote:
+>> On Tue, Oct 28, 2025 at 12:07:40PM +0100, Krzysztof Kozlowski wrote:
+>>> On 28/10/2025 12:04, Krzysztof Kozlowski wrote:
+>>>> On 28/10/2025 11:58, Hrishabh Rajput wrote:
 >>>>>
->>>>> Implement previous feedback.
+>>>>> On 10/28/2025 3:10 PM, Krzysztof Kozlowski wrote:
+>>>>>> On 28/10/2025 10:35, Hrishabh Rajput via B4 Relay wrote:
+>>>>>>> +
+>>>>>>> +static int __init gunyah_wdt_init(void)
+>>>>>>> +{
+>>>>>>> +	struct arm_smccc_res res;
+>>>>>>> +	struct device_node *np;
+>>>>>>> +	int ret;
+>>>>>>> +
+>>>>>>> +	/* Check if we're running on a Qualcomm device */
+>>>>>>> +	np = of_find_compatible_node(NULL, NULL, "qcom,smem");
+>>>>>> I don't think you implemented my feedback. This again is executed on
+>>>>>> every platform, e.g. on Samsung, pointlessly.
+>>>>>>
+>>>>>> Implement previous feedback.
+>>>>>
+>>>>> Do you want us to add platform device from another driver which is 
+>>>>> probed only on Qualcomm devices (like socinfo from previous discussion) 
+>>>>> and get rid of the module init function entirely? As keeping anything in 
+>>>>> the module init will get it executed on all platforms.
 >>>>
->>>> Do you want us to add platform device from another driver which is 
->>>> probed only on Qualcomm devices (like socinfo from previous discussion) 
->>>> and get rid of the module init function entirely? As keeping anything in 
->>>> the module init will get it executed on all platforms.
->>>
->>> Instead of asking the same can you read previous discussion? What is
->>> unclear here:
->>> https://lore.kernel.org/all/3b901f9d-dbfa-4f93-a8d2-3e89bd9783c9@kernel.org/
->>> ?
->>>
+>>>> Instead of asking the same can you read previous discussion? What is
+>>>> unclear here:
+>>>> https://lore.kernel.org/all/3b901f9d-dbfa-4f93-a8d2-3e89bd9783c9@kernel.org/
+>>>> ?
 >>>>
+>>>>>
+>>>>>
+>>>>> With this patch version, we have tried to reduce the code execution on 
+>>>>> non-Qualcomm devices (also tried the alternative as mentioned in the 
+>>>>> cover letter). Adding platform device from another driver as described 
+>>>>> above would eliminate it entirely, please let us know if you want us to 
+>>>>> do that.
 >>>>
->>>> With this patch version, we have tried to reduce the code execution on 
->>>> non-Qualcomm devices (also tried the alternative as mentioned in the 
->>>> cover letter). Adding platform device from another driver as described 
->>>> above would eliminate it entirely, please let us know if you want us to 
->>>> do that.
+>>>> Why do I need to repeat the same as last time?
 >>>
->>> Why do I need to repeat the same as last time?
+>>>
+>>> Now I see that you completely ignored previous discussion and sent THE
+>>> SAME approach.
 >>
+>> Our intention is not to waste reviewers time at all. It is just a
+>> misunderstanding on what your comment is about. Let me elaborate further
+>> not to defend our approach here but to get a clarity so that we don't
+>> end up in the same situation when v4 is posted.
 >>
->> Now I see that you completely ignored previous discussion and sent THE
->> SAME approach.
+>> https://lore.kernel.org/all/b94d8ca3-af58-4a78-9a5a-12e3db0bf75f@kernel.org/ 
+>>
+>> You mentioned here
+>>
+>> ```
+>> To me socinfo feels even better. That way only, really only qcom devices
+>> will execute this SMC.
+>> ```
+>>
+>> We interpreted this comment as `avoid executing this SMC on non qcom
+>> devices`. That is exactly what we have done in the current patch. since
 > 
-> Our intention is not to waste reviewers time at all. It is just a
-> misunderstanding on what your comment is about. Let me elaborate further
-> not to defend our approach here but to get a clarity so that we don't
-> end up in the same situation when v4 is posted.
 > 
-> https://lore.kernel.org/all/b94d8ca3-af58-4a78-9a5a-12e3db0bf75f@kernel.org/ 
-> 
-> You mentioned here
-> 
-> ```
-> To me socinfo feels even better. That way only, really only qcom devices
-> will execute this SMC.
-> ```
-> 
-> We interpreted this comment as `avoid executing this SMC on non qcom
-> devices`. That is exactly what we have done in the current patch. since
+> So where did you use socinfo? Point me to the code.
 
 
-So where did you use socinfo? Point me to the code.
+To recall my previous feedback:
+
+"No, your hypervisor driver (which you have) should start the module via
+adding platform/aux/something devices."
+
+"To me socinfo feels even better."
+
+And you ignored both and took some further part claiming that
+invalidates previous feedback. I don't know how to stress it more. You
+really do not read what was given to you.
+
+If you call any module_init other than module_foo_driver I will keep
+NAKing your patch because it is wrong. I explained why wrong already
+multiple times in previous threads and other discussions.
 
 Best regards,
 Krzysztof
