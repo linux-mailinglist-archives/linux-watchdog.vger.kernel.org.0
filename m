@@ -1,48 +1,48 @@
-Return-Path: <linux-watchdog+bounces-4435-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4436-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 426E5C15F1E
-	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Oct 2025 17:51:26 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id B00E0C15EDF
+	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Oct 2025 17:48:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D8613A27AF
-	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Oct 2025 16:44:29 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3E5744E33EF
+	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Oct 2025 16:46:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEA8D32BF43;
-	Tue, 28 Oct 2025 16:44:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EF3E341AA0;
+	Tue, 28 Oct 2025 16:46:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e856YTH8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aAP6pw92"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E7F823FC4C;
-	Tue, 28 Oct 2025 16:44:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DCFE214A8B;
+	Tue, 28 Oct 2025 16:46:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761669864; cv=none; b=OajnWh+tgDansVePBKQ0bvOyMGnBbPndilEaXZLvqNbs9e39zu9RePLumGt0cKXP0m7MyUESTjwN7VAKmaYSleorlFLpFoLvCBflwUPr6b8L7bUGnYouNp5YRHAY7dVyMlVrV9VdELuU0ra4lhSKrA7T7u41NdHGf5/xvulZt5U=
+	t=1761669963; cv=none; b=u/uziqwHewiUgd6iFQPvTJ+naYO6ZbBoN3QmSOyBtdajCvrEF926xcQjSlzI4aIfEt+cptDP9/D/VfCYBoSJq0t7e09AM9gozX4jb3wBygd84ZhZnhIXZMm17/pXTWQsdifA2xyQolbvzOQSq7W3oQDJk5AraxCcmj3QZHE4T3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761669864; c=relaxed/simple;
-	bh=zxXbW5Locnu07OLXroomWcTdRtWA7t9d00BPeoFn8I4=;
+	s=arc-20240116; t=1761669963; c=relaxed/simple;
+	bh=JpR4fWG1ncChqciQyze+WbIz99pClPhkzB2UqDbdlZk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NP4gz/PcbPEEJnAO8P7FMvsF+BZb6ZRXj4Su313myP9GWAPe/TiPfEM25OwUCt7umEJoA7y134GlabLvS1NGbwkt2oWeJBIcI1s9VTEI5UwCsyOa0hdKOL8Xxf1+woPng6vM9uh/ANrT8e4NbZ7ePSgq04wjGfwfFD+RA+RoFOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e856YTH8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDE08C4CEE7;
-	Tue, 28 Oct 2025 16:44:20 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=S95tZEZrTjrUsZkmciYRCLXlpryZcb4yt9wZpUIzrq2lcg53yN64aLLkBs77tix5ESBQqMgrmGnPusa0otMcRG1P4ImhZVMP9oDzZmfFUo4j2xe05QQC+bZqRTTAM3YIShwvUYyhda3o014Txi2KXEk4UXlkH1z5i9k1M5RaXe4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aAP6pw92; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D84B0C4CEFF;
+	Tue, 28 Oct 2025 16:45:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761669864;
-	bh=zxXbW5Locnu07OLXroomWcTdRtWA7t9d00BPeoFn8I4=;
+	s=k20201202; t=1761669960;
+	bh=JpR4fWG1ncChqciQyze+WbIz99pClPhkzB2UqDbdlZk=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=e856YTH8ga1nNoXKKtqQK9PstLrviyqey/NE8YNROM4kl0gA2jRpWwiK/2aUZU913
-	 rvC5dmJCtDbwky/iA4LP8PX0qzbsUWAueJUHvX2bg214sUSbqmOJhnq82xJMecFpr4
-	 jH2ru8pQWpBR2r5IiWnvs8d7++X8h/eGjZQ5XvUdHHvQoqFj5b2EHAD9aeke/DMpnv
-	 dN9PlJijsPSUPiJpAbvpvGBBU9UaiJ9bGQjPbvnGs6fZHwbcx+GTOA409EykhKuxy2
-	 5PMdz0ed1wb5RvYG5XWzBV0EWIyeXBPIXbjy1tfcxjKm+HLxCP8z5rNnvmb/tqaNw5
-	 XH+nh0VBpjRvg==
-Message-ID: <ccd14d85-320d-4f6b-bafb-45476ff15987@kernel.org>
-Date: Tue, 28 Oct 2025 17:44:19 +0100
+	b=aAP6pw92T0ww/UGtctLdTIo1UcOVyJYixVWFEr6BwcxZETMjZZe0VL2ZArxj1LMjP
+	 bCzDgDOQJZy/7CobxLeLzw8bfIWxXZRztx8U24B8+mi0tHFV+dCWQ6RxcGPpZLQzBi
+	 3311sU5y3lrklp7/7nx8VDWk254cADB3qeqUDgMrVPzYuFZNlCdIR5+md4fTEM8vRK
+	 vvrzEUzx3X4mdJVGTRNw3YCkMbIiMm+798t3XpCGs4SM+WU/N+q81WrtYHmf67SeEL
+	 USk/8uO/Ob/ZsHFTQzFkYtQeAGEPeOjgwUg2ecWoF+Sk0GbWUzdj2sgtfQQmtgprQV
+	 cZ1/OoMPrsmWg==
+Message-ID: <8dd2a196-e15b-4b1b-bebe-fcb6445d427b@kernel.org>
+Date: Tue, 28 Oct 2025 17:45:56 +0100
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -51,17 +51,18 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v3] watchdog: Add driver for Gunyah Watchdog
-To: Guenter Roeck <linux@roeck-us.net>, hrishabh.rajput@oss.qualcomm.com,
- Bjorn Andersson <andersson@kernel.org>,
+To: Pavan Kondeti <pavan.kondeti@oss.qualcomm.com>,
+ Guenter Roeck <linux@roeck-us.net>
+Cc: hrishabh.rajput@oss.qualcomm.com, Bjorn Andersson <andersson@kernel.org>,
  Konrad Dybcio <konradybcio@kernel.org>,
  Wim Van Sebroeck <wim@linux-watchdog.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- Pavan Kondeti <pavan.kondeti@oss.qualcomm.com>,
- Neil Armstrong <neil.armstrong@linaro.org>
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
+ linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Neil Armstrong <neil.armstrong@linaro.org>
 References: <20251028-gunyah_watchdog-v3-1-e6d1ea438b1d@oss.qualcomm.com>
  <4659e69b-907a-49ba-8eb6-ac17232a5219@roeck-us.net>
+ <3e4fd54c-90fb-4b15-a9cd-a2d11b0aa952@quicinc.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -107,36 +108,33 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <4659e69b-907a-49ba-8eb6-ac17232a5219@roeck-us.net>
+In-Reply-To: <3e4fd54c-90fb-4b15-a9cd-a2d11b0aa952@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 28/10/2025 17:06, Guenter Roeck wrote:
-> On 10/28/25 02:35, Hrishabh Rajput via B4 Relay wrote:
->> +
->> +	ret = gunyah_wdt_call(GUNYAH_WDT_STATUS, 0, 0, &res);
->> +	if (ret)
->> +		return -ENODEV;
->> +
->> +	ret = platform_driver_register(&gunyah_wdt_driver);
->> +	if (ret)
->> +		return ret;
->> +
->> +	gunyah_wdt_dev = platform_device_register_simple(GUNYAH_WDT_DRV_NAME,
->> +							 -1, NULL, 0);
-> 
-> I did not follow the discussion around this, so I may be missing something.
-> If so, apologies.
-> 
-> This is a highly unusual approach. What is the point of not instantiating
-> the watchdog device through devicetree and doing it in the init function
-> instead ? There should be a devicetree node which instantiates the device;
-> it should never be instantiated from the init function unless there _is_
-> no devicetree, which is obviously not the case here.
+On 28/10/2025 17:40, Pavan Kondeti wrote:
+>> Every other driver which supports devicetree has an .of_match_table
+>> which triggers device instantiation. If the Gunyah watchdog can for
+>> some reason not use that approach, its devicetree description should
+>> be fixed. Instantiating the device from its init function because its
+>> devicetree description is bad or missing is just wrong. It is even more
+>> wrong to try to contact the hardware or embedded controller to figure out
+>> if the device is there. This can have all kinds of negative impact on other
+>> hardware.
+>>
+> The Gunyah WDT node gets overlayed by bootloader. We see that this
+
+We absolutely don't care what your bootloader gives as overlay. You
+should have first define the bindings then add such stuff.
+
+You cannot use any argument of your bootloader in such case. You decided
+to do it ignoring or not even asking community, so you have to live now
+with all the consequences of it. Including rewriting completely bootloader.
 
 
-We told that to them already... Every iteration of gunyah feels like
-pushing their approach without regard to community feedback.
+> overlay is failing w/ upstream device tree since the overlay has
+> references to downstream code. Please see [1]. Hence we are trying to
+> register the platform device dynamically.
 
 
 Best regards,
