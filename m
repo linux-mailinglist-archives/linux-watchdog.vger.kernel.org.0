@@ -1,48 +1,48 @@
-Return-Path: <linux-watchdog+bounces-4423-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4424-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5656FC144A5
-	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Oct 2025 12:11:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A1AAC144C9
+	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Oct 2025 12:13:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 161DB543D8D
-	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Oct 2025 11:04:58 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 035114E784E
+	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Oct 2025 11:07:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58E552F0C67;
-	Tue, 28 Oct 2025 11:04:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C88172F0C67;
+	Tue, 28 Oct 2025 11:07:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U9zbWuG8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZHYInXqv"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F16A2C08C0;
-	Tue, 28 Oct 2025 11:04:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9942B22D7A5;
+	Tue, 28 Oct 2025 11:07:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761649494; cv=none; b=ZJBFlReZDt0ehkHGC4RVkepk0OI5QQYKNuhu57yQ2AOHX+t4ZJWPpcqG1VcZujFEIuY3SbcL9RB/U8mHER+do7MOLuRk9X9onhopeByGz8JcUXMcsStuUHp7QblKvP3DyBi4XDbuF8aOOmAMR5b71hPv6tjTCMe925QfuQ3vXso=
+	t=1761649666; cv=none; b=N4bHt+vZT2BbyQF9+y3OzIHBiBngmosq3sw9w1bFqHzWayBBtBOawQOSS3IHMWFNsj9BssHj6nW53AWyCbYP+lEYb4mH0vldaAJXEMafSawfxPNTeB9xIL78I6xSGFhEWleY8g4p+nkV4aB4HudMrS0t6CF3Znp3jKQwcvh/Be8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761649494; c=relaxed/simple;
-	bh=OBCXvKJjGdONFbMXWfGZ9ObyKFupdDq2VJVf7GEfLgU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kK5BN5QocLM0lLTm8/GwafiATVO0rSMs1pGCbPt8JL3FuWDGZ8L2LD3ECvtllW9nJvsIqcBhKa5z36xjYo51YRssdHVPt+k/qv1Po7X2kRBBu8lAW/5nTuO29PrdTQRQwOCAVtOioB1auHIslbT9+bGmNwV1o40l5d/JXA+nyl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U9zbWuG8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA94AC4CEE7;
-	Tue, 28 Oct 2025 11:04:50 +0000 (UTC)
+	s=arc-20240116; t=1761649666; c=relaxed/simple;
+	bh=jr205lfYzivrY0iZlCf4BZchigmuLVAxsV2HlxWTzwA=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=TJY5r0yd+8dJxi5stRnufN7rnRbrQJC4vLfRboP4m2tcFqo7IM3vTwbMIdhSV18AFI6u4W+W047QYWURFCfD6QQdU5J2sGmoDPzs3yC2GlhMe5AZyQb2G8d/CrkzC0o/EZ0kl0+mbwpF65TORGBwp1li1wbsH2Szo4vqU5dqOkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZHYInXqv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BED71C4CEE7;
+	Tue, 28 Oct 2025 11:07:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761649493;
-	bh=OBCXvKJjGdONFbMXWfGZ9ObyKFupdDq2VJVf7GEfLgU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=U9zbWuG8KfcIOhXoz2kCkYBTYFtIpBhypwWofwuVuGvRyhpkhaKSA3s1x1sWX1Yin
-	 RhN3YliNA0yS38qRRkhzS2xzrw9Ll7dUJU2HVWEPmP7U03foFueN9Q505fAV7LTqOV
-	 4vcGGjsrqQMwFWGF9XN3sGTSUFEvJB9d6RmCUxTZvvo/4OywsxranPm2hS4wS/np6O
-	 Z3zmhCPLai19R2G2quiwDIoL66nd8r6QU54z6v92Yu1nHE/6Myg7QWuM73pYPWV3w9
-	 1MYpqpfWXjtN8ewT+LhU0HQJssjABUcXlYiafczXV5OT0Unq8fqEeSrzIDXQmejDOb
-	 RV/cHU0MFpT/Q==
-Message-ID: <73955d58-544c-4299-a099-bfd9e5912a40@kernel.org>
-Date: Tue, 28 Oct 2025 12:04:48 +0100
+	s=k20201202; t=1761649666;
+	bh=jr205lfYzivrY0iZlCf4BZchigmuLVAxsV2HlxWTzwA=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=ZHYInXqv3X6ssI8eNwnBmi6ImltKjRfhUw2KidgwTQvg2qX84yLrAJqflrc3Ylrsq
+	 LggMDcpA/HEYKHZ3u254YNatAvTHLciQezq/LjLDqlDqL7Vr3owgFAJf+AptrRBWF6
+	 Ha37eDkkahJ3odsKlCkkEpvT8u6JyD18YQxmiK+cEuZetpgKrWDj8U2nFyFfr0Fj+7
+	 NZJmnW10AvtBed8/txaayxGdw+i1U4YtfeywNxVUaVtkVjVGK/kuui19QgWRBN8sQq
+	 BSfWAG6a6IfOTJjFYm/QrbBjJ73kRDKx+psTVlVq0x3y31/GXckbJB/WvGeMx/5d0U
+	 8wMN6FU1S7NJA==
+Message-ID: <636a1f99-acd4-4904-8fae-f159646cc1a0@kernel.org>
+Date: Tue, 28 Oct 2025 12:07:40 +0100
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -51,6 +51,7 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v3] watchdog: Add driver for Gunyah Watchdog
+From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Hrishabh Rajput <hrishabh.rajput@oss.qualcomm.com>,
  Bjorn Andersson <andersson@kernel.org>,
  Konrad Dybcio <konradybcio@kernel.org>,
@@ -64,7 +65,7 @@ Cc: linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
 References: <20251028-gunyah_watchdog-v3-1-e6d1ea438b1d@oss.qualcomm.com>
  <25f7ff09-08ea-4969-9184-9fd01b097558@kernel.org>
  <76479593-c47b-41a7-8349-5d7c1403f7c0@oss.qualcomm.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <73955d58-544c-4299-a099-bfd9e5912a40@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -109,47 +110,55 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <76479593-c47b-41a7-8349-5d7c1403f7c0@oss.qualcomm.com>
+In-Reply-To: <73955d58-544c-4299-a099-bfd9e5912a40@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 28/10/2025 11:58, Hrishabh Rajput wrote:
-> 
-> On 10/28/2025 3:10 PM, Krzysztof Kozlowski wrote:
->> On 28/10/2025 10:35, Hrishabh Rajput via B4 Relay wrote:
->>> +
->>> +static int __init gunyah_wdt_init(void)
->>> +{
->>> +	struct arm_smccc_res res;
->>> +	struct device_node *np;
->>> +	int ret;
->>> +
->>> +	/* Check if we're running on a Qualcomm device */
->>> +	np = of_find_compatible_node(NULL, NULL, "qcom,smem");
->> I don't think you implemented my feedback. This again is executed on
->> every platform, e.g. on Samsung, pointlessly.
+On 28/10/2025 12:04, Krzysztof Kozlowski wrote:
+> On 28/10/2025 11:58, Hrishabh Rajput wrote:
 >>
->> Implement previous feedback.
+>> On 10/28/2025 3:10 PM, Krzysztof Kozlowski wrote:
+>>> On 28/10/2025 10:35, Hrishabh Rajput via B4 Relay wrote:
+>>>> +
+>>>> +static int __init gunyah_wdt_init(void)
+>>>> +{
+>>>> +	struct arm_smccc_res res;
+>>>> +	struct device_node *np;
+>>>> +	int ret;
+>>>> +
+>>>> +	/* Check if we're running on a Qualcomm device */
+>>>> +	np = of_find_compatible_node(NULL, NULL, "qcom,smem");
+>>> I don't think you implemented my feedback. This again is executed on
+>>> every platform, e.g. on Samsung, pointlessly.
+>>>
+>>> Implement previous feedback.
+>>
+>> Do you want us to add platform device from another driver which is 
+>> probed only on Qualcomm devices (like socinfo from previous discussion) 
+>> and get rid of the module init function entirely? As keeping anything in 
+>> the module init will get it executed on all platforms.
 > 
-> Do you want us to add platform device from another driver which is 
-> probed only on Qualcomm devices (like socinfo from previous discussion) 
-> and get rid of the module init function entirely? As keeping anything in 
-> the module init will get it executed on all platforms.
-
-Instead of asking the same can you read previous discussion? What is
-unclear here:
-https://lore.kernel.org/all/3b901f9d-dbfa-4f93-a8d2-3e89bd9783c9@kernel.org/
-?
-
+> Instead of asking the same can you read previous discussion? What is
+> unclear here:
+> https://lore.kernel.org/all/3b901f9d-dbfa-4f93-a8d2-3e89bd9783c9@kernel.org/
+> ?
 > 
+>>
+>>
+>> With this patch version, we have tried to reduce the code execution on 
+>> non-Qualcomm devices (also tried the alternative as mentioned in the 
+>> cover letter). Adding platform device from another driver as described 
+>> above would eliminate it entirely, please let us know if you want us to 
+>> do that.
 > 
-> With this patch version, we have tried to reduce the code execution on 
-> non-Qualcomm devices (also tried the alternative as mentioned in the 
-> cover letter). Adding platform device from another driver as described 
-> above would eliminate it entirely, please let us know if you want us to 
-> do that.
+> Why do I need to repeat the same as last time?
 
-Why do I need to repeat the same as last time?
+
+Now I see that you completely ignored previous discussion and sent THE
+SAME approach.
+
+NAK. It is waste of our time if you keep ignoring reviewers and force us
+to re-iterate the same over and over again.
 
 Best regards,
 Krzysztof
