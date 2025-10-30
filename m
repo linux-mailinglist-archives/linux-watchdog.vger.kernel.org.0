@@ -1,65 +1,63 @@
-Return-Path: <linux-watchdog+bounces-4468-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4469-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41719C2179B
-	for <lists+linux-watchdog@lfdr.de>; Thu, 30 Oct 2025 18:25:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C57D7C21C8E
+	for <lists+linux-watchdog@lfdr.de>; Thu, 30 Oct 2025 19:33:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1365B407A61
-	for <lists+linux-watchdog@lfdr.de>; Thu, 30 Oct 2025 17:20:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 149B61A257F2
+	for <lists+linux-watchdog@lfdr.de>; Thu, 30 Oct 2025 18:33:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 682B936838E;
-	Thu, 30 Oct 2025 17:20:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3020E363366;
+	Thu, 30 Oct 2025 18:33:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TkjBz/+e"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Uc3n00xc"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25B622F60A3;
-	Thu, 30 Oct 2025 17:20:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0355F277026;
+	Thu, 30 Oct 2025 18:33:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761844844; cv=none; b=opN3ZQ69G9iQjN4yB0fPVpQ4jv3tlAzEQu2klowQ8RUsQG+taql9/ks8sMFuUMcl9EYywarZiIgng3AgaeKW9mrxxsHW5LoXAWcO6Atfrn2tDE4PGQJ50jjRomS3DUFGhp8KbUwINuT7aPKqkj5Bw4aNP4ZubJCvT5F44sko2sY=
+	t=1761849194; cv=none; b=K33IyFvNne3kg0XNVWB/RrqSqztv3htmCfT9WK9VZCLN93qjxdBKbWFQNGqtIxwBM6JtYZA5gPmCAMaZ8UUSgenaRxe0DvK4a1Tmw3bw7F3xkVud+YshCsec/CnPYXZppjYSWpbfTjt8hTxF5ms0FJdJy8Z7dW9quhe/NOwpP8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761844844; c=relaxed/simple;
-	bh=u1y3B+8RUYFHKy7C4XHtKEXlhSgIPJIedO3quTvmsnw=;
+	s=arc-20240116; t=1761849194; c=relaxed/simple;
+	bh=JvqCJgn8JrvX/wqRcJdBnCeJJvGQqO6u4dEBjS3ynJU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hRFw5puCpyCA0Bi7KTXHVSgcuyrfOKFCONLCblz/B3j+mgWxDzXXmyn0WJ+aobHrNtW7Vk1UaD09WFZVhs1ur9WCz0RFTMLTPyvuqXklKV8GowlmK/CvLOE4qyzqiOfMyTm2C7XRPl2JmwEuYExV/J9jjGigIVBORqv6febHFWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TkjBz/+e; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15760C4CEF8;
-	Thu, 30 Oct 2025 17:20:43 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=DnfE4mjUTJxZLPO/mdOODq1O87AKx7GAsk+Mufgczq5KZakOSH8Lf6JOinV4px9tylmRzDrMcpt8OmhipmN8HiG3e8VgBKo28+EBfwhcnOgroazNQBJVRNHIHi7RMNACvEyN08IOprW6dVsR05tX/e31p1nxy6gx1r2VU4cSVe8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Uc3n00xc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5346EC4CEF1;
+	Thu, 30 Oct 2025 18:33:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761844843;
-	bh=u1y3B+8RUYFHKy7C4XHtKEXlhSgIPJIedO3quTvmsnw=;
+	s=k20201202; t=1761849191;
+	bh=JvqCJgn8JrvX/wqRcJdBnCeJJvGQqO6u4dEBjS3ynJU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TkjBz/+eMf9gwnuS/btR8gNRi5Y9H5T1/MvDgOETJ01Dlf7POOO8RpU31DJXRWkz0
-	 2sg5vdBqJj8Ph6kWnzFnjJqOVHS0p9qIdVvuTwEQdEkbWnKfitwI60rwv1R0RaXOIM
-	 SllKsLbXxhoU+lYjc5zZSCwVSFAaxUBYQb1pw/L2dvWot+q9EEwCz01cn454THCbNq
-	 eW15Oz+PjCT/eyWSex7gJkIKAg9STU6JMZ93zoBM4JW6g3PVmElPdab0CgaA3lJY0S
-	 V180/yFR9pgQdRK2zMgvjebt/1nWBiFL0eYyUUTKzuqEz6PjDvxKLTfQ4gaxsmO29o
-	 dKSoOx1QelBig==
-Date: Thu, 30 Oct 2025 18:20:40 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
-To: Jack Hsu <jh.hsu@mediatek.com>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	jic23@kernel.org, dlechner@baylibre.com, nuno.sa@analog.com, andy@kernel.org, 
-	matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com, srini@kernel.org, 
-	gregkh@linuxfoundation.org, jirislaby@kernel.org, daniel.lezcano@linaro.org, 
-	tglx@linutronix.de, chunfeng.yun@mediatek.com, wim@linux-watchdog.org, 
-	linux@roeck-us.net, sean.wang@mediatek.com, zhiyong.tao@mediatek.com, 
-	andrew-ct.chen@mediatek.com, lala.lin@mediatek.com, jitao.shi@mediatek.com, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, linux-pwm@vger.kernel.org, 
-	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org, 
-	Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v6 04/11] dt-bindings: pwm: Support MediaTek MT8189 evb
- board disp-pwm
-Message-ID: <fqceagmqxbix4bnpacimf2lwpnwrw3gpwzknh3a7pt7sfmccm2@4jnh4ynkwwcg>
-References: <20251030134541.784011-1-jh.hsu@mediatek.com>
- <20251030134541.784011-5-jh.hsu@mediatek.com>
+	b=Uc3n00xcX2apahvQe+vOAxBTIP7QlaGSOysJWttTvoz8CF5WhCm4Inx7CKbgcsyvp
+	 FMHQ8uvIu1k2j3aWsbR0vFulwKd54VbMtPwe1wc1YvMd/syHapKHw5QRy1dIE31aNP
+	 pp5PXeHLaAudnWWG59ST7SoU6KMOJYjz2DWBHaMeF2GJmfrs4K/Bmg95XX2A7kXIWw
+	 p9iirwk3LlZ+6FOQKkaLKjamzAroKf4MgfCFUR+G4gn6tfbfswOXaZxR+r8OvGdGrY
+	 v1PkUebQysUlEZcYHVXYzEX3cCErawNt1JtrqkeJ8C05e7wosQ3j19rYB74Rk8y9yp
+	 oigdXlMNfZEmg==
+Date: Thu, 30 Oct 2025 18:33:07 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	kernel@collabora.com, linux-watchdog@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] dt-bindings: watchdog: mediatek,mtk-wdt: Add compatible
+ for MT8189 SoC
+Message-ID: <20251030-smooth-agony-bea253b919fa@spud>
+References: <20251030-mt8189-dt-bindings-wdt-v1-1-975971ba29e5@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -67,46 +65,35 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="tnp73246a7ax7u7v"
+	protocol="application/pgp-signature"; boundary="hd7qwYh7dn279Ibw"
 Content-Disposition: inline
-In-Reply-To: <20251030134541.784011-5-jh.hsu@mediatek.com>
+In-Reply-To: <20251030-mt8189-dt-bindings-wdt-v1-1-975971ba29e5@collabora.com>
 
 
---tnp73246a7ax7u7v
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
+--hd7qwYh7dn279Ibw
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v6 04/11] dt-bindings: pwm: Support MediaTek MT8189 evb
- board disp-pwm
-MIME-Version: 1.0
 
-On Thu, Oct 30, 2025 at 09:44:36PM +0800, Jack Hsu wrote:
-> add compatible string for mt8189 evb board dts node of disp-pwm
+On Thu, Oct 30, 2025 at 08:40:07AM +0100, Louis-Alexis Eyraud wrote:
+> Add compatible string for the watchdog block on MT8189 SoC, which is
+> compatible with the one used on MT6589.
 >=20
-> Signed-off-by: Jack Hsu <jh.hsu@mediatek.com>
+> Signed-off-by: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>
 
-LGTM. Assuming this patch will go in together with the other patches
-=66rom this series via arm-soc:
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+pw-bot: not-applicable
 
-Acked-by: Uwe Kleine-K=F6nig <ukleinek@kernel.org>
-
-Best regards
-Uwe
-
---tnp73246a7ax7u7v
+--hd7qwYh7dn279Ibw
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmkDnmYACgkQj4D7WH0S
-/k6ntAgAmefAEgqrCjLWiUHmGcabEITjr9SAE4YojmK2oq78HLZC4n0T3P19U5zm
-VFVFw+gARsZVw2CQ2ANeQiQBXWVDyT8BQ9Vh0PZZvVvE7fqMZM3FfIQ9bU2OgdWE
-vmSpfUBeyu1Fm95OZrMi475gX0v9ej4Tj6uLesaLywvcW0l8JZRPpRHDwpARP7rL
-fXgtxa69IAvwq1YGDcJfHXe3M+Z4t7OIJpE8qbAVkTpAqH438a26TzlQEgxHsXzi
-4C26RMlvhfSb/Ajn1ZU+y1SYyskpUOyGNUKMVYYoRUQEN9D/o3Mrx1T8BAhzpu5A
-XXCuNcZ2Tx5Mz3amOjApNarZkQVZhw==
-=Yaxj
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaQOvYgAKCRB4tDGHoIJi
+0oimAP9o2MEl59jifVvyPGLCWbSwGzDMmbIfyk1LRXRhAcGMcQD+MdAmHKkHucGO
+9XwvmdiZ/DSlgirQirhb+GL9vuMRdQY=
+=Qv/D
 -----END PGP SIGNATURE-----
 
---tnp73246a7ax7u7v--
+--hd7qwYh7dn279Ibw--
 
