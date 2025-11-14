@@ -1,55 +1,53 @@
-Return-Path: <linux-watchdog+bounces-4578-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4579-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2D82C5AFE0
-	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Nov 2025 03:19:45 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45338C5B01C
+	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Nov 2025 03:28:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6ECAA34BF5C
-	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Nov 2025 02:19:45 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id F01354E13DD
+	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Nov 2025 02:28:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3069A2153D3;
-	Fri, 14 Nov 2025 02:19:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A5DE21E087;
+	Fri, 14 Nov 2025 02:28:26 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from ssh248.corpemail.net (ssh248.corpemail.net [210.51.61.248])
+Received: from unicom146.biz-email.net (unicom146.biz-email.net [210.51.26.146])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F4B01DE2C9;
-	Fri, 14 Nov 2025 02:19:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.51.61.248
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C97F51F5842;
+	Fri, 14 Nov 2025 02:28:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.51.26.146
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763086782; cv=none; b=KFagMEfp9jvDHcyF0Qa3SPJKYq4grqEicDJPJdthb3icuVSqH9Ucb/HkiyQ640cObLV+tfoU1hJv5/FsLwGDcziHy3/7RA2GhMlNHeKGDGVqFqboF5nundi+NGG5K2ntlCQQAy6MTEojSPG+G2iIuuUb3D7Qi60RT2QerEy2/vE=
+	t=1763087306; cv=none; b=jrqgh4JD+LV8k6lSu3dvm8meBKQw1YybeJpsHqxUwJagJQBVMsJiOH75NxYQ052erj9TrrOeKIOzxs8kE2RiczxvG/Ho7l2B5ntJaH6yFs3wJO1gXQYGBymRnDuoajL5kUXZvCbu0S7z4je5r1O8WJ+TU9EqO2AHIZWnG32kzeM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763086782; c=relaxed/simple;
-	bh=48CjyM2AwMjsc23DNfyWp695/pjVJrBcjVimjbzXYbg=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Nijmm0/BdjjRdK+tHYTWyFapnknAA1o2xfE59fYeNYvkzclcnwlWEI1/SpwxoRUK8sbDWpu0pmhuKl+47Fw8QNaLO8Yae2uKdxU+j8hcqkOkWo0FRbVY3HOfWQjbm8NDa7pAHNyWcTm5W4onncSVM/JpnudSqYM/qGee6plwBm8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=inspur.com; spf=pass smtp.mailfrom=inspur.com; arc=none smtp.client-ip=210.51.61.248
+	s=arc-20240116; t=1763087306; c=relaxed/simple;
+	bh=+Q4KHRaNksiaz0YaV3/4Mihu4MgLih+spnrsoRC41Q8=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=rbXTOBLuFC1Wp04WhADMofvkRn4v5WlmYPOLBVzNSb+qyI5gwWL39o87Wt7JHCxzELIi8TDQ4SKPOO0zQMbkKF8Exemf9DzWTndsXmTufoD3H5jY5f8aATqgVHR4TnZVhXGiltj+twP3tjyC5o7TkiQ0V/soCtVGg+DKRPpFFIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=inspur.com; spf=pass smtp.mailfrom=inspur.com; arc=none smtp.client-ip=210.51.26.146
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=inspur.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inspur.com
-Received: from Jtjnmail201614.home.langchao.com
-        by ssh248.corpemail.net ((D)) with ASMTP (SSL) id 202511141019291711;
-        Fri, 14 Nov 2025 10:19:29 +0800
-Received: from jtjnmailAR02.home.langchao.com (10.100.2.43) by
- Jtjnmail201614.home.langchao.com (10.100.2.14) with Microsoft SMTP Server
+Received: from Jtjnmail201613.home.langchao.com
+        by unicom146.biz-email.net ((D)) with ASMTP (SSL) id 202511141028137133;
+        Fri, 14 Nov 2025 10:28:13 +0800
+Received: from jtjnmailAR01.home.langchao.com (10.100.2.42) by
+ Jtjnmail201613.home.langchao.com (10.100.2.13) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.58; Fri, 14 Nov 2025 10:19:29 +0800
-Received: from inspur.com (10.100.2.112) by jtjnmailAR02.home.langchao.com
- (10.100.2.43) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
- Transport; Fri, 14 Nov 2025 10:19:29 +0800
+ 15.1.2507.58; Fri, 14 Nov 2025 10:28:12 +0800
+Received: from inspur.com (10.100.2.112) by jtjnmailAR01.home.langchao.com
+ (10.100.2.42) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
+ Transport; Fri, 14 Nov 2025 10:28:12 +0800
 Received: from localhost.localdomain.com (unknown [10.94.7.17])
-	by app8 (Coremail) with SMTP id cAJkCsDwK9GxkRZpvFgNAA--.25084S4;
-	Fri, 14 Nov 2025 10:19:29 +0800 (CST)
+	by app8 (Coremail) with SMTP id cAJkCsDw0NC7kxZpflkNAA--.24527S4;
+	Fri, 14 Nov 2025 10:28:12 +0800 (CST)
 From: Chu Guangqing <chuguangqing@inspur.com>
-To: <hca@linux.ibm.com>, <gor@linux.ibm.com>, <agordeev@linux.ibm.com>,
-	<borntraeger@linux.ibm.com>, <svens@linux.ibm.com>, <wim@linux-watchdog.org>,
-	<linux@roeck-us.net>
-CC: <linux-s390@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, Chu Guangqing <chuguangqing@inspur.com>
-Subject: [PATCH v2] watchdog: diag288: Fix a spelling mistake
-Date: Fri, 14 Nov 2025 10:18:34 +0800
-Message-ID: <20251114021834.2346-1-chuguangqing@inspur.com>
+To: <craig.lamparter@hpe.com>, <wim@linux-watchdog.org>, <linux@roeck-us.net>
+CC: <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Chu
+ Guangqing <chuguangqing@inspur.com>
+Subject: [PATCH v2] watchdog/hpwdt: Fix a spelling mistake
+Date: Fri, 14 Nov 2025 10:27:22 +0800
+Message-ID: <20251114022722.2560-1-chuguangqing@inspur.com>
 X-Mailer: git-send-email 2.43.7
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
@@ -58,58 +56,53 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cAJkCsDwK9GxkRZpvFgNAA--.25084S4
-X-Coremail-Antispam: 1UD129KBjvdXoW7JFy5CrWrJF4DZr18Xw1UJrb_yoWfWrX_Wa
-	yIyr9a9348Kr42yF4kZw45Aa40gF4DuF1kWaySq3yag3y2vrWrGr4kJ348tr1xWFWjgrn8
-	Aan0qr4S9F47tjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUb38FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+X-CM-TRANSID: cAJkCsDw0NC7kxZpflkNAA--.24527S4
+X-Coremail-Antispam: 1UD129KBjvdXoW7Xry8Zry7CFW8WF18ur1rZwb_yoWfZrX_ur
+	WxJrZruw1kJFy0vwn8Z345Aw4Iv3ZFqFn7Jrn7tFZ3Ca97AryY9rZ7K34Iq3yq9w15XFyY
+	vwnFgr4a9F18GjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbcAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
 	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
 	A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_GcCE
 	3s1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s
 	1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0
 	cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8Jw
-	ACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-	0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
-	v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
-	1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
-	AIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI
-	42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
-	evJa73UjIFyTuYvjfUFg4SDUUUU
+	ACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7CjxVAaw2AFwI0_JF0_
+	Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
+	WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI
+	7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
+	4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+	42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUr2-eDUUUU
 X-CM-SenderInfo: 5fkxw35dqj1xlqj6x0hvsx2hhfrp/
-X-CM-DELIVERINFO: =?B?X9aut5RRTeOiUs3aOqHZ50hzsfHKF9Ds6CbXmDm38RucXu3DYXJR7Zlh9zE0nt/Iac
-	D+KYzHO7CvzIQvEYRP3RrTMMymYlkH/bzoF/J+hA0EGp26pktjtCORG06EFhyBEYXcMZUx
-	EHpAtsdbSJKVvDTKW2Q=
+X-CM-DELIVERINFO: =?B?gp2/8JRRTeOiUs3aOqHZ50hzsfHKF9Ds6CbXmDm38RucXu3DYXJR7Zlh9zE0nt/Iac
+	D+KYLoUdZA17rw8wfZkO+lRaKmYlkH/bzoF/J+hA0EGp26nVoKkpCfzOvWjsfyuJg0xWgy
+	6e6x6e9DpSCxhdkzego=
 Content-Type: text/plain
-tUid: 20251114101930d08dc6991b159d8568959072dc9ea6c4
+tUid: 20251114102813bc3ecd78bac877f47fe7c84675d24051
 X-Abuse-Reports-To: service@corp-email.com
 Abuse-Reports-To: service@corp-email.com
 X-Complaints-To: service@corp-email.com
 X-Report-Abuse-To: service@corp-email.com
 
-There are two word spelling errors here, correct two spelling errors.
+The spelling of the word "auxilary" is incorrect; it should be "auxiliary".
 
 Signed-off-by: Chu Guangqing <chuguangqing@inspur.com>
 ---
- drivers/watchdog/diag288_wdt.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/watchdog/hpwdt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/watchdog/diag288_wdt.c b/drivers/watchdog/diag288_wdt.c
-index 887d5a6c155b..48219844efef 100644
---- a/drivers/watchdog/diag288_wdt.c
-+++ b/drivers/watchdog/diag288_wdt.c
-@@ -6,10 +6,10 @@
-  * to CP.
-  *
-  * The command can be altered using the module parameter "cmd". This is
-- * not recommended because it's only supported on z/VM but not whith LPAR.
-+ * not recommended because it's only supported on z/VM but not with LPAR.
-  *
-  * On LPAR, the watchdog will always trigger a system restart. the module
-- * paramter cmd is meaningless here.
-+ * parameter cmd is meaningless here.
-  *
-  *
-  * Copyright IBM Corp. 2004, 2013
+diff --git a/drivers/watchdog/hpwdt.c b/drivers/watchdog/hpwdt.c
+index ae30e394d176..5909da9a7eae 100644
+--- a/drivers/watchdog/hpwdt.c
++++ b/drivers/watchdog/hpwdt.c
+@@ -52,7 +52,7 @@ static const struct pci_device_id hpwdt_devices[] = {
+ MODULE_DEVICE_TABLE(pci, hpwdt_devices);
+ 
+ static const struct pci_device_id hpwdt_blacklist[] = {
+-	{ PCI_DEVICE_SUB(PCI_VENDOR_ID_HP, 0x3306, PCI_VENDOR_ID_HP, 0x1979) }, /* auxilary iLO */
++	{ PCI_DEVICE_SUB(PCI_VENDOR_ID_HP, 0x3306, PCI_VENDOR_ID_HP, 0x1979) }, /* auxiliary iLO */
+ 	{ PCI_DEVICE_SUB(PCI_VENDOR_ID_HP, 0x3306, PCI_VENDOR_ID_HP_3PAR, 0x0289) },  /* CL */
+ 	{0},			/* terminate list */
+ };
 -- 
 2.43.7
 
