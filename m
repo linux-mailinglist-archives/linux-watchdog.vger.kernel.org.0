@@ -1,55 +1,84 @@
-Return-Path: <linux-watchdog+bounces-4600-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4601-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EFA6C61C35
-	for <lists+linux-watchdog@lfdr.de>; Sun, 16 Nov 2025 21:21:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 11368C61F17
+	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Nov 2025 00:59:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B158D35D622
-	for <lists+linux-watchdog@lfdr.de>; Sun, 16 Nov 2025 20:21:45 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 8337E35D97A
+	for <lists+linux-watchdog@lfdr.de>; Sun, 16 Nov 2025 23:59:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADDF221FF3B;
-	Sun, 16 Nov 2025 20:21:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0ABEC257AEC;
+	Sun, 16 Nov 2025 23:59:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="bQJEM4Yx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NGhHjTxb"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.15.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B820F23E23C;
-	Sun, 16 Nov 2025 20:21:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4BEE259498
+	for <linux-watchdog@vger.kernel.org>; Sun, 16 Nov 2025 23:59:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763324500; cv=none; b=MAZHXV13SFnmC3nWVyCsc361Kkj90UtJzp6Zi5h5hu3u2P1+IDkuaRgJlRSnwRCIPMP0Q01aeRyxVO0SyBCtqrDPXIk3Eee52KgsXVzJmIBXn7w81ZQHyZS4oYwWoYkVHynN4VARzNNwYk4nDMMH9rP3vnKQcwK3X0IIv/M5kA8=
+	t=1763337595; cv=none; b=NZ4ehGzW4cME3YPrTBOPHeUAYXu6NaufAO2SIsLaeYLjdn98YcsRZOWItIJgC6P8lfdlJfxewtlLOt4F3VeS7au/nt+pX2Lm8M2XCwP5ZwbGhb9uis47Ot2/Zl2jbCgIkn8zED9NauAGuYlDJBoMYK7Bi7xsxmnEfnm+kVMUUPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763324500; c=relaxed/simple;
-	bh=pHEKON0IJEvSHLsiLD7bFuCEOLbveWl63Y23VpcmUcw=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=ewdmmEMJWmDbt5XeJNfQEmXDqtRWcpLBVS4F9p2YQAYUoJ3bTpBvs7p2cxX6BzZMdNqLxaut4VjCKH3eKVdqReXmxA6CN82w542IckMQrzDXEKdxT4/EjgpKbfxuNIWGjRKIk1uoFhcUSEDsG7qfmWEX3oQ9Zr5x8hWOuJWqZJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=bQJEM4Yx; arc=none smtp.client-ip=212.227.15.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1763324484; x=1763929284; i=markus.elfring@web.de;
-	bh=pHEKON0IJEvSHLsiLD7bFuCEOLbveWl63Y23VpcmUcw=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=bQJEM4Yxv/2vhyYGPSiN1ub4+y9zUaAHi9i5xWKO+srOfrlaxFp+hkqo2QdzOUG/
-	 lEJKZ0bG744r+heUstliTZubTY/Yq87hUwazi2mrWWHd71o1uS9cCaAnFpmxhNgFb
-	 JWMnBM5EEfk1JEhAFDGNocFDh/rXzii8zXopzBvsokQQuY7FpxiOOp8LNwMmcoWb3
-	 +NIJVgpfrc0xgoFhN7F60HWcLrZ/d1MZ7wWf9IkcRZIiZ3Zu5uIoFr9p6RXF5MYNr
-	 4gI/cGD2c34N61rRazJEdkvIzk+1dF7xi5mdZ/+z3FOWILUsbPQVIvr7nP/twMlaY
-	 XunktVmfJH5lanMvHg==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.29] ([94.31.69.193]) by smtp.web.de (mrweb006
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MCXVX-1vTDZn1TNb-008TS5; Sun, 16
- Nov 2025 21:21:24 +0100
-Message-ID: <804a53d6-db99-430d-89d9-42ebdfda8eed@web.de>
-Date: Sun, 16 Nov 2025 21:21:20 +0100
+	s=arc-20240116; t=1763337595; c=relaxed/simple;
+	bh=zHQYsQXo5MmyHztBEeCEPBEvif1dvitp41wZuF5sy2g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=p5/0xvdc+FHkQ63/IsaNnSdAJrc0oAX80vRWJ0ESnZyKkxQXPctdEZZygMqOHIX00QRLkRCcR5ZzcJbxH3COboV2JWkhlrcWDo48AdRBelJKVPOBoFhnMaAWRoxZqvIazKosydIiIic3G8z2LHZzjTRpwLN5ibX1FJz1qc4dA50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NGhHjTxb; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-34585428e33so826363a91.3
+        for <linux-watchdog@vger.kernel.org>; Sun, 16 Nov 2025 15:59:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763337590; x=1763942390; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=tc2nOe111dzTyX787F1g6P/XIFovV3ZNRO2Z4Cs57G8=;
+        b=NGhHjTxbhKzzX8AfFtoyFwj2CA5XjiLFmJsiRGu91oxdq2stkq9Beg3y7P3ShN4EZ0
+         PnMaCcS00FELjzhD1SAOkYKfUP2RMrIMIWZPPyC2LmweCUkiepe2T0yyZ1G04vkgALvK
+         gR3S3avExPKRegKsUZ+nfvyuY9iin/nPY4GEJr+utPlDMfutl483aOWYeJlGpacE1eEQ
+         iH5Ev3/8+heo5eGayEOEPj7PHbRQl6W4p8x62fdbxdEGu3g5Y3K6quUosmYJUFEUsfb/
+         2eQtrGKwOZYymKZvtyRULjjUeGfVPSxc7BRVskPLixweVxmZXMWkYEq17pgHjjbBeZIj
+         QZ9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763337590; x=1763942390;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tc2nOe111dzTyX787F1g6P/XIFovV3ZNRO2Z4Cs57G8=;
+        b=FzOjpQJ1Z1/MZX7cwjfgwDa0Y9laAdFwFWgFESUkwRLT6IcUny/FquwN3JcM7paqdi
+         sNtF5DdCn4QBlgcQ/w+T1cmWkny09HmDt84DumKuaLzU1VAlVs4U/I3yf1ICmv5iXfXh
+         NPhbBo9K6ZQA4pVMctc+SCYl9ArEdZIPIkYfCh54rxkUf7+3/TXYc7a/2EBBmg7vT492
+         pPHP/iM/Dei6IVPinLOzdn66EUYdZ39GV0B3g99iM9lPgzTdpZb8qCJAn5ELkeXO96M/
+         GgV3Bdqo6yhu1fFZCIXZ8BYFaGdCzPwFBTnl9ZaucfOVCCxyeUJFmvmMSA32q2PWEZ05
+         1Q3w==
+X-Forwarded-Encrypted: i=1; AJvYcCUJ2j/D/eERNuLuHZDc89xNUfTIMMOY5PXveUy9qrsnS23r9IsX5tsHanBEffuvHcXKgiUXsgtizyX+EIP6yA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx9ZQgEbCbtcyFRwMzkT9vywkkv8lIvhb2UMgCqAZsXNINbCGXW
+	PphFWwTVPByPo3QZFlr6uNxMTsecvAzBbs6JurXwlmRDsQkiPKl7XCMRvFgwXg==
+X-Gm-Gg: ASbGncvUz0YkwN2scTc43Y1/L4cjERBomyaD2celVrDm1ETZQ66cOmjvNISA5xzxHsp
+	mfj+yqE0jk+DK4hcy9VFFgLMTeqEcOkZiYvJYfFEIpjqttFC1xWnUny/l3I7GjrmJJcpPVgt0u5
+	KjhJK4GXb1MF8NgPmXPBb+wZnSUCrXwLSxL5B2/ksxHC9uLvpGXzij3RXgZAx2rLi1pjZl32h6y
+	2nUxdCmHK/Dhv6EL1CKcFfFSwN0EQnONEtrwl9X08++DPp8EOY1qG/bXNsnCoxpN+32NkZ21WWt
+	+wwat4Y5Rv7wL0YT4Fi8x7mQa5/uw6l7VcK5cGrptZQJjknJMPByU/IMNiCzPtfr3fTDh853Qme
+	g0DDourpELPPhxKpMMTobdBstceQ46oqu1rhEQ8SqljAl601D7sYF0rT2uFL91EexU8mRqjOU/g
+	Ht8QTkJqoz95CUUc0dIG+vka0iIsDB7S0gk3/5a6nPxGpXo2h26KrKAopNdlxe8OjOGBnfWyNv3
+	1QmYvzn
+X-Google-Smtp-Source: AGHT+IErzTDV8m04GYr2B6dSY4CCtXvx4DVQNCSjzj01VT8+Xr+xpIlX/AsLh/+vQRi1NgjO/n7vWQ==
+X-Received: by 2002:a05:7022:639d:b0:119:e569:f27a with SMTP id a92af1059eb24-11b4120d45emr4079935c88.35.1763337589547;
+        Sun, 16 Nov 2025 15:59:49 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11b0608860fsm33991343c88.5.2025.11.16.15.59.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Nov 2025 15:59:49 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <071a702a-da55-4f67-9568-0a80cc543e06@roeck-us.net>
+Date: Sun, 16 Nov 2025 15:59:47 -0800
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -57,102 +86,83 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: vulab@iscas.ac.cn, linux-watchdog@vger.kernel.org,
- =?UTF-8?B?R8O8bnRlciBSw7Zjaw==?= <linux@roeck-us.net>,
- Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: LKML <linux-kernel@vger.kernel.org>
-References: <20251113023032.547-1-vulab@iscas.ac.cn>
-Subject: Re: [PATCH v2] watchdog: wdat_wdt: Fix ACPI table leak in probe
- function
-Content-Language: en-GB, de-DE
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20251113023032.547-1-vulab@iscas.ac.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:0FmvoSOClZK1vgqrLzVBRC/H/zbU+w8nPANVH2gBVmBWfTi9/NV
- dfHbl+g+702LWRMyQ8ceWqK3kH1Q0ttGJdqUtvrjc5xSdWUfowQYPDRgcPuCEOS8Dy194zM
- by+uRtUBebjgvtipF4S8luVjFqmtppYRfVKFsCEufpVSnFGG7sdY8xj2VxBb8Gfw2BWWOEb
- g7eXjfSPrfGteq4h9sJ+A==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:yFpZHQRI+4k=;C+VO4t4CWsSBp9JS2qYIkYGpDAL
- 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
- gn3n5Wp3QzBo5Kz/4=
+Subject: Re: [PATCH v2] fix it87_wdt early reboot w/ FW started timer
+To: =?UTF-8?Q?Ren=C3=A9_Rebe?= <rene@exactco.de>
+Cc: wim@linux-watchdog.org, linux-watchdog@vger.kernel.org
+References: <20251116.145908.308086523429052446.rene@exactcode.com>
+ <72606213-bce4-4807-8c04-5dc4221975cd@roeck-us.net>
+ <20251116.204210.871371429161034821.rene@exactco.de>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20251116.204210.871371429161034821.rene@exactco.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-> Add a single cleanup path which calls acpi_put_table() to ensure
-> the ACPI table is always released.
+On 11/16/25 11:42, René Rebe wrote:
+> On Sun, 16 Nov 2025 08:22:39 -0800,
+> Guenter Roeck <linux@roeck-us.net> wrote:
+> 
+>> This is not a reason for a log message, much less for a warning.
+>>
+>>> +		wdt_dev.max_hw_heartbeat_ms = timeout * 1000;
+>>
+>> This should be set instead of setting max_timeout.
+> 
+> After debugging, reading the core source and RTFM apparently not. As
+> the time can be changed and thus .max_hw_heartbeat_ms should
+> apparently not be set at all unlike you initially suggested. AFAICS it
+> is the regular .timeout and .max_timeout we want to keep setting.
+> 
 
-Would additional labels become helpful also for error code assignments?
+You are correct here. My understanding wqas wrong - I though the problem
+was that updating the timeout was disabled by the kernel, but the problem
+was just that the timeout was enabled by the BIOS. So all that needs to
+be done is what was done in w83627hf_wdt.c - mark the watchdog as running
+if that is the case.
 
-Regards,
-Markus
+Guenter
+
 
