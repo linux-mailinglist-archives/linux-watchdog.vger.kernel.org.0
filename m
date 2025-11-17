@@ -1,84 +1,83 @@
-Return-Path: <linux-watchdog+bounces-4601-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4602-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11368C61F17
-	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Nov 2025 00:59:59 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59D15C61F23
+	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Nov 2025 01:16:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 8337E35D97A
-	for <lists+linux-watchdog@lfdr.de>; Sun, 16 Nov 2025 23:59:58 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 503DC4E1DC5
+	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Nov 2025 00:16:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0ABEC257AEC;
-	Sun, 16 Nov 2025 23:59:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D9AC2BAF7;
+	Mon, 17 Nov 2025 00:16:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NGhHjTxb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j/SX/Wwg"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4BEE259498
-	for <linux-watchdog@vger.kernel.org>; Sun, 16 Nov 2025 23:59:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40D7D645
+	for <linux-watchdog@vger.kernel.org>; Mon, 17 Nov 2025 00:16:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763337595; cv=none; b=NZ4ehGzW4cME3YPrTBOPHeUAYXu6NaufAO2SIsLaeYLjdn98YcsRZOWItIJgC6P8lfdlJfxewtlLOt4F3VeS7au/nt+pX2Lm8M2XCwP5ZwbGhb9uis47Ot2/Zl2jbCgIkn8zED9NauAGuYlDJBoMYK7Bi7xsxmnEfnm+kVMUUPg=
+	t=1763338574; cv=none; b=cfcd5ZUxGzG5XtCOXj+QNHAO5+iriOtYWCyTy55jYKrzN0Lu4apHIkebna8letz9As3Q+hyNhEITHAQDaWJzE+Z5qUknu9z+RIYKKTLFtioN0LQoL7kj1vIIsdLyL/fBeltbxw8dM/L8/3kaeliyKixwbogJa3jgeHOf+Wgc8l0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763337595; c=relaxed/simple;
-	bh=zHQYsQXo5MmyHztBEeCEPBEvif1dvitp41wZuF5sy2g=;
+	s=arc-20240116; t=1763338574; c=relaxed/simple;
+	bh=9egEtZhWV6vFN3bhVfg9uHAsmj98G3kFs6JEQzKjIe4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=p5/0xvdc+FHkQ63/IsaNnSdAJrc0oAX80vRWJ0ESnZyKkxQXPctdEZZygMqOHIX00QRLkRCcR5ZzcJbxH3COboV2JWkhlrcWDo48AdRBelJKVPOBoFhnMaAWRoxZqvIazKosydIiIic3G8z2LHZzjTRpwLN5ibX1FJz1qc4dA50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NGhHjTxb; arc=none smtp.client-ip=209.85.216.41
+	 In-Reply-To:Content-Type; b=qz2rzdU6pVjifQgKfKkvUAL8Hv1ZAozd7bQpqdNii2WiU+HgwBzrV9E0TLlvOTK/JCYnUJzpl0O/WSYPxCuc6O2e7k50ozTIcykwXVFXX5EuOuN5r39GPeun1yl+p1D2FutrBTV4PRloL2VDQCmgLkUM3iMz96xVDz3m1kfoJd4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j/SX/Wwg; arc=none smtp.client-ip=209.85.215.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-34585428e33so826363a91.3
-        for <linux-watchdog@vger.kernel.org>; Sun, 16 Nov 2025 15:59:50 -0800 (PST)
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-bc29d64b39dso2178395a12.3
+        for <linux-watchdog@vger.kernel.org>; Sun, 16 Nov 2025 16:16:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763337590; x=1763942390; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1763338569; x=1763943369; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=tc2nOe111dzTyX787F1g6P/XIFovV3ZNRO2Z4Cs57G8=;
-        b=NGhHjTxbhKzzX8AfFtoyFwj2CA5XjiLFmJsiRGu91oxdq2stkq9Beg3y7P3ShN4EZ0
-         PnMaCcS00FELjzhD1SAOkYKfUP2RMrIMIWZPPyC2LmweCUkiepe2T0yyZ1G04vkgALvK
-         gR3S3avExPKRegKsUZ+nfvyuY9iin/nPY4GEJr+utPlDMfutl483aOWYeJlGpacE1eEQ
-         iH5Ev3/8+heo5eGayEOEPj7PHbRQl6W4p8x62fdbxdEGu3g5Y3K6quUosmYJUFEUsfb/
-         2eQtrGKwOZYymKZvtyRULjjUeGfVPSxc7BRVskPLixweVxmZXMWkYEq17pgHjjbBeZIj
-         QZ9w==
+        bh=aiU1Dw/hg9i2QqC9D4nQ5VNkXEIpJmSbDCgNmIbjpbc=;
+        b=j/SX/WwgNFbjeRkRr9NeN+uah0XfvuoEQZnu7Rlblile9EfoDYQuzwYaTWXttPHsja
+         H7KdqldPyZS/95A3fnbYPrp50LQGDigRiispRDj4Qj/TVytQiTMP8dMNH1qSq/6FUbqp
+         9rE/HcQqfQFagh6xtbNcQd9OKutTsOdIqiVW/g0Pmw4GT5XpJdkqqWV06k8XZbrnhB5u
+         TuNFVnNNOgEsDraR7SeyrLci5SzqN0xXbzUpuYFnGfLowg1bgPTwSOLC3/tIRZA09R7i
+         zgZuCnvySLQWaa2FyNzVupewkvAmqkuaFL37cN820rRlYq2UPAv69arBV87/ZuRF+1Fu
+         Ymdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763337590; x=1763942390;
+        d=1e100.net; s=20230601; t=1763338569; x=1763943369;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tc2nOe111dzTyX787F1g6P/XIFovV3ZNRO2Z4Cs57G8=;
-        b=FzOjpQJ1Z1/MZX7cwjfgwDa0Y9laAdFwFWgFESUkwRLT6IcUny/FquwN3JcM7paqdi
-         sNtF5DdCn4QBlgcQ/w+T1cmWkny09HmDt84DumKuaLzU1VAlVs4U/I3yf1ICmv5iXfXh
-         NPhbBo9K6ZQA4pVMctc+SCYl9ArEdZIPIkYfCh54rxkUf7+3/TXYc7a/2EBBmg7vT492
-         pPHP/iM/Dei6IVPinLOzdn66EUYdZ39GV0B3g99iM9lPgzTdpZb8qCJAn5ELkeXO96M/
-         GgV3Bdqo6yhu1fFZCIXZ8BYFaGdCzPwFBTnl9ZaucfOVCCxyeUJFmvmMSA32q2PWEZ05
-         1Q3w==
-X-Forwarded-Encrypted: i=1; AJvYcCUJ2j/D/eERNuLuHZDc89xNUfTIMMOY5PXveUy9qrsnS23r9IsX5tsHanBEffuvHcXKgiUXsgtizyX+EIP6yA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx9ZQgEbCbtcyFRwMzkT9vywkkv8lIvhb2UMgCqAZsXNINbCGXW
-	PphFWwTVPByPo3QZFlr6uNxMTsecvAzBbs6JurXwlmRDsQkiPKl7XCMRvFgwXg==
-X-Gm-Gg: ASbGncvUz0YkwN2scTc43Y1/L4cjERBomyaD2celVrDm1ETZQ66cOmjvNISA5xzxHsp
-	mfj+yqE0jk+DK4hcy9VFFgLMTeqEcOkZiYvJYfFEIpjqttFC1xWnUny/l3I7GjrmJJcpPVgt0u5
-	KjhJK4GXb1MF8NgPmXPBb+wZnSUCrXwLSxL5B2/ksxHC9uLvpGXzij3RXgZAx2rLi1pjZl32h6y
-	2nUxdCmHK/Dhv6EL1CKcFfFSwN0EQnONEtrwl9X08++DPp8EOY1qG/bXNsnCoxpN+32NkZ21WWt
-	+wwat4Y5Rv7wL0YT4Fi8x7mQa5/uw6l7VcK5cGrptZQJjknJMPByU/IMNiCzPtfr3fTDh853Qme
-	g0DDourpELPPhxKpMMTobdBstceQ46oqu1rhEQ8SqljAl601D7sYF0rT2uFL91EexU8mRqjOU/g
-	Ht8QTkJqoz95CUUc0dIG+vka0iIsDB7S0gk3/5a6nPxGpXo2h26KrKAopNdlxe8OjOGBnfWyNv3
-	1QmYvzn
-X-Google-Smtp-Source: AGHT+IErzTDV8m04GYr2B6dSY4CCtXvx4DVQNCSjzj01VT8+Xr+xpIlX/AsLh/+vQRi1NgjO/n7vWQ==
-X-Received: by 2002:a05:7022:639d:b0:119:e569:f27a with SMTP id a92af1059eb24-11b4120d45emr4079935c88.35.1763337589547;
-        Sun, 16 Nov 2025 15:59:49 -0800 (PST)
+        bh=aiU1Dw/hg9i2QqC9D4nQ5VNkXEIpJmSbDCgNmIbjpbc=;
+        b=j/iuybm/2Ge9qUAarVhRb1B+rJarbJD8cPuVcgYTXZP95lnW2WOI6/DSF654VykPli
+         66ZUCH8K/7tUv5jHDH9pyWX5cK5N8ogKtsUrg/0HnGvTt/naCdEJn/PXxJxBD28Q0fLT
+         zrN/uVx0CHhbzl7diJ2vshWXpiNaW5UHkKvpDmRJZPD8q2XenwWletg3HmGmFiikP0ZE
+         HMFrkah1chbJqWtvLnLWeRTKxM7r5ED6GyW7SLAfIpt9cRywtKy08BH0B3cj4ceLBmXA
+         mElNkB7Np/SpjYQ32U77jkfpboOaL7rHD77uJeWmyrw04oqg2XsxW19eH3Npb4s5iAhI
+         2Myw==
+X-Forwarded-Encrypted: i=1; AJvYcCWqVy8dRhCU3c5MWZOuyPqze7ogpMWhIM11bBx9EI4Cbzk7s4UyYvfrOD3tBMtDjXLDPf0pxStKVpDTEkjM6A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw6xYthwtW8fs7lPqFEcFNXBdpYxC4D0IydSi/jr4ThlfiV/9ju
+	jtkkA8iFFkeSKjLF3Ek5j4XEG9RYZv0aMoiKFmvOxJs8aR4Ka303M25d
+X-Gm-Gg: ASbGncs0huzUb8MgKpeBfMnjdsWjKyycfa4/PgqaIPEMO6fqq/ZzYc9yB6K1BtLxbXF
+	o9RtRh9p57efNnIozw5CNVcSbapg+7kdrwq1FdJe2aMpmKq+zRw1Q+yEqQesM1s7ZNqlhlEyAnZ
+	q6Aw0Cg1nT/2prt4dkUSQM8N7B7AyftWwUUfZAD5fxpJPr/SSQnJrBY864/xVpfRUi81cdWxA7u
+	oDHMB2ZKHZb2BHsq+zuLKAmuRHyhkKPw1TvxBg3rdNhlbA08mjA6YehVQxbUCWZjjvP9Z0XP/7G
+	QJ0B1QfrNwvS0tcfkE7VxM1R1pLOcDzmK7zuVSG5YS0TIM7910igTOpM/f8PPXbHHSzpKNyjLaU
+	JeiEDzac4w+/jzzc4XPeW/tzqRRUfVpI0E7qzTx8ADCp0rjn7DWLEc5kar/N7iQFh/LoGewfCKV
+	wbQy3XYqEDELaHBRNiSU4xWmAEWt8leYEZBNqGqE4Gh2frS4bidLdJKZqPdk0Q6A8H/nV0yQ==
+X-Google-Smtp-Source: AGHT+IETZPA4oKvZAJ36NGD4H/YR9gKFk2yH9fG4H9uJSyyGt8jfG8GIdvypwzFfw2ppp8bJbf1EGA==
+X-Received: by 2002:a05:7022:ea48:20b0:11b:803c:2cf5 with SMTP id a92af1059eb24-11b803c2eb6mr2405989c88.33.1763338569202;
+        Sun, 16 Nov 2025 16:16:09 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11b0608860fsm33991343c88.5.2025.11.16.15.59.48
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2a49d9ead79sm52663393eec.1.2025.11.16.16.16.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Nov 2025 15:59:49 -0800 (PST)
+        Sun, 16 Nov 2025 16:16:08 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <071a702a-da55-4f67-9568-0a80cc543e06@roeck-us.net>
-Date: Sun, 16 Nov 2025 15:59:47 -0800
+Message-ID: <bda0bda0-8e7e-4dd1-8726-30685496e187@roeck-us.net>
+Date: Sun, 16 Nov 2025 16:16:07 -0800
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -86,12 +85,12 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] fix it87_wdt early reboot w/ FW started timer
+Subject: Re: [PATCH v3] fix it87_wdt early reboot w/ FW started timer
 To: =?UTF-8?Q?Ren=C3=A9_Rebe?= <rene@exactco.de>
 Cc: wim@linux-watchdog.org, linux-watchdog@vger.kernel.org
 References: <20251116.145908.308086523429052446.rene@exactcode.com>
  <72606213-bce4-4807-8c04-5dc4221975cd@roeck-us.net>
- <20251116.204210.871371429161034821.rene@exactco.de>
+ <20251116.210920.587481738814327702.rene@exactco.de>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -137,32 +136,117 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20251116.204210.871371429161034821.rene@exactco.de>
+In-Reply-To: <20251116.210920.587481738814327702.rene@exactco.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 11/16/25 11:42, René Rebe wrote:
-> On Sun, 16 Nov 2025 08:22:39 -0800,
-> Guenter Roeck <linux@roeck-us.net> wrote:
-> 
->> This is not a reason for a log message, much less for a warning.
->>
->>> +		wdt_dev.max_hw_heartbeat_ms = timeout * 1000;
->>
->> This should be set instead of setting max_timeout.
-> 
-> After debugging, reading the core source and RTFM apparently not. As
-> the time can be changed and thus .max_hw_heartbeat_ms should
-> apparently not be set at all unlike you initially suggested. AFAICS it
-> is the regular .timeout and .max_timeout we want to keep setting.
-> 
+On 11/16/25 12:09, René Rebe wrote:
+> Some products, such as the Ugreen DXP4800 Plus NAS, ship with the it87
+> wdt enabled by the firmware and a broken BIOS option that does not
+> allow to change the default time or turn it off. This makes installing
 
-You are correct here. My understanding wqas wrong - I though the problem
-was that updating the timeout was disabled by the kernel, but the problem
-was just that the timeout was enabled by the BIOS. So all that needs to
-be done is what was done in w83627hf_wdt.c - mark the watchdog as running
-if that is the case.
+Again, "and a broken BIOS option that does not allow to change the default
+time or turn it off" is secondary. The key is that the BIOS/firmware may have
+enabled the watchdog.
 
-Guenter
+> Linux difficult and annoyingly rebooting early in an installer; unless
+> one loads and starts a watchdogd in the installer environment.
+> 
+Also again, please drop irrelevant information (how to work around the
+problem without this patch is irrelevant) and provide a more neutral
+description. Add as much additional details after "---" if you like.
+
+> Change it87_wdt to report a running timer to the watchdog core using
+> the user supplied or module's default time so it is reset before
+> triggering.
+> 
+> Signed-off-by: René Rebe <rene@exactco.de>
+> 
+> v1:
+> - just clear hw timer register
+> 
+> v2:
+> - detect running hw timer and report to watchdog core
+> 
+> v3:
+> - multiply TOV1 in _wdt_get_timeout
+> - don't wrongly and superfluously set .max_hw_heartbeat_ms
+> - don't call set_timeout manually
+> 
+> --- linux-6.17/drivers/watchdog/it87_wdt.c.orig	2025-09-28 23:39:22.000000000 +0200
+> +++ linux-6.17/drivers/watchdog/it87_wdt.c	2025-11-16 20:05:01.650672740 +0100
+> @@ -188,6 +190,21 @@
+>   		superio_outb(t >> 8, WDTVALMSB);
+>   }
+>   
+> +/* Internal function, should be called after superio_select(GPIO) */
+> +static unsigned int _wdt_get_timeout(void)
+> +{
+> +	unsigned int t;
+> +	u8 cfg;
+> +
+> +	cfg = superio_inb(WDTCFG);
+> +	t = superio_inb(WDTVALLSB);
+> +	if (max_units > 255)
+> +		t |= superio_inb(WDTVALMSB) << 8;
+> +	if (cfg & WDT_TOV1)
+> +		t *= 60;
+> +	return t;
+
+Given the context, this can be simplified to something like
+
+static bool _wdt_running(void)
+{
+	return !!(superio_inb(WDTVALLSB) || max_units > 255 && superio_inb(WDTVALMSB));
+}
+
+[ where the !! isn't really necessary ]
+
+> +}
+> +
+>   static int wdt_update_timeout(unsigned int t)
+>   {
+>   	int ret;
+> @@ -292,6 +309,7 @@
+>   	u8 ctrl;
+>   	int quirks = 0;
+>   	int rc;
+> +	unsigned int _timeout;
+>   
+>   	rc = superio_enter();
+>   	if (rc)
+> @@ -374,8 +392,6 @@
+>   		}
+>   	}
+>   
+> -	superio_exit();
+> -
+>   	if (timeout < 1 || timeout > max_units * 60) {
+>   		timeout = DEFAULT_TIMEOUT;
+>   		pr_warn("Timeout value out of range, use default %d sec\n",
+> @@ -388,6 +404,15 @@
+>   	wdt_dev.timeout = timeout;
+>   	wdt_dev.max_timeout = max_units * 60;
+>   
+> +	/* wdt already left running by fw bios? */
+> +	_timeout = _wdt_get_timeout();
+> +	if (_timeout) {
+
+	if (_wdt_running()) {
+	}
+
+and the code can be moved ahead of the superio_exit() call above,
+avoiding the need to move it.
+
+> +		pr_info("Left running by firmware.\n");
+> +		set_bit(WDOG_HW_RUNNING, &wdt_dev.status);
+> +	}
+> +
+> +	superio_exit();
+> +
+>   	watchdog_stop_on_reboot(&wdt_dev);
+>   	rc = watchdog_register_device(&wdt_dev);
+>   	if (rc)
+> 
 
 
