@@ -1,83 +1,83 @@
-Return-Path: <linux-watchdog+bounces-4605-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4606-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DC4BC64B0B
-	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Nov 2025 15:45:43 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25C8BC64DCD
+	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Nov 2025 16:24:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by tor.lore.kernel.org (Postfix) with ESMTPS id EB09F23EBF
-	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Nov 2025 14:45:40 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTPS id 48B4628EFA
+	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Nov 2025 15:24:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51DCE33557E;
-	Mon, 17 Nov 2025 14:45:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5407F270EBA;
+	Mon, 17 Nov 2025 15:24:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ilgPcbIh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GDA6PxZk"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A549334681
-	for <linux-watchdog@vger.kernel.org>; Mon, 17 Nov 2025 14:45:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 217413370F2
+	for <linux-watchdog@vger.kernel.org>; Mon, 17 Nov 2025 15:24:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763390737; cv=none; b=KiMjSOOBhUexHwLZqx4jYtG2qmfGx1AbUGVt9xtM9ne+Ngunkg9j7XaH8y3B6LtigP3tZ8WVqNRaM1fzRxLMvEznArcGmDWML12o/7p9GKl7myRnSqm5buNv1AMMMepNRbNeh613lx8J9EZBnn7A4v1GUvC4rYwQazXrXDN4zpY=
+	t=1763393078; cv=none; b=F7/SSJr3Xs/gT9QV2mFuVhg2PwKUxXtfB9zwMDV+ChDhH8gpV8ZXvA1+YCptuPDCsroZeQmuhmbnfXXvrjlRyrPHiPNk5OMkJqts1GlwNES4mH1rWz/lcSpTnIGR+4KTS96+B1O8Bcpt9mga0LJuvUVNUNoHOw9XPFdjviLUG1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763390737; c=relaxed/simple;
-	bh=Q6zm4hF/iuyshuI8ZTVRPYLVS9bhIMvZAtEoGBwphH8=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=FUvggTyPh8jR8TuiCLt7NKulUYB38fOqc1RdLdUeM4IENAFAk14LTu9J6XCGWApnQqMzeUqCPv12UkJgs5ECPESI7GscAUqJGYhZYaIHWaAb6yyM4di4I4ebN19zduyXih5g2AMpiJg1E59/d59fcjJLQ1T6GshJzYFbdWyfsxo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ilgPcbIh; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4779adb38d3so14987145e9.2
-        for <linux-watchdog@vger.kernel.org>; Mon, 17 Nov 2025 06:45:34 -0800 (PST)
+	s=arc-20240116; t=1763393078; c=relaxed/simple;
+	bh=BrI7oN/gW4IccJJk3cioKiIJZA4rsaicJtpTf8J1ZcU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=M45WlYzA8MsnrMiriF0yTaFNGZz5zfeaYwJK+R0UzCiYW7N5uMVvNMv9tU1/xjqZ5b8Ue99phvpTF1tdzfJhZuJug+N9dje8+7ZV61banjoY1CzWsIeVglGNwZNRDAtBCbff4Kn7LHCxN9I63WEoSWmEqqrFYRZeAMG4q6+9wg8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GDA6PxZk; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2958db8ae4fso40768385ad.2
+        for <linux-watchdog@vger.kernel.org>; Mon, 17 Nov 2025 07:24:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1763390733; x=1763995533; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Tk1rjAouZOijY60x5awEeFZKndj7NK9f5IbkSRl7Hig=;
-        b=ilgPcbIhX64PZXxn2qgIjAK8KupZkkjeaBdC6GnUi9CDSeTkOFM+VL63LkVDzmzQOF
-         HfR0lXyqfRZcRv+hM9OkgVfZ5kpyeSJglbL+5X2hlKO4znxkZv0AYiOWyFGIULeU/UH6
-         is/BoMcuP+5Ja+/5On3a/KGXiff3Fi6iLjYYUUZUbS7S8QjZUcG+N8D5BPN0K20DUFTR
-         c99Oqyc/jWpA+6i2brxgZ6PvXeMaHs2/4DgQtlwrQEZlxtqYy1YwO7+VKedqWBiCY79u
-         onCPY3LcDjM6rB7zW5bxdMiELWCdD8oFHGDjDOG906yThOE+ftsqWw0ZPA2MR3ddN2qD
-         HIcw==
+        d=gmail.com; s=20230601; t=1763393075; x=1763997875; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zoq4aC9kle0K5A78aH0c2WTFCpMzgvcADSnyRnsuEAc=;
+        b=GDA6PxZkzIYLvRF8aqAjRlx57kD7SVcZJ95IfldlOx0LVvm1PFvnMYdFJPT4VSJdLh
+         lDRm7+cZC6idqt/CpSNMP1GgfkfCTOSsAF5tRIZK9ESV2lArSZDVaeWoEQGFqBTUpOeD
+         3VseNIsPcowIyQQuca0Hsai4cEqlXvVBRzSLHmX/goSzG231goYQSKuxvYrx5Vpdtaxd
+         a3DlWIU8g9CsqyP0TgDcsZ0WFaxJKFapAAwiKBP1ZM/FF4s/4y0GyiEmACFPyBAj8BoX
+         kjQxFTEDETTBa3ovtVfPknru8ZET2GvL4JWFjnyWUeGi4cL4U9Vq2n12gDmyjNNW/ueu
+         8czw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763390733; x=1763995533;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1763393075; x=1763997875;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Tk1rjAouZOijY60x5awEeFZKndj7NK9f5IbkSRl7Hig=;
-        b=IUAYRbvsW/JTrE0j8NkX9sHZrQ14iruEW1WyzswMYX9zH+pT94lOR8BCojpmyr2RJo
-         MK0eubqNEKjSOfvFIZTae1vmabLyqh3QaCCkFndSf3ey+Kt1zbHqGCOy2sGb5OV8tdXL
-         W9K5VmYtkghJgYfNbVjT+S9ekXoJdGUVcoZaOc8f7OKgpQCREHZjKu/MWvbdkHIw+N6u
-         9BiSwXCcxxigK62fRjI7+PLg9A4nTJpcxX1DSCyhenOStoeIE7Wr3PNiAzuGA/ZfQG9a
-         qdSgNmr09oK9tdR0NUI+ww1JzdHu2rWMTmpZD8AZcgbSEfcRFTkoojh80ygXYMNgavq4
-         +rYA==
-X-Forwarded-Encrypted: i=1; AJvYcCXoLlLIm8gzGYzquqGoZRrwtXNx5V7+2NfO+TQ2tt6rQVPPGxFWm6l2ImnN61VqfELBSv+Rnt2Wacw4Kqwdow==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxdZXGdwn9KEI+vvPKnoVE30gSY0E+dEKCKAu04+SUUpEkqsch7
-	wQ8MWxc8L9WZ89RLh54zS5jH2AO/Xs7mLyHxkpuXDbj81WLnALC4Rhp7RQRuH/6j6Lc=
-X-Gm-Gg: ASbGncvwhaWbEyCy4eXhrhuVy0FXrIWN38kMiGgZPtKn6Y18mHaecYiMTv+DneLf/10
-	rzdkwzVyLHK83JoAaymdCePGNZMj0ngf3I2OD9LkMl+LfFRsrO1265tzgRJ6qqIzvb+h4nmk7qs
-	M+sXAYQ79FBJwsJbpC48sdRVwmkKSumXLab3/nuV1WhsiocEZjLLzD/FaXNjKjpSfBm0Ly9JEkI
-	lSeegpFv/IhsgeYaMG0i4Y7w7iP+L5ftCoMS1nrdij1rL1AsTKKnHKnN972UIU6M6NyebZWumzA
-	QXXB9UNlRWnCZOTDo6bbKtvB9pDsTY1UI8VHeqZLMeGCizaZYpYZLwnhzTtY6tRnw/ABjigNVzS
-	N7NHXDVTi+zY4P3iOCb1jXI9FlP4P0obFhMzs40tXrWcpf50EiwiWQ8krq1UrbovZCgkMQ2zNi0
-	N+9eWrGoZF5O3ObDc5th0eS6A4WAcs6wgASNNvQ71nFkz3xvV1kBk3EP6uEBy5Q0g=
-X-Google-Smtp-Source: AGHT+IGlg72HMQBd44oB2inZGPtEY6S/5RoSqJOOvYSdU1XD8940TN5ihG3EtEkhqdXoOuWUP9+0Hw==
-X-Received: by 2002:a05:600c:c177:b0:46f:d682:3c3d with SMTP id 5b1f17b1804b1-4778fe683d6mr111222665e9.13.1763390733101;
-        Mon, 17 Nov 2025 06:45:33 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:3d9:2080:d631:aa74:9313:e9f3? ([2a01:e0a:3d9:2080:d631:aa74:9313:e9f3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4779920f2cdsm154148925e9.10.2025.11.17.06.45.32
+        bh=Zoq4aC9kle0K5A78aH0c2WTFCpMzgvcADSnyRnsuEAc=;
+        b=XGCcxfTFCknQkT/pBF+Yaku0GCCGoFh1jmmL5XYqzWFyQ+ZlNPK7+WvfN5R1zUqPVn
+         LdAR+zppJCM0MrXGiQXu3gLHaNHksRN2oPg7K0Ae5rqqfwwUPSuU4dUm705wpJ4D6ynM
+         1vLuyuAyaC8fG2FHCV1WHuh8CZbKURxNIBK8qeqTjooCKXbhvvZ0n3PvFrF+Mr9x+gRk
+         gO/10Lxns1q7i1BtI/q0MeXBF60g4k+vJtRrx5Khlni6Vo4IR9DVHfQJIFmSO5GsL0Xe
+         jdDqwh+WlTwJQ0EJEZ0Or+nglgukLzVxamsE+wHHUn3q3b+qS2ewgrdy+JHnD0SyT6j8
+         xyOw==
+X-Forwarded-Encrypted: i=1; AJvYcCV5sgqOdL0HdYOoTWoysw5cLS9vgsjhuVUT8NUAmduZAGUf6sN74mNHqVZZQ3+ZIxjFtkb0eiwG3k6PEcRhMw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxhANTLwSqyR4njOixaomOZ1ay8niPhfIQbbgoFqeJJHCVTI8+v
+	XuIJUiSBc62HrEbW7n5JXx7eGZy54I9QYXQum8Qy37FjKTvgl4OOFjQSSXD+cQ==
+X-Gm-Gg: ASbGncu8k7+ZsgK++DNJt4RJCFFS7o7UDatbE++YGYkxDdAn+0lEdeUjeCsJnpjHu/2
+	Efh8d7hZdqN1pfsRqzo4k2KH9//+PxC02QMSE+NYfNF9rBpNB0fC2HgXSl1eJi8Idyme+oiepww
+	F82C9JwjgCt0gvq90bVCN5whh6E5rS+BzoWjAzJnPpWzoKhJc4I+3krDoyQTJUCucRRfROyhMph
+	mhJzMnBoP5JJu6V2zDAAIHVfvLdbL6E/uw6dlRbx0KAT16Oa6noC3/xQn9Ys6mFLqtjSRq/r3ES
+	gCLtraKudp5aim3bk1oP+8EO0eWZx1eKsz3HgeaqpjLTpIv40jl0zJkU3DrJ4jwrkRSJ72kQBwy
+	yTAw4wyOZ5HPC1Sc1xC//uCFiQh0hBbXBqwm+S0lCqpToSglQchTT/27YuJCl7b5DUbBQAsAnsA
+	Pk8xfCkyl0DF5/sOlMefC8xLRJaoHz2QfpaKFCwUejEnmUBJploV/D0b7nZb1nyITFf8yWIQ==
+X-Google-Smtp-Source: AGHT+IEiIT2ZzKafX7P6IDpWWVgda39gy4Bf/RghcaRFGxs+zZinBv+sla+MJC322OIgoH+Kt5iooA==
+X-Received: by 2002:a17:902:f78c:b0:295:ceaf:8d76 with SMTP id d9443c01a7336-2986a75010cmr131694105ad.47.1763393075217;
+        Mon, 17 Nov 2025 07:24:35 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-bc36f61bea9sm12392071a12.14.2025.11.17.07.24.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Nov 2025 06:45:32 -0800 (PST)
-Message-ID: <168374f9-cf03-481b-b4b2-ed51787a3def@linaro.org>
-Date: Mon, 17 Nov 2025 15:45:31 +0100
+        Mon, 17 Nov 2025 07:24:34 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <e8b8940a-2cfe-4dea-99be-e1902f19b922@roeck-us.net>
+Date: Mon, 17 Nov 2025 07:24:33 -0800
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -85,146 +85,113 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH v7 0/2] Add support for Gunyah Watchdog
-To: hrishabh.rajput@oss.qualcomm.com, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
- <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- Pavan Kondeti <pavan.kondeti@oss.qualcomm.com>,
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-References: <20251114-gunyah_watchdog-v7-0-f5c155b941d5@oss.qualcomm.com>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <20251114-gunyah_watchdog-v7-0-f5c155b941d5@oss.qualcomm.com>
+Subject: Re: [PATCH v4] fix it87_wdt early reboot by reporting running timer
+To: =?UTF-8?Q?Ren=C3=A9_Rebe?= <rene@exactco.de>
+Cc: wim@linux-watchdog.org, linux-watchdog@vger.kernel.org
+References: <20251117.131124.1452225967649047223.rene@exactco.de>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20251117.131124.1452225967649047223.rene@exactco.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 11/14/25 08:57, Hrishabh Rajput via B4 Relay wrote:
-> Gunyah is a Type-I hypervisor which was introduced in the patch series
-> [1]. It is an open source hypervisor. The source repo is available at
-> [2].
+On 11/17/25 04:11, René Rebe wrote:
+> Some products, such as the Ugreen DXP4800 Plus NAS, ship with the it87
+> wdt enabled by the firmware and a broken BIOS option that does not
+> allow to change the time or turn it off. As this makes installing
+> Linux rather difficult, change the it87_wdt to report it running to
+> the watchdog core.
 > 
-> The Gunyah Hypervisor doesn't allow its Virtual Machines to directly
-> access the MMIO watchdog. It either provides the fully emulated MMIO
-> based watchdog interface or the SMC-based watchdog interface depending
-> on the hypervisor configuration.
-> The SMC-based watchdog follows ARM's SMC Calling Convention (SMCCC)
-> version 1.1 and uses Vendor Specific Hypervisor Service Calls space.
-> 
-> This patch series adds support for the SMC-based watchdog interface
-> provided by the Gunyah Hypervisor.
-> 
-> This series is tested on SM8750 platform.
-> 
-> [1]
-> https://lore.kernel.org/all/20240222-gunyah-v17-0-1e9da6763d38@quicinc.com/
-> 
-> [2]
-> https://github.com/quic/gunyah-hypervisor
-> 
-> Signed-off-by: Hrishabh Rajput <hrishabh.rajput@oss.qualcomm.com>
-> ---
-> Changes in v7:
-> - Convert local `const` arrays to `static const` to optimize
->    initialization and stack allocation.
-> - Link to v6: https://lore.kernel.org/r/20251112-gunyah_watchdog-v6-0-38ad01f8dac0@oss.qualcomm.com
-> 
-> Changes in v6:
-> - Fix build issues reported by the kernel test robot on PowerPC and RISC-V
->    architectures by adding IS_ENABLED(CONFIG_HAVE_ARM_SMCCC_DISCOVERY) check
->    before calling arm_smccc_hypervisor_has_uuid().
-> - Link to v5: https://lore.kernel.org/r/20251107-gunyah_watchdog-v5-0-4c6e3fb6eb17@oss.qualcomm.com
-> 
-> Changes in v5:
-> - Move the gunyah_wdt device registration from the SMEM driver to the
->    SCM driver. Add additional logic to check if we're running under the
->    Gunyah Hypervisor.
-> - Implement .remove() for gunyah_wdt driver to make it not persistent.
-> - Link to v4: https://lore.kernel.org/r/20251031-gunyah_watchdog-v4-0-7abb1ee11315@oss.qualcomm.com
-> 
-> Changes in v4:
-> - Move the contents of gunyah_wdt_init() to qcom_smem_probe() to make
->    sure we're registering the watchdog only on the Qualcomm devices.
-> - Link to v3: https://lore.kernel.org/r/20251028-gunyah_watchdog-v3-1-e6d1ea438b1d@oss.qualcomm.com
-> 
-> Changes in v3:
-> - Move back to platform driver model. In module init, determine if we're
->    running on a Qualcomm device and there is no supported memory-mapped
->    watchdog present. Then proceed to register platform device and driver
->    for SMC-based Gunyah watchdog.
-> - To determine if we're running on a Qualcomm device we're checking the
->    presence of "qcom,smem" compatible devicetree node. As an alternative,
->    we also tried using socinfo for the same purpose. When both
->    gunyah_wdt and socinfo drivers were made built-in, it couldn't be
->    ensured that the socinfo driver probed successfully before gunyah_wdt
->    init was called. Hence, we resorted to the devicetree node approach.
-> - Limit the errors listed in gunyah_error to the ones that can be
->    produced by the driver.
-> - Link to v2: https://lore.kernel.org/r/20251006-gunyah_watchdog-v2-1-b99d41d45450@oss.qualcomm.com
-> 
-> Changes in v2:
-> - Move away from platform driver model since the devicetree overlay does
->    not happen by default.
->    See https://lore.kernel.org/all/91002189-9d9e-48a2-8424-c42705fed3f8@quicinc.com/
-> - Only when MMIO-based watchdog device is absent in the devicetree,
->    proceed to detect SMC-based watchdog using GUNYAH_WDT_STATUS SMC and
->    initialize if SMC returns success.
-> - Implement pm notifiers as gunyah_wdt is no longer a platform driver so
->    dev_pm_ops cannot be used.
-> - Pretimeout IRQ is no longer supported.
-> - Remove struct gunyah_wdt since it is not required.
-> - Move the contents of gunyah_errno.h to gunyah_wdt.c.
-> - Link to v1: https://lore.kernel.org/r/20250903-gunyah_watchdog-v1-0-3ae690530e4b@oss.qualcomm.com
-> 
-> ---
-> Hrishabh Rajput (2):
->        firmware: qcom: scm: Register gunyah watchdog device
->        watchdog: Add driver for Gunyah Watchdog
-> 
->   MAINTAINERS                      |   1 +
->   drivers/firmware/qcom/qcom_scm.c |  53 ++++++++
->   drivers/watchdog/Kconfig         |  13 ++
->   drivers/watchdog/Makefile        |   1 +
->   drivers/watchdog/gunyah_wdt.c    | 260 +++++++++++++++++++++++++++++++++++++++
->   5 files changed, 328 insertions(+)
-> ---
-> base-commit: e9a6fb0bcdd7609be6969112f3fbfcce3b1d4a7c
-> change-id: 20250903-gunyah_watchdog-2d2649438e29
-> 
-> Best regards,
+> Signed-off-by: René Rebe <rene@exactco.de>
 
-Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on SM8650-QRD
-Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on SM8650-HDK
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Thanks,
-Neil
+> ---
+> v1:
+> - just clear hw timer register
+> v2:
+> - detect running hw timer and report to watchdog core
+> v3:
+> - multiply TOV1 in _wdt_get_timeout
+> - don't wrongly and superfluously set .max_hw_heartbeat_ms
+> - don't call set_timeout manually
+> v4:
+> - simplify to wdt_running
+> - move code up to not move superio_exit
+> 
+> diff --git a/drivers/watchdog/it87_wdt.c b/drivers/watchdog/it87_wdt.c
+> index 3b8488c86a2f..8ba7e03857ca 100644
+> --- a/drivers/watchdog/it87_wdt.c
+> +++ b/drivers/watchdog/it87_wdt.c
+> @@ -188,6 +188,12 @@ static void _wdt_update_timeout(unsigned int t)
+>   		superio_outb(t >> 8, WDTVALMSB);
+>   }
+>   
+> +/* Internal function, should be called after superio_select(GPIO) */
+> +static bool _wdt_running(void)
+> +{
+> +	return superio_inb(WDTVALLSB) || (max_units > 255 && superio_inb(WDTVALMSB));
+> +}
+> +
+>   static int wdt_update_timeout(unsigned int t)
+>   {
+>   	int ret;
+> @@ -374,6 +381,12 @@ static int __init it87_wdt_init(void)
+>   		}
+>   	}
+>   
+> +	/* wdt already left running by firmware? */
+> +	if (_wdt_running()) {
+> +		pr_info("Left running by firmware.\n");
+> +		set_bit(WDOG_HW_RUNNING, &wdt_dev.status);
+> +	}
+> +
+>   	superio_exit();
+>   
+>   	if (timeout < 1 || timeout > max_units * 60) {
+> 
+
 
