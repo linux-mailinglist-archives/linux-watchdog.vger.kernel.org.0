@@ -1,83 +1,82 @@
-Return-Path: <linux-watchdog+bounces-4606-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4607-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25C8BC64DCD
-	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Nov 2025 16:24:47 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF776C65E18
+	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Nov 2025 20:10:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sin.lore.kernel.org (Postfix) with ESMTPS id 48B4628EFA
-	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Nov 2025 15:24:42 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 76C0A4EE7CB
+	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Nov 2025 19:07:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5407F270EBA;
-	Mon, 17 Nov 2025 15:24:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F237B303A1D;
+	Mon, 17 Nov 2025 19:06:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GDA6PxZk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hCGAy9ny"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 217413370F2
-	for <linux-watchdog@vger.kernel.org>; Mon, 17 Nov 2025 15:24:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45976207A3A
+	for <linux-watchdog@vger.kernel.org>; Mon, 17 Nov 2025 19:06:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763393078; cv=none; b=F7/SSJr3Xs/gT9QV2mFuVhg2PwKUxXtfB9zwMDV+ChDhH8gpV8ZXvA1+YCptuPDCsroZeQmuhmbnfXXvrjlRyrPHiPNk5OMkJqts1GlwNES4mH1rWz/lcSpTnIGR+4KTS96+B1O8Bcpt9mga0LJuvUVNUNoHOw9XPFdjviLUG1o=
+	t=1763406374; cv=none; b=JlsoN0qVgZ7pTJUuBWud2+uuicIt6vBRg6LyexaAjk+pQgN3t2KkgXukNKjhzx+V3cUKHtmal4kx5DFPRvblUTKI0br15FT+yCi0pNHZ4JHtdA7XASxgnqUISbTOgx4XjQj/B4AmHvyhc2m1EtSMfNCyMxaHrhFcA8Yd+vfxY2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763393078; c=relaxed/simple;
-	bh=BrI7oN/gW4IccJJk3cioKiIJZA4rsaicJtpTf8J1ZcU=;
+	s=arc-20240116; t=1763406374; c=relaxed/simple;
+	bh=rFiMSmFEjPbJNpsQ4K9x1RL6OeK3koTlX7zcSoXg9Vo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=M45WlYzA8MsnrMiriF0yTaFNGZz5zfeaYwJK+R0UzCiYW7N5uMVvNMv9tU1/xjqZ5b8Ue99phvpTF1tdzfJhZuJug+N9dje8+7ZV61banjoY1CzWsIeVglGNwZNRDAtBCbff4Kn7LHCxN9I63WEoSWmEqqrFYRZeAMG4q6+9wg8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GDA6PxZk; arc=none smtp.client-ip=209.85.214.182
+	 In-Reply-To:Content-Type; b=DpFYEMExbCldj3eIvuGXov3H/17K6U9UwplXsxKbuGu/+5NX8odEK4/2PTuthdBXNIHDhU2DgknLVcfrwhnZ+z4LfxIv2zbZvoXBpkXrwsKW+/1nSVv75MjKuN+RBI9/dUa/JCBX2uYMgHk4uj1r9bMsr1Sz1Ty7gl6QsCA1LVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hCGAy9ny; arc=none smtp.client-ip=209.85.210.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2958db8ae4fso40768385ad.2
-        for <linux-watchdog@vger.kernel.org>; Mon, 17 Nov 2025 07:24:35 -0800 (PST)
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-7ad1cd0db3bso3952842b3a.1
+        for <linux-watchdog@vger.kernel.org>; Mon, 17 Nov 2025 11:06:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763393075; x=1763997875; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1763406372; x=1764011172; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zoq4aC9kle0K5A78aH0c2WTFCpMzgvcADSnyRnsuEAc=;
-        b=GDA6PxZkzIYLvRF8aqAjRlx57kD7SVcZJ95IfldlOx0LVvm1PFvnMYdFJPT4VSJdLh
-         lDRm7+cZC6idqt/CpSNMP1GgfkfCTOSsAF5tRIZK9ESV2lArSZDVaeWoEQGFqBTUpOeD
-         3VseNIsPcowIyQQuca0Hsai4cEqlXvVBRzSLHmX/goSzG231goYQSKuxvYrx5Vpdtaxd
-         a3DlWIU8g9CsqyP0TgDcsZ0WFaxJKFapAAwiKBP1ZM/FF4s/4y0GyiEmACFPyBAj8BoX
-         kjQxFTEDETTBa3ovtVfPknru8ZET2GvL4JWFjnyWUeGi4cL4U9Vq2n12gDmyjNNW/ueu
-         8czw==
+        bh=dlsZtfEc6JQRncrO9gv3FbbnoRQVjJvWvLbcLyrQNAE=;
+        b=hCGAy9nyzQHJjoHBhLjQ/q9kJshzFAbDbS+tscLl1FFu5+2L44p/7JnAt57Uis4PRu
+         EmrMxdFORC7qHkH5LRUKuNOlAQ/AAsF0JZP/ixogsxWckFDN9u5x/QKZuVaYLmxiDKmU
+         TnSKOwZHY63RRa9C/+LunSDa0lY19O2VBZMqpCFjsPWNa12+foNuhQVXKzb722egdCtJ
+         NfpAY9iNjX806unS7HKdPgEoAwoC9M7DoOS6hpFcRcO15wtAg8CCIqgOdoJwJbJPCtTL
+         zIk8Fb5kksi0xEaPogQa7CgC+mL3BOeHfAPL87q7Mr1jOXdPJziHFD8CKfsYMwfACj9s
+         3seQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763393075; x=1763997875;
+        d=1e100.net; s=20230601; t=1763406372; x=1764011172;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Zoq4aC9kle0K5A78aH0c2WTFCpMzgvcADSnyRnsuEAc=;
-        b=XGCcxfTFCknQkT/pBF+Yaku0GCCGoFh1jmmL5XYqzWFyQ+ZlNPK7+WvfN5R1zUqPVn
-         LdAR+zppJCM0MrXGiQXu3gLHaNHksRN2oPg7K0Ae5rqqfwwUPSuU4dUm705wpJ4D6ynM
-         1vLuyuAyaC8fG2FHCV1WHuh8CZbKURxNIBK8qeqTjooCKXbhvvZ0n3PvFrF+Mr9x+gRk
-         gO/10Lxns1q7i1BtI/q0MeXBF60g4k+vJtRrx5Khlni6Vo4IR9DVHfQJIFmSO5GsL0Xe
-         jdDqwh+WlTwJQ0EJEZ0Or+nglgukLzVxamsE+wHHUn3q3b+qS2ewgrdy+JHnD0SyT6j8
-         xyOw==
-X-Forwarded-Encrypted: i=1; AJvYcCV5sgqOdL0HdYOoTWoysw5cLS9vgsjhuVUT8NUAmduZAGUf6sN74mNHqVZZQ3+ZIxjFtkb0eiwG3k6PEcRhMw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhANTLwSqyR4njOixaomOZ1ay8niPhfIQbbgoFqeJJHCVTI8+v
-	XuIJUiSBc62HrEbW7n5JXx7eGZy54I9QYXQum8Qy37FjKTvgl4OOFjQSSXD+cQ==
-X-Gm-Gg: ASbGncu8k7+ZsgK++DNJt4RJCFFS7o7UDatbE++YGYkxDdAn+0lEdeUjeCsJnpjHu/2
-	Efh8d7hZdqN1pfsRqzo4k2KH9//+PxC02QMSE+NYfNF9rBpNB0fC2HgXSl1eJi8Idyme+oiepww
-	F82C9JwjgCt0gvq90bVCN5whh6E5rS+BzoWjAzJnPpWzoKhJc4I+3krDoyQTJUCucRRfROyhMph
-	mhJzMnBoP5JJu6V2zDAAIHVfvLdbL6E/uw6dlRbx0KAT16Oa6noC3/xQn9Ys6mFLqtjSRq/r3ES
-	gCLtraKudp5aim3bk1oP+8EO0eWZx1eKsz3HgeaqpjLTpIv40jl0zJkU3DrJ4jwrkRSJ72kQBwy
-	yTAw4wyOZ5HPC1Sc1xC//uCFiQh0hBbXBqwm+S0lCqpToSglQchTT/27YuJCl7b5DUbBQAsAnsA
-	Pk8xfCkyl0DF5/sOlMefC8xLRJaoHz2QfpaKFCwUejEnmUBJploV/D0b7nZb1nyITFf8yWIQ==
-X-Google-Smtp-Source: AGHT+IEiIT2ZzKafX7P6IDpWWVgda39gy4Bf/RghcaRFGxs+zZinBv+sla+MJC322OIgoH+Kt5iooA==
-X-Received: by 2002:a17:902:f78c:b0:295:ceaf:8d76 with SMTP id d9443c01a7336-2986a75010cmr131694105ad.47.1763393075217;
-        Mon, 17 Nov 2025 07:24:35 -0800 (PST)
+        bh=dlsZtfEc6JQRncrO9gv3FbbnoRQVjJvWvLbcLyrQNAE=;
+        b=uNhiWWPXI6/Nz0p7/0j1ZwxHqyChJ0YKD1Mz3iizMEGuiFht7x1TmF+ZBoKoPEtqxJ
+         3EBuSxlQPUa8g2hwiioa8m2QPkz2igRPQTFTG5YxJh6GYjdNSGrLaP+cr4HhqhS0LXo5
+         x2KwqS1GD7sMMW0Dhu7JbB5lgXi9JF8JmYU1atYZCIOTsFfYHyj21NurFL+W/fDX2Nhc
+         I7mdJiu9Ks+yuy7vYhRUP7QXXMavjCW+51T+qFUdGAbnBemqzWbYfpPhGjAkpDMXk04s
+         cj4qVhUvi9bQwxfCFSGzGPokbUrQFbMORs4hWTI1hh1BBwK089K+GKGhsoHvzH+R1pQE
+         bYpA==
+X-Gm-Message-State: AOJu0YxfGcLDlKSqjofdEX6gzWIgDd2OpfkfcqYo0zQf4guQb/XvWjk7
+	+x3sHeyKYCcx/N/43Cjy+WyDwUUfIilHq7j9WDdj5iGJybFRXRssKB7v
+X-Gm-Gg: ASbGncvtuFRM3DiaZ8e1hILc4nRaCUglauta7Zur86evkOlHlSRdvlEFf/QIHdNlNZd
+	0rPqqR3LXyqw8LZPywZ5c5o9i4apUBp7Z0OI7LrXdMm6zd7fabHKPfQ12tAB6kmQorG8RZnyoFG
+	ViHqypHtQtbJlJMq2MC3l6EWzGRTbRlWUThmJ4UlXhQ5A/ozlFqU1032k0kJbp30gPglHSbZ194
+	JS5xPffqhvtnRXLT0smNI7NOUwnQwinkBXOsQUMURuYeKGG7Ofcu/N5Y4kIqJ+oysWB1ujvX5L0
+	pVt17RVMU8+6qK2Ty3d58Sn8vPn6JJtPmL7995ngPPwFxQza8pIrm6yZjn8OdhbOiNf6xdN7NAK
+	g9tab2DlNmWTHjExXGMUnfAwlaHugP/B3qi7tcXYP2JQuGdM/ONZ1SkMRqCznWF0NGvSLMT7fWc
+	54xpXNP9soeBvF6qX5PlUdom/grS5uJ/cyrhMjBpUWTEYFxDySWWlSQtntAsM=
+X-Google-Smtp-Source: AGHT+IFd5uwvmhgTmz/z8E86sAkopCImCOPyZ6bzoN8PX6DF9/XnG2lTG7ZoLs+N4gvzqXcLpjvBbQ==
+X-Received: by 2002:a17:90b:1348:b0:340:bb64:c5e with SMTP id 98e67ed59e1d1-343f9ea41b3mr14489544a91.14.1763406372354;
+        Mon, 17 Nov 2025 11:06:12 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-bc36f61bea9sm12392071a12.14.2025.11.17.07.24.34
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7b927151d38sm13965830b3a.40.2025.11.17.11.06.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Nov 2025 07:24:34 -0800 (PST)
+        Mon, 17 Nov 2025 11:06:11 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e8b8940a-2cfe-4dea-99be-e1902f19b922@roeck-us.net>
-Date: Mon, 17 Nov 2025 07:24:33 -0800
+Message-ID: <c4c1a84e-ee2d-459a-84dd-6dec3ee8e152@roeck-us.net>
+Date: Mon, 17 Nov 2025 11:06:10 -0800
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -85,10 +84,11 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] fix it87_wdt early reboot by reporting running timer
-To: =?UTF-8?Q?Ren=C3=A9_Rebe?= <rene@exactco.de>
-Cc: wim@linux-watchdog.org, linux-watchdog@vger.kernel.org
-References: <20251117.131124.1452225967649047223.rene@exactco.de>
+Subject: Re: [PATCH v2] watchdog: wdat_wdt: Fix ACPI table leak in probe
+ function
+To: Haotian Zhang <vulab@iscas.ac.cn>, wim@linux-watchdog.org
+Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20251113023032.547-1-vulab@iscas.ac.cn>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -134,64 +134,162 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20251117.131124.1452225967649047223.rene@exactco.de>
+In-Reply-To: <20251113023032.547-1-vulab@iscas.ac.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 11/17/25 04:11, René Rebe wrote:
-> Some products, such as the Ugreen DXP4800 Plus NAS, ship with the it87
-> wdt enabled by the firmware and a broken BIOS option that does not
-> allow to change the time or turn it off. As this makes installing
-> Linux rather difficult, change the it87_wdt to report it running to
-> the watchdog core.
+On 11/12/25 18:30, Haotian Zhang wrote:
+> wdat_wdt_probe() calls acpi_get_table() to obtain the WDAT ACPI table but
+> never calls acpi_put_table() on any paths. This causes a permanent ACPI
+> table memory leak.
 > 
-> Signed-off-by: René Rebe <rene@exactco.de>
+> Add a single cleanup path which calls acpi_put_table() to ensure
+> the ACPI table is always released.
+> 
+> Fixes: 058dfc767008 ("ACPI / watchdog: Add support for WDAT hardware watchdog")
+> Suggested-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Haotian Zhang <vulab@iscas.ac.cn>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
-> v1:
-> - just clear hw timer register
-> v2:
-> - detect running hw timer and report to watchdog core
-> v3:
-> - multiply TOV1 in _wdt_get_timeout
-> - don't wrongly and superfluously set .max_hw_heartbeat_ms
-> - don't call set_timeout manually
-> v4:
-> - simplify to wdt_running
-> - move code up to not move superio_exit
+> Changes in v2:
+>    -Remove unnecessary initialization.
+>    -Correct the patch description, since the v1 patch already
+>     free table on both error and success paths.
+> ---
+>   drivers/watchdog/wdat_wdt.c | 64 +++++++++++++++++++++++++------------
+>   1 file changed, 43 insertions(+), 21 deletions(-)
 > 
-> diff --git a/drivers/watchdog/it87_wdt.c b/drivers/watchdog/it87_wdt.c
-> index 3b8488c86a2f..8ba7e03857ca 100644
-> --- a/drivers/watchdog/it87_wdt.c
-> +++ b/drivers/watchdog/it87_wdt.c
-> @@ -188,6 +188,12 @@ static void _wdt_update_timeout(unsigned int t)
->   		superio_outb(t >> 8, WDTVALMSB);
+> diff --git a/drivers/watchdog/wdat_wdt.c b/drivers/watchdog/wdat_wdt.c
+> index 650fdc7996e1..dd3c2d69c9df 100644
+> --- a/drivers/watchdog/wdat_wdt.c
+> +++ b/drivers/watchdog/wdat_wdt.c
+> @@ -326,19 +326,27 @@ static int wdat_wdt_probe(struct platform_device *pdev)
+>   		return -ENODEV;
+>   
+>   	wdat = devm_kzalloc(dev, sizeof(*wdat), GFP_KERNEL);
+> -	if (!wdat)
+> -		return -ENOMEM;
+> +	if (!wdat) {
+> +		ret = -ENOMEM;
+> +		goto out_put_table;
+> +	}
+>   
+>   	regs = devm_kcalloc(dev, pdev->num_resources, sizeof(*regs),
+>   			    GFP_KERNEL);
+> -	if (!regs)
+> -		return -ENOMEM;
+> +	if (!regs) {
+> +		ret = -ENOMEM;
+> +		goto out_put_table;
+> +	}
+>   
+>   	/* WDAT specification wants to have >= 1ms period */
+> -	if (tbl->timer_period < 1)
+> -		return -EINVAL;
+> -	if (tbl->min_count > tbl->max_count)
+> -		return -EINVAL;
+> +	if (tbl->timer_period < 1) {
+> +		ret = -EINVAL;
+> +		goto out_put_table;
+> +	}
+> +	if (tbl->min_count > tbl->max_count) {
+> +		ret = -EINVAL;
+> +		goto out_put_table;
+> +	}
+>   
+>   	wdat->period = tbl->timer_period;
+>   	wdat->wdd.min_timeout = DIV_ROUND_UP(wdat->period * tbl->min_count, 1000);
+> @@ -355,15 +363,20 @@ static int wdat_wdt_probe(struct platform_device *pdev)
+>   		res = &pdev->resource[i];
+>   		if (resource_type(res) == IORESOURCE_MEM) {
+>   			reg = devm_ioremap_resource(dev, res);
+> -			if (IS_ERR(reg))
+> -				return PTR_ERR(reg);
+> +			if (IS_ERR(reg)) {
+> +				ret = PTR_ERR(reg);
+> +				goto out_put_table;
+> +			}
+>   		} else if (resource_type(res) == IORESOURCE_IO) {
+>   			reg = devm_ioport_map(dev, res->start, 1);
+> -			if (!reg)
+> -				return -ENOMEM;
+> +			if (!reg) {
+> +				ret = -ENOMEM;
+> +				goto out_put_table;
+> +			}
+>   		} else {
+>   			dev_err(dev, "Unsupported resource\n");
+> -			return -EINVAL;
+> +			ret = -EINVAL;
+> +			goto out_put_table;
+>   		}
+>   
+>   		regs[i] = reg;
+> @@ -385,8 +398,10 @@ static int wdat_wdt_probe(struct platform_device *pdev)
+>   		}
+>   
+>   		instr = devm_kzalloc(dev, sizeof(*instr), GFP_KERNEL);
+> -		if (!instr)
+> -			return -ENOMEM;
+> +		if (!instr) {
+> +			ret = -ENOMEM;
+> +			goto out_put_table;
+> +		}
+>   
+>   		INIT_LIST_HEAD(&instr->node);
+>   		instr->entry = entries[i];
+> @@ -417,7 +432,8 @@ static int wdat_wdt_probe(struct platform_device *pdev)
+>   
+>   		if (!instr->reg) {
+>   			dev_err(dev, "I/O resource not found\n");
+> -			return -EINVAL;
+> +			ret = -EINVAL;
+> +			goto out_put_table;
+>   		}
+>   
+>   		instructions = wdat->instructions[action];
+> @@ -425,8 +441,10 @@ static int wdat_wdt_probe(struct platform_device *pdev)
+>   			instructions = devm_kzalloc(dev,
+>   						    sizeof(*instructions),
+>   						    GFP_KERNEL);
+> -			if (!instructions)
+> -				return -ENOMEM;
+> +			if (!instructions) {
+> +				ret = -ENOMEM;
+> +				goto out_put_table;
+> +			}
+>   
+>   			INIT_LIST_HEAD(instructions);
+>   			wdat->instructions[action] = instructions;
+> @@ -443,7 +461,7 @@ static int wdat_wdt_probe(struct platform_device *pdev)
+>   
+>   	ret = wdat_wdt_enable_reboot(wdat);
+>   	if (ret)
+> -		return ret;
+> +		goto out_put_table;
+>   
+>   	platform_set_drvdata(pdev, wdat);
+>   
+> @@ -460,12 +478,16 @@ static int wdat_wdt_probe(struct platform_device *pdev)
+>   
+>   	ret = wdat_wdt_set_timeout(&wdat->wdd, timeout);
+>   	if (ret)
+> -		return ret;
+> +		goto out_put_table;
+>   
+>   	watchdog_set_nowayout(&wdat->wdd, nowayout);
+>   	watchdog_stop_on_reboot(&wdat->wdd);
+>   	watchdog_stop_on_unregister(&wdat->wdd);
+> -	return devm_watchdog_register_device(dev, &wdat->wdd);
+> +	ret = devm_watchdog_register_device(dev, &wdat->wdd);
+> +
+> +out_put_table:
+> +	acpi_put_table((struct acpi_table_header *)tbl);
+> +	return ret;
 >   }
 >   
-> +/* Internal function, should be called after superio_select(GPIO) */
-> +static bool _wdt_running(void)
-> +{
-> +	return superio_inb(WDTVALLSB) || (max_units > 255 && superio_inb(WDTVALMSB));
-> +}
-> +
->   static int wdt_update_timeout(unsigned int t)
->   {
->   	int ret;
-> @@ -374,6 +381,12 @@ static int __init it87_wdt_init(void)
->   		}
->   	}
->   
-> +	/* wdt already left running by firmware? */
-> +	if (_wdt_running()) {
-> +		pr_info("Left running by firmware.\n");
-> +		set_bit(WDOG_HW_RUNNING, &wdt_dev.status);
-> +	}
-> +
->   	superio_exit();
->   
->   	if (timeout < 1 || timeout > max_units * 60) {
-> 
+>   static int wdat_wdt_suspend_noirq(struct device *dev)
 
 
