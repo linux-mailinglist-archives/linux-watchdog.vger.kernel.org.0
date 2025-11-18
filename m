@@ -1,182 +1,461 @@
-Return-Path: <linux-watchdog+bounces-4615-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4616-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBFD2C695B5
-	for <lists+linux-watchdog@lfdr.de>; Tue, 18 Nov 2025 13:24:45 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88FE9C6B749
+	for <lists+linux-watchdog@lfdr.de>; Tue, 18 Nov 2025 20:32:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id CD3794E44BA
-	for <lists+linux-watchdog@lfdr.de>; Tue, 18 Nov 2025 12:24:42 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6EB7934329C
+	for <lists+linux-watchdog@lfdr.de>; Tue, 18 Nov 2025 19:30:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 158C0315D3B;
-	Tue, 18 Nov 2025 12:24:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A18AE240611;
+	Tue, 18 Nov 2025 19:30:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="JRCQGFlJ";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="XX1elc67"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MCEd9IFn"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D099306B02
-	for <linux-watchdog@vger.kernel.org>; Tue, 18 Nov 2025 12:24:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A56E2EDD6F
+	for <linux-watchdog@vger.kernel.org>; Tue, 18 Nov 2025 19:30:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763468682; cv=none; b=Qj3Xkgqg7QBkEKCaIJrR6/KQuAYv6SONiz/FIV7ITQNWrDXontXBsj1bqD4DpO4fIfD7DSbjErX8wIJSKjgRxw298Sic0XYMtePyvreuM6XvH1a35+ajmVSRv8haQ5prVW9roZ101nZb4szgv95M0BXggbS4iS+UnU3nLlcb8xg=
+	t=1763494208; cv=none; b=kqzMejVOfp9vmJIbn0roaKIfwBljb3537hxPW5ZdHwOjuhFqCvYXvVl4cFGrZ9dhOp+7sw+a6oNIxxyV/4jsIKDaIJ41I9pqq3PrebNKXJ9L+GJATCX6Kn1IrMOHfFoTh5skSSnHfXPqZ+qKICvsAGyK+Bf+oL/5tUoL53mikho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763468682; c=relaxed/simple;
-	bh=huYe93wRFMhFP9jgygcl+YFgbFfEk20gLV/A0igsqJI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QaDDRCY4gEfwXQfbUm7kKynfwTuJ1N1EqcxBYig2yYa9mLWCD3ON7b/0Saa1qHjpa+Mi7zxxhhf+cl2jnWhMZS7QKEQ3nnpwWpBhblGCUBwbyz59o684yT9Q03tqytO6cJkUW1WtCsPcALf3qt9+HmZQ9o1EfkvC0xez3RnuP1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=JRCQGFlJ; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=XX1elc67; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AIAW7JL027447
-	for <linux-watchdog@vger.kernel.org>; Tue, 18 Nov 2025 12:24:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=g07JOyEzM0TjbD6ezjDR6ELM
-	vtt9Jl4vE+WZmWAkXx8=; b=JRCQGFlJxeDmZ8n+ySQ08IF24yMp5qsq/Jg0szEY
-	bwuoVpUjqxPfjh0frtIJNatHQiyZpmKF3YeoNNIdwx2Ga+ERICkmSXFeYysnLlVs
-	t0C9NGD5XPjeYBjCqZclrw81tljRTmZuwcXDdbzMxn09dEHrk4QYUcwPCh1R/N3R
-	tx8LLRnl4TokvVSFkWdr4+PHddBuM4e448B9RXojGr8A2cw4rubVHToUp9ANBwVV
-	yE8O74BXh4arddmrE/JTUJj+r41NaTmUARlhTKRZ2NUDIONrdzqeJFtEMhAn61uQ
-	MJDM2mLYyFoZY4v3kASQNvXO+0ylkAT4WTz7sDfeMf8dWQ==
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com [209.85.160.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4ag77t321k-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-watchdog@vger.kernel.org>; Tue, 18 Nov 2025 12:24:39 +0000 (GMT)
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-4ee04db384eso105520631cf.3
-        for <linux-watchdog@vger.kernel.org>; Tue, 18 Nov 2025 04:24:39 -0800 (PST)
+	s=arc-20240116; t=1763494208; c=relaxed/simple;
+	bh=BDmwYdodm5ybr3jokc0ci9os6H3SUrfFrHHYg3aNBts=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ng2i5dG/A66QmOWbb58bY25jHjMOaYZz4ACKhIf4WjqKHAqWgg6ts0W6FEBNYguzMqYBqat0rh0BSNm04Q20HMpK1zrhES4aSc8w35XZ8VODg9vkMBjSWA0wxl/l9/AshXDKI76u18zbz4hINS/Ab3QahkdGP5pjl048mtPJJrw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MCEd9IFn; arc=none smtp.client-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-ba599137cf8so113716a12.0
+        for <linux-watchdog@vger.kernel.org>; Tue, 18 Nov 2025 11:30:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1763468679; x=1764073479; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=g07JOyEzM0TjbD6ezjDR6ELMvtt9Jl4vE+WZmWAkXx8=;
-        b=XX1elc67tqZ3bCRjtzXxKmScNT1ml4QoVafvpg1wEG8D6kIQMiOGyPNAeb9hQScnBE
-         tnGTw7fWDYl6vN61PiQZ4MXcMJ4t8jDFEEzs9Od9lGTnQjyF4VS86TVmKxbxCiephvxK
-         LBh8qo8/qcP/yRg7TrOPS9ipLGfyKxKOtdgk0mVZQNFAKyIsCalHWGMNHD3FPneIbOdX
-         pijSP9gpYBFaNvRuIOmGR/8HKboCnB291T5Se+jtmZxMC1ds1a/Q+ijy7e3A2y5JQc4O
-         oe7rPI8GkITtxBFf0KA5s3kmmpllkyR9bnxl2WWumwTKqe5GalIyZddL23FSqPOINz/1
-         WOYA==
+        d=gmail.com; s=20230601; t=1763494202; x=1764099002; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=IPA2qG9Moyv81DGwZs8rRFNaKgQiqJZSwK+j3lZBua0=;
+        b=MCEd9IFnn9zuA5yP7GwIBXunEOBBokVfB6/PM7F+LhFBLNBzZsG/MqZOfljbZ0Gtjd
+         2g20HgFXh6LLWkDUW6pK2kkXudzNQlQetWZ8s255nL9giWP/hm+Ox+yyPe6srQbhpwrG
+         NaPx4pcOY9wBL+JdLt+3zWj4hhf6UlJyr5PqjvLqIcSILEcEyuBayYyg1ScJCCH3+Txh
+         SNmzrkcVwnqKwq3MUsXtPRFPkYVM2eBIlsk7MkEDttPy/nYa7b+gwkhc7P3ipVKNXvC7
+         J8/ZmicwsBoadBpfj1oZO9WqdoXBUjfUwWoFicnjliS5X5cU97HSj/jWegh2+jkwFSfF
+         9Ohw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763468679; x=1764073479;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g07JOyEzM0TjbD6ezjDR6ELMvtt9Jl4vE+WZmWAkXx8=;
-        b=VN1TpShp1UYog5HrZGWSvORvuQyJDCi5Karx/OI76QeKS8qlptqJhp3JE1f9O3U3qN
-         xTXNpyVi6Ai32gnP4iZraKuJimb7jaFC/3C0D1ZJVPNv4aLHXTFakAvFJE3Jsm4U3MYn
-         lGM2iK37VFymaAcvRa+mtCSSRhoqc9hVshWnhJtAJ2eRojtTqB17ISl4/kyzMPM+KS/u
-         ddvo5/HqIMQHw1t31HzvMF5dSeX/zfCk+wJXJcQF3jfRBwCGsgV9njreAhQWcGPhQILu
-         Qntf/v2LJIQ7Ou6CX/p5pShRJDIj4kQZHBe++vBeasKk0v8oUwRi7dZ/vRQ026OqlHpZ
-         SQVw==
-X-Forwarded-Encrypted: i=1; AJvYcCWovdG31cdNVXtJh0GXJK2AsfDfOAyeYo10PvQfl/Ou5IWRV/HKBxiHoW19Mt5uRHOLG/rZCAJpAO4haeZ+lA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwYQ21P6XJaxU9nHjoYyKb7jj5iFNDsrEZu7cB/M6MAe2Lb5JDa
-	UvVh5NN0sC0WZml5DN1ncsbQSU9zN3tNsVI9sZR44pgg4GPK/Ub+d61uqr3EajUWTB7GcdBJavb
-	lHafg+TFLfH9u+ZON7SYzF1V1b+mHBy7EZlWYQfAq3BVQKFaOyhr4TKD7/SBj158uU71Fgg==
-X-Gm-Gg: ASbGnct7vTuVlmcTb48SEBHOln7onuSwjaZj39yWsIFdU2khblQfGo+vq7GZjGo5O2V
-	zMQCUfiq8+aHn1fQPYCTu1zDsOKXzRhtLnJPqryqVCD054ZXoZGhcsf+3JmgqGU+q6520HDfKEg
-	FIfWL1+rko09rd+hjgIcONJZv3/ekiUy/fUl5qnmJR1EF17/iIdpvg4urqDX7B6yB8BEjBPXfSV
-	Yhpv2UHJxgdO9vOa9V8Xw9Fv6K5r/wPQiz9UQgmDdBd6Q9FUyReKSv79NrEHah77r9BZLMCuM15
-	7CpS2z06yWanHrXo0GrWScw+UrS9cGDtVTBJMQs6vhQ+tgY3mwDrIzYQm+wwGj9Sj0fgbsnfr9Z
-	7sCAfJgz23lLyze8rrib8K2zdNxL1SZq4gGQDq5AI1wbVaDRK9K0Tmf5mTPO4s85uoFyEA6ElMZ
-	GFZJ0Zi4idbj3k
-X-Received: by 2002:a05:622a:355:b0:4ed:6cd3:7d1e with SMTP id d75a77b69052e-4edf2048792mr210596401cf.10.1763468678652;
-        Tue, 18 Nov 2025 04:24:38 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEfdjo3aY1W8lhHj4V4igEYF/+oA7pGr8Ds5Ftpg3JovJEBSKb6NxOTd1Ty9fMH9pPAF6NYcg==
-X-Received: by 2002:a05:622a:355:b0:4ed:6cd3:7d1e with SMTP id d75a77b69052e-4edf2048792mr210596091cf.10.1763468678281;
-        Tue, 18 Nov 2025 04:24:38 -0800 (PST)
-Received: from umbar.lan (2001-14ba-a0c3-3a00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-37bccabf576sm1512771fa.34.2025.11.18.04.24.37
+        d=1e100.net; s=20230601; t=1763494202; x=1764099002;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IPA2qG9Moyv81DGwZs8rRFNaKgQiqJZSwK+j3lZBua0=;
+        b=MjJjpQaUgr+LSCSeBc6AFPD+vA86KwLnx8Bz0K5PYiYhm/jBlAsLeRHLYJU1lVZHaD
+         HJlGAwwpU6B+oCLMI/ZiGV1B0+R+T8SECb7dh8YmXYYM07vaAcfHo2mpEEe25aEdA4Ra
+         Pp90PodT/kTKpWnc/GLqwR3kMdR0Oz0N5AAYH8/A9bS5i2Ki8DkgfpV1CuTQDThuDlf1
+         zk1OHFeUrygALEf0SSsLZC+1yv7e+KZ/5/zYPb6i3CpGiLEuhKSBwtISw7YesJvnTEML
+         qXnlOhTwK1rWXo01SVbf1n8hMa0EkrxCXeAS5EHuoI0GgweoP5vXmFmaj3CQzSLbbV3P
+         BxjA==
+X-Gm-Message-State: AOJu0YySgTQMSScMOtslP3DQYckBbDc78g4hZIjO75NOm3mbMMWPnP8u
+	F1Qz/WrIKYOjB+EXDI+0LTYoPnOjFU4qEQPiGaib1gGwfx4OxP90wE08
+X-Gm-Gg: ASbGncvPnDmG8l3UWq/9XYqErhIy0rbLbGrrGaWOtfqGweJtpJYTHBKfnF+i+luwdex
+	nGZTCL3+lWAH68UoxLk+0T6sDGhsLPtmvbGcphAuyZEGVYQeo3yWZgTzgYSY3znkiv4iSBfpiR2
+	BWrz9Tf9BKRfAlG8KDyDrvQxG9HlOv9ALj/4NjlpiBqZ0XLZpmGiaOS9lOCKOToSSCCpveEg6TJ
+	j5UmqajQaPTNe4FPo7R6poggEvmgegkTvXVMkdnymVVi0xs+4BgY5yZNjmIkGLUw9lD/g2WqvIk
+	IzKK5eb4QLZl6HHUIzoLn45hsKOONKBICorRHunRxP93YyxslqGQgHiHvjlDZZf4HDLX3QISm6s
+	NNLZwQDm6TQzLQdsQqBzGdCPGP8E7Wz5MK65AJnl9/Vrp7sGjeHzNoCN0OPPLcmelbgO7yCw4Uy
+	BBQ9/BSILUI4incft8wVDSGwREgyvjTNdWQw==
+X-Google-Smtp-Source: AGHT+IEYyqyxrekNLLE1xkrzbw54yEyRhPZcZk852lWWQerxTs9vRbOEwlVri/S0gPP+iwMfqar/Mg==
+X-Received: by 2002:a05:7022:424:b0:119:e569:f85d with SMTP id a92af1059eb24-11c8d971f75mr9835c88.20.1763494202164;
+        Tue, 18 Nov 2025 11:30:02 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2a49db102f5sm48656893eec.4.2025.11.18.11.30.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Nov 2025 04:24:37 -0800 (PST)
-Date: Tue, 18 Nov 2025 14:24:35 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: hrishabh.rajput@oss.qualcomm.com
-Cc: Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Pavan Kondeti <pavan.kondeti@oss.qualcomm.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
-Subject: Re: [PATCH v8 2/2] watchdog: Add driver for Gunyah Watchdog
-Message-ID: <as2u55ojagrz7dpm6ueg2x2o7e2jhvjcm5gjfuyoguniznnzqu@gieinkz4phfx>
-References: <20251118-gunyah_watchdog-v8-0-e5de12e2eef5@oss.qualcomm.com>
- <20251118-gunyah_watchdog-v8-2-e5de12e2eef5@oss.qualcomm.com>
+        Tue, 18 Nov 2025 11:30:01 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+To: Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: linux-watchdog@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v2] watchdog: iTCO: Drop vendor support
+Date: Tue, 18 Nov 2025 11:29:58 -0800
+Message-ID: <20251118192959.2333461-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251118-gunyah_watchdog-v8-2-e5de12e2eef5@oss.qualcomm.com>
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE4MDA5OSBTYWx0ZWRfXzhyNwuwqDy12
- MtzdoM4fZ6V/zlwBklLYdhMTWcTGd2TuNmiWp9Em2GAhQ/LeMTMyZJITVF/M4EJoYq4fIvZCx4z
- 6J7HWF4B8jZdLdjJui0rlKo3kyqiVWGBBDsGwvvyBxwOmE70NwQKolj2V8O8iFreb+aNezSQTy5
- shOP/zKhMne0Sv2q9WdYen5PQlzZ0iMVVPCt4ok1zChTeL9/3Y4w7QKZNYrG/Va4noMuM8yIxzo
- /dBVoocMhyWHdobNFgfxKYFnubrFJMGs2AKEBf7dmpVc5QXle1v20FopbW7Ircmf3dBmWBKIJqV
- VpEzL7bk5WU9WjW6joXK/jnshrMz+R8KNHr4CbjvBRY3CJHJ9SWs3liAo+XC5p+AIZFo79gidZP
- kB4+o3QWijYJLD9vrpQlH/F9R8F1Mg==
-X-Authority-Analysis: v=2.4 cv=EPoLElZC c=1 sm=1 tr=0 ts=691c6587 cx=c_pps
- a=EVbN6Ke/fEF3bsl7X48z0g==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=EUspDBNiAAAA:8 a=KKAkSRfTAAAA:8 a=qi9a3yEbpvmg9l7mAUAA:9 a=CjuIK1q_8ugA:10
- a=a_PwQJl-kcHnX1M80qC6:22 a=cvBusfyB2V15izCimMoJ:22
-X-Proofpoint-ORIG-GUID: 7TC8zuy7Hf8pfyt8wswi9mX7NppOtZ3m
-X-Proofpoint-GUID: 7TC8zuy7Hf8pfyt8wswi9mX7NppOtZ3m
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-17_04,2025-11-13_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 bulkscore=0 priorityscore=1501 impostorscore=0
- lowpriorityscore=0 phishscore=0 adultscore=0 spamscore=0 clxscore=1015
- malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2510240001
- definitions=main-2511180099
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 18, 2025 at 10:40:57AM +0000, Hrishabh Rajput via B4 Relay wrote:
-> From: Hrishabh Rajput <hrishabh.rajput@oss.qualcomm.com>
-> 
-> On Qualcomm SoCs running under the Gunyah hypervisor, access to watchdog
-> through MMIO is not available on all platforms. Depending on the
-> hypervisor configuration, the watchdog is either fully emulated or
-> exposed via ARM's SMC Calling Conventions (SMCCC) through the Vendor
-> Specific Hypervisor Service Calls space.
-> 
-> Add driver to support the SMC-based watchdog provided by the Gunyah
-> Hypervisor. Device registration is done in the QCOM SCM driver after
-> checks to restrict the watchdog initialization to Qualcomm devices
-> running under Gunyah.
-> 
-> Gunyah watchdog is not a hardware but an SMC-based vendor-specific
-> hypervisor interface provided by the Gunyah hypervisor. The design
-> involving QCOM SCM driver for registering the platform device has been
-> devised to avoid adding non-hardware nodes to devicetree.
-> 
-> Tested-by: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
-> Tested-by: Neil Armstrong <neil.armstrong@linaro.org>
-> Signed-off-by: Hrishabh Rajput <hrishabh.rajput@oss.qualcomm.com>
-> ---
->  MAINTAINERS                   |   1 +
->  drivers/watchdog/Kconfig      |  13 +++
->  drivers/watchdog/Makefile     |   1 +
->  drivers/watchdog/gunyah_wdt.c | 261 ++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 276 insertions(+)
+iTCO vendor support was introduced in 2006 to support SuperMicro boards
+with Pentium 3 CPUs. It was extended in 2009 to support motherbords
+with broken BIOS (specifically Intel DG33TL). The code is long since
+obsolete, so let's drop support for it.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+v2:
+- Rebased on top of v6.18-rc6
+- The checks for turn_SMI_watchdog_clear_off and for update_no_reboot_bit
+  in the probe function are still needed.
 
+ .../watchdog/watchdog-parameters.rst          |   7 -
+ drivers/watchdog/Kconfig                      |   8 -
+ drivers/watchdog/Makefile                     |   3 -
+ drivers/watchdog/iTCO_vendor.h                |  14 --
+ drivers/watchdog/iTCO_vendor_support.c        | 216 ------------------
+ drivers/watchdog/iTCO_wdt.c                   |  12 +-
+ 6 files changed, 2 insertions(+), 258 deletions(-)
+ delete mode 100644 drivers/watchdog/iTCO_vendor.h
+ delete mode 100644 drivers/watchdog/iTCO_vendor_support.c
 
+diff --git a/Documentation/watchdog/watchdog-parameters.rst b/Documentation/watchdog/watchdog-parameters.rst
+index 0a0119edfa82..773241ed9986 100644
+--- a/Documentation/watchdog/watchdog-parameters.rst
++++ b/Documentation/watchdog/watchdog-parameters.rst
+@@ -209,13 +209,6 @@ iTCO_wdt:
+ 
+ -------------------------------------------------
+ 
+-iTCO_vendor_support:
+-    vendorsupport:
+-	iTCO vendor specific support mode, default=0 (none),
+-	1=SuperMicro Pent3, 2=SuperMicro Pent4+, 911=Broken SMI BIOS
+-
+--------------------------------------------------
+-
+ ib700wdt:
+     timeout:
+ 	Watchdog timeout in seconds. 0<= timeout <=30, default=30.
+diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+index 05008d937e40..56d52345c579 100644
+--- a/drivers/watchdog/Kconfig
++++ b/drivers/watchdog/Kconfig
+@@ -1421,14 +1421,6 @@ config ITCO_WDT
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called iTCO_wdt.
+ 
+-config ITCO_VENDOR_SUPPORT
+-	bool "Intel TCO Timer/Watchdog Specific Vendor Support"
+-	depends on ITCO_WDT
+-	help
+-	  Add vendor specific support to the intel TCO timer based watchdog
+-	  devices. At this moment we only have additional support for some
+-	  SuperMicro Inc. motherboards.
+-
+ config IT8712F_WDT
+ 	tristate "IT8712F (Smart Guardian) Watchdog Timer"
+ 	depends on (X86 || COMPILE_TEST) && HAS_IOPORT
+diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+index b680e4d3c1bc..94cef662621a 100644
+--- a/drivers/watchdog/Makefile
++++ b/drivers/watchdog/Makefile
+@@ -126,9 +126,6 @@ obj-$(CONFIG_IE6XX_WDT) += ie6xx_wdt.o
+ obj-$(CONFIG_ITCO_WDT) += iTCO_wdt.o
+ obj-$(CONFIG_LENOVO_SE10_WDT) += lenovo_se10_wdt.o
+ obj-$(CONFIG_LENOVO_SE30_WDT) += lenovo_se30_wdt.o
+-ifeq ($(CONFIG_ITCO_VENDOR_SUPPORT),y)
+-obj-$(CONFIG_ITCO_WDT) += iTCO_vendor_support.o
+-endif
+ obj-$(CONFIG_IT8712F_WDT) += it8712f_wdt.o
+ obj-$(CONFIG_IT87_WDT) += it87_wdt.o
+ obj-$(CONFIG_HP_WATCHDOG) += hpwdt.o
+diff --git a/drivers/watchdog/iTCO_vendor.h b/drivers/watchdog/iTCO_vendor.h
+deleted file mode 100644
+index 69e92e692ae0..000000000000
+--- a/drivers/watchdog/iTCO_vendor.h
++++ /dev/null
+@@ -1,14 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-/* iTCO Vendor Specific Support hooks */
+-#ifdef CONFIG_ITCO_VENDOR_SUPPORT
+-extern int iTCO_vendorsupport;
+-extern void iTCO_vendor_pre_start(struct resource *, unsigned int);
+-extern void iTCO_vendor_pre_stop(struct resource *);
+-extern int iTCO_vendor_check_noreboot_on(void);
+-#else
+-#define iTCO_vendorsupport				0
+-#define iTCO_vendor_pre_start(acpibase, heartbeat)	{}
+-#define iTCO_vendor_pre_stop(acpibase)			{}
+-#define iTCO_vendor_check_noreboot_on()			1
+-				/* 1=check noreboot; 0=don't check */
+-#endif
+diff --git a/drivers/watchdog/iTCO_vendor_support.c b/drivers/watchdog/iTCO_vendor_support.c
+deleted file mode 100644
+index cf0eaa04b064..000000000000
+--- a/drivers/watchdog/iTCO_vendor_support.c
++++ /dev/null
+@@ -1,216 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0+
+-/*
+- *	intel TCO vendor specific watchdog driver support
+- *
+- *	(c) Copyright 2006-2009 Wim Van Sebroeck <wim@iguana.be>.
+- *
+- *	Neither Wim Van Sebroeck nor Iguana vzw. admit liability nor
+- *	provide warranty for any of this software. This material is
+- *	provided "AS-IS" and at no charge.
+- */
+-
+-/*
+- *	Includes, defines, variables, module parameters, ...
+- */
+-
+-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+-
+-/* Module and version information */
+-#define DRV_NAME	"iTCO_vendor_support"
+-#define DRV_VERSION	"1.04"
+-
+-/* Includes */
+-#include <linux/module.h>		/* For module specific items */
+-#include <linux/moduleparam.h>		/* For new moduleparam's */
+-#include <linux/types.h>		/* For standard types (like size_t) */
+-#include <linux/errno.h>		/* For the -ENODEV/... values */
+-#include <linux/kernel.h>		/* For printk/panic/... */
+-#include <linux/init.h>			/* For __init/__exit/... */
+-#include <linux/ioport.h>		/* For io-port access */
+-#include <linux/io.h>			/* For inb/outb/... */
+-
+-#include "iTCO_vendor.h"
+-
+-/* List of vendor support modes */
+-/* SuperMicro Pentium 3 Era 370SSE+-OEM1/P3TSSE */
+-#define SUPERMICRO_OLD_BOARD	1
+-/* SuperMicro Pentium 4 / Xeon 4 / EMT64T Era Systems - no longer supported */
+-#define SUPERMICRO_NEW_BOARD	2
+-/* Broken BIOS */
+-#define BROKEN_BIOS		911
+-
+-int iTCO_vendorsupport;
+-EXPORT_SYMBOL(iTCO_vendorsupport);
+-
+-module_param_named(vendorsupport, iTCO_vendorsupport, int, 0);
+-MODULE_PARM_DESC(vendorsupport, "iTCO vendor specific support mode, default="
+-			"0 (none), 1=SuperMicro Pent3, 911=Broken SMI BIOS");
+-
+-/*
+- *	Vendor Specific Support
+- */
+-
+-/*
+- *	Vendor Support: 1
+- *	Board: Super Micro Computer Inc. 370SSE+-OEM1/P3TSSE
+- *	iTCO chipset: ICH2
+- *
+- *	Code contributed by: R. Seretny <lkpatches@paypc.com>
+- *	Documentation obtained by R. Seretny from SuperMicro Technical Support
+- *
+- *	To enable Watchdog function:
+- *	    BIOS setup -> Power -> TCO Logic SMI Enable -> Within5Minutes
+- *	    This setting enables SMI to clear the watchdog expired flag.
+- *	    If BIOS or CPU fail which may cause SMI hang, then system will
+- *	    reboot. When application starts to use watchdog function,
+- *	    application has to take over the control from SMI.
+- *
+- *	    For P3TSSE, J36 jumper needs to be removed to enable the Watchdog
+- *	    function.
+- *
+- *	    Note: The system will reboot when Expire Flag is set TWICE.
+- *	    So, if the watchdog timer is 20 seconds, then the maximum hang
+- *	    time is about 40 seconds, and the minimum hang time is about
+- *	    20.6 seconds.
+- */
+-
+-static void supermicro_old_pre_start(struct resource *smires)
+-{
+-	unsigned long val32;
+-
+-	/* Bit 13: TCO_EN -> 0 = Disables TCO logic generating an SMI# */
+-	val32 = inl(smires->start);
+-	val32 &= 0xffffdfff;	/* Turn off SMI clearing watchdog */
+-	outl(val32, smires->start);	/* Needed to activate watchdog */
+-}
+-
+-static void supermicro_old_pre_stop(struct resource *smires)
+-{
+-	unsigned long val32;
+-
+-	/* Bit 13: TCO_EN -> 1 = Enables the TCO logic to generate SMI# */
+-	val32 = inl(smires->start);
+-	val32 |= 0x00002000;	/* Turn on SMI clearing watchdog */
+-	outl(val32, smires->start);	/* Needed to deactivate watchdog */
+-}
+-
+-/*
+- *	Vendor Support: 911
+- *	Board: Some Intel ICHx based motherboards
+- *	iTCO chipset: ICH7+
+- *
+- *	Some Intel motherboards have a broken BIOS implementation: i.e.
+- *	the SMI handler clear's the TIMEOUT bit in the TC01_STS register
+- *	and does not reload the time. Thus the TCO watchdog does not reboot
+- *	the system.
+- *
+- *	These are the conclusions of Andriy Gapon <avg@icyb.net.ua> after
+- *	debugging: the SMI handler is quite simple - it tests value in
+- *	TCO1_CNT against 0x800, i.e. checks TCO_TMR_HLT. If the bit is set
+- *	the handler goes into an infinite loop, apparently to allow the
+- *	second timeout and reboot. Otherwise it simply clears TIMEOUT bit
+- *	in TCO1_STS and that's it.
+- *	So the logic seems to be reversed, because it is hard to see how
+- *	TIMEOUT can get set to 1 and SMI generated when TCO_TMR_HLT is set
+- *	(other than a transitional effect).
+- *
+- *	The only fix found to get the motherboard(s) to reboot is to put
+- *	the glb_smi_en bit to 0. This is a dirty hack that bypasses the
+- *	broken code by disabling Global SMI.
+- *
+- *	WARNING: globally disabling SMI could possibly lead to dramatic
+- *	problems, especially on laptops! I.e. various ACPI things where
+- *	SMI is used for communication between OS and firmware.
+- *
+- *	Don't use this fix if you don't need to!!!
+- */
+-
+-static void broken_bios_start(struct resource *smires)
+-{
+-	unsigned long val32;
+-
+-	val32 = inl(smires->start);
+-	/* Bit 13: TCO_EN     -> 0 = Disables TCO logic generating an SMI#
+-	   Bit  0: GBL_SMI_EN -> 0 = No SMI# will be generated by ICH. */
+-	val32 &= 0xffffdffe;
+-	outl(val32, smires->start);
+-}
+-
+-static void broken_bios_stop(struct resource *smires)
+-{
+-	unsigned long val32;
+-
+-	val32 = inl(smires->start);
+-	/* Bit 13: TCO_EN     -> 1 = Enables TCO logic generating an SMI#
+-	   Bit  0: GBL_SMI_EN -> 1 = Turn global SMI on again. */
+-	val32 |= 0x00002001;
+-	outl(val32, smires->start);
+-}
+-
+-/*
+- *	Generic Support Functions
+- */
+-
+-void iTCO_vendor_pre_start(struct resource *smires,
+-			   unsigned int heartbeat)
+-{
+-	switch (iTCO_vendorsupport) {
+-	case SUPERMICRO_OLD_BOARD:
+-		supermicro_old_pre_start(smires);
+-		break;
+-	case BROKEN_BIOS:
+-		broken_bios_start(smires);
+-		break;
+-	}
+-}
+-EXPORT_SYMBOL(iTCO_vendor_pre_start);
+-
+-void iTCO_vendor_pre_stop(struct resource *smires)
+-{
+-	switch (iTCO_vendorsupport) {
+-	case SUPERMICRO_OLD_BOARD:
+-		supermicro_old_pre_stop(smires);
+-		break;
+-	case BROKEN_BIOS:
+-		broken_bios_stop(smires);
+-		break;
+-	}
+-}
+-EXPORT_SYMBOL(iTCO_vendor_pre_stop);
+-
+-int iTCO_vendor_check_noreboot_on(void)
+-{
+-	switch (iTCO_vendorsupport) {
+-	case SUPERMICRO_OLD_BOARD:
+-		return 0;
+-	default:
+-		return 1;
+-	}
+-}
+-EXPORT_SYMBOL(iTCO_vendor_check_noreboot_on);
+-
+-static int __init iTCO_vendor_init_module(void)
+-{
+-	if (iTCO_vendorsupport == SUPERMICRO_NEW_BOARD) {
+-		pr_warn("Option vendorsupport=%d is no longer supported, "
+-			"please use the w83627hf_wdt driver instead\n",
+-			SUPERMICRO_NEW_BOARD);
+-		return -EINVAL;
+-	}
+-	pr_info("vendor-support=%d\n", iTCO_vendorsupport);
+-	return 0;
+-}
+-
+-static void __exit iTCO_vendor_exit_module(void)
+-{
+-	pr_info("Module Unloaded\n");
+-}
+-
+-module_init(iTCO_vendor_init_module);
+-module_exit(iTCO_vendor_exit_module);
+-
+-MODULE_AUTHOR("Wim Van Sebroeck <wim@iguana.be>, "
+-		"R. Seretny <lkpatches@paypc.com>");
+-MODULE_DESCRIPTION("Intel TCO Vendor Specific WatchDog Timer Driver Support");
+-MODULE_VERSION(DRV_VERSION);
+-MODULE_LICENSE("GPL");
+diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
+index 4ab3405ef8e6..1dec9cd155b1 100644
+--- a/drivers/watchdog/iTCO_wdt.c
++++ b/drivers/watchdog/iTCO_wdt.c
+@@ -63,8 +63,6 @@
+ #include <linux/platform_data/itco_wdt.h>
+ #include <linux/mfd/intel_pmc_bxt.h>
+ 
+-#include "iTCO_vendor.h"
+-
+ /* Address definitions for the TCO */
+ /* TCO base address */
+ #define TCOBASE(p)	((p)->tco_res->start)
+@@ -283,8 +281,6 @@ static int iTCO_wdt_start(struct watchdog_device *wd_dev)
+ 	struct iTCO_wdt_private *p = watchdog_get_drvdata(wd_dev);
+ 	unsigned int val;
+ 
+-	iTCO_vendor_pre_start(p->smi_res, wd_dev->timeout);
+-
+ 	/* disable chipset's NO_REBOOT bit */
+ 	if (p->update_no_reboot_bit(p->no_reboot_priv, false)) {
+ 		dev_err(wd_dev->parent, "failed to reset NO_REBOOT flag, reboot disabled by hardware/BIOS\n");
+@@ -314,8 +310,6 @@ static int iTCO_wdt_stop(struct watchdog_device *wd_dev)
+ 	struct iTCO_wdt_private *p = watchdog_get_drvdata(wd_dev);
+ 	unsigned int val;
+ 
+-	iTCO_vendor_pre_stop(p->smi_res);
+-
+ 	/* Bit 11: TCO Timer Halt -> 1 = The TCO timer is disabled */
+ 	val = inw(TCO1_CNT(p));
+ 	val |= 0x0800;
+@@ -488,8 +482,7 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
+ 			       (u64)SMI_EN(p));
+ 			return -EBUSY;
+ 		}
+-	} else if (iTCO_vendorsupport ||
+-		   turn_SMI_watchdog_clear_off >= p->iTCO_version) {
++	} else if (turn_SMI_watchdog_clear_off >= p->iTCO_version) {
+ 		dev_err(dev, "SMI I/O resource is missing\n");
+ 		return -ENODEV;
+ 	}
+@@ -508,8 +501,7 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	/* Check chipset's NO_REBOOT bit */
+-	if (p->update_no_reboot_bit(p->no_reboot_priv, false) &&
+-	    iTCO_vendor_check_noreboot_on()) {
++	if (p->update_no_reboot_bit(p->no_reboot_priv, false)) {
+ 		dev_info(dev, "unable to reset NO_REBOOT flag, device disabled by hardware/BIOS\n");
+ 		return -ENODEV;	/* Cannot reset NO_REBOOT bit */
+ 	}
 -- 
-With best wishes
-Dmitry
+2.45.2
+
 
