@@ -1,151 +1,131 @@
-Return-Path: <linux-watchdog+bounces-4644-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4645-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96990C8F797
-	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Nov 2025 17:16:47 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3103AC9112C
+	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Nov 2025 08:54:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 42706354193
-	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Nov 2025 16:16:47 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 271304E2B11
+	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Nov 2025 07:54:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 082D02C21F4;
-	Thu, 27 Nov 2025 16:16:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 983A82D8DB7;
+	Fri, 28 Nov 2025 07:54:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KPs5FdL0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="isVkdmf5"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A35554654
-	for <linux-watchdog@vger.kernel.org>; Thu, 27 Nov 2025 16:16:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54BEBC2EA;
+	Fri, 28 Nov 2025 07:54:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764260203; cv=none; b=hOmThMMqD5a5S5lnmFGNTWNYpuhNUWRvMsE0YH2/R6l6wBlDjj6v3z2SWaDh5UwRj3w7zJeT19Pj3lYsrvZ1a0dLuupKJQF+TVuD/IEzEVSBlCOfCJY9VXChoSMSWhN8SjvUhiT6vDPKx2YcI2OsdmrquYE50WpjPr54gUQYkHw=
+	t=1764316465; cv=none; b=AANtgSbsGN65b3HR1B0+TQv7rPQ9BnNh9ryD3iFCNjCuIQZMIBuevZuGC60GnVfqHAll5x/S8gJ4Y5NgXKlW9l7mfTI2IgQn0shSgr4dBFrYBD5OU7PRq0ZarJBk9/GhjwZ+lr47CzV1kq0KlZVa8T6TmrKeDN1pLZVpkIpN83Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764260203; c=relaxed/simple;
-	bh=xDypKOX/n6GRcGDAU8VyLfV/rY9GENv82TIM6XTxRto=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gQsC3H8Vhu9bseMG3ghKmwhaJsue7xYeob0jDHRtuaYWs5CQpTGgVVrkjT7vXl6kKt6VzXks2Yr5/4JARmorE0a8nBDi7dnwWdwVfAZPOciDoCMTkYENWqFn83Nzl9cQVwngoimtNhdYk2Q7RUf8Iqr0Y7J46fZeCyYG7djZ7x8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KPs5FdL0; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-640a0812658so1818852a12.0
-        for <linux-watchdog@vger.kernel.org>; Thu, 27 Nov 2025 08:16:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764260200; x=1764865000; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KNO28PzgIsx+2Ndb8A3ECc1R+7TzxXSai5xVu+osWaY=;
-        b=KPs5FdL04I8adeZnQ9V4xT1D/R21qLv4bEymY7y1NKEsv1aSHOxF7+0WOhOANz6hEu
-         H0t9EqE3YzDceOOA3aOZJ50d9mUgX6KkcBRvBSfaqWx0Vx5/aQXfdqzXkhrn9NrISEpq
-         FNhREaJi6TU+fIpTf4p3drfvf7RVIdc9L2+mIuGhqUNNVtnf4tdoPBB0GJ8B1hso97xG
-         XEQnXkv895T5F58P8cYDt+Z/7cV2HHFfsC5TbUh7o34q52u+qWHcnDjbG1vyCouftlhm
-         Ojjghv40AkxBRREjFwcO5yf9SysAncr+yoDaaiYIpcUnwfWjCWKTlUaJcVSdFALHypzg
-         bynw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764260200; x=1764865000;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=KNO28PzgIsx+2Ndb8A3ECc1R+7TzxXSai5xVu+osWaY=;
-        b=GUtZfv/2cEK+BRbMNP6Tvsi+/X0OCO5QnHXO/2MuvE+AC12XTFTcH77uhZhZGvIb6w
-         2GclMfDelNQP8PIB7lss618aDpFNhB94ubTMDLVE8AHYriuE3Vl9uI7mFJBl34BDjdsa
-         MX6Xvw5QDCbW0G3M3R8TCO+dIomDXEwN4874KuQ3IFReHCK/ltSeHybQgn9ubXKvyg96
-         tL5jYcXoNnzw5ZKvn1Qgi+kF0tyqtWXxEw9XGiD59m0iQA2ngMrgfoeRL/lvylaauJ/a
-         puLOPj/drdzIPmFfgEK8C3NVEceEglbw/FgeMrkotaBDcUz7DT4TLEufjhLy5axP681q
-         G5Ug==
-X-Forwarded-Encrypted: i=1; AJvYcCXh0inW4tBv9v3TfoUyUqyvWTNFABccwYjHjASWL1kqSD6t5jl6vzMi6QfuAwarU8z7ibr4NpVYsTaR7YjIuw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/ctOOmnLnWEfRzbRsCPThn1Rm0xbiMUtUCQXEmcxpPjCgYBiL
-	HkAsnDjJgVEgTTp5vqSSSP/TGyKvHI0GMDNI2lF24kRFdRPb2paC5pODfpVW+z7WCD6JCgHBP3/
-	RnYkwswtywAu8J/OlSZb927YbUu2wzJ0=
-X-Gm-Gg: ASbGnctFrYF3KOCnitSEBr0vCSbpKcaGrQboHXZBx+5yTTgqYG+Zij2n/pAXCCc7MDk
-	SXQoEzKf/5cTZC9zvPtW2wFt+zOak5Z11O0j4k3bYAK6IX/8ttWo+BrDTutdPf8/P2TAhiRPUP+
-	tVUO+9kmhELrfVeDVsiP1vgpgfG5+d6mwR7wDBuRL321T5txOzyOEe6pXAfVujzLAipV2G3N+M6
-	66LVtuF5h4BtJPAXpkdHYtFInMawSaBTaVMXxHk0wFrOAUmQZgpnYo2oPkFG/a4tDvs3W0ui9YH
-	yMFtA1ad4DGXBhPJqV7ly+i3mxYxPHPt5zcON1Cz8k97zoWxhdgJqLxl3DZ618sZ3P0x/GM=
-X-Google-Smtp-Source: AGHT+IE6et7KPZp2GkXfofcAVlXzT7muZvGR6VaoGxIvgHz2tucfIoZqOFaUmU2ZIt9fSGn6WlPk+6UoVkEjoIjxQZM=
-X-Received: by 2002:a17:906:f5a5:b0:b3f:f207:b748 with SMTP id
- a640c23a62f3a-b76c547167bmr1211487466b.10.1764260200132; Thu, 27 Nov 2025
- 08:16:40 -0800 (PST)
+	s=arc-20240116; t=1764316465; c=relaxed/simple;
+	bh=pzM/UFQ4rAPUbnfeQ3KKSzYXL0ONVwdYXU3p3ni+ExM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mxzjgmSeJD9gA2ldCuhq/mHqkeRGIyGFnWT66XqaBusHQF6fiObUZ23JNEvPWGpHZD/JdJR6X5ova9DWCXAMkUTYHxtDObtp2+vy+kdY48B3NeHFPx4GbsbR6OtKDj86Q5BfXcUM3cjZAfhSLAEfuK7QH7Rj2WvutlI6ry+HxP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=isVkdmf5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74EBFC4CEF1;
+	Fri, 28 Nov 2025 07:54:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764316464;
+	bh=pzM/UFQ4rAPUbnfeQ3KKSzYXL0ONVwdYXU3p3ni+ExM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=isVkdmf5YSDI+n9xv6QfyTplWqOOp9SD0slPBuiCPaPZQDi8Q37Z00qbtnDjpcXzA
+	 OBlakAObQ2HR/+RLeoQtkoeJSFknlOCG8THuqjrof9Hr4jK5nEYTtxZNRDUM4mVrFc
+	 a5Fb6k00QoURkZk2mjrZRHgUzGxqlXNtbjtwBKZ3dvxq44ce1nXSxo+CJ620zGnldn
+	 1CCzlWSJ6qPV6T4lcjzNAT2kdChWtZppXKxywWVYsctbF93tmP/DaccMss7m1hucmG
+	 CTEHl0iSXoyMQxbt4ir+gMPdEHPjPWnv7ZnlRyGTBae9OUllInFtMRwWMhxlj9NuGR
+	 i/7LuX8guOgeQ==
+Message-ID: <e40e877a-130c-45f5-ad73-560704592815@kernel.org>
+Date: Fri, 28 Nov 2025 08:54:18 +0100
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] mcb: Add missing modpost build support
+To: Andy Shevchenko <andy.shevchenko@gmail.com>,
+ Jose Javier Rodriguez Barbarin <dev-josejavier.rodriguez@duagon.com>
+Cc: linus.walleij@linaro.org, brgl@kernel.org, jic23@kernel.org,
+ dlechner@baylibre.com, nuno.sa@analog.com, andy@kernel.org,
+ gregkh@linuxfoundation.org, morbidrsa@gmail.com, jth@kernel.org,
+ wim@linux-watchdog.org, linux@roeck-us.net, nathan@kernel.org,
+ nsc@kernel.org, linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-serial@vger.kernel.org,
+ linux-watchdog@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ Jorge Sanjuan Garcia <dev-jorge.sanjuangarcia@duagon.com>
 References: <20251127155452.42660-1-dev-josejavier.rodriguez@duagon.com>
-In-Reply-To: <20251127155452.42660-1-dev-josejavier.rodriguez@duagon.com>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Thu, 27 Nov 2025 18:16:03 +0200
-X-Gm-Features: AWmQ_bkZa2nrqUftdjH6MAYONe3JSVeW4Th2GGUqnpqYo2uuwkRVZXIvhkoPc0g
-Message-ID: <CAHp75VdvJUFwFBRKT+iqwQXiK-toah3gZq6pX9Omcp6d2R7g+A@mail.gmail.com>
-Subject: Re: [PATCH 0/2] mcb: Add modpost support for processing MODULE_DEVICE_TABLE
-To: Jose Javier Rodriguez Barbarin <dev-josejavier.rodriguez@duagon.com>
-Cc: linus.walleij@linaro.org, brgl@kernel.org, jic23@kernel.org, 
-	dlechner@baylibre.com, nuno.sa@analog.com, andy@kernel.org, 
-	gregkh@linuxfoundation.org, jirislaby@kernel.org, morbidrsa@gmail.com, 
-	jth@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net, nathan@kernel.org, 
-	nsc@kernel.org, linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-iio@vger.kernel.org, linux-serial@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+ <20251127155452.42660-2-dev-josejavier.rodriguez@duagon.com>
+ <CAHp75VeNtYJPmXtDfWEN3a184YXTKNems657UDeBKp4xpOGovQ@mail.gmail.com>
+Content-Language: en-US
+From: Jiri Slaby <jirislaby@kernel.org>
+Autocrypt: addr=jirislaby@kernel.org; keydata=
+ xsFNBE6S54YBEACzzjLwDUbU5elY4GTg/NdotjA0jyyJtYI86wdKraekbNE0bC4zV+ryvH4j
+ rrcDwGs6tFVrAHvdHeIdI07s1iIx5R/ndcHwt4fvI8CL5PzPmn5J+h0WERR5rFprRh6axhOk
+ rSD5CwQl19fm4AJCS6A9GJtOoiLpWn2/IbogPc71jQVrupZYYx51rAaHZ0D2KYK/uhfc6neJ
+ i0WqPlbtIlIrpvWxckucNu6ZwXjFY0f3qIRg3Vqh5QxPkojGsq9tXVFVLEkSVz6FoqCHrUTx
+ wr+aw6qqQVgvT/McQtsI0S66uIkQjzPUrgAEtWUv76rM4ekqL9stHyvTGw0Fjsualwb0Gwdx
+ ReTZzMgheAyoy/umIOKrSEpWouVoBt5FFSZUyjuDdlPPYyPav+hpI6ggmCTld3u2hyiHji2H
+ cDpcLM2LMhlHBipu80s9anNeZhCANDhbC5E+NZmuwgzHBcan8WC7xsPXPaiZSIm7TKaVoOcL
+ 9tE5aN3jQmIlrT7ZUX52Ff/hSdx/JKDP3YMNtt4B0cH6ejIjtqTd+Ge8sSttsnNM0CQUkXps
+ w98jwz+Lxw/bKMr3NSnnFpUZaxwji3BC9vYyxKMAwNelBCHEgS/OAa3EJoTfuYOK6wT6nadm
+ YqYjwYbZE5V/SwzMbpWu7Jwlvuwyfo5mh7w5iMfnZE+vHFwp/wARAQABzSFKaXJpIFNsYWJ5
+ IDxqaXJpc2xhYnlAa2VybmVsLm9yZz7CwXcEEwEIACEFAlW3RUwCGwMFCwkIBwIGFQgJCgsC
+ BBYCAwECHgECF4AACgkQvSWxBAa0cEnVTg//TQpdIAr8Tn0VAeUjdVIH9XCFw+cPSU+zMSCH
+ eCZoA/N6gitEcnvHoFVVM7b3hK2HgoFUNbmYC0RdcSc80pOF5gCnACSP9XWHGWzeKCARRcQR
+ 4s5YD8I4VV5hqXcKo2DFAtIOVbHDW+0okOzcecdasCakUTr7s2fXz97uuoc2gIBB7bmHUGAH
+ XQXHvdnCLjDjR+eJN+zrtbqZKYSfj89s/ZHn5Slug6w8qOPT1sVNGG+eWPlc5s7XYhT9z66E
+ l5C0rG35JE4PhC+tl7BaE5IwjJlBMHf/cMJxNHAYoQ1hWQCKOfMDQ6bsEr++kGUCbHkrEFwD
+ UVA72iLnnnlZCMevwE4hc0zVhseWhPc/KMYObU1sDGqaCesRLkE3tiE7X2cikmj/qH0CoMWe
+ gjnwnQ2qVJcaPSzJ4QITvchEQ+tbuVAyvn9H+9MkdT7b7b2OaqYsUP8rn/2k1Td5zknUz7iF
+ oJ0Z9wPTl6tDfF8phaMIPISYrhceVOIoL+rWfaikhBulZTIT5ihieY9nQOw6vhOfWkYvv0Dl
+ o4GRnb2ybPQpfEs7WtetOsUgiUbfljTgILFw3CsPW8JESOGQc0Pv8ieznIighqPPFz9g+zSu
+ Ss/rpcsqag5n9rQp/H3WW5zKUpeYcKGaPDp/vSUovMcjp8USIhzBBrmI7UWAtuedG9prjqfO
+ wU0ETpLnhgEQAM+cDWLL+Wvc9cLhA2OXZ/gMmu7NbYKjfth1UyOuBd5emIO+d4RfFM02XFTI
+ t4MxwhAryhsKQQcA4iQNldkbyeviYrPKWjLTjRXT5cD2lpWzr+Jx7mX7InV5JOz1Qq+P+nJW
+ YIBjUKhI03ux89p58CYil24Zpyn2F5cX7U+inY8lJIBwLPBnc9Z0An/DVnUOD+0wIcYVnZAK
+ DiIXODkGqTg3fhZwbbi+KAhtHPFM2fGw2VTUf62IHzV+eBSnamzPOBc1XsJYKRo3FHNeLuS8
+ f4wUe7bWb9O66PPFK/RkeqNX6akkFBf9VfrZ1rTEKAyJ2uqf1EI1olYnENk4+00IBa+BavGQ
+ 8UW9dGW3nbPrfuOV5UUvbnsSQwj67pSdrBQqilr5N/5H9z7VCDQ0dhuJNtvDSlTf2iUFBqgk
+ 3smln31PUYiVPrMP0V4ja0i9qtO/TB01rTfTyXTRtqz53qO5dGsYiliJO5aUmh8swVpotgK4
+ /57h3zGsaXO9PGgnnAdqeKVITaFTLY1ISg+Ptb4KoliiOjrBMmQUSJVtkUXMrCMCeuPDGHo7
+ 39Xc75lcHlGuM3yEB//htKjyprbLeLf1y4xPyTeeF5zg/0ztRZNKZicgEmxyUNBHHnBKHQxz
+ 1j+mzH0HjZZtXjGu2KLJ18G07q0fpz2ZPk2D53Ww39VNI/J9ABEBAAHCwV8EGAECAAkFAk6S
+ 54YCGwwACgkQvSWxBAa0cEk3tRAAgO+DFpbyIa4RlnfpcW17AfnpZi9VR5+zr496n2jH/1ld
+ wRO/S+QNSA8qdABqMb9WI4BNaoANgcg0AS429Mq0taaWKkAjkkGAT7mD1Q5PiLr06Y/+Kzdr
+ 90eUVneqM2TUQQbK+Kh7JwmGVrRGNqQrDk+gRNvKnGwFNeTkTKtJ0P8jYd7P1gZb9Fwj9YLx
+ jhn/sVIhNmEBLBoI7PL+9fbILqJPHgAwW35rpnq4f/EYTykbk1sa13Tav6btJ+4QOgbcezWI
+ wZ5w/JVfEJW9JXp3BFAVzRQ5nVrrLDAJZ8Y5ioWcm99JtSIIxXxt9FJaGc1Bgsi5K/+dyTKL
+ wLMJgiBzbVx8G+fCJJ9YtlNOPWhbKPlrQ8+AY52Aagi9WNhe6XfJdh5g6ptiOILm330mkR4g
+ W6nEgZVyIyTq3ekOuruftWL99qpP5zi+eNrMmLRQx9iecDNgFr342R9bTDlb1TLuRb+/tJ98
+ f/bIWIr0cqQmqQ33FgRhrG1+Xml6UXyJ2jExmlO8JljuOGeXYh6ZkIEyzqzffzBLXZCujlYQ
+ DFXpyMNVJ2ZwPmX2mWEoYuaBU0JN7wM+/zWgOf2zRwhEuD3A2cO2PxoiIfyUEfB9SSmffaK/
+ S4xXoB6wvGENZ85Hg37C7WDNdaAt6Xh2uQIly5grkgvWppkNy4ZHxE+jeNsU7tg=
+In-Reply-To: <CAHp75VeNtYJPmXtDfWEN3a184YXTKNems657UDeBKp4xpOGovQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Nov 27, 2025 at 5:56=E2=80=AFPM Jose Javier Rodriguez Barbarin
-<dev-josejavier.rodriguez@duagon.com> wrote:
->
-> During the process of update of one of the device drivers that are part o=
-f
-> mcb bus (gpio-menz127.c),
+On 27. 11. 25, 17:10, Andy Shevchenko wrote:
+>>   static const struct devtable devtable[] = {
+> 
+>>          {"cpu", SIZE_cpu_feature, do_cpu_entry},
+>>          {"mei", SIZE_mei_cl_device_id, do_mei_entry},
+>>          {"rapidio", SIZE_rio_device_id, do_rio_entry},
+>> +       {"mcb", SIZE_mcb_device_id, do_mcb_entry},
+> 
+> Perhaps squeeze it to be more ordered (yes, I know that the table is
+> not so ordered, but given context suggests to put it after "mei").
 
-> one maintainer of the GPIO subsystem
+s/after/before/ :)
 
-Krzysztof? Did I miss something and he is now a (co)maintainer here?
-
-> asked me
-> why I was adding new MODULE_ALIAS when I also added the same new
-> information on MODULE_DEVICE_TABLE.
->
-> You can find the messages here:
->
-> https://lore.kernel.org/linux-gpio/80a20b13-7c6a-4483-9741-568424f957ef@k=
-ernel.org/
->
-> After a deeper analysis, I came across that the mcb_table_id defined insi=
-de
-> MODULE_DEVICE_TABLE on all device drivers was being ignored as modpost wa=
-s
-> not processing the mcb MODULE_DEVICE_TABLE entries. For this reason, form=
-er
-> contributors were using MODULE_ALIAS for enabling mcb to autoload the
-> device drivers.
->
-> My proposal with these changes is to complete the mcb bus by adding
-> modpost support for processing mcb MODULE_DEVICE_TABLE and removing
-> MODULE_ALIAS from all device drivers as they are no longer needed.
->
-> Jose Javier Rodriguez Barbarin (2):
->   mcb: Add missing modpost build support
->   mcb: Remove MODULE_ALIAS from all mcb client drivers
->
->  drivers/gpio/gpio-menz127.c            | 1 -
->  drivers/iio/adc/men_z188_adc.c         | 1 -
->  drivers/tty/serial/8250/8250_men_mcb.c | 3 ---
->  drivers/tty/serial/men_z135_uart.c     | 1 -
->  drivers/watchdog/menz69_wdt.c          | 1 -
->  scripts/mod/devicetable-offsets.c      | 3 +++
->  scripts/mod/file2alias.c               | 9 +++++++++
->  7 files changed, 12 insertions(+), 7 deletions(-)
->
-> --
-> 2.51.1
-
-
-
---=20
-With Best Regards,
-Andy Shevchenko
+-- 
+js
+suse labs
 
