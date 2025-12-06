@@ -1,147 +1,219 @@
-Return-Path: <linux-watchdog+bounces-4651-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4652-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4DAEC9C103
-	for <lists+linux-watchdog@lfdr.de>; Tue, 02 Dec 2025 16:59:52 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 45E413A7B48
-	for <lists+linux-watchdog@lfdr.de>; Tue,  2 Dec 2025 15:59:37 +0000 (UTC)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6AB9CAA600
+	for <lists+linux-watchdog@lfdr.de>; Sat, 06 Dec 2025 13:13:16 +0100 (CET)
+Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
+	by sea.lore.kernel.org (Postfix) with ESMTP id E5F33305EC1D
+	for <lists+linux-watchdog@lfdr.de>; Sat,  6 Dec 2025 12:13:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0B0E3246F7;
-	Tue,  2 Dec 2025 15:59:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33E542F1FDC;
+	Sat,  6 Dec 2025 12:13:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kHQML4dq"
+	dkim=pass (2048-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b="o37lrMgA"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF4BE3128A6;
-	Tue,  2 Dec 2025 15:59:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37ADA7640E;
+	Sat,  6 Dec 2025 12:13:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.87.125.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764691175; cv=none; b=ri0eYi5pOSCi0ty5VggnNj2npNuE51oXTkI5t50ShnxVQYW/atnNRGDMj3vg6Rs0fJc4SlDcEyR7zg27id5te4kpD7OqRela2ij327zM03eVIBdF2hA1FdWeqW7wNdO+oE4z7qod0KpmFDv/VGniI5idldQ/z4h6wzfu4JuEcwg=
+	t=1765023194; cv=none; b=J2nLNLqcBXWiJ27I6bHYQUeWFtHUs/CB6ueXtWO5kdpQ8AGdIX4XrWvjubfT1zYk2h8FKFG4LZpkL/ybBije5loNZAwWZp3wF28q5C2DnvefJcZa0Tpq9jT1UEH0wlTkTHc3o4nOOOeo16c0FJTiavp8CZ6SF7/Gb+4G+0sso/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764691175; c=relaxed/simple;
-	bh=y8UHDCear6g8zwmTOT4B5TcyW2sG2CGa9i3KDZDuCec=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=lQnHuyFeIkdKBHE/c5xSaGgo1lk4DW+SsaEu/6/R2SYynWpUVM9NQ/EvqwCXCRINLJQhAKAD1BFass/mZKMhKhTx2lfLcsmZo5i4zJIpSW/0104lmTXrdskto52SX2rN5jfU2+sFMxk04Fo/1xxwveWXgV61FqS7LewOv/z0Kjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kHQML4dq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05025C116B1;
-	Tue,  2 Dec 2025 15:59:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764691175;
-	bh=y8UHDCear6g8zwmTOT4B5TcyW2sG2CGa9i3KDZDuCec=;
-	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-	b=kHQML4dq55YsHdYiyq7+T4PXGLf0K/gZv5B+0VE+MbSlzEMEVWWLaDksx4kivbKM8
-	 Ac8T+VkA1kw8/rma0Pl1pOSUQH9GYbbmkjN3SDOZMe7j0gOWq4xAe1+/bdEPTQSxbz
-	 iC05jB66oPJr4RKPyIJ+m9JptIRut560mET8RLnNUUs09dSM9H8BUCpA0JrOgENyzj
-	 A7QKBIZcttlQAA6ZeGpkUSbS4Mi0qR/f3H/nArV/OdBesTXeI3gTuOUwCiUdZapqzt
-	 jQ6165iRkDP25MRweuh1v4stZY8cJkY2UXRCWE6HppnfguchOsHc3EBSRzf35admrB
-	 Vz8S6yaOMKDXA==
-Message-ID: <992d46b7-b053-4a9e-ba04-f5653525a891@kernel.org>
-Date: Tue, 2 Dec 2025 16:59:30 +0100
+	s=arc-20240116; t=1765023194; c=relaxed/simple;
+	bh=5M6AwtGlK9pkgul9Roa9ih4aulMvO27asjhtyNdHL78=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=CJpT5/bEz/5VlnJuCVJFFJR/htL++3bPcEw4rKAAFpf74BeUb/fpCXnZSi0qfMAlI2ihU3F7bKeGplQtGP4GcxsBOOzAICUKtfPlAQDyhxzy11IXfdxoqvNB7lN9uxfnI6ynng84GRShqm9qnO0taznmW7HcnvOmD2w0HtHV4zU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org; spf=pass smtp.mailfrom=linux-watchdog.org; dkim=pass (2048-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b=o37lrMgA; arc=none smtp.client-ip=185.87.125.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux-watchdog.org
+Received: by www.linux-watchdog.org (Postfix, from userid 500)
+	id 64632409F0; Sat,  6 Dec 2025 12:13:38 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 64632409F0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
+	s=odk20250313; t=1765019618;
+	bh=5M6AwtGlK9pkgul9Roa9ih4aulMvO27asjhtyNdHL78=;
+	h=Date:From:To:Cc:Subject:From;
+	b=o37lrMgAEO2umE9ci9Wj3b99oLuDhdpAbmupCXXewBjLd83B6PfZHI8OtnoQH2QP0
+	 Ppv+Oe2q466RptgX66t1ZHVyqzk2kBXFCS0Qzg4ND202h8ZcxKOj0aN6IUO2nvNhc9
+	 9CXdlquUECA59fXP0rH/U2OQoCsPDWDG9E0In3wkNSywG/qpZIzfz9zmnBQf5IsQWe
+	 X6vTHdQP8B+PUbIcqMIpenUFXWvSHBV2ZXjbH4HSgdC5cVFkPnW+hPQXMvSXeY1wp3
+	 GvJRDcDe3z6WOZphcvdIYOuFH2c/fJRo6aIYhxCdGGJxt3ynZaFdXSnazVYSEMIkAQ
+	 CES0Xvp9wjySQ==
+Date: Sat, 6 Dec 2025 12:13:38 +0100
+From: Wim Van Sebroeck <wim@linux-watchdog.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Aleksander Jan Bajkowski <olek2@wp.pl>,
+	Binbin Zhou <zhoubinbin@loongson.cn>,
+	Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
+	Christian Marangi <ansuelsmth@gmail.com>,
+	Haotian Zhang <vulab@iscas.ac.cn>, Heiko Stuebner <heiko@sntech.de>,
+	Jack Hsu <jh.hsu@mediatek.com>,
+	Jingyi Wang <jingyi.wang@oss.qualcomm.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Li Qiang <liqiang01@kylinos.cn>,
+	Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>,
+	Rob Herring <robh@kernel.org>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Zoe Gates <zoe@zeocities.dev>
+Subject: [GIT PULL REQUEST] watchdog - v6.19 release cycle.
+Message-ID: <20251206111338.GA4014@www.linux-watchdog.org>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH v8 0/2] Add support for Gunyah Watchdog
-To: Hrishabh Rajput <hrishabh.rajput@oss.qualcomm.com>,
- Bjorn Andersson <andersson@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
- Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- Pavan Kondeti <pavan.kondeti@oss.qualcomm.com>,
- Neil Armstrong <neil.armstrong@linaro.org>,
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
- Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>,
- Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-References: <20251118-gunyah_watchdog-v8-0-e5de12e2eef5@oss.qualcomm.com>
- <6a8f5d62-f6ea-44b3-9baf-acfbc1e58efe@oss.qualcomm.com>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <6a8f5d62-f6ea-44b3-9baf-acfbc1e58efe@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.20 (2009-12-10)
 
-On 02/12/2025 12:23, Hrishabh Rajput wrote:
-> Hi Bjorn, Guenter, and Wim,
-> 
-> Just a gentle ping on this series.
+Hi Linus,
 
-It's merge window. There was no point in pinging just before merge
-window and is even worse to ping now. Nothing can happen with this
-patchset and such pings is only noise.
+Please pull following watchdog changes for the v6.19 release cycle.
 
-> 
-> Since the patches have received Reviewed-by tags from Dmitry and 
-> Guenter, I wanted to confirm the merge strategy.
-> 
-> Bjorn: Are you planning to pick the QCOM SCM changes separately through 
-> your tree, or would you prefer the whole series go through the Watchdog 
-> tree?
-> If the latter, do we need an explicit Acked-by from you for QCOM SCM patch?
+This series contains:
+* Add watchdog support for:
+        - Renesas WWDT
+	- AST2700 platform
+	- MediaTek MT8189 SoC
+	- Loongson-2k0300 watchdog
+	- Qualcomm Kaanapali watchdog
+	- RK3506 compatible
+	- Airoha AN7583 SoC
+* DT Schema conversions:
+	- lantiq,wdt
+	- TI OMAP
+	- marvell,orion-wdt
+* Several other fixes and improvements
 
-Where did you document dependencies between patches and any non-obvious
-merging? I open cover letter and there is NOTHING. I look at patch
-changelog and also NOTHING.
 
-So if you tell us nothing, why would we care to think we need to do
-anything special here?
+The output from git request-pull:
+----------------------------------------------------------------
+The following changes since commit e9a6fb0bcdd7609be6969112f3fbfcce3b1d4a7c:
 
-You must explicitly document every dependency, both external and between
-patches, in the cover letter. At least cover letter, some people (e.g.
-mostly me) don't even read them...
+  Linux 6.18-rc5 (2025-11-09 15:10:19 -0800)
 
-Best regards,
-Krzysztof
+are available in the git repository at:
+
+  git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.19-rc1
+
+for you to fetch changes up to 5bcc5786a0cfa9249ccbe539833040a6285d0de3:
+
+  watchdog: starfive: Fix resource leak in probe error path (2025-11-15 15:29:01 +0100)
+
+----------------------------------------------------------------
+linux-watchdog 6.19-rc1 tag
+
+----------------------------------------------------------------
+Aleksander Jan Bajkowski (1):
+      dt-bindings: watchdog: lantiq,wdt: convert bindings to dtschema
+
+Binbin Zhou (5):
+      watchdog: loongson1: Add missing MODULE_PARM_DESC
+      watchdog: loongson1: Simplify ls1x_wdt_probe code
+      watchdog: loongson1: Drop CONFIG_OF
+      dt-bindings: watchdog: loongson,ls1x-wdt: Add ls2k0300-wdt compatible
+      watchdog: loongson1: Add Loongson-2k0300 watchdog support
+
+Chin-Ting Kuo (3):
+      dt-bindings: watchdog: aspeed,ast2400-wdt: Add support for AST2700
+      watchdog: aspeed: Support variable number of reset mask registers
+      watchdog: aspeed: Add support for AST2700 platform
+
+Christian Marangi (1):
+      dt-bindings: watchdog: airoha: Add support for Airoha AN7583 SoC
+
+Haotian Zhang (2):
+      watchdog: wdat_wdt: Fix ACPI table leak in probe function
+      watchdog: starfive: Fix resource leak in probe error path
+
+Heiko Stuebner (1):
+      dt-bindings: watchdog: Add RK3506 compatible
+
+Jack Hsu (1):
+      dt-bindings: watchdog: Support MediaTek MT8189 wdt
+
+Jingyi Wang (1):
+      dt-bindings: watchdog: Document Qualcomm Kaanapali watchdog
+
+Krzysztof Kozlowski (3):
+      dt-bindings: watchdog: Restrict timeout-sec to one number
+      dt-bindings: watchdog: Allow node names named 'pmic'
+      dt-bindings: mfd: rohm,bd96801-pmic: Correct timeout-sec length and reference watchdog schema
+
+Li Qiang (1):
+      via_wdt: fix critical boot hang due to unnamed resource allocation
+
+Louis-Alexis Eyraud (1):
+      dt-bindings: watchdog: mediatek,mtk-wdt: Add compatible for MT8189 SoC
+
+Rob Herring (Arm) (2):
+      dt-bindings: watchdog: Convert TI OMAP to DT schema
+      dt-bindings: watchdog: Convert marvell,orion-wdt to DT schema
+
+Wolfram Sang (7):
+      dt-bindings: watchdog: factor out RZ/A watchdog
+      dt-bindings: watchdog: factor out RZ/N1 watchdog
+      dt-bindings: watchdog: factor out RZ/G2L watchdog
+      dt-bindings: watchdog: factor out RZ/V2H(P) watchdog
+      dt-bindings: watchdog: renesas,wdt: add SWDT exception for V3H
+      dt-bindings: watchdog: Add Renesas WWDT
+      watchdog: renesas_wwdt: add driver
+
+Zoe Gates (1):
+      watchdog/diag288: Fix module comment typos
+
+ .../devicetree/bindings/mfd/rohm,bd96801-pmic.yaml |   8 +-
+ .../bindings/watchdog/airoha,en7581-wdt.yaml       |   6 +-
+ .../bindings/watchdog/aspeed,ast2400-wdt.yaml      |   8 +-
+ .../devicetree/bindings/watchdog/lantiq,wdt.yaml   |  57 +++++++
+ .../devicetree/bindings/watchdog/lantiq-wdt.txt    |  24 ---
+ .../bindings/watchdog/loongson,ls1x-wdt.yaml       |   3 +-
+ .../devicetree/bindings/watchdog/marvel.txt        |  45 ------
+ .../bindings/watchdog/marvell,orion-wdt.yaml       | 100 +++++++++++++
+ .../bindings/watchdog/mediatek,mtk-wdt.yaml        |   2 +
+ .../devicetree/bindings/watchdog/omap-wdt.txt      |  15 --
+ .../devicetree/bindings/watchdog/qcom-wdt.yaml     |   1 +
+ .../bindings/watchdog/renesas,r9a09g057-wdt.yaml   |  99 +++++++++++++
+ .../bindings/watchdog/renesas,rcar-gen3-wwdt.yaml  | 114 ++++++++++++++
+ .../bindings/watchdog/renesas,rza-wdt.yaml         |  51 +++++++
+ .../bindings/watchdog/renesas,rzg2l-wdt.yaml       | 111 ++++++++++++++
+ .../bindings/watchdog/renesas,rzn1-wdt.yaml        |  50 +++++++
+ .../devicetree/bindings/watchdog/renesas,wdt.yaml  | 146 +-----------------
+ .../devicetree/bindings/watchdog/snps,dw-wdt.yaml  |   1 +
+ .../devicetree/bindings/watchdog/ti,omap2-wdt.yaml |  51 +++++++
+ .../devicetree/bindings/watchdog/watchdog.yaml     |   3 +-
+ drivers/watchdog/Kconfig                           |  12 +-
+ drivers/watchdog/Makefile                          |   1 +
+ drivers/watchdog/aspeed_wdt.c                      |  30 +++-
+ drivers/watchdog/diag288_wdt.c                     |   6 +-
+ drivers/watchdog/loongson1_wdt.c                   |  89 ++++++++---
+ drivers/watchdog/renesas_wwdt.c                    | 163 +++++++++++++++++++++
+ drivers/watchdog/starfive-wdt.c                    |   4 +-
+ drivers/watchdog/via_wdt.c                         |   1 +
+ drivers/watchdog/wdat_wdt.c                        |  64 +++++---
+ include/dt-bindings/watchdog/aspeed-wdt.h          | 138 +++++++++++++++++
+ 30 files changed, 1113 insertions(+), 290 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/lantiq,wdt.yaml
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/lantiq-wdt.txt
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/marvel.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/marvell,orion-wdt.yaml
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/omap-wdt.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/renesas,r9a09g057-wdt.yaml
+ create mode 100644 Documentation/devicetree/bindings/watchdog/renesas,rcar-gen3-wwdt.yaml
+ create mode 100644 Documentation/devicetree/bindings/watchdog/renesas,rza-wdt.yaml
+ create mode 100644 Documentation/devicetree/bindings/watchdog/renesas,rzg2l-wdt.yaml
+ create mode 100644 Documentation/devicetree/bindings/watchdog/renesas,rzn1-wdt.yaml
+ create mode 100644 Documentation/devicetree/bindings/watchdog/ti,omap2-wdt.yaml
+ create mode 100644 drivers/watchdog/renesas_wwdt.c
+----------------------------------------------------------------
+
+Kind regards,
+Wim.
+
 
