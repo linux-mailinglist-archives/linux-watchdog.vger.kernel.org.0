@@ -1,252 +1,236 @@
-Return-Path: <linux-watchdog+bounces-4696-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4697-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2579CBB10A
-	for <lists+linux-watchdog@lfdr.de>; Sat, 13 Dec 2025 17:01:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B58CCBB1E8
+	for <lists+linux-watchdog@lfdr.de>; Sat, 13 Dec 2025 18:34:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 47F003059344
-	for <lists+linux-watchdog@lfdr.de>; Sat, 13 Dec 2025 16:01:44 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 44B2F304C2A4
+	for <lists+linux-watchdog@lfdr.de>; Sat, 13 Dec 2025 17:34:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81F6C18D636;
-	Sat, 13 Dec 2025 16:01:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A49E42E54DE;
+	Sat, 13 Dec 2025 17:34:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MLd6T+g4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y/jcOuz+"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BC7E3B8D4B
-	for <linux-watchdog@vger.kernel.org>; Sat, 13 Dec 2025 16:01:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A312425D216;
+	Sat, 13 Dec 2025 17:34:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765641703; cv=none; b=rdZU3QQl6oSunB58a3f63Zm38kee6RWBqVBU7KfxEw8hjapLvuCnDXTgXrBwKa2Vv3q19BO5ap0ZnxqQcSZRXzcPeYPns3FdcXLnzvIlPlOeFqxb+VVHgWMJp9KcKee57qDnXKkBUl+ggWKYa0LZ0K21GQ20xfAmLszpSyRo+C0=
+	t=1765647255; cv=none; b=I8iZJ/FB6YgyMErQkxr/4dfGNcquNGWjMakeND3HLp2FBOfKoNPivHPnlSqyuq2ula1y3YcWpP1WPijlW7n3ygS3OhQIbwBIwxlXto72dkdTeyTT2QUa8WAHipStiFBAaH3vWwqSY+peq5EJeuedZCO7uqMOkkHfsic7wq1qagw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765641703; c=relaxed/simple;
-	bh=GugUZIDmxL1IfNy1Jk1N2veotxygzuKWiYbpFPhN9A4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SqX409Fik6SHq7dhuc/BP+E12RKq6xs4RMmMy0+aSl9YkMWq2+RfT6qXQjH4FOkLb7QdzC+mamy7raxxm5/VGMiOq8+ZYO5WlC2L1bxELYESUIvFsl+sXyGzQGUJFhlscDCd1tXpl1v3OjAGcYVKI/IixW3XSmIGGuPf64CfoWs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MLd6T+g4; arc=none smtp.client-ip=74.125.82.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-2ae24015dc0so345632eec.1
-        for <linux-watchdog@vger.kernel.org>; Sat, 13 Dec 2025 08:01:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765641700; x=1766246500; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=VNtjhG0Npr9CFEK/eSNr4DfvSNeMnTtAn/2BLbwKKZs=;
-        b=MLd6T+g4DS2Pl4ldX3rGfg2oNr/iYu2wM2bYyeoFp8Lrw5P6xmxcZzZjY598bEue5J
-         ds1ShP1uhKiCvZ7EMVwWd29BaGwRTx59gaz1y0C4U9PoR8RswnCcoNzbAegzwlImRGLJ
-         Z1lv2sCohbngdB5oTn+ustECERg5PHkN7lX6Sb37Akb6898w0FH1oHIb9TEpPvztUYPu
-         3LDtHErDDvMMC41JuwYTJk/pBbWJMXkIp9GpVzvwmbFOfcaHK4E8kEQxLPaWgwQf9ONX
-         HZu7Zt47gKMw4kn+6ExvUlCfsIy2Jv0ZPUOscxPzdVbu8L+pl5ru1Fc3raJhBVuJ0GqZ
-         OP/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765641700; x=1766246500;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VNtjhG0Npr9CFEK/eSNr4DfvSNeMnTtAn/2BLbwKKZs=;
-        b=vtyE/HsOmGouqwfJfhHo40bsTrDft82O/Jzam0wQmoFw+x8UzAlr3XxL4Avq3abwP4
-         xvxazM5THrbj18untqm35gaP8jffJH6gDYu0jqjhdTqfIZmW3O7WljM423dg1qoX2fxM
-         KOYwIHkMGsQt59STVQ7z2pX6ZoWeei9OFJp6y9ORPP3r2w9WB9ZggzY5j73Yy4ORHQkN
-         mPZnaTRKM36W/TfJTdZXEd+T1sznf137AK9sWtqCqH40ZEPoNYxXTRsFPn7owe2Cuhvk
-         blVT7DpQfTE3pXiQPAbqvLktyy+OUu9b2z5fjksnWVMhJEmIC9GBcHe0u0G4YlNpFnhz
-         04CQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW7UrKd+qKNuZ8kQE7NN85o2zz7XlxY6StCObUSRIqmouXfmhdWdKKl0WorhOOCUyfCg7HR3pQQKJtBBLHDPw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwenjYc3dCcm1RNQKPcCHtG20x50477ces6HV9P78NO89yJl6vg
-	+7OHZSxFGHXxU3qMAt+rEqzWqjAMvuz8salTA6olRp1vo0vZYi6vxy28fHiDmA==
-X-Gm-Gg: AY/fxX7AWMkTtuzqfeQcCf5FhJF5gl+KeNOy4gK53HvE/Q5kw+7fL3vMIzvFQ+w+G+d
-	lN0E8MG0HiKGutRAVM+DbfBsmutepxW/yEx9UoYM73/ettLQENeJ3jLUcfWdmNqVNI8TOrS+mPC
-	G8+6O7ZqLBd5I2faKohYOrW3ZBokpnNElC7scMH+qoSjZtH5TEkqCBGgG7WPYrTkOGVdI7MFO2p
-	dkCiM/IadKZZjhzAZRmzLvYMTqQy3tE1XbqUteX3/J7R5cA85TooURFbKjlrfZi2bIp2pjZUbC+
-	9hhG/Ulp0OFZgILLdExNrMGzEWmZi1eul3r9VTGLCxmYMKtdfSd09fN8jB+9+5IGmwaz5FRNRCY
-	2OzQxuBpaxiUCMhYwKwLyYKH95UT+tacchyN0D5ofcbUNuADqyrfaeVbZrzmMUEaaviqjDJe3/8
-	Cif1TSIM86JJYEatTKGNfjJbBsClZnI4gbXSeqWEZB28fMBoIfrzcbmAVOfSc/byHd5DleXQ==
-X-Google-Smtp-Source: AGHT+IEW34XEwqH24ydIm+j4Bela3kMkxcf2yXpdV2uRzVrtlakYUKvFcnGDBoT70a0C9nRdCj5TrQ==
-X-Received: by 2002:a05:7301:4d0d:b0:2ac:1464:7255 with SMTP id 5a478bee46e88-2ac1c5cdacdmr4908716eec.5.1765641700068;
-        Sat, 13 Dec 2025 08:01:40 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ac190acd01sm23728595eec.1.2025.12.13.08.01.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 13 Dec 2025 08:01:39 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <acd50699-e369-4f29-a015-7a753e410f1e@roeck-us.net>
-Date: Sat, 13 Dec 2025 08:01:37 -0800
+	s=arc-20240116; t=1765647255; c=relaxed/simple;
+	bh=YSbuTBIlzPrLiem4wRujUcouD4hirFezUKyLBGx4aYE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BRsM3as7Q0sSDwZUZzz5L8tl1/AfapvL9guPUayzAufqLA2ATKgi9c0B33Vs4TvLlmDsif6D+YRBMZadNLcDavFXDLqDJj1JqR23lfGZ1dYt4SUIxFiSHvUj+mh1CQOjJJcSCYQCyBBNbVLDq6qnFhwfozfYOrt5HgPAo6Urcho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y/jcOuz+; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1765647254; x=1797183254;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YSbuTBIlzPrLiem4wRujUcouD4hirFezUKyLBGx4aYE=;
+  b=Y/jcOuz+zAvvIrMy5slZbV5W1/zpM5YuxZamu7mYN2omRV3aig6BeK0W
+   fn8Bjvtwh4qFzVIIs+vcq9nA0g2DcapTBGeaXbjO8QN59mQ7iB++FVSUz
+   JFCiJpAkRFrVWBGjEQm3cXyekDxe+9a13cSyrm6FDOJ9pH+f2RvsaoDVW
+   vBCNrQ6OweJORjZXHKfQV2d2LrCKEU6Gnn4+mykHScEw+fa0Ktf1KYSbG
+   1sA4vNytr+WKtTkR9ZS8aQAyBREmIJuaG4roEjCc681+8yHKVQKC/BxH0
+   Pq3XfKhcJS+S33VJ/eHD8CrZLa9AqARVZiHwV2iP1mUnAwz8vjCCibRxg
+   Q==;
+X-CSE-ConnectionGUID: /yh4NJOKQ/OCApAgcPrfXQ==
+X-CSE-MsgGUID: KGSc6475QTKMzvTeQOhrpw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11641"; a="71466836"
+X-IronPort-AV: E=Sophos;i="6.21,146,1763452800"; 
+   d="scan'208";a="71466836"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2025 09:34:13 -0800
+X-CSE-ConnectionGUID: U2A9g5b+SUy+YPvqzYTSSw==
+X-CSE-MsgGUID: qzQEF6zzTcyQTO3n73QR3w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,146,1763452800"; 
+   d="scan'208";a="197617095"
+Received: from lkp-server01.sh.intel.com (HELO d335e3c6db51) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 13 Dec 2025 09:34:07 -0800
+Received: from kbuild by d335e3c6db51 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vUTVN-000000007zp-00v0;
+	Sat, 13 Dec 2025 17:34:05 +0000
+Date: Sun, 14 Dec 2025 01:33:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ramiro Oliveira <ramiro.oliveira@advantech.com>,
+	Lee Jones <lee@kernel.org>, Linus Walleij <linusw@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Daniel Thompson <danielt@kernel.org>,
+	Jingoo Han <jingoohan1@gmail.com>, Helge Deller <deller@gmx.de>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-i2c@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linux-fbdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Wenkai Chung <wenkai.chung@advantech.com.tw>,
+	Francisco Aragon-Trivino <francisco.aragon-trivino@advantech.com>,
+	Hongzhi Wang <hongzhi.wang@advantech.com>,
+	Mikhail Tsukerman <mikhail.tsukerman@advantech.com>,
+	Thomas Kastner <thomas.kastner@advantech.com>,
+	Ramiro Oliveira <ramiro.oliveira@advantech.com>
+Subject: Re: [PATCH 8/8] Add Advantech EIO Fan driver
+Message-ID: <202512140153.dNgpAKJt-lkp@intel.com>
+References: <20251212-upstream-v1-v1-8-d50d40ec8d8a@advantech.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] fix it87_wdt early reboot by reporting running timer
-To: James Hilliard <james.hilliard1@gmail.com>, =?UTF-8?Q?Ren=C3=A9_Rebe?=
- <rene@exactco.de>
-Cc: wim@linux-watchdog.org, linux-watchdog@vger.kernel.org
-References: <20251117.131124.1452225967649047223.rene@exactco.de>
- <CADvTj4po1bx6AVfGKoxF38pzKURxryC17Up5Z7Ne+P5XBMZFmQ@mail.gmail.com>
- <b828fd88-5efa-4916-a781-17df6bd100a2@roeck-us.net>
- <CADvTj4okwTFALbEWtYKju2Q7MRFJOwRk4PEC77w9+Pk9nRBtzQ@mail.gmail.com>
- <DE34C809-E782-485E-AE17-62D5EB08F4E3@exactco.de>
- <CADvTj4oz6gA3Z1dxHok1Q31x1ziaERS04G4_gwBmZrVwrM59Xw@mail.gmail.com>
- <65A6FF07-20ED-45DB-BA3E-458662B93EA3@exactco.de>
- <CADvTj4qWfq4OgGfYECuepazbwNWWhtH7qy6cAzCYeFKYDFGt-w@mail.gmail.com>
- <D6B291A1-0657-4DA6-A7F8-40C19AB9064D@exactco.de>
- <CADvTj4r+SJ6+jbOOkdjoiZFqwMFx2XLkHu6kwkaewW5a2w71aA@mail.gmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <CADvTj4r+SJ6+jbOOkdjoiZFqwMFx2XLkHu6kwkaewW5a2w71aA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251212-upstream-v1-v1-8-d50d40ec8d8a@advantech.com>
 
-On 12/12/25 15:00, James Hilliard wrote:
-> On Fri, Dec 12, 2025 at 3:44 PM René Rebe <rene@exactco.de> wrote:
->>
->>
->>> On 12. Dec 2025, at 23:41, James Hilliard <james.hilliard1@gmail.com> wrote:
->>>
->>> On Fri, Dec 12, 2025 at 3:34 PM René Rebe <rene@exactco.de> wrote:
->>>>
->>>>> On 12. Dec 2025, at 23:28, James Hilliard <james.hilliard1@gmail.com> wrote:
->>>>>
->>>>> On Fri, Dec 12, 2025 at 3:16 PM René Rebe <rene@exactco.de> wrote:
->>>>>>
->>>>>>
->>>>>>> On 12. Dec 2025, at 23:04, James Hilliard <james.hilliard1@gmail.com> wrote:
->>>>>>>
->>>>>>> On Fri, Dec 12, 2025 at 2:50 PM Guenter Roeck <linux@roeck-us.net> wrote:
->>>>>>>>
->>>>>>>> On 12/12/25 12:17, James Hilliard wrote:
->>>>>>>> ...
->>>>>>>>>   +       /* wdt already left running by firmware? */
->>>>>>>>>   +       if (_wdt_running()) {
->>>>>>>>>   +               pr_info("Left running by firmware.\n");
->>>>>>>>>
->>>>>>>>>
->>>>>>>>> I'm wondering, is there a way other than looking at dmesg to identify if
->>>>>>>>> a wdt was left running by the firmware? I'm thinking having an ioctl or
->>>>>>>>> similar could be useful as a way to notify a user that a BIOS or firmware
->>>>>>>>> configuration change may be needed.
->>>>>>>>>
->>>>>>>>
->>>>>>>> This is not a bug, so there is no need to notify the user in the first place.
->>>>>>>> The only reason for accepting the message is that I was tired arguing.
->>>>>>>> It is even misleading, because loading the driver, starting the watchdog
->>>>>>>> by touching the watchdog device, unloading it, and loading it again will
->>>>>>>> likely trigger the message.
->>>>>>>
->>>>>>> Yeah, I'm aware it's not a bug, I'm just thinking it might be good to have
->>>>>>> watchdog drivers record the initial running state.
->>>>>>
->>>>>> The kernel logs so much pointless random stuff; an info about a
->>>>>> running watchdog timer is more than warranted in this case IMHO.
->>>>>> It wasted quite a bit of my valuable time.
->>>>>>
->>>>>>>> Userspace can check if a watchdog is running by reading
->>>>>>>> /sys/class/watchdog/watchdog<index>/state. Do that after loading the driver
->>>>>>>> and before starting the watchdog daemon and you'll see if the watchdog
->>>>>>>> was running when the driver was loaded. But that doesn't mean it was
->>>>>>>> running when the system booted; it only means that the watchdog was running
->>>>>>>> when the driver was loaded.
->>>>>>>
->>>>>>> Hmm, this seems impossible in some configurations, AFAIU systemd's
->>>>>>> watchdog is integrated into PID 1, so loading a watchdog daemon later
->>>>>>> doesn't appear possible.
->>>>>>>
->>>>>>> Maybe it would make sense to have a sysfs variable like
->>>>>>> /sys/class/watchdog/watchdog<index>/initial_state so that
->>>>>>> there's a way for userspace to determine if a watchdog was
->>>>>>> already armed by the time the driver was loaded?
->>>>>>
->>>>>> This would be quite wasteful overkill for something that unimportant.
->>>>>> It is rare that firmware leaves a watchdog timer enabled in any case.
->>>>>
->>>>> I think your presumption that a watchdog is unimportant is wrong,
->>>>> in my case I want to identify systems and send alerts if it's detected
->>>>> that a watchdog was NOT armed by the firmware.
->>>>>
->>>>> I manage a bunch of x86_64 based embedded systems and
->>>>> we always want the watchdog enabled, including in the BIOS,
->>>>> however unlike on your system the watchdogs on my systems are
->>>>> disabled by default and must be manually configured in the BIOS.
->>>>> We do still arm them from Linux either way but it would be nice
->>>>> to warn users that their systems have bad BIOS settings, on the
->>>>> systems I work with failing to arm the watchdog in both the BIOS
->>>>> and Linux can result in the watchdog failing to fire when we need
->>>>> it to under some circumstances(we're not sure exactly why this
->>>>> happens but failing to arm the watchdog in the BIOS can result
->>>>> in the watchdog not always firing if the system freezes during a
->>>>> reboot from what we can tell, although it's difficult to reproduce
->>>>> this issue in our hardware testing lab).
->>>>
->>>> Instead of adding new kernel state, you could probably just read
->>>> the initial state as suggested by Guenter.
->>>
->>> As I mentioned earlier, I don't think we can read initial state since
->>> AFAIU systemd PID1 will immediately arm the watchdog prior
->>> to anything else running, so by the time we could read the state
->>> variable the watchdog would have already been armed so the
->>> state var would be meaningless in regards to determining if the
->>> firmware armed the watchdog.
->>
->> You can either adjust systemd accordingly or add a /sbin/init
->> wrapper for systemd to check the state before executing init.
-> 
-> This seems super hacky to me and likely to cause weird issues.
-> 
+Hi Ramiro,
 
-systemd executes a number of actions before opening the watchdog device.
-At the very least that includes loading all the modules. I am quite sure
-that some script can be configured to run after loading the modules and
-before opening the watchdog device. I don't see that as hacky.
+kernel test robot noticed the following build warnings:
 
-Guenter
+[auto build test WARNING on d9771d0dbe18dd643760431870a6abf9b0866bb0]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Ramiro-Oliveira/Add-Advantech-EIO-MFD-driver/20251213-004905
+base:   d9771d0dbe18dd643760431870a6abf9b0866bb0
+patch link:    https://lore.kernel.org/r/20251212-upstream-v1-v1-8-d50d40ec8d8a%40advantech.com
+patch subject: [PATCH 8/8] Add Advantech EIO Fan driver
+config: nios2-allmodconfig (https://download.01.org/0day-ci/archive/20251214/202512140153.dNgpAKJt-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 11.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251214/202512140153.dNgpAKJt-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512140153.dNgpAKJt-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/thermal/eio_fan.c: In function 'eio_fan_probe':
+>> drivers/thermal/eio_fan.c:391:21: warning: variable 'temps_mc' set but not used [-Wunused-but-set-variable]
+     391 |                 int temps_mc[TRIP_NUM];
+         |                     ^~~~~~~~
+
+
+vim +/temps_mc +391 drivers/thermal/eio_fan.c
+
+   375	
+   376	static int eio_fan_probe(struct platform_device *pdev)
+   377	{
+   378		struct device *dev = &pdev->dev;
+   379		unsigned int fan_id;
+   380		int ret;
+   381	
+   382		if (!dev_get_drvdata(dev->parent)) {
+   383			dev_err(dev, "eio_core not present\n");
+   384			return -ENODEV;
+   385		}
+   386	
+   387		for (fan_id = 0; fan_id < FAN_MAX; fan_id++) {
+   388			u8 state = 0, name = 0;
+   389			int trip_hi = 0, trip_lo = 0, trip_stop = 0;
+   390			int pwm_hi = 0, pwm_lo = 0;
+ > 391			int temps_mc[TRIP_NUM];
+   392			struct eio_fan_dev *fan;
+   393			struct thermal_zone_device *tzd;
+   394			struct thermal_cooling_device *cdev;
+   395	
+   396			if (pmc_read(dev->parent, CTRL_STATE, fan_id, &state) ||
+   397			    pmc_read(dev->parent, CTRL_TYPE, fan_id, &name) ||
+   398			    pmc_read(dev->parent, CTRL_THERM_HIGH, fan_id, &trip_hi) ||
+   399			    pmc_read(dev->parent, CTRL_THERM_LOW, fan_id, &trip_lo) ||
+   400			    pmc_read(dev->parent, CTRL_THERM_STOP, fan_id, &trip_stop) ||
+   401			    pmc_read(dev->parent, CTRL_PWM_HIGH, fan_id, &pwm_hi) ||
+   402			    pmc_read(dev->parent, CTRL_PWM_LOW, fan_id, &pwm_lo)) {
+   403				dev_info(dev, "fan%u: pmc read error, skipping\n", fan_id);
+   404				continue;
+   405			}
+   406	
+   407			if (!(state & 0x1)) {
+   408				dev_info(dev, "fan%u: firmware reports disabled\n", fan_id);
+   409				continue;
+   410			}
+   411	
+   412			if (!fan_name[name][0]) {
+   413				dev_info(dev, "fan%u: unknown name index %u\n", fan_id, name);
+   414				continue;
+   415			}
+   416	
+   417			temps_mc[TRIP_HIGH] = DECI_KELVIN_TO_MILLI_CELSIUS(trip_hi);
+   418			temps_mc[TRIP_LOW]  = DECI_KELVIN_TO_MILLI_CELSIUS(trip_lo);
+   419			temps_mc[TRIP_STOP] = DECI_KELVIN_TO_MILLI_CELSIUS(trip_stop);
+   420	
+   421			fan = devm_kzalloc(dev, sizeof(*fan), GFP_KERNEL);
+   422			if (!fan)
+   423				return -ENOMEM;
+   424	
+   425			fan->mfd = dev->parent;
+   426			fan->id  = (u8)fan_id;
+   427	
+   428			fan->trip_priv[TRIP_HIGH].trip_ctl = CTRL_THERM_HIGH;
+   429			fan->trip_priv[TRIP_LOW].trip_ctl  = CTRL_THERM_LOW;
+   430			fan->trip_priv[TRIP_STOP].trip_ctl = CTRL_THERM_STOP;
+   431	
+   432			struct thermal_trip trips[TRIP_NUM] = {
+   433				[TRIP_HIGH] = {
+   434					.type = THERMAL_TRIP_ACTIVE,
+   435					.temperature = DECI_KELVIN_TO_MILLI_CELSIUS(trip_hi),
+   436					.flags = THERMAL_TRIP_FLAG_RW_TEMP,
+   437					.priv = &fan->trip_priv[TRIP_HIGH],
+   438				},
+   439				[TRIP_LOW] = {
+   440					.type = THERMAL_TRIP_ACTIVE,
+   441					.temperature = DECI_KELVIN_TO_MILLI_CELSIUS(trip_lo),
+   442					.flags = THERMAL_TRIP_FLAG_RW_TEMP,
+   443					.priv = &fan->trip_priv[TRIP_LOW],
+   444				},
+   445				[TRIP_STOP] = {
+   446					.type = THERMAL_TRIP_ACTIVE,
+   447					.temperature = DECI_KELVIN_TO_MILLI_CELSIUS(trip_stop),
+   448					.flags = THERMAL_TRIP_FLAG_RW_TEMP,
+   449					.priv = &fan->trip_priv[TRIP_STOP],
+   450				},
+   451			};
+   452	
+   453			tzd = thermal_zone_device_register_with_trips(fan_name[name],
+   454								      trips, TRIP_NUM,
+   455								      fan,
+   456								      &zone_ops,
+   457								      NULL,
+   458								      0, 0);
+   459			if (IS_ERR(tzd))
+   460				return PTR_ERR(tzd);
+   461	
+   462			cdev = thermal_cooling_device_register(fan_name[name], fan, &cooling_ops);
+   463			if (IS_ERR(cdev)) {
+   464				thermal_zone_device_unregister(tzd);
+   465				dev_err(dev, "fan%u: cdev register failed: %ld\n",
+   466					fan_id, PTR_ERR(cdev));
+   467				return PTR_ERR(cdev);
+   468			}
+   469	
+   470			dev_set_drvdata(thermal_zone_device(tzd), tzd);
+   471			ret = device_create_file(thermal_zone_device(tzd), &dev_attr_fan_mode);
+   472			if (ret)
+   473				dev_warn(dev, "Error create thermal zone fan_mode sysfs\n");
+   474		}
+   475		return 0;
+   476	}
+   477	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
