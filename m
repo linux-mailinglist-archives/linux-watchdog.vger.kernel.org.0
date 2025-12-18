@@ -1,180 +1,152 @@
-Return-Path: <linux-watchdog+bounces-4713-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4714-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AADB3CCA457
-	for <lists+linux-watchdog@lfdr.de>; Thu, 18 Dec 2025 05:53:39 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3331CCB4DC
+	for <lists+linux-watchdog@lfdr.de>; Thu, 18 Dec 2025 11:06:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 9CCBE301471C
-	for <lists+linux-watchdog@lfdr.de>; Thu, 18 Dec 2025 04:53:38 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B6C48300D14F
+	for <lists+linux-watchdog@lfdr.de>; Thu, 18 Dec 2025 10:06:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA8762773F9;
-	Thu, 18 Dec 2025 04:53:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D88472DECCC;
+	Thu, 18 Dec 2025 10:06:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KFumEL7v"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vh8DhXGI"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7644236A73
-	for <linux-watchdog@vger.kernel.org>; Thu, 18 Dec 2025 04:53:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF400231845
+	for <linux-watchdog@vger.kernel.org>; Thu, 18 Dec 2025 10:06:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766033617; cv=none; b=R2bmCQODN7zl+8KFzebe8xiEdGL2Y2420aiq9n7iVqUDKWxSs7KHKX6HGw5lnKAhjm33y2pyEj6DPtXajEsHEu8kj61vo6+2a7lXNJoxnhQxH24jKmO7ZHy0vuhR6Gjgbxe7zNRGlSpDCm/5USo1zdIVz0vwKjZqceG6NBySAYo=
+	t=1766052386; cv=none; b=Wq7r/qo9huPhZhDSU1ceivpgW3XQPAQtpr+U1u18x0lEtjnKu2yALwY5xfy/3MgGDergNlee3nnD02zbRp+BD4WmjcPfb7sY6v6UMbxXDJyNaaFShnRBUKPttjR4mVmcDNCNLC0UsP7pybdcPAlyIIKaMwTtacg7KxFUm/e7uzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766033617; c=relaxed/simple;
-	bh=gC3ugXYp1tMJq3Cs3Hrdsa3w75J7g6V6e9ZGeoc/Sfo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uwCbz2x0tVQh3qTKaIsf9GQINgT+xrAu91cJ9ZpwvR+PDUZ2eoVx1Pqcb9cAQbEDpVMSKEJa8olBbYRjEOnwWC0YwbdEcXeaWmXZ/mRQqLGBbRVC07loc170koVbrN7Znm18R+Oa3rmdFKIrWvUrmEU9AwN8ej2qsaSLk1rxasQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KFumEL7v; arc=none smtp.client-ip=74.125.82.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-11b6bc976d6so2007503c88.0
-        for <linux-watchdog@vger.kernel.org>; Wed, 17 Dec 2025 20:53:35 -0800 (PST)
+	s=arc-20240116; t=1766052386; c=relaxed/simple;
+	bh=00v3kzAV4duY2v2/dB54DflNOIbH5D4CPWqrg3MyJZA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rPJGBaoRrZ0a8FBH/eOTruVcbw7FrI8Fi3vVDgX6VCNfQv3HLjLDKx+XuYwbSqlEAaL2nsnb9IQsUnMEVfjohE8iLw9mES6wtlrT8UyNLUhz1uZrFPsURiCnHEUdp2Osq0Kj8Y0mIoU7Dxd8H+hkGpryDJYcYyDFzJFH6KLP5Vc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=vh8DhXGI; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-6419aaced59so619602a12.0
+        for <linux-watchdog@vger.kernel.org>; Thu, 18 Dec 2025 02:06:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766033615; x=1766638415; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=OgxD9acskh/VQiAtEaUet6zCftwQMFxsHsnGcHh6oWE=;
-        b=KFumEL7vMlRam6tM/hOpAHPhQEQzvvGUtB6pXwgAR6MUrkPUUPPkIGlUSr9310mgUV
-         pbPU4ZhJoX3wIZeyJueTOOiaJrzEmTXo1YSu6U6IWWwLHiKR8cei65ma+0m3CGPJXKzz
-         m6VKqhb3hfrW5Dttx06p4WhpVnYSQ8H3lcEVoYum8Fe7x3rR2wOuYh7o40QMwKsEJiLt
-         PhiS1sWw+Wl65JPweM1wMwhUZC9tszK8d8CaQQxsTPshmSrhQwdFKwlsKoyaa50ufFkd
-         /dZkfqsTZ68TIqfYK25+R5QB6FCYgQhSCn1sVcSQEAnl1pYPCfbkZciyq6jsfPjXhIol
-         wTQg==
+        d=linaro.org; s=google; t=1766052382; x=1766657182; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=eMH8wF/DkKC3kkFwo7pbjYWtxpqsSiixfrTZUtPLmDs=;
+        b=vh8DhXGIpbMLGAmpNGkUa7l6mHdGkn8ZsVxvEd36/X86Y2beLx949ux1oGWOJe8GXU
+         URjI2s/ClwZbTIfZlPP/vFWf7SpVch8hP6d1XLItq+kTOfW/bbhSY4gFGCR+g6szQP4Q
+         rTtQ+fXe09cEn5ilYaQcoLcMogJ2TsXSupfCVktcH/LuhkognN+ClT0vtMA9TgTfEQ3S
+         TIkBH1rliLYIDUS394VepaJOkx2y/l8H0zWAoMWIvzdQqO0z4nJ2JeoYduieWlsDjwbL
+         3norY9qTI8w43dcP0XUz6r6XV34Ll/mhPsCnnEE0fZkyz5qlIGKx6pFLoVF1/jWu7Rl5
+         juyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766033615; x=1766638415;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1766052382; x=1766657182;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OgxD9acskh/VQiAtEaUet6zCftwQMFxsHsnGcHh6oWE=;
-        b=irk0X5vgf2QP9BUz2D6weAVWf4I0DdPk+os8KkTFYjl+TVLOYq5BMvhqs90hFtHWMp
-         p55vG/seLvOetgxRghLBMSMja5LK7p9aqIh+r412NWB+wbTLHc0R9j+QZMMqQveuDTpQ
-         DDu4HDSas//1r3vKL1I/ccmF9qnKjz8OBdQ0ZF5yWGOTMdXxxFw6q6wQEBa+euaYYqJ2
-         +h0VL7Ef6IeBZEsqFo7aOb9F4CJHooH3RNv82z5tBwsgamZUjXAneftpJcx0bcgsddOa
-         NwLpTxM8BiNx+MfQvm9TUjVZVURXA+7LYRBGEOmimDHkSGcQjIdFSROW8JydAhiPqOex
-         r22Q==
-X-Forwarded-Encrypted: i=1; AJvYcCV6dj144S+MwoofMyKo05kfOb5VD0v7A8f7FCojc+IIMg3EUw8BS/w9s96KTAPv8XNQKkHr9U76dRwXT37NIQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxsdnVHYv+NZxmq1eIkPGCc86+4ZrBtpnohx44FupANglR0Lqxy
-	8fdhLS7mD1xxQrYQIFlb30QFsUMaDBt2nhSS77aIJoCpK67q83ez2C4w
-X-Gm-Gg: AY/fxX64w243hQwhCa+LkNM8OEc8gMfhvlAn1eWDYVWaEOZ53W92YLjgsuyH3gWmkx3
-	C2uNXqtZ/rwBTVfT/ONp9i05wbCzyEZsaiL60OOaH59m5ZQaq1nN9q1yON4Wbcz4vbmGMGDGWJw
-	8No6njDE0oirkibCbvfyUMZfsVi2T0m+PN1hzSYSOAwab+gULJtZmi32x2Oma/p93qUJWF0J/Qz
-	xn67Mkavw5c37E/muG6iOUj9C6HJdgCBcAYu1izEeJldbgNm2/4VTCQE02fIRA4NKHiDfkOdRn2
-	lt5IlPtzcMkk/bGEw2v0bwSQ5K/p/X08Pt4aGOBS+sFsuCsTFcE60i9uK2795Mz9DePZdKHU4fC
-	teSFAkFoBsqv6I+wLuk7jcD1WZKLHA7H6pEEKF4VrtLEOJccTBi4ebUpDjnp1VqNdwBfYLrWtrc
-	sYYKhbyD2LY1MkU0qlGSCntKSOcqztJxxTEgE35325aLKc4VH+pepU9Gq2vLDz
-X-Google-Smtp-Source: AGHT+IGtK2sKqghMtwNzmEIezygUub7cRsHjuKPFgrXpP47Vo2J4XU7GfKUwjyggfsFigcji6XVPjA==
-X-Received: by 2002:a05:7022:b90:b0:11b:3eb7:f9d7 with SMTP id a92af1059eb24-12061975750mr1349154c88.14.1766033614784;
-        Wed, 17 Dec 2025 20:53:34 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12061f54947sm4359090c88.7.2025.12.17.20.53.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Dec 2025 20:53:34 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <6fda7aa7-244a-4650-b120-acd66ca0d1c9@roeck-us.net>
-Date: Wed, 17 Dec 2025 20:53:33 -0800
+        bh=eMH8wF/DkKC3kkFwo7pbjYWtxpqsSiixfrTZUtPLmDs=;
+        b=DfBN107RZoywEjjzoOx38MvQ+YhscyC8QEkI6VORpZcG/tHjDrbE97d67mRzTAhlbJ
+         bbwYUmRd4QXtAWQMTsHMDBdr2gBU7QBe1MBPl+tCKv8gJaEga2en5cTe9PZU6wn2mflb
+         izzyQ9/5f7w0lk6Dg0FoiPT+5cBAgQNryfiveG6QOVO4+KHASLtk9EdtJM3XxbdKujWa
+         q0OM62oVB/JUrjZL/9OvW5AQg/5Wkw9ZZKMMIj6gDSRE9OJsffHBsQxcWFVOeztgSu4t
+         tGMctEwc8UAy/PThOHcUPxHgdWsgqaCMy8VeEYOykAWvL2j9agqRWwxeumBzHDB8EA86
+         AShQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUfTU7SOw4QAAgL/XkNmStIJca+eksehSNnSwcGURHLcU9cmHMp8Km8+XhhU8LL2msa6JZ4y5mGSTHgPTiLKg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwXpZ5AbDFJQPdHSPeWVfqmdEHnmiwFCJ3YFOmchO+JELWju7ZP
+	FD8OlKOG3kN1BOjnfwVhRuN7y93tvDBAhPV0Wi30vAqboZxxdjQ9WlbzjLv80qV48BA=
+X-Gm-Gg: AY/fxX6kQvlgBHIivgYt0mKg8y8aQS+IKDeqrNuxAIFhe7we2MzWxJGJLMzPO9mCgNA
+	NuCpJRroWfAzcinv32FEgEQZJhrvTfTfymJDpiKk2GHpIgkNoHXLpgWdJ3LY1X4ZmIQsdZzO+A5
+	RElYP7lHavS3pKGUinhRiq7mht7g6bHd12sSpHG8MPxiogu5D0mPR+wp7XSFH/gpwIVSvCBCM3o
+	3U7zxuhvvNG43btcS4ncPiI3aKWqN470Ac9mQ7o1RLze5S91ER+0TPDE1Uo6TMUUviaeSDPIsCj
+	qJzitAWpj3E3VHL71B/n5BJCqRuZr0jCqVOEfdDOwE5nnOsQ6mLQ6sBcjgjnENG0lbulZGIg3Cg
+	cVKXs0TjN3d4tVJRPDj5uJs/NRpz9KLq7/nMF5N/h9bA+jGkoSGbcrcYtvevbtbkX0CvYaowkc2
+	cRhouc3CbTH00PWacOmSWw3fU=
+X-Google-Smtp-Source: AGHT+IFA6SS4YOPlrBDtk9PjM8zZe1pqVrSvNV8OpH8V3h+3nAk0ughsiQ0KfmvcLkZxgEp6dOM4bQ==
+X-Received: by 2002:a17:907:7ea5:b0:b7c:e3ad:cd17 with SMTP id a640c23a62f3a-b7d237756edmr2384134066b.32.1766052382145;
+        Thu, 18 Dec 2025 02:06:22 -0800 (PST)
+Received: from linaro.org ([2a02:2454:ff23:4410:1c2c:7aff:fe45:362e])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8022f93e8esm185717366b.11.2025.12.18.02.06.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Dec 2025 02:06:21 -0800 (PST)
+Date: Thu, 18 Dec 2025 11:06:08 +0100
+From: Stephan Gerhold <stephan.gerhold@linaro.org>
+To: Abel Vesa <abel.vesa@oss.qualcomm.com>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Rajendra Nayak <quic_rjendra@quicinc.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] arm64: dts: qcom: x1-el2: Add the APSS watchdog
+Message-ID: <aUPSEM2AFPTmQLtv@linaro.org>
+References: <20251214-arm64-dts-qcom-x1e80100-el2-add-apss-wdt-v1-0-94ee80b8cbe7@oss.qualcomm.com>
+ <20251214-arm64-dts-qcom-x1e80100-el2-add-apss-wdt-v1-2-94ee80b8cbe7@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] watchdog: sbsa-gwdt: clamp timeout before updating
- wdd->timeout
-To: Zhu Ling <1536943441@qq.com>, linux-watchdog@vger.kernel.org
-Cc: wim@linux-watchdog.org, linux-kernel@vger.kernel.org
-References: <tencent_E88A86F3126F065BA4E3D4FC9CEB1A9A2406@qq.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <tencent_E88A86F3126F065BA4E3D4FC9CEB1A9A2406@qq.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251214-arm64-dts-qcom-x1e80100-el2-add-apss-wdt-v1-2-94ee80b8cbe7@oss.qualcomm.com>
 
-On 12/17/25 18:31, Zhu Ling wrote:
-> sbsa_gwdt_set_timeout() updates wdd->timeout before clamping the user
-> requested value to the hardware-supported range. As a result,
-> WDIOC_GETTIMEOUT and sysfs may report a timeout larger than what is
-> actually programmed into the hardware.
+On Sun, Dec 14, 2025 at 10:49:59PM +0200, Abel Vesa wrote:
+> The watchdog support in EL1 is SBSA compliant, handled by Gunyah
+> hypervisor, but in EL2. the watchdog is an instance of the APSS WDT HW
+> block, same as older platforms. So describe the APSS WDT node in the EL2
+> overlay.
 > 
-> Clamp the timeout first and then update wdd->timeout so that
-> userspace-visible values always reflect the effective hardware
-> timeout.
-> 
-> Signed-off-by: Zhu Ling <1536943441@qq.com>
+> Signed-off-by: Abel Vesa <abel.vesa@oss.qualcomm.com>
 > ---
->   drivers/watchdog/sbsa_gwdt.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>  arch/arm64/boot/dts/qcom/x1-el2.dtso | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
 > 
-> diff --git a/drivers/watchdog/sbsa_gwdt.c b/drivers/watchdog/sbsa_gwdt.c
-> index 6ce1bfb39..826469645 100644
-> --- a/drivers/watchdog/sbsa_gwdt.c
-> +++ b/drivers/watchdog/sbsa_gwdt.c
-> @@ -155,8 +155,8 @@ static int sbsa_gwdt_set_timeout(struct watchdog_device *wdd,
->   {
->   	struct sbsa_gwdt *gwdt = watchdog_get_drvdata(wdd);
->   
-> -	wdd->timeout = timeout;
->   	timeout = clamp_t(unsigned int, timeout, 1, wdd->max_hw_heartbeat_ms / 1000);
-> +	wdd->timeout = timeout;
->   
->   	if (action)
->   		sbsa_gwdt_reg_write((u64)gwdt->clk * timeout, gwdt);
+> diff --git a/arch/arm64/boot/dts/qcom/x1-el2.dtso b/arch/arm64/boot/dts/qcom/x1-el2.dtso
+> index 2d1c9151cf1b..404174a15659 100644
+> --- a/arch/arm64/boot/dts/qcom/x1-el2.dtso
+> +++ b/arch/arm64/boot/dts/qcom/x1-el2.dtso
+> @@ -7,6 +7,8 @@
+>  /dts-v1/;
+>  /plugin/;
+>  
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+>  /* We can't and don't need to use zap shader in EL2 as linux can zap the gpu on it's own. */
+>  &gpu_zap_shader {
+>  	status = "disabled";
+> @@ -55,3 +57,17 @@ &pcie_smmu {
+>  &sbsa_watchdog {
+>  	status = "disabled";
+>  };
+> +
+> +&soc {
+> +	#address-cells = <2>;
+> +	#size-cells = <2>;
+> +
+> +	/* The APSS watchdog is only accessible in EL2 */
+> +	watchdog@17410000 {
+> +		compatible = "qcom,apss-wdt-x1e80100", "qcom,kpss-wdt";
+> +		reg = <0x0 0x17410000 0x0 0x1000>;
+> +		clocks = <&sleep_clk>;
+> +		interrupts = <GIC_SPI 0 IRQ_TYPE_EDGE_RISING>;
+> +		interrupt-parent = <&intc>;
+> +	};
 
+For consistency with &pcie_smmu, I think it would be cleaner to put this
+into hamoa.dtsi, mark it as status = "reserved"; and then enable it here
+in the overlay. That way, we have a full hardware description in
+hamoa.dtsi.
 
-This is wrong. With max_hw_heartbeat_ms set, the timeout value is not limited to
-the hardware timeout and becomes a virtual timeout. If it is larger than the
-maximum hardware timeout, the watchdog core will issue any necessary heartbeats.
-The current code is perfectly correct.
+You should also be able to drop the interrupt-parent if you move it
+there.
 
-NACK.
-
-Guenter
-
+Thanks,
+Stephan
 
