@@ -1,81 +1,81 @@
-Return-Path: <linux-watchdog+bounces-4722-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4723-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33B6ACD083F
-	for <lists+linux-watchdog@lfdr.de>; Fri, 19 Dec 2025 16:33:52 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01DE1CD08C6
+	for <lists+linux-watchdog@lfdr.de>; Fri, 19 Dec 2025 16:41:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7ACF530A4765
-	for <lists+linux-watchdog@lfdr.de>; Fri, 19 Dec 2025 15:31:49 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 03210300E443
+	for <lists+linux-watchdog@lfdr.de>; Fri, 19 Dec 2025 15:41:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D07A033A70E;
-	Fri, 19 Dec 2025 15:24:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62BC832AABE;
+	Fri, 19 Dec 2025 15:41:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HVICYD1i"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iFtIVfnA"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pf1-f194.google.com (mail-pf1-f194.google.com [209.85.210.194])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26B0433BBA9
-	for <linux-watchdog@vger.kernel.org>; Fri, 19 Dec 2025 15:24:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E24533043CF
+	for <linux-watchdog@vger.kernel.org>; Fri, 19 Dec 2025 15:41:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766157871; cv=none; b=NvA22tqnj7oVDyGW6YZEN85CL5ujmYwLsMbPCnxR4zhIfGurk4pMtb3Wu6McgJDnv/brRmNgIWM3NFil9xNhv9U8lPlniyCn7d9IKAHsf+8DmPf5m1+f24uitVsnOB0kUaiDzpUxCKoPnIRilQSzKAFyptp/vIX6pniCs1li2uE=
+	t=1766158871; cv=none; b=gy9Q+s62Gm+PS8kiPvKGIgqGG9tj/1SXbIxB8gwzQBHVdMC2GUWDG7ptCZuKhM209KRnt4ClbCsrD+QLAn3oyTwsDyco4W1YZbF6ulqXOilILF9XZoYk+lg5ChsL6WTJrjL69/GE5L37wvaXy7IX+/K2MFl5SK7MTdb2FqZ46hw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766157871; c=relaxed/simple;
-	bh=pyaIykGPB70j837ze1Yr0lmYLtFDXAzteGopj7k4P2A=;
+	s=arc-20240116; t=1766158871; c=relaxed/simple;
+	bh=BRrNcZvVlDwSwnRRU6a5m2aesMieJkkg9nkD+8nzge0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cJ4ea/6rC7DhhW0qYBO0fYR1HEe7xjRtbtlvKl92uz8abKBnMn96MPwjbVNyibirUiMKOOYqo6mbpxevqTX3CNCMVuJdjU2Y5FkO7jR+qEReI4MF6aEQgAlrqZo7g3jxb7ygG7JDjDwJLNKuCV44Fwfaef6oNMBH6VR0TIqVsks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HVICYD1i; arc=none smtp.client-ip=209.85.210.194
+	 In-Reply-To:Content-Type; b=T76QlQnvRW9afUVrnimh4c/anJxSbSER66+n92i7tFDvJykt1kPv54261+SMsjchV19RkaynIRLhZ2jmVS66fVZwZfzqtF9LEmk0T3fkn0190QtgoDgFsOC0QiVCaSgj7pJsRbmyYwThIy04Tdx4hea3PQA94uvh1yv2solOveY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iFtIVfnA; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f194.google.com with SMTP id d2e1a72fcca58-7bc248dc16aso1659561b3a.0
-        for <linux-watchdog@vger.kernel.org>; Fri, 19 Dec 2025 07:24:29 -0800 (PST)
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2a0ac29fca1so17055385ad.2
+        for <linux-watchdog@vger.kernel.org>; Fri, 19 Dec 2025 07:41:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766157869; x=1766762669; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1766158869; x=1766763669; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=KXMyp0AmN42Z6/oPi4y0Uh3k5P2iSKmKeUWrXrw/OhI=;
-        b=HVICYD1ij2cv4eM4QwRujz5hmSrSMIP3N7AZTBLZrOV3aiISFaDg72wWSJXZaxxj1d
-         11SWWWzqLN9Ihkh6GpeNlSSx6/xE+uXW1smKk+hXYwiKg+zc1kTc0rv83lZBwsBYswyI
-         PUmXGQ4pu4I3zmQ9XAT7E4TlnblQXir61deWR0oWTyOWLtDOdKccZrZ/EZFgB7U9BpAV
-         /ZauCkiMGFha3DryhZgsjPefwtgGrpKqkaFimi9+F109/XQInyNzcUxtMoXXPuolIudp
-         WkD2jrxM7ho6FBSCACQm0vnpr9Rh1vYfLyJITDabF/eP/sORlLOBBJzeQrd6926+H1OZ
-         OBTg==
+        bh=IPXvnEl86h7uXlbydiQlqn600f4rTYS35PhjEa5747s=;
+        b=iFtIVfnAtO1qW3qBvxdns8ezPF6L0ayGcwsTRztB9fbtbo/DHO62xPPZJmEQ1Pq3wF
+         u4K4O1GUXd3omsBvlYr1LlR2zHJipXeFjOCf66GyCz2k3A6vIwYuMUwDns68U17PqGxk
+         qKSZ64+k0gBKpowVEPZStDu+ZFi3HEIjOhQZDEOeJl1itpa+wF3JRxNc4nAgTDTS0yOW
+         6lpKze08D0aGOzMu7U5dbjv14dx7Aw1HZ3CfAR2Nn7A0UZxzkIGOOfzi/sY+N8+VuCyC
+         W831NVhOQRdVdLp06Larh+lyZe5q2TEZxeV3UUuDw3rrKSaB19u6RncdRtFTQM3CdWR2
+         E9hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766157869; x=1766762669;
+        d=1e100.net; s=20230601; t=1766158869; x=1766763669;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KXMyp0AmN42Z6/oPi4y0Uh3k5P2iSKmKeUWrXrw/OhI=;
-        b=IxQ/9xAiwjVqm4tod9FSTaeJUxxZHVHHUc2u6+48cV3JNABFhSZLLIjdq/yp3xp3ES
-         eIRs1TfWU/zWKzAKeHs21/BPlxtWdUUNWae5wzLW8JVyiTGfwVsm43S0xZqNfaVejxV6
-         F65RQfbF3YE+15rh3Hp3PeBuT2aXjCuvENNh7np7Dk1ggfluDNyY8RlDJXpDG1DAqmtp
-         +AWd9AZ7IQwc1tgLqwY7fhXG0m4ahNcfQah1D/2Hptf+IMnjpCOOxO32NH59R3xv8DpP
-         t7SprK0akBIVxsP3Absbg4ds7Z6hVxOOiEa56Z89B721usn3xR1PP3w+3db6+HNk4kyF
-         SMOA==
-X-Forwarded-Encrypted: i=1; AJvYcCU1pXk5oFl3wC7XcFO0xOxKdbK5UyxMkRP0Vxl0/qatWKxbP0qLve3Jehp1ZnpFAEdFiweWtNTEOpo2GxHEQw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxcUvuN1SgFHAeSv7shIAfAdzbYTzUW3InPIBjraz7HGV4sZihA
-	ykvrrJv6n6NITGrCiT+RFhc5119qOHjzNz3CJWWgUtN+9LVj3UvvR3/L
-X-Gm-Gg: AY/fxX6L+yiK733j/8qUzFoGxop6j9lAXh3ZPjVKN7FRcpkygK2ZGNgMJA+RnPJ5oZy
-	JZHu28cA111DYF5bBiQ1pwQyPSJV8VHbYhQ6miahnEBQhXudu9WNyLjAvHQTz0+pAJ+5hpZurIT
-	m9wru0YPQFV//6ViNHAS2GD1ZWQea+7D8XWc6My1Fa7EdKCt8mIAHp+fGdkqhFe7T8avCuTLT8l
-	XtUk4IVD8pxFHes+/5dPEmylcJbPnOtRfmtnzhkmEq7LKUh6hl2k7a+IyX0cbgMEBA6L2z7RQiL
-	Ji60OyZmnFRzxMXE7t2AJFg8rbfRnYBxWJLAaYk45Alwyv7Erko7jZ7uMzBTXjAkJLPhqWiM/iX
-	8SkXsuYShq/yrJtP5YTozRk1eKwC8iQncXSxb7AcDcSZS9zulJfulIiCrbLoSO16xzE/pnG2RG2
-	v8yHB6qDnQvovU7YJCHo3a7w8EflijmAZYbhzKP3jsL8H7xHWFQaLXV/WUZ+wf
-X-Google-Smtp-Source: AGHT+IH3aUgWlSLmmNgeXJUtVuAJkCaCPzHfOPGwYGlINzMZ5QrtjAjTFU7dPdRreuBeByHrfX4TqQ==
-X-Received: by 2002:a05:6a20:7d9b:b0:355:1add:c291 with SMTP id adf61e73a8af0-376a75f5bb2mr3608090637.10.1766157869355;
-        Fri, 19 Dec 2025 07:24:29 -0800 (PST)
+        bh=IPXvnEl86h7uXlbydiQlqn600f4rTYS35PhjEa5747s=;
+        b=H37DX8kqMRfVDaaipd/NQXoM5ReOrOuuYwzt2Jy1fqIQUG/x/qvYbYgDC5PZZm21jQ
+         XTKgjIWYxgmEOjI3IUyFYuVipyoQ6NdfZMTR0n/A3qWcy0LO0qf4nUs39iHGUt90pvmN
+         d3owCPWxsZi8+bdvdXz2UwrGLpj/24RFcXhke7xM2luxz1H2MmSpao8hXmMQ4KpkNvUY
+         xAeDKgIcKSE3/im1GJ0bzfZ6xaD3pwHqGTKFZ1hOZQUWvDVvHZlBbcTrBPsXetZPQl5h
+         EGNujl5kT+Y1GlajV6kRYH6opPOlqUwVQh9szkS9GKYRMPe5OB9MiBe9t5dVM7TuyZx+
+         WI2g==
+X-Forwarded-Encrypted: i=1; AJvYcCX2bWmkT93EDtiRzM6TqL3ho7Xh0h72t6A26kZSvjr1UKFcrbW14Da6Z8aAHgLU/Ry4dRfr3VBdADy7FIqPng==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzri9dosGIw2YSMEnXNBNe9eiMOGj3I7oHa3DEmiQ/t1+ZZ5aJB
+	jEKvyJcc5aFwBkZq/KeOMbGdC4PrQBK7mbk2YgnKujJm0WVRnHjTVj+V
+X-Gm-Gg: AY/fxX5ml+xwiPLIwLgbpErHWHQAqaT6A7ILPslS8oqda16cgaHGOJnlhjIQjU6mLn7
+	zYsnVdToOuLB/wDIzuWH9/LZZrs5WPCzSLy9/LzDIU2YLyY0qfmr2c5W0jFSbaMj3uhwcX9fDZF
+	/Jy7Q2aprLY7YnJYclJw2kjhKFF+/YbnayytGmJSE8kjD+HIE9nnpNHrpqJzRAA5urPwxYX5TGl
+	M8AVnjw+px9okB4MzSjs31nsJxfkyKgN2ffNroXETdFxCmBOg1oE7iE5iTD9XpTkp4g4Zd0CMGf
+	baMQJcy1GdGwIDX44YE0ozgZorT9H14PlexwmY4G/mUU/Nw3CggDOZx20qoJRktNu8YUFbRP3kK
+	D2dKLEdbQv7v9Rh5L7G3p1IOpBA/R88eipERq25GOFqJp4QzPPfIsQOHC9tfQGKxCZpna1YcRCK
+	3v0FqludrOisfuKR96C91TN2IaDHWuyhw1d9oel9EERVmI0banuwRgmI6HtNLV
+X-Google-Smtp-Source: AGHT+IHqFQr9VCsCz94jfHlAbFf1IeLSnEtxm0lVZUjn+gonTVrzhD4100xdi7kegdd/YqdS1Bi3rw==
+X-Received: by 2002:a17:902:e748:b0:295:738f:73fe with SMTP id d9443c01a7336-2a2f2732287mr32089865ad.30.1766158869094;
+        Fri, 19 Dec 2025 07:41:09 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c1e7bc69728sm2495572a12.19.2025.12.19.07.24.27
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a2f3d5dea1sm25677395ad.81.2025.12.19.07.41.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Dec 2025 07:24:28 -0800 (PST)
+        Fri, 19 Dec 2025 07:41:08 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <6dcc54b0-7b52-4759-859a-983edb1a8337@roeck-us.net>
-Date: Fri, 19 Dec 2025 07:24:26 -0800
+Message-ID: <39f2a3ac-6906-4970-822e-d1f5cdced563@roeck-us.net>
+Date: Fri, 19 Dec 2025 07:41:07 -0800
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -83,19 +83,14 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/3] dt-bindings: watchdog: Document X1E80100
- compatible
-To: Abel Vesa <abel.vesa@oss.qualcomm.com>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Rajendra Nayak <quic_rjendra@quicinc.com>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>
-Cc: Stephan Gerhold <stephan.gerhold@linaro.org>,
- linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20251219-arm64-dts-qcom-x1e80100-el2-add-apss-wdt-v2-0-fdfc6ba663e6@oss.qualcomm.com>
- <20251219-arm64-dts-qcom-x1e80100-el2-add-apss-wdt-v2-1-fdfc6ba663e6@oss.qualcomm.com>
+Subject: =?UTF-8?B?UmU6IOWbnuWkje+8miBbUEFUQ0hdIHdhdGNoZG9nOiBzYnNhLWd3ZHQ6?=
+ =?UTF-8?Q?_clamp_timeout_before_updating_wdd-=3Etimeout?=
+To: 1536943441 <1536943441@qq.com>,
+ linux-watchdog <linux-watchdog@vger.kernel.org>
+Cc: wim <wim@linux-watchdog.org>, linux-kernel <linux-kernel@vger.kernel.org>
+References: <tencent_E88A86F3126F065BA4E3D4FC9CEB1A9A2406@qq.com>
+ <6fda7aa7-244a-4650-b120-acd66ca0d1c9@roeck-us.net>
+ <tencent_8FC8A3A9BF39EB3529C9320DFC259E0CE607@qq.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -141,35 +136,28 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20251219-arm64-dts-qcom-x1e80100-el2-add-apss-wdt-v2-1-fdfc6ba663e6@oss.qualcomm.com>
+In-Reply-To: <tencent_8FC8A3A9BF39EB3529C9320DFC259E0CE607@qq.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 12/19/25 02:00, Abel Vesa wrote:
-> Document the compatible for the X1E80100 platform to the Qualcomm watchdog
-> binding. The HW implementation is compatible with the KPSS WDT.
+On 12/19/25 01:46, 1536943441 wrote:
+> Hi Guenter,
 > 
-> Acked-by: Rob Herring (Arm) <robh@kernel.org>
-> Signed-off-by: Abel Vesa <abel.vesa@oss.qualcomm.com>
+> thank you for the detailed explanation.
+> 
+> I misunderstood the watchdog core semantics here. With max_hw_heartbeat_ms set, the userspace timeout can represent a virtual timeout and is not expected to be limited by the single hardware timeout. Given that, my change is indeed wrong
+> and I will drop this patch.
+> 
+> One follow-up question: in my testing, "/sys/class/watchdog/watchdog0/max_timeout" always shows 0 for sbsa-gwdt.  Should the driver set wdd->max_timeout in probe(), or is a 0 value expected when max_hw_heartbeat_ms/virtual timeouts are used?
+> 
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+The value is as expected, and the driver should not do anything. A value of 0
+means "unlimited", which in practice means that the limit is UINT_MAX / 1000.
 
-> ---
->   Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> index 54f5311ed016..f2c4bc900e5f 100644
-> --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> @@ -43,6 +43,7 @@ properties:
->                 - qcom,apss-wdt-sm6350
->                 - qcom,apss-wdt-sm8150
->                 - qcom,apss-wdt-sm8250
-> +              - qcom,apss-wdt-x1e80100
->             - const: qcom,kpss-wdt
->         - const: qcom,kpss-wdt
->           deprecated: true
-> 
+Turns out the attribute is not documented. We should add it to the ABI
+documentation. If/when I find the time ...
+
+Thanks,
+Guenter
 
 
