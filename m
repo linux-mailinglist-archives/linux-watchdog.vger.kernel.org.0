@@ -1,106 +1,114 @@
-Return-Path: <linux-watchdog+bounces-4751-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4752-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C860CEC9BA
-	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Dec 2025 22:51:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6606CCECAD3
+	for <lists+linux-watchdog@lfdr.de>; Thu, 01 Jan 2026 00:41:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 193B430084E3
-	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Dec 2025 21:51:08 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 32297300F9F7
+	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Dec 2025 23:41:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 337C530EF63;
-	Wed, 31 Dec 2025 21:51:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3C8B30FC00;
+	Wed, 31 Dec 2025 23:41:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sUhkrStJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nhNLG7KN"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DFE030E84B
-	for <linux-watchdog@vger.kernel.org>; Wed, 31 Dec 2025 21:51:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A6D930F52B
+	for <linux-watchdog@vger.kernel.org>; Wed, 31 Dec 2025 23:41:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767217867; cv=none; b=S2haaKdukX6mE6a2uiSlPcj3V/mFYK3E9/WAJ9snRc9ewGjXOUKvBaJKQ+l+imxvGigHGbwF77HiqH5HVBgrmHxX67+1eTvqLgCvaqya619kYiyljMYT2te0H3YKEwtJ+dWp/AeC09dYJfD1+qj/ZEuvd1Vim6ivdzgRSy2Wzps=
+	t=1767224482; cv=none; b=o2Z3z/igjJ2T2hnUOAjAolqmeTS+r34LJL/7k65H+/v41C5uUqlC9g95N17NrVgrqZrZtPLI71wv36SgBuKtb1UrkKONB7/qPQcs6Zn6UwWA67Hrx3TtDGceTgVbQiP1vkWjaU68EIhgbw4N1RIx7znFPFlkT4zTgen7BY7PC9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767217867; c=relaxed/simple;
-	bh=1dgOiCMHW+Z7a4Iq31trxTmP5l0kzHmrGC9ib/clXB4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mn04MLfQVGDCg5o0dKbBOZW2y6BiQe6haEwca2eArPw7zbpE1xzQbNC2DV776TgPoW5dY2Il+dIUOC58pDRaY0lRcEqPLqMEYAzAPfH5FEv7fwto6cPtGGzgh8M0X+ar9nnf3Af4SBH7eleu1ubwlnQ0aPewhM1F2EjQPPCGdiE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sUhkrStJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A34F5C2BC86
-	for <linux-watchdog@vger.kernel.org>; Wed, 31 Dec 2025 21:51:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767217866;
-	bh=1dgOiCMHW+Z7a4Iq31trxTmP5l0kzHmrGC9ib/clXB4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=sUhkrStJSwjGZ2XRy9OJb6HUvUKwET0l9AiU6cNZosCauIHjFKzQ1b7TOKHLwxRdc
-	 b5nPDpnnlCBqd2zATN+TSwKN09UnT06oJMorI7qRZ7tPu617nyFv3V/JLc41jgAqRO
-	 XU6yU5g2bc8G5DLtO5Ozd0fkI+hOKqEXLWbIojJAu9ZZq+xWNlLQtzqq3P3Qsr3p0t
-	 gYJsWSrl/Xsmn9vIJo+Et94QdgZtWVQIlhq/FSVhksJkp97iiSl60ZHTNxClwhfB4M
-	 GKWL2T1hvzLJoPdTS5xcn/Tl7IuVvFRWwIxokPYKkN8VdOAA4Gf3DDXugPLUC0V6Df
-	 uho202+Fyh+LA==
-Received: by mail-yx1-f49.google.com with SMTP id 956f58d0204a3-642fcb38f35so8420708d50.1
-        for <linux-watchdog@vger.kernel.org>; Wed, 31 Dec 2025 13:51:06 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXhC5nkJMfs5jcS6fuRaR9Sz4EUP8p8IoZR/QZzGb2WaYoPjG6F9dJBHJydc177VRbwvwNH0ixm1mVKutH8qA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxy46yfMaGWv9NfXO6rtD9gpNmVmOzGuNuqBoUh3VzzpJ0b4tyn
-	w90YxqrBhc+jDEJ0f5G5X0BxKutIoBOdlDWUC7+EmllJlfNqwp74fWvcYwGic2qGSYBYv6SiwmP
-	YnP6QMAJ47B8I6dUBTEc7VtGQMKwIjdE=
-X-Google-Smtp-Source: AGHT+IH29S99+HYf8SuC4lZx27OfrHABr4tetzXdccaN2xUVWn/wgVS/NlKdgLQVr0jKfoYAGzsi8EIIhZ5XvfkifzI=
-X-Received: by 2002:a05:690e:1486:b0:63e:b41:cebc with SMTP id
- 956f58d0204a3-6466a8395admr30714655d50.17.1767217865999; Wed, 31 Dec 2025
- 13:51:05 -0800 (PST)
+	s=arc-20240116; t=1767224482; c=relaxed/simple;
+	bh=BWy1gXyOOWYNnYUBz6Zo1eDM/lnD8SOnC63pK454g8g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=m/lyR2Xzbj4CZxFXCA/XPAU2wXmaGvOgwQKKbIVxPvqyA2hXqbsXtZA5Fz3qWIVfXcooNmkKu8rHjH4Wb1+v+NaL6bQhFwEDAG/8YLRGiIhnnPYC/28f4oy383tzpFn2kdBRho+nrB/mVIA6ZjjV9vjuv77Nsj5Cq4REcMdKj+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nhNLG7KN; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-c3e921afad1so369811a12.1
+        for <linux-watchdog@vger.kernel.org>; Wed, 31 Dec 2025 15:41:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767224480; x=1767829280; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BWy1gXyOOWYNnYUBz6Zo1eDM/lnD8SOnC63pK454g8g=;
+        b=nhNLG7KNf8ryHZsDsjazvvhjhrSK2fojkHdAZerUfZYxrEdshByrXlaaZ0AAGSAOvj
+         oyESHjwZyipucGgaPE5q8fB0tUUZ29ov3ckVz6lpP5OTDFl5VF15FDlsoj7LI6bUNPrx
+         VjY2oYxtJnPvmqkRi6/J0YiZn3nqwfqKrORxgdbxEIROWOou10nv5D4UJal9vxHckzSH
+         2p+UR4KApM6J2n82Wlvb5m2G4LzYgLHQ/wr1Ftbef6s9xYyFKeJFp0d6VTTJzyT1UZsP
+         2fOI8rbvlObGGgn1EutaEfAdjR5Hn++6FI9TXQDdpfEBXDg5E3l3qX30lsVt8V9I7pHr
+         jguQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767224480; x=1767829280;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=BWy1gXyOOWYNnYUBz6Zo1eDM/lnD8SOnC63pK454g8g=;
+        b=fKHu5YebMMqdzR2FMqg5nebMVmaDLGdPuIbTETBYiCxJ2IFY0hNURnLnn3EenbG2Xe
+         NFMwFE2Q8Rwg25o6gapO0tY8j350ofd9U6HTRr8cDEyqbi+/z05V+nzSmGqE0HMo7mTR
+         s9YKISaycs0L+6n7Qi9r9cVfIWpOQUCFepNaeOUYc0vjYOZsQBJj+YTnl1StLy1osFLB
+         KKA10voxs/ntn7x4LzVid/VwAmbkDzLL87uomIAs4yP5vQnU26zSRkcuraynAFNlONb0
+         7W7VsR06UVbGDd87ul1fPbigMF2VgHNS/QhA71g+S/5dVpF8kdJrH2W1Fa0RReG4PeYL
+         S4aQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVZ+MLlEhyj4MYV2a94mBan+5nopPEKgmR1vnInHMuvuqN5nCpwvd2wP/ODF66gLeWPqeNydWq6zIfeVFL4og==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzgh7rlwl569KIkGJO1xRzIlSAPyQD2bW4dTRr9N9bbQkpfCr9n
+	eBFcSMRuotb2G+SY4fjymB+EgY+dvPEIS03nreUxI1xzHQXhodVGLhrD
+X-Gm-Gg: AY/fxX6MMM3e+pCcvjn9jcOu6Mxutrv4LfLBU/sY8BHuY1sT9bdl2trMczT0ZSlibxw
+	6fWNMxiugs3h0GrzgNv66FH7tHc/MoNh4tQKEYpefi2ocUAX/ndPo3v6+WvH3J4NtY9DgOYxNkw
+	Jmo9878tgtiPtezdCNuTH/aeiGnl2rUTTstlMlodPVIPj55ZKSxlvB68mbtpUa5MNyE/45I1wMp
+	nEDQF9vAqtmNb81Q5VoXppnbcjbfGHr2GeNGPgTK8MUbpf3rKQXyD0Ecxd/w3GTD3QTYi0LX8jY
+	GjjLJGq7jZvxniywfMEcAj0BAQBe9tNIwaiQEYQcIYuizDYjnr36eA3KVzYI03olvSDIKXF2ZP0
+	jOWxTFUjQd7BSMz30Av/NteeCKRWKfdl6f3KTtVLOoW5dtT0shv4Ff0oX3ORumDWz8CNH5eAoFT
+	RoAklGxP9GBiYYzWutHXW7FixJ
+X-Google-Smtp-Source: AGHT+IHdS1XCFIF/s+R2MzEjCr3KsXQm81WSnRd7sNkVOMb7Y4hp3EFixXPpBvYYArS7H/0Gwn6dbQ==
+X-Received: by 2002:a05:7022:3b8d:b0:119:e55a:9bfa with SMTP id a92af1059eb24-121722b46d6mr35420452c88.22.1767224480383;
+        Wed, 31 Dec 2025 15:41:20 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1217253c058sm143562327c88.11.2025.12.31.15.41.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Dec 2025 15:41:19 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 31 Dec 2025 15:41:18 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Nandor Han <nandor.han@gehealthcare.com>
+Cc: wim@linux-watchdog.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+	kernel@pengutronix.de, festevam@gmail.com,
+	linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] watchdog: imx2_wdt: Allow to continue in low power
+ mode
+Message-ID: <ee2771f2-539d-4bb2-adc1-663e39488148@roeck-us.net>
+References: <20251229145000.421426-1-nandor.han@gehealthcare.com>
+ <20251229145000.421426-2-nandor.han@gehealthcare.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251212-dev-b4-aaeon-mcu-driver-v1-0-6bd65bc8ef12@bootlin.com>
- <20251212-dev-b4-aaeon-mcu-driver-v1-3-6bd65bc8ef12@bootlin.com> <019aa49f-fe59-488d-aff8-f07cf07ee68d@kernel.org>
-In-Reply-To: <019aa49f-fe59-488d-aff8-f07cf07ee68d@kernel.org>
-From: Linus Walleij <linusw@kernel.org>
-Date: Wed, 31 Dec 2025 22:50:55 +0100
-X-Gmail-Original-Message-ID: <CAD++jLmKL4afaOn_eka6v=j_Wu0orZMb-2NbPZgP4SM2q4V7qw@mail.gmail.com>
-X-Gm-Features: AQt7F2pjZLgNxaiWJYqspkMb-XGMxgFbeL4lckn8FGNkckGZmMd1GQVA1LvpjDo
-Message-ID: <CAD++jLmKL4afaOn_eka6v=j_Wu0orZMb-2NbPZgP4SM2q4V7qw@mail.gmail.com>
-Subject: Re: [PATCH 3/8] dt-bindings: watchdog: Add AAEON embedded controller
- watchdog binding
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: "Thomas Perrot (Schneider Electric)" <thomas.perrot@bootlin.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Bartosz Golaszewski <brgl@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, 
-	=?UTF-8?B?SsOpcsOpbWllIERhdXRoZXJpYmVz?= <jeremie.dautheribes@bootlin.com>, 
-	Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, Lee Jones <lee@kernel.org>, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-watchdog@vger.kernel.org, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251229145000.421426-2-nandor.han@gehealthcare.com>
 
-On Fri, Dec 12, 2025 at 9:20=E2=80=AFAM Krzysztof Kozlowski <krzk@kernel.or=
-g> wrote:
-> On 12/12/2025 08:41, Thomas Perrot (Schneider Electric) wrote:
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    watchdog {
-> > +      compatible =3D "aaeon,srg-imx8pl-wdt";
->
-> No, that was discussed many times on the mailing list already. Fold the
-> child into the parent. Your driver model really do not matter for DT.
+On Mon, Dec 29, 2025 at 04:49:59PM +0200, Nandor Han wrote:
+> By default, the driver suspends the watchdog in low power modes (STOP
+> and DOZE). In some situations this is not desired.
 
-True. For an example in Linux check how I spawn a watchdog
-platform device from a timer node in:
-drivers/clocksource/timer-ixp4xx.c
+Following up on Krzysztof's comment to the devicetree patch:
+Assuming the watchdog is in low power mode while the system is
+suspended, it is all but impossible to imagine what those situations
+might be. A reset by watchdog after the system is suspended simply
+does not make sense. A system which must not go into suspend mode
+must not be permitted to go into suspend mode to start with, or in
+other words suspend mode must not be enabled to start with on such
+systems.
 
-It's just one node in the device tree, in Linux it is in two different
-subsystems but we just deal with that in code.
-
-Yours,
-Linus Walleij
+Guenter
 
