@@ -1,209 +1,109 @@
-Return-Path: <linux-watchdog+bounces-4753-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4754-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 951A0CED2ED
-	for <lists+linux-watchdog@lfdr.de>; Thu, 01 Jan 2026 17:54:32 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42AF9CED400
+	for <lists+linux-watchdog@lfdr.de>; Thu, 01 Jan 2026 18:51:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 7E98B30047BA
-	for <lists+linux-watchdog@lfdr.de>; Thu,  1 Jan 2026 16:54:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C4CFE3006AA3
+	for <lists+linux-watchdog@lfdr.de>; Thu,  1 Jan 2026 17:51:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C773223A9B3;
-	Thu,  1 Jan 2026 16:54:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66907224B04;
+	Thu,  1 Jan 2026 17:51:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aKEkR+fL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hfVTA9c5"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98F30405F7;
-	Thu,  1 Jan 2026 16:54:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C93531A0BF1
+	for <linux-watchdog@vger.kernel.org>; Thu,  1 Jan 2026 17:51:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767286469; cv=none; b=j6rw4AuUW8QX4q906egFX/TZ0Cfdu3XqBYQr84OPeGD69IHDVfyVc7yd1+lZj5CrYAmyKBJ27DHicDsPUSnSvZWTIR7QusKnZtfthcZDVp8os7JAOnkmQlxD2z5DXcUxtfQjTeO9c9A9hVESHgLuXNyrARFI/cgwJJMQbKXq6P8=
+	t=1767289871; cv=none; b=ti8kmig9b3Pg2tg1QWy+UAxMpdsdUeMlXlC9l2TAGOlrTr4IdWXrOGFbcfHTZxWwE3KvDIHUq7yXw8tGnprdXkir8HfPjlJj7l/fhU6K01a8+sKw9PwzcTL2U2WvYUKQeT3Z9NBvFBrCW9SCVQGEaaap48X9ku6XK4T4hhXa08A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767286469; c=relaxed/simple;
-	bh=nq6v8jCixnAalf9SHq9b05ejaN7vaO9MlQ1lo+AMhQg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=gj+kVGg+mkxIO886M2UhGNaB63ONmflf5SVfYa1vJlT++XR7p0QqDFrK437KK1DujhWu7ZulM6snmv9RkjSwyOzSL31WB4Bm7ACgyUcZvc+KL9m+sxGO7jlWJ+F4PZPnGoK/ePvOVjYxY3hpdLTnxharBAyv2F0V/b4yZAGS2sQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aKEkR+fL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 38DA2C4CEF7;
-	Thu,  1 Jan 2026 16:54:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767286469;
-	bh=nq6v8jCixnAalf9SHq9b05ejaN7vaO9MlQ1lo+AMhQg=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=aKEkR+fL8cxdJrEBKvL3CcqKy8V2bq+QJ92460JJNXgAmJomg65HVzmSAfxJ4D2cr
-	 bAEctdvy9JpHnE7hdvRrejOU8iFBlVKLwGBL4Mqa44X4DlqGLwcrUmndYSU5Y6OdYx
-	 MbpIN+ho0ESlS4dm4Cm2eOFiUMkoLBCAcRTswg1l7ozE88g6aV+IDUl7a91tjD2mgO
-	 /CQoFUcan++mJYa+z9ve+NjCJqFpbZK1+VzxU25l0KZCia3vqmVbu0UOLqmoAift4C
-	 1gbaTxlFi92J9Er9nrQMQ7EExLsQiUPvSKC8fhyqf9CLtPeDmm6nG8LeSWev8wQSOU
-	 7W80he3HPiZ7Q==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 288A5EED615;
-	Thu,  1 Jan 2026 16:54:29 +0000 (UTC)
-From: =?utf-8?q?J=2E_Neusch=C3=A4fer_via_B4_Relay?= <devnull+j.ne.posteo.net@kernel.org>
-Date: Thu, 01 Jan 2026 17:54:22 +0100
-Subject: [PATCH RESEND v3] dt-bindings: watchdog: Convert mpc8xxx-wdt to
+	s=arc-20240116; t=1767289871; c=relaxed/simple;
+	bh=+SuxnZuOwBtnUHrco5G/8HwaRgy8Mmuz80am3+gdY0s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XT2TAktED+Ku1vlwptkRIlcUVhER3UZzzsUDMC/PQ/j2dm0fvsPiwEa9+aECi1GILCLUxAR334OK150jNNOrupyQlxCOMvNddHa2xI06GxjP+U8Q3Zif1Anpp0MKi8lH6kVXyDamiZ7p5W8VMwd0fz03d9nX1RdLIXjctU0GFHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hfVTA9c5; arc=none smtp.client-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-7b7828bf7bcso13609929b3a.2
+        for <linux-watchdog@vger.kernel.org>; Thu, 01 Jan 2026 09:51:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767289869; x=1767894669; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0jj51h0hnz/QKxpvGSIa9Sv1MaE6xhEm5WI7a6VOKxg=;
+        b=hfVTA9c5BPfPqSosNllmgPzi0PXxb1Gq4qzIn1NDH4v/XCQ4Hh3FWJCTBxEnEa8nN4
+         kmC3lV5kbnfErKmPqgFUjewD85RSbeDA7qFJS+0Z28fRraghdLuIadguaR7qutcMsD+g
+         fOJ3GP6JRvmkC4FC65vZ02hblMTeOzdY0af8qVjI5iLdH/MuN/KT1bAc3lmBqlg8fmRK
+         SL+BlKn2McE1OKcNzAGQ3eRPLfEpKiw5n9a3GYWC8+KmQEsx+qBFBN6nABbGAzCKtAUy
+         rIVfr7dDIRG+F9TRqwLAWD/q+JUZRBvLW4FlK3aZin+zQ84sBmAX4/dp5kZ57v0csLga
+         Shug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767289869; x=1767894669;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0jj51h0hnz/QKxpvGSIa9Sv1MaE6xhEm5WI7a6VOKxg=;
+        b=xHjBPp3/bmqtdzl2gN2prOkMZ3Kef9bdP9GuUCQYOXGSSgiYw5Ap0akkGYTWrTo8F2
+         vOkZ30TVB38qsfatWrvppuOHtkBH+4WKYqpKffD9+1GC2Yd5J7r6y/ZpbVi4LuOIwse9
+         73KIYTbzD5cLMZ3fqQRNfxKMq/3Yu6sDToFaCurMmseCNwTAtQquHnWqd2X7+19DvUtP
+         D8/v4eGmLZlOBE0aYpPyT75V8HX5Qvyok+Y8BEABtA4/lgsp+KofUyRWf+P1RUlXilV7
+         RWj2q7438ciZn1YOTCDYOh5X1tzG1AhJ9TVfqdUNkhuSNQLq4FU2ICt8dqGCwp+owJqa
+         mK+A==
+X-Forwarded-Encrypted: i=1; AJvYcCULU3F+I+UovMFihwRidlMZ7R3VLFGuTo4u/gbdx/KpbBGf1eQUSJXwCltM5fbj6u5JciIxn/ThYA/+jXI2Ng==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQieWokNbiCi2rfOizrMJOkn0B+hqm0qOu3pfN7z85Ocnv6Ay5
+	EitaL+E+se30lslgAsrXb9xWmiHAiNhC6jU5u52B4ou/efezdp7A/tW1
+X-Gm-Gg: AY/fxX5flBvUTSiHRAaBHXlArWCcQHVNXAAw6iUCzdaPb9MP2QYSpDLluMX5K3UxHlj
+	6C8F8sbNF45XrNHhCkasPN3ONjJos4ionIbeQoUC7y8cdEkPgAfbcmzrY9Xcyrtl0tWVGa/4JKC
+	JKHL0tV4tT9siwMDZu6IfWsS0izl9MkqRtSQ+QJDvKAJ+907njdoDPnvnmwtQpbFs2zr2UKCTr/
+	xArZ0ga2gMOKDrXBva1S/T6mZeQFMPYa7ZYkGameH3qOqJSQRGyUHQNp4H77CmGT1J7Bv8Ixlc8
+	kNOxPIOUwa9VIP7V8LjsGqvcnL1d9ahwaDQh1qGEgo5BHpgLSDFj0BbVcllvlTR+edA6xggC+e0
+	JHYQqo4attXrpUJeUCpZyKJw6HJTRtNCnD6kSjTjjdefdmihkIQ3XsYV5XCCpsHBk/Jvwtn5EKv
+	zzsAjplbFSz4UVa8fA0CCsH/or
+X-Google-Smtp-Source: AGHT+IFsQJ4bAmzJ+Reis0EcfO56892m2Lru8k+ihnYSVUjClPj1CJFSHdmj8mSH6IKO+AaaRLP9dQ==
+X-Received: by 2002:a05:7022:42a4:b0:11a:fe6f:806a with SMTP id a92af1059eb24-121722f65a3mr42792371c88.31.1767289869024;
+        Thu, 01 Jan 2026 09:51:09 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1217254c734sm152212026c88.13.2026.01.01.09.51.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jan 2026 09:51:08 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Thu, 1 Jan 2026 09:51:07 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: j.ne@posteo.net
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-watchdog@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v3] dt-bindings: watchdog: Convert mpc8xxx-wdt to
  YAML
+Message-ID: <74226532-e501-414e-87a3-5a1b54e0b9fd@roeck-us.net>
+References: <20260101-ppcyaml-wdt-v3-1-9d59c5aee03f@posteo.net>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260101-ppcyaml-wdt-v3-1-9d59c5aee03f@posteo.net>
-To: Wim Van Sebroeck <wim@linux-watchdog.org>, 
- Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- =?utf-8?q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1767286468; l=4148;
- i=j.ne@posteo.net; s=20240329; h=from:subject:message-id;
- bh=bB23UQDjneYN1/x32YaH9AR28whcCCI45Acz4U/Ao1Q=;
- b=ohP7I0XkNKWYzdv0Q6D5+1rjodHTcz83v5nwSxuoDkFw2DqMMtwOg1vv6gTstu/tIE4HTvdmE
- JOC/tkYDAY3AcJNgA7DFG1M8nnumer9Tbln+A0ZV7tP47ndeb5iosJL
-X-Developer-Key: i=j.ne@posteo.net; a=ed25519;
- pk=NIe0bK42wNaX/C4bi6ezm7NJK0IQE+8MKBm7igFMIS4=
-X-Endpoint-Received: by B4 Relay for j.ne@posteo.net/20240329 with
- auth_id=156
-X-Original-From: =?utf-8?q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
-Reply-To: j.ne@posteo.net
+In-Reply-To: <20260101-ppcyaml-wdt-v3-1-9d59c5aee03f@posteo.net>
 
-From: "J. Neusch√§fer" <j.ne@posteo.net>
+On Thu, Jan 01, 2026 at 05:54:22PM +0100, J. Neusch‰fer via B4 Relay wrote:
+> From: "J. Neusch‰fer" <j.ne@posteo.net>
+> 
+> Convert mpc83xx-wdt.txt to YAML to enable automatic schema validation.
+> 
+> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+> Signed-off-by: J. Neusch‰fer <j.ne@posteo.net>
 
-Convert mpc83xx-wdt.txt to YAML to enable automatic schema validation.
-
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
-Signed-off-by: J. Neusch√§fer <j.ne@posteo.net>
----
-V3:
-- split out as a single patch
-- remove unnecessary node labels in examples
-
-V2:
-- part of series [PATCH v2 00/12] YAML conversion of several Freescale/PowerPC DT bindings
-  Link: https://lore.kernel.org/lkml/20250207-ppcyaml-v2-7-8137b0c42526@posteo.net/
-- trim subject line (remove "binding")
-- fix property order to comply with dts coding style
----
- .../devicetree/bindings/watchdog/mpc8xxx-wdt.txt   | 25 ---------
- .../devicetree/bindings/watchdog/mpc8xxx-wdt.yaml  | 64 ++++++++++++++++++++++
- 2 files changed, 64 insertions(+), 25 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/watchdog/mpc8xxx-wdt.txt b/Documentation/devicetree/bindings/watchdog/mpc8xxx-wdt.txt
-deleted file mode 100644
-index a384ff5b3ce8c6..00000000000000
---- a/Documentation/devicetree/bindings/watchdog/mpc8xxx-wdt.txt
-+++ /dev/null
-@@ -1,25 +0,0 @@
--* Freescale mpc8xxx watchdog driver (For 83xx, 86xx and 8xx)
--
--Required properties:
--- compatible: Shall contain one of the following:
--	"mpc83xx_wdt" for an mpc83xx
--	"fsl,mpc8610-wdt" for an mpc86xx
--	"fsl,mpc823-wdt" for an mpc8xx
--- reg: base physical address and length of the area hosting the
--       watchdog registers.
--		On the 83xx, "Watchdog Timer Registers" area:	<0x200 0x100>
--		On the 86xx, "Watchdog Timer Registers" area:	<0xe4000 0x100>
--		On the 8xx, "General System Interface Unit" area: <0x0 0x10>
--
--Optional properties:
--- reg: additional physical address and length (4) of location of the
--       Reset Status Register (called RSTRSCR on the mpc86xx)
--		On the 83xx, it is located at offset 0x910
--		On the 86xx, it is located at offset 0xe0094
--		On the 8xx, it is located at offset 0x288
--
--Example:
--		WDT: watchdog@0 {
--		    compatible = "fsl,mpc823-wdt";
--		    reg = <0x0 0x10 0x288 0x4>;
--		};
-diff --git a/Documentation/devicetree/bindings/watchdog/mpc8xxx-wdt.yaml b/Documentation/devicetree/bindings/watchdog/mpc8xxx-wdt.yaml
-new file mode 100644
-index 00000000000000..67ad4f1eda8de0
---- /dev/null
-+++ b/Documentation/devicetree/bindings/watchdog/mpc8xxx-wdt.yaml
-@@ -0,0 +1,64 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/watchdog/mpc8xxx-wdt.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Freescale MPC8xxx watchdog timer (For 83xx, 86xx and 8xx)
-+
-+maintainers:
-+  - J. Neusch√§fer <j.ne@posteo.net>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - mpc83xx_wdt       # for an mpc83xx
-+      - fsl,mpc8610-wdt   # for an mpc86xx
-+      - fsl,mpc823-wdt    # for an mpc8xx
-+
-+  device_type:
-+    const: watchdog
-+
-+  reg:
-+    minItems: 1
-+    items:
-+      - description: |
-+          Base physical address and length of the area hosting the watchdog
-+          registers.
-+
-+          On the 83xx, "Watchdog Timer Registers" area:     <0x200 0x100>
-+          On the 86xx, "Watchdog Timer Registers" area:     <0xe4000 0x100>
-+          On the 8xx, "General System Interface Unit" area: <0x0 0x10>
-+
-+      - description: |
-+          Additional optional physical address and length (4) of location of
-+          the Reset Status Register (called RSTRSCR on the mpc86xx)
-+
-+          On the 83xx, it is located at offset 0x910
-+          On the 86xx, it is located at offset 0xe0094
-+          On the 8xx, it is located at offset 0x288
-+
-+required:
-+  - compatible
-+  - reg
-+
-+allOf:
-+  - $ref: watchdog.yaml#
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    watchdog@0 {
-+        compatible = "fsl,mpc823-wdt";
-+        reg = <0x0 0x10 0x288 0x4>;
-+    };
-+
-+  - |
-+    watchdog@200 {
-+        compatible = "mpc83xx_wdt";
-+        reg = <0x200 0x100>;
-+        device_type = "watchdog";
-+    };
-+
-+...
-
----
-base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
-change-id: 20250220-ppcyaml-wdt-130a3ae38a9f
-
-Best regards,
--- 
-J. Neusch√§fer <j.ne@posteo.net>
-
-
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
