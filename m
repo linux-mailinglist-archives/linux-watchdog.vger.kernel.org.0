@@ -1,109 +1,120 @@
-Return-Path: <linux-watchdog+bounces-4754-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4755-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42AF9CED400
-	for <lists+linux-watchdog@lfdr.de>; Thu, 01 Jan 2026 18:51:14 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE0B2CF6432
+	for <lists+linux-watchdog@lfdr.de>; Tue, 06 Jan 2026 02:29:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C4CFE3006AA3
-	for <lists+linux-watchdog@lfdr.de>; Thu,  1 Jan 2026 17:51:12 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id E72A63024249
+	for <lists+linux-watchdog@lfdr.de>; Tue,  6 Jan 2026 01:29:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66907224B04;
-	Thu,  1 Jan 2026 17:51:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3186B29CE9;
+	Tue,  6 Jan 2026 01:29:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hfVTA9c5"
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="TSC2nlgN"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-10630.protonmail.ch (mail-10630.protonmail.ch [79.135.106.30])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C93531A0BF1
-	for <linux-watchdog@vger.kernel.org>; Thu,  1 Jan 2026 17:51:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4FD47640E;
+	Tue,  6 Jan 2026 01:29:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767289871; cv=none; b=ti8kmig9b3Pg2tg1QWy+UAxMpdsdUeMlXlC9l2TAGOlrTr4IdWXrOGFbcfHTZxWwE3KvDIHUq7yXw8tGnprdXkir8HfPjlJj7l/fhU6K01a8+sKw9PwzcTL2U2WvYUKQeT3Z9NBvFBrCW9SCVQGEaaap48X9ku6XK4T4hhXa08A=
+	t=1767662978; cv=none; b=u54CE9+Pl2HibLAmO1hBou8pg2IGAMuWFGtihOoIX+lRV2hsMIeTVhC3jVnPzOlODtYzLpf9iGqIqlkMu1q/tNSfTeFxVphKKH0yfv80cZU3W+S+gCI+ozlFW08JPZSmYBLTOvlx+Dut0wMxWDJZTG0qrxFf/qaYxSIM3dtas4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767289871; c=relaxed/simple;
-	bh=+SuxnZuOwBtnUHrco5G/8HwaRgy8Mmuz80am3+gdY0s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XT2TAktED+Ku1vlwptkRIlcUVhER3UZzzsUDMC/PQ/j2dm0fvsPiwEa9+aECi1GILCLUxAR334OK150jNNOrupyQlxCOMvNddHa2xI06GxjP+U8Q3Zif1Anpp0MKi8lH6kVXyDamiZ7p5W8VMwd0fz03d9nX1RdLIXjctU0GFHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hfVTA9c5; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-7b7828bf7bcso13609929b3a.2
-        for <linux-watchdog@vger.kernel.org>; Thu, 01 Jan 2026 09:51:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767289869; x=1767894669; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0jj51h0hnz/QKxpvGSIa9Sv1MaE6xhEm5WI7a6VOKxg=;
-        b=hfVTA9c5BPfPqSosNllmgPzi0PXxb1Gq4qzIn1NDH4v/XCQ4Hh3FWJCTBxEnEa8nN4
-         kmC3lV5kbnfErKmPqgFUjewD85RSbeDA7qFJS+0Z28fRraghdLuIadguaR7qutcMsD+g
-         fOJ3GP6JRvmkC4FC65vZ02hblMTeOzdY0af8qVjI5iLdH/MuN/KT1bAc3lmBqlg8fmRK
-         SL+BlKn2McE1OKcNzAGQ3eRPLfEpKiw5n9a3GYWC8+KmQEsx+qBFBN6nABbGAzCKtAUy
-         rIVfr7dDIRG+F9TRqwLAWD/q+JUZRBvLW4FlK3aZin+zQ84sBmAX4/dp5kZ57v0csLga
-         Shug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767289869; x=1767894669;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0jj51h0hnz/QKxpvGSIa9Sv1MaE6xhEm5WI7a6VOKxg=;
-        b=xHjBPp3/bmqtdzl2gN2prOkMZ3Kef9bdP9GuUCQYOXGSSgiYw5Ap0akkGYTWrTo8F2
-         vOkZ30TVB38qsfatWrvppuOHtkBH+4WKYqpKffD9+1GC2Yd5J7r6y/ZpbVi4LuOIwse9
-         73KIYTbzD5cLMZ3fqQRNfxKMq/3Yu6sDToFaCurMmseCNwTAtQquHnWqd2X7+19DvUtP
-         D8/v4eGmLZlOBE0aYpPyT75V8HX5Qvyok+Y8BEABtA4/lgsp+KofUyRWf+P1RUlXilV7
-         RWj2q7438ciZn1YOTCDYOh5X1tzG1AhJ9TVfqdUNkhuSNQLq4FU2ICt8dqGCwp+owJqa
-         mK+A==
-X-Forwarded-Encrypted: i=1; AJvYcCULU3F+I+UovMFihwRidlMZ7R3VLFGuTo4u/gbdx/KpbBGf1eQUSJXwCltM5fbj6u5JciIxn/ThYA/+jXI2Ng==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyQieWokNbiCi2rfOizrMJOkn0B+hqm0qOu3pfN7z85Ocnv6Ay5
-	EitaL+E+se30lslgAsrXb9xWmiHAiNhC6jU5u52B4ou/efezdp7A/tW1
-X-Gm-Gg: AY/fxX5flBvUTSiHRAaBHXlArWCcQHVNXAAw6iUCzdaPb9MP2QYSpDLluMX5K3UxHlj
-	6C8F8sbNF45XrNHhCkasPN3ONjJos4ionIbeQoUC7y8cdEkPgAfbcmzrY9Xcyrtl0tWVGa/4JKC
-	JKHL0tV4tT9siwMDZu6IfWsS0izl9MkqRtSQ+QJDvKAJ+907njdoDPnvnmwtQpbFs2zr2UKCTr/
-	xArZ0ga2gMOKDrXBva1S/T6mZeQFMPYa7ZYkGameH3qOqJSQRGyUHQNp4H77CmGT1J7Bv8Ixlc8
-	kNOxPIOUwa9VIP7V8LjsGqvcnL1d9ahwaDQh1qGEgo5BHpgLSDFj0BbVcllvlTR+edA6xggC+e0
-	JHYQqo4attXrpUJeUCpZyKJw6HJTRtNCnD6kSjTjjdefdmihkIQ3XsYV5XCCpsHBk/Jvwtn5EKv
-	zzsAjplbFSz4UVa8fA0CCsH/or
-X-Google-Smtp-Source: AGHT+IFsQJ4bAmzJ+Reis0EcfO56892m2Lru8k+ihnYSVUjClPj1CJFSHdmj8mSH6IKO+AaaRLP9dQ==
-X-Received: by 2002:a05:7022:42a4:b0:11a:fe6f:806a with SMTP id a92af1059eb24-121722f65a3mr42792371c88.31.1767289869024;
-        Thu, 01 Jan 2026 09:51:09 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1217254c734sm152212026c88.13.2026.01.01.09.51.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jan 2026 09:51:08 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 1 Jan 2026 09:51:07 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: j.ne@posteo.net
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-watchdog@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v3] dt-bindings: watchdog: Convert mpc8xxx-wdt to
- YAML
-Message-ID: <74226532-e501-414e-87a3-5a1b54e0b9fd@roeck-us.net>
-References: <20260101-ppcyaml-wdt-v3-1-9d59c5aee03f@posteo.net>
+	s=arc-20240116; t=1767662978; c=relaxed/simple;
+	bh=BOcCNMp1INqjcXwIO4bDUoob4UpdQuZ592biX8sY/Aw=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=MH1ShLMvo288FGObg/WI9Bzc7zolpjhZcQWcDznb/WR2mBVku6vp1L06bhPyu4qYAa493XI4MhIikU71bo2ADF8awI9JscQGWreEgSmZdEbjmiofz0eg3Ou1EUBiG2hKsqNHKCfvjCVsbBK2nri3jeFzS+6U57QWGbABKPL8avk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=TSC2nlgN; arc=none smtp.client-ip=79.135.106.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+	s=protonmail3; t=1767662967; x=1767922167;
+	bh=4uzkSMQRSAW1nzDN/n5W806VDwJ13cISuBlGwWWQkLY=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=TSC2nlgNyplw+OmXAPsM91lKCJhKyQCqgTI1zY6qd+xV05HxQOc5AJc6aB9Eg8iUy
+	 r2KS1yDgN0I5GvoP7Za9n+2mxlLoSQrD8R/5+iEF0fxknMQ2W28Jqq9P2ZOQAUTxre
+	 1pp17lVBor9h7f0jiA1ms92U62YCnmqO+eCKIfzKKDvx19yF8JrWETKcxzjGl0GQhY
+	 BdB+YmPJbW47jlD9LaZiv8XlYK/S8opI4FMkNvEyBAmBuHMJKc96CTx397vItoQ6Ht
+	 UVelqv771clcHZM9NE6FBJM6q+MxxzgLhUzDY1JYHGTQNTKFzt/qwBj/qZon5I99be
+	 YLwmNcqIqxYvg==
+Date: Tue, 06 Jan 2026 01:29:25 +0000
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+From: Alexander Koskovich <AKoskovich@pm.me>
+Cc: Pavan Kondeti <pavan.kondeti@oss.qualcomm.com>, Bjorn Andersson <andersson@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>, hrishabh.rajput@oss.qualcomm.com, Konrad Dybcio <konradybcio@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] Add support for Gunyah Watchdog
+Message-ID: <ABmlNqg6uJXJLkDZo3uaZLdrTCFIjRXOJ68Hrx1MnHHYMnPJ9_g7GW0HGRhZBKv4--_PANfXgTV7h-n7HFC51zKNW6JkmEhpB6_EhFQ27Rw=@pm.me>
+In-Reply-To: <e469548a-8d74-4d3b-9617-2b06f36013e2@oss.qualcomm.com>
+References: <b105810a-63a8-4d81-9ad8-b0788e2e1431@pm.me> <e469548a-8d74-4d3b-9617-2b06f36013e2@oss.qualcomm.com>
+Feedback-ID: 37836894:user:proton
+X-Pm-Message-ID: 8b02b851afc68cfce49efce818cc7f562f6297d6
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260101-ppcyaml-wdt-v3-1-9d59c5aee03f@posteo.net>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 01, 2026 at 05:54:22PM +0100, J. Neuschäfer via B4 Relay wrote:
-> From: "J. Neuschäfer" <j.ne@posteo.net>
-> 
-> Convert mpc83xx-wdt.txt to YAML to enable automatic schema validation.
-> 
-> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
-> Signed-off-by: J. Neuschäfer <j.ne@posteo.net>
+Hey Konrad,
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+My device's EDK2 should be on 'KERNEL.PLATFORM.3.0.r1-12700-kernel.0', unfo=
+rtunately the device I'm working with is secure boot on so I can't modify b=
+ootloader to resolve this issue, though I'm not really sure why it's happen=
+ing when I looked at BootLinux. It seems the hyp dtb handling is the same i=
+n both the "dtbo img valid" and "dtbo img invalid" cases, so not sure how i=
+t's only happening in the latter case.
+
+Note, that I do have a blair secure boot off device that I flashed with  th=
+e same tag (KERNEL.PLATFORM.3.0.r1-12700-kernel.0) since I noticed it happe=
+ned to support the chipset, but was unable to reproduce the issue there, DT=
+BO gets applied even with a basically empty base DTB. Guessing it may be du=
+e to some change in hyp with recent SoCs.
+
+Alex
+
+On Tuesday, December 23rd, 2025 at 12:50 PM, Konrad Dybcio <konrad.dybcio@o=
+ss.qualcomm.com> wrote:
+
+>
+>
+> On 12/22/25 8:02 PM, Alexander Koskovich wrote:
+>
+> > On 9/4/25 1:05 PM, Pavan Kondeti wrote:
+> >
+> > > Thanks for asking this question. I believe the overlay part needs som=
+e
+> > > discussion here.
+> > >
+> > > I have tried this series on 8550 MTP. The overlay failed, so watchdog
+> > > device did not probe. same is the case with 8750 too. It works only
+> > > after applying this patch. I will test and report my observation on 8=
+650
+> > > later.
+> >
+> > Hi Pavan, was linked this thread after seeing what I think to be the
+> > same issue on another platform,
+> > but issue is a bit more serious here since bootloader fails to find a
+> > DTB at all, not just overlay fails.
+> > When the "arch_timer" label is missing from the base DTB on Milos,
+> > ufdt_apply_overlay in bootloader
+> > will fail and it looks like the DTB memory gets corrupted. If you are
+> > booting without a dtbo image,
+> > then you don't see the issue. Couple logs from bootloader when it happe=
+ns:
+> >
+> > ApplyOverlay: ufdt apply overlay failed
+>
+>
+> FWIW this comes from ABL, which is open source
+>
+> https://git.codelinaro.org/clo/la/abl/tianocore/edk2/
+>
+> You can probably deduce the correct tag from the boot logs
+>
+> Konrad
 
