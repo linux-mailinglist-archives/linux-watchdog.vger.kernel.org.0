@@ -1,46 +1,46 @@
-Return-Path: <linux-watchdog+bounces-4766-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4767-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18F87CFEB18
-	for <lists+linux-watchdog@lfdr.de>; Wed, 07 Jan 2026 16:51:34 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id B738ECFEC44
+	for <lists+linux-watchdog@lfdr.de>; Wed, 07 Jan 2026 17:03:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3F09B3038306
-	for <lists+linux-watchdog@lfdr.de>; Wed,  7 Jan 2026 15:44:46 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DF8713155E4A
+	for <lists+linux-watchdog@lfdr.de>; Wed,  7 Jan 2026 15:54:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 771FE37F732;
-	Wed,  7 Jan 2026 15:44:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AD8A38E125;
+	Wed,  7 Jan 2026 15:46:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g8JODOrW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jyGN+sHp"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A19237F727;
-	Wed,  7 Jan 2026 15:44:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EE1938E10F;
+	Wed,  7 Jan 2026 15:46:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767800685; cv=none; b=KOERjkQsqWLHETsf6SCvmhIv+ErCFhUWJPjIRui+OAp+AGEsie72jebely++L//sOhmUTmVmXZAQk0vd3ec02lYxz0SkT744dBzKZRDyjVPyfZ82NHOdRq3Rec8XhXS423pApqVSbxY+ivAyxt9YJdAutlXx1mTcjZAGQtk5PhM=
+	t=1767800784; cv=none; b=M6ymuwbK7ullSh/QN2MLe17Fi8/2jSUffLSNfs8ngnGt2F8wBZg5dtv2pylV3ptIKZ7kTuDMbCEcEIN2LHhdXfwwWnnhNZlrFMU7v8CtXg7SzF6rAK3VUEME/omNlEdG02HWIWt3lYvP/zGHxo7Uo24CwSDwl9aZOJbfbHAQQ04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767800685; c=relaxed/simple;
-	bh=LwDA4GYylP2MHvwvl4K6Q3S2ceaIZga12+v8v7bkIWk=;
+	s=arc-20240116; t=1767800784; c=relaxed/simple;
+	bh=8wdUCNJatHyfAYeD8UVlkIkMO60J2rFkEA2xK/Lz7ug=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=q6TslvUwRKTQtUvuwGfYdDHESRkYdPvc4+3FB1TJikBYWKOQNHUMd7fXuFFZsbZlt26mFxcCDjRM+XVGW1ruSsi6gFkxN09TlSEdoA0188NSTzSH7mmcxRXe4vQPWCt98IXKXhRgu5C4CqEEIrNE7NvqoJBNdbYkoB9J3PEWDGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g8JODOrW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A76ABC4CEF7;
-	Wed,  7 Jan 2026 15:44:42 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=tWCRNBkz/k7ZgChprKfDewxz+lkwcSGjgOXK3CWT2hcgwl9EyW1LmXsKr1kGZpy/JWSCHGX0auQjyn+JxeuYQ/F1iQnsR9+M7RF/FArSlkbAKA4fOvFdPVGN7+fjJDCHSKPbkOTJbNwaPMQKeJ6r2pxPwPkHHS+QjA1UoVUX43c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jyGN+sHp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91912C4CEF1;
+	Wed,  7 Jan 2026 15:46:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767800684;
-	bh=LwDA4GYylP2MHvwvl4K6Q3S2ceaIZga12+v8v7bkIWk=;
+	s=k20201202; t=1767800782;
+	bh=8wdUCNJatHyfAYeD8UVlkIkMO60J2rFkEA2xK/Lz7ug=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=g8JODOrWf7B1et8kswwunTiB7Xl9H9CqItbUR9S4tNDC+tnnwUxqtJJFVkBRPKv2M
-	 1NNzrnGkvz3r05TyuH7HFGeZsOcUdbn221SSUJTcxNJyqTxXOVS4k72upYUbrEgR6S
-	 F2iz1LPI3RVSDL6iW2F7ia7QetsKi6pEuEbv5SIeJ5+Za8ULLz9PWAA9U/FjcBY5SW
-	 xS8+fyb2dxWCgLO5vEUXY3EaPKrDfrmHw8xSuZhaYrPjZPuJPUPBTZtKDjq+IxyIim
-	 kzefKYGGOMxKkXukaFLO1H2KEJ4Y501ybZQtglvPAZwjEbxewR3drIhK9hRW5BWt0B
-	 9LFaKAKIx3xog==
-Message-ID: <ffb1a4ef-b22c-4d59-a494-0ab703ef24d2@kernel.org>
-Date: Wed, 7 Jan 2026 16:44:40 +0100
+	b=jyGN+sHplI8A2IL1DbjvgggmKgWe8nq+HlLmCcifk29QZPIsV2C2t+f89HhtyxJwH
+	 OyEb03xy5OQ1J0mPUSEhv+KSW5elAcQCDQS6O5RCj2FKslQU0AzsMVrvd7AwDX1DeI
+	 lGBodHRqPRTtI1YV6Cs8oteOfrRQ2bTxZBcY5Mjz8E/okCIa0aR4Nfsf0LzvFB/isv
+	 V1pk43HPJmD3rC4sr6uehXCPOgu1zWSC7586Gcn2G1DaZyTL9U82bdGSzIf6dDec3l
+	 ONoIQWm/1cjV6cMpPIZqQHP9Xt4TewLSa1F2noEacX0RE2wW23jklG4eAREkIY2w3o
+	 f2l2BhXqaLzZw==
+Message-ID: <f6499c9a-4ec8-4c9e-b9b5-e679e0f913a4@kernel.org>
+Date: Wed, 7 Jan 2026 16:46:18 +0100
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -48,14 +48,13 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] dt-bindings: watchdog: Add support for Andes
- ATCWDT200
+Subject: Re: [PATCH 2/3] watchdog: atcwdt200: Add driver for Andes ATCWDT200
 To: CL Wang <cl634@andestech.com>, wim@linux-watchdog.org,
  linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org
 Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-watchdog@vger.kernel.org, tim609@andestech.com
 References: <20260107145058.213334-1-cl634@andestech.com>
- <20260107145058.213334-2-cl634@andestech.com>
+ <20260107145058.213334-3-cl634@andestech.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -101,85 +100,186 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20260107145058.213334-2-cl634@andestech.com>
+In-Reply-To: <20260107145058.213334-3-cl634@andestech.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 07/01/2026 15:50, CL Wang wrote:
-> Add the devicetree binding documentation for the Andes ATCWDT200
-> watchdog timer, including supported properties and usage examples.
+> +
+> +static int atcwdt_enable_clk(struct atcwdt_drv *drv_data)
+> +{
+> +	struct device *dev = drv_data->wdt_dev.parent;
+> +	unsigned int val;
+> +	int ret;
+> +
+> +	drv_data->clk = devm_clk_get(dev, NULL);
 
-Last part is redundant. Can you add a binding without supported
-properties and without usage examples?
+Just use API for getting enabled clock.
 
-> 
-> Signed-off-by: CL Wang <cl634@andestech.com>
-> ---
->  .../watchdog/andestech,ae350-wdt.yaml         | 48 +++++++++++++++++++
->  1 file changed, 48 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/watchdog/andestech,ae350-wdt.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/andestech,ae350-wdt.yaml b/Documentation/devicetree/bindings/watchdog/andestech,ae350-wdt.yaml
-> new file mode 100644
-> index 000000000000..4726bd6734d8
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/andestech,ae350-wdt.yaml
-> @@ -0,0 +1,48 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/andestech,ae350-wdt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +	if (IS_ERR(drv_data->clk))
+> +		return dev_err_probe(dev, PTR_ERR(drv_data->clk),
+> +				     "Failed to get watchdog clock\n");
 > +
-> +title: Andes ATCWDT200 Watchdog Timer
+> +	ret = clk_prepare_enable(drv_data->clk);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret,
+> +				     "Failed to enable clock\n");
 > +
-> +maintainers:
-> +  - CL Wang <cl634@andestech.com>
+> +	drv_data->clk_freq = clk_get_rate(drv_data->clk);
+> +	if (!drv_data->clk_freq)
+> +		return dev_err_probe(dev, -EINVAL,
+> +				     "Failed to get clock rate\n");
 > +
-> +allOf:
-> +  - $ref: watchdog.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - andestech,qilai-wdt
-> +          - const: andestech,ae350-wdt
-> +      - const: andestech,ae350-wdt
+> +	ret = device_property_read_u32(dev, "andestech,clock-source", &val);
 
-Subject says WDT200, this code sais 350 and qilai. What is what? You
-have entire commit msg to explain that
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  andestech,clock-source:
+No, read your binding. You said it is a list... list of phandles?
 
-No clue what's this, but for sure does not pass tests without
-description and type.
+> +	drv_data->clk_src = (!ret && val != 0) ? CTRL_CLK_SEL_PCLK : 0;
+> +
+> +	return 0;
+> +}
+> +
+> +static int atcwdt_init_wdt_device(struct device *dev,
+> +				  struct atcwdt_drv *drv_data)
+> +{
+> +	struct watchdog_device *wdd = &drv_data->wdt_dev;
+> +
+> +	wdd->parent = dev;
+> +	wdd->info = &atcwdt_info;
+> +	wdd->ops = &atcwdt_ops;
+> +	wdd->timeout = ATCWDT_TIMEOUT;
+> +	wdd->min_timeout = 1;
+> +
+> +	watchdog_set_nowayout(wdd, nowayout);
+> +	watchdog_set_drvdata(wdd, drv_data);
+> +
+> +	return 0;
+> +}
+> +
+> +static void atcwdt_calc_max_timeout(struct atcwdt_drv *drv_data)
+> +{
+> +	unsigned char rst_idx = atcwdt_get_index(0xFF, TMR_RST);
+> +	unsigned char int_idx = atcwdt_get_index(0xFF,
+> +						 drv_data->int_timer_type);
+> +
+> +	drv_data->wdt_dev.max_timeout =
+> +		((1U << rst_idx) + (1U << int_idx)) / drv_data->clk_freq;
+> +}
+> +
+> +static int atcwdt_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct atcwdt_drv *drv_data;
+> +	int ret;
+> +
+> +	drv_data = devm_kzalloc(dev, sizeof(*drv_data), GFP_KERNEL);
+> +	if (!drv_data)
+> +		return -ENOMEM;
+> +
+> +	platform_set_drvdata(pdev, drv_data);
+> +	spin_lock_init(&drv_data->lock);
+> +
+> +	ret = atcwdt_init_wdt_device(dev, drv_data);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = atcwdt_init_resource(pdev, drv_data);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = atcwdt_enable_clk(drv_data);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = atcwdt_get_int_timer_type(drv_data);
+> +	if (ret)
+> +		goto disable_clk;
+> +
+> +	atcwdt_calc_max_timeout(drv_data);
+> +
+> +	ret = devm_watchdog_register_device(dev, &drv_data->wdt_dev);
+> +	if (ret)
+> +		goto disable_clk;
+> +
+> +	return 0;
+> +
+> +disable_clk:
+> +	clk_disable_unprepare(drv_data->clk);
+> +
+> +	return ret;
+> +}
+> +
+> +static int atcwdt_suspend(struct device *dev)
+> +{
+> +	struct atcwdt_drv *drv_data = dev_get_drvdata(dev);
+> +
+> +	if (watchdog_active(&drv_data->wdt_dev)) {
+> +		atcwdt_stop(&drv_data->wdt_dev);
+> +		clk_disable_unprepare(drv_data->clk);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int atcwdt_resume(struct device *dev)
+> +{
+> +	struct atcwdt_drv *drv_data = dev_get_drvdata(dev);
+> +	int ret = 0;
+> +
+> +	if (watchdog_active(&drv_data->wdt_dev)) {
+> +		ret = clk_prepare_enable(drv_data->clk);
+> +		if (ret)
+> +			goto clk_prepare_err;
 
-> +    maxItems: 1
+Just return.
+
 > +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - andestech,clock-source
+> +		atcwdt_start(&drv_data->wdt_dev);
+> +		atcwdt_ping(&drv_data->wdt_dev);
+> +	}
 > +
-> +unevaluatedProperties: false
+> +clk_prepare_err:
+> +	return ret;
+> +}
 > +
-> +examples:
-> +  - |
-> +    watchdog@f0500000 {
-> +        compatible = "andestech,ae350-wdt";
-> +        reg = <0xf0500000 0x20>;
-> +        clocks = <&clk_wdt>;
-> +        andestech,clock-source = <0>;
-> +    };
+> +static const struct of_device_id atcwdt_match[] = {
+> +	{ .compatible = "andestech,qilai-wdt" },
+
+Drop, not needed.
+
+> +	{ .compatible = "andestech,ae350-wdt" },
+> +	{ /* sentinel */ },
+> +};
+> +MODULE_DEVICE_TABLE(of, atcwdt_match);
+> +
+> +static DEFINE_SIMPLE_DEV_PM_OPS(atcwdt_pm_ops, atcwdt_suspend, atcwdt_resume);
+> +
+> +static struct platform_driver atcwdt_driver = {
+> +	.probe		= atcwdt_probe,
+> +	.driver		= {
+> +		.name	= DRV_NAME,
+> +		.owner	= THIS_MODULE,
+
+From where did you get this?
+
+> +		.of_match_table = atcwdt_match,
+> +		.pm = pm_sleep_ptr(&atcwdt_pm_ops),
+> +	},
+> +};
+> +
+> +module_platform_driver(atcwdt_driver);
+> +
+> +module_param(timeout, uint, 0);
+> +MODULE_PARM_DESC(timeout, "Watchdog timeout in seconds (default="
+> +		 __MODULE_STRING(ATCWDT_TIMEOUT) ")");
+> +
+> +module_param(nowayout, bool, 0);
+> +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
+> +		 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+> +
+> +MODULE_LICENSE("GPL");
+> +MODULE_AUTHOR("CL Wang <cl634@andestech.com>");
+> +MODULE_DESCRIPTION("Andes ATCWDT200 Watchdog timer driver");
 
 
 Best regards,
