@@ -1,92 +1,196 @@
-Return-Path: <linux-watchdog+bounces-4776-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4777-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA1CBD08452
-	for <lists+linux-watchdog@lfdr.de>; Fri, 09 Jan 2026 10:40:34 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 732F7D0B529
+	for <lists+linux-watchdog@lfdr.de>; Fri, 09 Jan 2026 17:42:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 6DDE8301AA9B
-	for <lists+linux-watchdog@lfdr.de>; Fri,  9 Jan 2026 09:38:56 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 6E7F730386EC
+	for <lists+linux-watchdog@lfdr.de>; Fri,  9 Jan 2026 16:42:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 312533590CF;
-	Fri,  9 Jan 2026 09:38:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39F4C364E81;
+	Fri,  9 Jan 2026 16:41:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HXxVKYat";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Z52+5WQI"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net [60.248.80.70])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00B9F3596ED;
-	Fri,  9 Jan 2026 09:38:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.248.80.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28FF63644CC
+	for <linux-watchdog@vger.kernel.org>; Fri,  9 Jan 2026 16:41:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767951533; cv=none; b=raPkiQO8a6cpqOkO4t/2u400He+Xh2kBKtLiix9Fwtp/JR2iDW0rK+0yB3xAM7t8oE1uDRCpeYKPH3QHTwIJf5RB7IoMfKuXPFPo5WUf6y7w+f0aYgN5/v/j/N7Z30/uZSdHukRIzdw90qtFnqxRsEiexEU1JLVD+wEoKYxPMXo=
+	t=1767976915; cv=none; b=XCdjZk3+bBI6/5fH/YVaabW0Bike9HSl8NdNbbAlY+Sa2TVTK7prNgqgmoalTMAxIj3je4eLtPq/YF1POdJWQ7NNuWvGN392Bgcvt5i6EW/uRm7N2tpWW3Rimp+RirHn5Fof31PaJpsqWqtTSTyRbdZXZHYNn9mFPKui/c2LRsA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767951533; c=relaxed/simple;
-	bh=qf0Ay49SUWNcpfPLtH9KOhfJ3qPKHVC59ZmhW095Oos=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Np9Do0GRu8vElpFq5Y5bIga01sOWw9S4EgtgA7K/3c+N38TEPNHfYcRB6SrRKB/yPOhDcVzA8RnvKCGJ62fWhxUd4ja2cn6L2qjUYgfCTiVj46WTBNXLZMoG+oO9RLhQay4g3MNKpdxltbIzM5snZghtotwmAgQvPllnDRjkH+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=permerror header.from=andestech.com; spf=pass smtp.mailfrom=andestech.com; arc=none smtp.client-ip=60.248.80.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=permerror header.from=andestech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=andestech.com
-Received: from mail.andestech.com (ATCPCS34.andestech.com [10.0.1.134])
-	by Atcsqr.andestech.com with ESMTPS id 6099a3IQ031860
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-	Fri, 9 Jan 2026 17:36:03 +0800 (+08)
-	(envelope-from cl634@andestech.com)
-Received: from swlinux02 (10.0.15.183) by ATCPCS34.andestech.com (10.0.1.134)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 9 Jan
- 2026 17:36:03 +0800
-Date: Fri, 9 Jan 2026 17:35:58 +0800
-From: CL Wang <cl634@andestech.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-CC: <wim@linux-watchdog.org>, <linux@roeck-us.net>, <robh@kernel.org>,
-        <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>, <tim609@andestech.com>,
-        <ben717@andestech.com>
-Subject: Re: [PATCH 1/3] dt-bindings: watchdog: Add support for Andes
- ATCWDT200
-Message-ID: <aWDL_n16CLyP5DR3@swlinux02>
-References: <20260107145058.213334-1-cl634@andestech.com>
- <20260107145058.213334-2-cl634@andestech.com>
- <ffb1a4ef-b22c-4d59-a494-0ab703ef24d2@kernel.org>
+	s=arc-20240116; t=1767976915; c=relaxed/simple;
+	bh=ZysjqcFEA2M52Cw6hzhfoy4Mp8j+YWw+AXypIoyErFM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=AGdfne+XItFepOEH8Q0fdB226AcJsz34Mf5duOoB/ExMRDsc6SLNGTZSxigHfPXwr/LWfxxuUCT516VWl5JRX3DtoQ8HuKxZd2dFp7ieOZChb18U1+x5c7zHmCJpt5szKctexFoqAH8mej3gF4PI4yPMvfRG2QQOWSLUcGOJ+So=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HXxVKYat; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Z52+5WQI; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1767976912;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=8wvKExavjc6j+4IOpY8QllHRKJuz9b57L79LV3iAB+c=;
+	b=HXxVKYateK/T2k8aoqO07GCmoBj5hV4PxMaMPEzdEdLNNQ089pL7BSEu07uHMJBnEAaw1p
+	MdPFMNncytSSUQUgfgDA8STKS5/t51HUI0ZAdYR2w6EpzY8Q/qeHvMcMIxPn/2iA/iPqGJ
+	hWsf5fS/TZke4LgNLWTkywAhKEln3S8=
+Received: from mail-ua1-f70.google.com (mail-ua1-f70.google.com
+ [209.85.222.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-676-XndvvghlNEiINnFDQ64b9g-1; Fri, 09 Jan 2026 11:41:51 -0500
+X-MC-Unique: XndvvghlNEiINnFDQ64b9g-1
+X-Mimecast-MFC-AGG-ID: XndvvghlNEiINnFDQ64b9g_1767976910
+Received: by mail-ua1-f70.google.com with SMTP id a1e0cc1a2514c-93f5f75c1a9so4954803241.0
+        for <linux-watchdog@vger.kernel.org>; Fri, 09 Jan 2026 08:41:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1767976910; x=1768581710; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8wvKExavjc6j+4IOpY8QllHRKJuz9b57L79LV3iAB+c=;
+        b=Z52+5WQI+NN5g3ZT6jt162y4fhE8bjrlrctINmJih1kHaPLLc9eUSP0dOG0lK3DgrZ
+         ZCRGRt/I/jRLSdSzlg03dqs5XvU/b6YUQOhwcc8FjoV3mm8XVb6MfUOaDgcgAssWKlEX
+         xi6Ke8VjgQZM1FdR9we6sXQPitzTZ1LNxCDxlyULEKfCoe8QLsP95y7b4e2yxGfDuGXu
+         zp/jTYWvmjfMMUGdOPC8sSZS/N6OwFANfSJ9Jn6ZJdk1it/lhkoEKhaFxrzie1hRPYbe
+         Q3QOsj+M/6SD3g33Bc8xn04Db7+e9DhwfBoeNT/lcZmrSks0kOzfJ/+BNz/rtgf4Ht7p
+         HurA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767976910; x=1768581710;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8wvKExavjc6j+4IOpY8QllHRKJuz9b57L79LV3iAB+c=;
+        b=JeRmM/66AszuTxNycsWdGIQ6m5hziACJKiUv2HzB8y0V1eUfJWJE3G0DJsOtOHxF32
+         Jz0cimBagOH6oijybRZToowiCH+Eu5GFVpR/EWM9fsGgFZhCo6Ht/M4eymviNJ4Mm6Nn
+         Z1iNE3CwD1aQ5hwWiugfpQX9c8MkrNWzcjFFVPcJHrvpCQJ0fCOG9RGSpuNIMS3Zmdz1
+         bMzSkxi/kAIUrcQbUwfSKozaSCoaZZhCwCokmNGBmXPQavzAcbNo8mTbdHeJqfh8TyBL
+         zySbY9jC9nmAQk4AVH6rThLmiBl8m7k+H33CGaJwcX24tS/+MDPRnvXJIjPDNJ+gfVLC
+         3LWw==
+X-Forwarded-Encrypted: i=1; AJvYcCUzUp5Fz/laKHy6M6YZGM5glJPE81JGLvhKZI+rCgTguQmRAS/HAs1s/epqV5UkmUob+Q3VYbyOEh7BuHuXZw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPeusfmtAY5o7Yj8auq8ZSukwGWf03km6rhyj4rKNwcK1aHfna
+	vG5doLWRMTnNPtkPAca2+potFtLmcx/CP9REp4t9uNyHQLd+8BmHYeeNQ/jnn5/EqAO7tuD/BDv
+	tTU07/lQ1/U+IHHwdwx6wTzLy9Dog0oxeBofWd1KH7tSYIMZ6kIwIEI5QWbXuC0q/lT7ZNkWga/
+	xj
+X-Gm-Gg: AY/fxX7fqfKmvV630uvyjmS9WPrombmkOesu07Ncviuh4E2G68MmLO6lo4vYAIJEyp7
+	8NOsAc2WKulSvUk3DxTqpvgfhjrCdXxmAYShjTd/T8hjIPZGRx/cJiRPzJgM7XFMrof2hbNeySW
+	KP4XhLhylPgCwVbZ3+gty5WxkFcm4MeRV+j9qVZK6QSCrpp9P9kdxVZfO8RbAQJwixTspePowB2
+	sI5C2NJWi930iE6wUvGCqq+slQ+soGzihE5msIl05fStMd9eNoAjAUtnBJhmfGiDi33g46qeb2b
+	JA2BnzZ+hEv1Vr5n/EHwDuOLo7Q8UdySe7bPsg0GYjo9fGvjuU2Fj/qC/G8vIetf92RQZ36haqs
+	T8w4Ns3aeXzxw6+brbIzMh/dC3bvzPJJoGj1XxBWkYeKPRnfa
+X-Received: by 2002:a05:6122:208a:b0:54a:a048:45a4 with SMTP id 71dfb90a1353d-56347fd2b82mr3687429e0c.16.1767976910342;
+        Fri, 09 Jan 2026 08:41:50 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHg2rR4icyXwYT9jLl1J1KKobpfXOb/9BW52Be/PiSmJMg278XTtW66CrE9UzYOdog/JJ04yQ==
+X-Received: by 2002:a05:6122:208a:b0:54a:a048:45a4 with SMTP id 71dfb90a1353d-56347fd2b82mr3687412e0c.16.1767976909849;
+        Fri, 09 Jan 2026 08:41:49 -0800 (PST)
+Received: from [192.168.1.3] (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5636c753392sm1267752e0c.6.2026.01.09.08.41.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jan 2026 08:41:49 -0800 (PST)
+From: Brian Masney <bmasney@redhat.com>
+Subject: [PATCH 00/13] MIPS: move pic32.h header file from asm to
+ platform_data
+Date: Fri, 09 Jan 2026 11:41:13 -0500
+Message-Id: <20260109-mips-pic32-header-move-v1-0-99859c55783d@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ffb1a4ef-b22c-4d59-a494-0ab703ef24d2@kernel.org>
-User-Agent: Mutt/2.2.12 (2023-09-09)
-X-ClientProxiedBy: ATCPCS33.andestech.com (10.0.1.100) To
- ATCPCS34.andestech.com (10.0.1.134)
-X-DKIM-Results: atcpcs34.andestech.com; dkim=none;
-X-DNSRBL: 
-X-SPAM-SOURCE-CHECK: pass
-X-MAIL:Atcsqr.andestech.com 6099a3IQ031860
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MQQqAIBBA0avIrBswI8OuEi0GnXIWlShIEN09a
+ fkW/z9QOAsXmNUDmasUuc6GvlPgI507o4RmMNpY3WuHh6SCSfxgMDIFznhcldGSd86ORJMmaHH
+ KvMn9j5f1fT/DtL17aAAAAA==
+X-Change-ID: 20260109-mips-pic32-header-move-6ac9965aa70a
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Brian Masney <bmasney@redhat.com>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org, 
+ Thomas Gleixner <tglx@linutronix.de>, 
+ Adrian Hunter <adrian.hunter@intel.com>, 
+ Ulf Hansson <ulf.hansson@linaro.org>, linux-mmc@vger.kernel.org, 
+ Linus Walleij <linusw@kernel.org>, linux-gpio@vger.kernel.org, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ linux-rtc@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org, 
+ Wim Van Sebroeck <wim@linux-watchdog.org>, 
+ Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3223; i=bmasney@redhat.com;
+ s=20250903; h=from:subject:message-id;
+ bh=ZysjqcFEA2M52Cw6hzhfoy4Mp8j+YWw+AXypIoyErFM=;
+ b=owGbwMvMwCW2/dJd9di6A+2Mp9WSGDIT9Y8EPa6d/eBUAWMdbxCjsnf/NJeXP46LxMTuD2UoM
+ b9WPPNiRykLgxgXg6yYIsuSXKOCiNRVtvfuaLLAzGFlAhnCwMUpABP56sDIsGifX88aoTcC29l8
+ X7Bt/R7AtmvV9N0yR16d+cM+137JaVZGhu1L75968Cv7yO6mN9p5XJdDWrLOvyqsX7/+lL7/L89
+ tczgA
+X-Developer-Key: i=bmasney@redhat.com; a=openpgp;
+ fpr=A46D32705865AA3DDEDC2904B7D2DD275D7EC087
 
-Hi Krzysztof,
+There are currently some pic32 MIPS drivers that are in tree, and are
+only configured to be compiled on the MIPS pic32 platform. There's a
+risk of breaking some of these drivers when migrating drivers away from
+legacy APIs. It happened to me with a pic32 clk driver.
 
-Thanks for your review.
+Let's go ahead and move the pic32.h from the asm to the platform_data
+include directory in the tree. This will make it easier, and cleaner to
+enable COMPILE_TEST for some of these pic32 drivers.
 
-On 07/01/2026 15:50, Krzysztof Kozlowski wrote:
-> Last part is redundant. Can you add a binding without supported properties and without usage examples?
+I included a patch at the end that shows enabling COMPILE_TEST for a
+pic32 clk driver.
 
-Agreed. I will remove the redundant part "including supported properties
-and usage examples" in the commit message in the next version.
+Merge Strategy
+==============
+- Patches 1-12 can go through the MIPS tree.
+- Patch 13 I can repost to Claudiu after patches 1-12 are in Linus's
+  tree after the next merge window. There is a separate patch set that
+  fixes a compiler error I unintentionally introduced via the clk tree.
+  https://lore.kernel.org/linux-clk/CABx5tq+eOocJ41X-GSgkGy6S+s+Am1yCS099wqP695NtwALTmg@mail.gmail.com/T/
 
-> Subject says WDT200, this code sais 350 and qilai. What is what? You have entire commit msg to explain that
+Signed-off-by: Brian Masney <bmasney@redhat.com>
+---
+Brian Masney (13):
+      MIPS: copy pic32.h header file from asm/mach-pic32/ to include/platform-data/
+      MAINTAINERS: add include/linux/platform_data/pic32.h to MIPS entry
+      MIPS: update include to use pic32.h from platform_data
+      clk: microchip: core: update include to use pic32.h from platform_data
+      irqchip/irq-pic32-evic: update include to use pic32.h from platform_data
+      mmc: sdhci-pic32: update include to use pic32.h from platform_data
+      pinctrl: pic32: update include to use pic32.h from platform_data
+      rtc: pic32: update include to use pic32.h from platform_data
+      serial: pic32_uart: update include to use pic32.h from platform_data
+      watchdog: pic32-dmt: update include to use pic32.h from platform_data
+      watchdog: pic32-wdt: update include to use pic32.h from platform_data
+      MIPS: drop unused pic32.h header
+      clk: microchip: core: allow driver to be compiled with COMPILE_TEST
 
-I will clarify in the commit message that ATCWDT200 is the IP name, which
-is embedded in AndesCore-based platforms or SoCs such as AE350 and Qilai.
-
-> No clue what's this, but for sure does not pass tests without description and type.
-
-You are right, I missed the type definition. I will add the description
-and set the type to uint32 (enum [0, 1]) for `andestech,clock-source`.
+ MAINTAINERS                                             |  1 +
+ arch/mips/pic32/common/reset.c                          |  2 +-
+ arch/mips/pic32/pic32mzda/config.c                      |  3 +--
+ arch/mips/pic32/pic32mzda/early_clk.c                   |  2 +-
+ arch/mips/pic32/pic32mzda/early_console.c               |  2 +-
+ drivers/clk/microchip/Kconfig                           |  2 +-
+ drivers/clk/microchip/clk-core.c                        |  6 +++++-
+ drivers/irqchip/irq-pic32-evic.c                        |  2 +-
+ drivers/mmc/host/sdhci-pic32.c                          |  2 +-
+ drivers/pinctrl/pinctrl-pic32.c                         |  3 +--
+ drivers/rtc/rtc-pic32.c                                 |  3 +--
+ drivers/tty/serial/pic32_uart.c                         |  3 +--
+ drivers/watchdog/pic32-dmt.c                            |  3 +--
+ drivers/watchdog/pic32-wdt.c                            |  3 +--
+ .../mach-pic32 => include/linux/platform_data}/pic32.h  | 17 +++++++++--------
+ 15 files changed, 27 insertions(+), 27 deletions(-)
+---
+base-commit: f417b7ffcbef7d76b0d8860518f50dae0e7e5eda
+change-id: 20260109-mips-pic32-header-move-6ac9965aa70a
 
 Best regards,
-CL Wang
+-- 
+Brian Masney <bmasney@redhat.com>
+
 
