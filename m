@@ -1,120 +1,122 @@
-Return-Path: <linux-watchdog+bounces-4774-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4775-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3416D0475A
-	for <lists+linux-watchdog@lfdr.de>; Thu, 08 Jan 2026 17:40:41 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6544D07993
+	for <lists+linux-watchdog@lfdr.de>; Fri, 09 Jan 2026 08:34:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C19DA3030228
-	for <lists+linux-watchdog@lfdr.de>; Thu,  8 Jan 2026 16:18:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 738453025178
+	for <lists+linux-watchdog@lfdr.de>; Fri,  9 Jan 2026 07:34:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC64027B358;
-	Thu,  8 Jan 2026 16:18:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D12F28642D;
+	Fri,  9 Jan 2026 07:34:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PxGo0Lie"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fNoWH1a4"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E95B7265CA6
-	for <linux-watchdog@vger.kernel.org>; Thu,  8 Jan 2026 16:18:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E79E2EBDE9
+	for <linux-watchdog@vger.kernel.org>; Fri,  9 Jan 2026 07:34:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767889136; cv=none; b=cmpmuKm0nVkf9KtUygxKZq6xwtWHe5bpDuhMzVuMjeUwEVtKbnbeJ1RNmmTVeBxJbPR8GSQp+5+F50rPvdnw5felOIvSSw9p6hqW8PrRqpLkt3jeWuyO5EXKswADI1YgxlN/evOjBBO2qiG3EAgS0N/2Ob2O9+o1uewnYT75ihc=
+	t=1767944081; cv=none; b=XTzf98drw5PYKOB5DsBvRQMZPCJu2mrr1d4szOi1CeAXe/4D9DIOWwWVJ68WIZhfNpomUE2MbjCKpaGmrO7ceeHvFTjvzIwDaa6Ac9h9DwWFu4Uu/EyooOzVCqo1EnA3S4N9akeKIwCdXkUh27aCT7jTuNljURxluOc1N3AQ1k4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767889136; c=relaxed/simple;
-	bh=O6+oFR1NOZM7poQ7ME6Vz9XmsRTpUcTt9KHN7yAq0oI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I8bcE0mpT9zvR7e6YOD7IintJToUHUpayTklOyJwF4vdMfoBjnzzdZ5UiI52svGfueDDT9q3hx7zVjPmo+k58+fobFAoCcESogh1WU58HEcoywcPNVM9zSKUoFR7Tnw76l7BMCFj/RvLW9lvAo3cdB90bX0ykujIMHesaFH8ibA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PxGo0Lie; arc=none smtp.client-ip=74.125.82.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-121a0bcd376so1051184c88.0
-        for <linux-watchdog@vger.kernel.org>; Thu, 08 Jan 2026 08:18:53 -0800 (PST)
+	s=arc-20240116; t=1767944081; c=relaxed/simple;
+	bh=7tR/ZYbxwRw31VQ7G4Drgo0EN5v/lLxJEOFU8+T/Whk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uVF630bO68zH/Om7mTG2fh7uwa2lcwdIRyaLcKENmUGLu70gSlTYG0CkR/5yj4sbv2v+kU244X1H/6FPYp9uwtoJ41aFBN35gHBIMObeNm3fpTXNPvjM3j6M6PLWFVov1RGJiDxNDWhyuwiNUBE2zC+h3mL9NarN0kyTtb5FBWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fNoWH1a4; arc=none smtp.client-ip=209.85.210.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-7cae2330765so1923300a34.0
+        for <linux-watchdog@vger.kernel.org>; Thu, 08 Jan 2026 23:34:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767889133; x=1768493933; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lqeESqwjwwB7zBaaddbtVMJBEkf6U2caroyFqB5VHwc=;
-        b=PxGo0Lie4xRuEFRePuO2Iss/BjDYLp88gVZwyKsH8bve9VgXeQyLAgOcGgDK1RfRVC
-         KUbdJoTTE7EQuM/zdOYUKT4JL1BtKJcl5Q1ISqWshnXP3Fyb9SR/LSA78IkDizjVHpLo
-         bP8iZIuJUlNv4uL1LaD4OkpNtUqUokza3KYpBgQ1tCa9CyDfg//G4Fo7lTvKjTt/ASxz
-         2hj5/o3RXfVpRj4RAoS7kCotEzWFsTGIe5/B+zoU4F40wJGw9GlaGOJy5pDomfg+xzBk
-         UOttspZHoSv1fu91BUm5jiso0DM8P6LJUrnSFXg78DnZMe95is+flQX/scO7PdzT6Gey
-         VKRQ==
+        d=google.com; s=20230601; t=1767944078; x=1768548878; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CvruJf9ds6VF4vKwIEOtxb71AX3Ha61J6CEY4Eo+Z88=;
+        b=fNoWH1a4/6vyIkp81bk//tnxkvekqel+3dVeaK8aG9Z+KZkXZ+9hYv2UyDgFKceIU+
+         x5AjrijR3Ru9v5njY+614IKEDrRHLPn/ETzoNv1GS/2U48JJICoi7nmR2swzDaFiMrMq
+         Wm5yehTgxj6Sm3QEXkp847VoLwFncfpCobyMUtvIKdKwSyeQowBgo8EDI5UakXFl9J+S
+         pUU7ats5+7T2Db5TvOjE0B4xfU5CsseWX0bzx+RjCzAZAkCCb/5tGQU81alyqT7Jr0Sk
+         ULTBDeXh/gCnchsLwTCoy1e73ylTmAoCgKFbQEtsa/BaGoajAo13ZRVd1+oOKtH6dWTr
+         CTYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767889133; x=1768493933;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lqeESqwjwwB7zBaaddbtVMJBEkf6U2caroyFqB5VHwc=;
-        b=XJcWfQAVakN6Zvf9m0YzW0RgV5y8mzhlypWR6SgYftRr7LbHXC+/duX3pZfzYNjqjh
-         a8g+YBXUvWrOs3ulaTVVUZAIAOUMg2rNMRNbhBr47WHywSsqVQiy9QnHArQCw07ToEo7
-         J722gVLvTYhivxOYimDSkkLD5R7nAUcf6BaH6YJwvoXV0O/aQsFSB/23kFq7ZDJkAIkM
-         Z3XOSXSKY3MLP8O0xPqsjTcebQRqaxLWpQWKo484+D3ipeYnsC/DsibwqT6+oBqK8eV2
-         UxZt7y1ye6MMUABc4zV9MrnGFPFGqRFzmobKp0hDzfH0L/CszJu5vE87sbrM/cukE+jE
-         QMxw==
-X-Gm-Message-State: AOJu0YyR0ADaWf5UUQQi+aVOsBvg/e3ITtNfuXhCjuA+mKwhY60xBXZn
-	9Wg5BHuoNbbzwdeWDoO8nS/TQ5HW91W5n//2L30eEBp2Y2zzDpX79P5WCEYfrg==
-X-Gm-Gg: AY/fxX4RElXdZOWJSM0oE2C2pttg1KOaQyFFF+Cy6Bp71YT7DT72kcQH772O4sZpAnY
-	KqA55fhgTAwSmxGBxmr28fnG6IhevVRDu/nh1FMie2tH+ao7M6ZWY9Fb1aj0d7kyCK2t8lOa8MD
-	G7lq8ZxsVoHIoFIKern2i02HpWE2erJvA6wIbNn0fazvB4AtTbL6hJAIVNnETN3Tvr1uF69TP/E
-	Iw/bM9FTa0NHPl7SENItcxMwxt+x/0W/XVbn5aWlPUX8no2WxbIJAdzV2ylK/2Kza4BnkSpsk1j
-	9Ymdc8OyU3pw8YLb3dEFxcnc0nj5ZsmTxtR9x4KEejySu2QlhPA0jz8nFinyrLZw4mlzrkhgmTa
-	Npqt2TXsBxRirtkMC7vMKrhU2KaAkrrhROgWHdKZzjQ7Tmx9de07OwtJrv5PKJvdXTjZ9uu3vqB
-	gA8httSAFNAw9CeiPpYP+hNt9G
-X-Google-Smtp-Source: AGHT+IGzcV+omYF0waHLEIqPsGu7/NkvQUX1f36pXfP6t3kdKvRuPy/O8uMVloP0kxR5YWmqnrF+aA==
-X-Received: by 2002:a05:7022:622:b0:11b:869f:742a with SMTP id a92af1059eb24-121f8ab92f7mr6120725c88.1.1767889132469;
-        Thu, 08 Jan 2026 08:18:52 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-121f243f384sm14051575c88.6.2026.01.08.08.18.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jan 2026 08:18:51 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 8 Jan 2026 08:18:49 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: =?utf-8?B?546L5b+X?= <23009200614@stu.xidian.edu.cn>
-Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-	syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] Kernel panic in pcipcwd_get_status due to simulated
- overheat
-Message-ID: <4be6759d-091f-428c-a514-fec465cf053e@roeck-us.net>
-References: <409c49ef.ab91.19b9b835c62.Coremail.23009200614@stu.xidian.edu.cn>
+        d=1e100.net; s=20230601; t=1767944078; x=1768548878;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=CvruJf9ds6VF4vKwIEOtxb71AX3Ha61J6CEY4Eo+Z88=;
+        b=r5qZPRvDLbSdR+ZjWNyOTAeY3/AizQBpyW55BgoX9s4pCVY9TXj/EyqS0yFNStoey+
+         KBLh8bY/b/Ck6zeV61LA/0TZ3JINE18zg4gvoqDYKbrCw8nw1Y2LW6PjlPYiGE6QIh7A
+         fuTpn8OKjB/XC9+iwtkd0VHQiEY0Nti1IrnbTfJpt27COk6+DGDW6Vmkj7TuYK3ua/bt
+         cAHvfQML79OYJWASiljNOtxb8jpzqVTQ2kI1+qM9TV37Y09F7uYZIMoh1TxGVKXtoTts
+         8i5vbwv2hglg5ZJqA8ZcMhD63dP2/EPZFRA/bF8HuCJIeNSgzMpOj/ROy0rjDIDvsBV0
+         rJ+w==
+X-Forwarded-Encrypted: i=1; AJvYcCXrkV/mtx5Q9a1+5gpTT4JBChNWH4VthP4EFcftl5lt0XHDkJcYxfkJKWJW4G97ZSUuiNxXwrEh+XhOX8zZFQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzzOXHP08y46pW+WhIIneoESAFITcP7HX4BBq7o27DAKdORj6AD
+	oYX9XbDlpgk9ECXckDvVQnaIuzIzGbrBQg1mB0YJnQ+q9iCp6W6S7Ep5+CrVPKGDr9BhsLIv1t3
+	KXyReKB6ecz6HW5bIrv7Nxd82BsJCN+c3objI/YJdUa3hSHJ8twqekGN5
+X-Gm-Gg: AY/fxX4SKX4dx249Mc9+yqI79u/TnS3T8vGCIjYC5Emi+GYEKoKvj+5nYNODgvy4O0Z
+	3Xm2Pin7bMs025zbzpLObfgtcyP/XBbFc9Q9+pNzBaWhF2sA6NSqfsV6ITWXhXCPhYgt/IgTkTc
+	Itrc9BGj1pTGKpCXOgNqXKajj/+6mU7z2Kh/DowXjEnyGe9Wq8L7+aX+xPCjTkI32Cu+7MbGXyk
+	STBlnvvEkXR0m/JnYWDAlB+CaySOoVWpJXUvGcfPvzlxWGWkz5YGiMJZFD1+j4vRMBB8/hw02aD
+	fcJTBiFYFFcQmW58D4XlGwSVgJPTRQE/IvgGICsqqzse+70Ki5sBQrU4Cg==
+X-Google-Smtp-Source: AGHT+IGnOY8cHaoSa8refvi55GtPBbWuAyzTCPpLjqQpuU09TO6GLYmPj8KwpI8kHIMdXLmZUr0kmdfCe6CJYJWRqIA=
+X-Received: by 2002:a05:6820:660e:b0:65d:1ec0:2fe5 with SMTP id
+ 006d021491bc7-65f545b3316mr3376567eaf.1.1767944078298; Thu, 08 Jan 2026
+ 23:34:38 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <409c49ef.ab91.19b9b835c62.Coremail.23009200614@stu.xidian.edu.cn>
+References: <409c49ef.ab91.19b9b835c62.Coremail.23009200614@stu.xidian.edu.cn> <4be6759d-091f-428c-a514-fec465cf053e@roeck-us.net>
+In-Reply-To: <4be6759d-091f-428c-a514-fec465cf053e@roeck-us.net>
+From: Aleksandr Nogikh <nogikh@google.com>
+Date: Fri, 9 Jan 2026 08:34:27 +0100
+X-Gm-Features: AQt7F2ogUyK0omYd-6DMkF5g_NsUVcwXb9vaiTqCU2aU3O6OcWmx0QxEZSaRjTA
+Message-ID: <CANp29Y5OvPgU7y6OftDtk=jhraJDJyDb3=DEBcOk9T9B99kcVg@mail.gmail.com>
+Subject: Re: [syzbot] Kernel panic in pcipcwd_get_status due to simulated overheat
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: =?UTF-8?B?546L5b+X?= <23009200614@stu.xidian.edu.cn>, 
+	linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 08, 2026 at 10:50:35AM +0800, 王志 wrote:
-> syzbot has found the following issue on:
-> 
-> HEAD commit:    6.18.0 (custom build)
-> git tree:       linux-stable
-> console output: (see below)
-> kernel config:  (attached)
-> 
-> ---
-> 
-> pcwd_pci: Card timer not enabled
-> pcwd_pci: Unexpected close, not stopping watchdog!
-> pcwd_pci: Card timer not enabled
-> pcwd_pci: Unexpected close, not stopping watchdog!
-> pcwd_pci: Card timer not enabled
-> Kernel panic - not syncing: pcwd_pci: Temperature overheat trip!
+On Thu, Jan 8, 2026 at 5:18=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> w=
+rote:
+>
+> On Thu, Jan 08, 2026 at 10:50:35AM +0800, =E7=8E=8B=E5=BF=97 wrote:
+> > syzbot has found the following issue on:
+> >
+> > HEAD commit:    6.18.0 (custom build)
+> > git tree:       linux-stable
+> > console output: (see below)
+> > kernel config:  (attached)
+> >
+> > ---
+> >
+> > pcwd_pci: Card timer not enabled
+> > pcwd_pci: Unexpected close, not stopping watchdog!
+> > pcwd_pci: Card timer not enabled
+> > pcwd_pci: Unexpected close, not stopping watchdog!
+> > pcwd_pci: Card timer not enabled
+> > Kernel panic - not syncing: pcwd_pci: Temperature overheat trip!
+>
+> You mean syzbot now complains that a driver is doing exactly what
+> it is supposed to be doing ? Really ?
+>
+> It is not surprising that more and more people consider syzbot reports
+> to be just noise.
 
-You mean syzbot now complains that a driver is doing exactly what
-it is supposed to be doing ? Really ?
+Please note that it was not a report from syzbot itself.
 
-It is not surprising that more and more people consider syzbot reports
-to be just noise.
-
-Guenter
+>
+> Guenter
+>
 
