@@ -1,84 +1,83 @@
-Return-Path: <linux-watchdog+bounces-4791-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4792-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16B98D0F807
-	for <lists+linux-watchdog@lfdr.de>; Sun, 11 Jan 2026 18:14:41 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FDC3D0F835
+	for <lists+linux-watchdog@lfdr.de>; Sun, 11 Jan 2026 18:30:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 57B1D302532A
-	for <lists+linux-watchdog@lfdr.de>; Sun, 11 Jan 2026 17:14:16 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C02A4300662C
+	for <lists+linux-watchdog@lfdr.de>; Sun, 11 Jan 2026 17:30:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 974441DF248;
-	Sun, 11 Jan 2026 17:14:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F2701E5B7A;
+	Sun, 11 Jan 2026 17:30:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iQ5xRKPU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KKlOVDnN"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BCD434A3DA
-	for <linux-watchdog@vger.kernel.org>; Sun, 11 Jan 2026 17:14:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FCAF156677
+	for <linux-watchdog@vger.kernel.org>; Sun, 11 Jan 2026 17:30:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768151655; cv=none; b=ix1FBRK4vs1L/lQi1+HzY0D57B+1F33/8oJklcKjboLOxxKVWAs/He+J2xuDl4FBZd8MIdnCjISoV9+22WyE0mnKfXtmgglkGo6TuH8uZTmSW1DmhbHfwFq5y1XWjJ1HpKTjBlNArnmqIdbxmy9NSClgiqXzUZF8MnqSqQOBN3M=
+	t=1768152634; cv=none; b=ZGyVhLLZYhuHCWiPIDo65i/KJyiWbHKJ9gu8RUph2uVqy2rfIgWFbTafnzplDnh3xFuYBp6ulR0/cBbOharbvK/yHHrvEpmQp33HOQtQivPzAGxZN55D9mBCQfZJHhmmV/KiF03LSFUONCBMahuJghD4QRuuMcB92nqemtjWmIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768151655; c=relaxed/simple;
-	bh=8MvUYiqAy2DhTDiAOe1zexmhcH5cmS1/p03VaTB4nu8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sAZboBsygbkcj0LkKuGaLw0sZ+DHv9/oVkX2n2YKd2Bp3MBMNcQXWLqcw9TwX2H5+WjXckxjTyUuVQrXZ889PtJn2jY+hecNyqb7fOEA9WQSZaPo21Y13cSSGZpImEsSftieESN/dVPVbRngI1qRYBHw//cryDNHPyW6199rohQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iQ5xRKPU; arc=none smtp.client-ip=209.85.214.170
+	s=arc-20240116; t=1768152634; c=relaxed/simple;
+	bh=7VZpYSNTIyeuxkRGN+r67rmzBHe1Pr9K7IFJ/0/wK5k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tD0YwVKtEjlzldhMdUVyIe0mldCcDTE3GpKn+8V7F19RrUiY9l1N4eG66ghT81jrUlLLl/tgOES1LzluZ37x1OB7P/g1z+4JM0UuKK6IXDEUjQ3bBrXKvIzqLz+ME/1Kq8N35G3OZK40slB2t89nNIoBK+Tr3K9XjxydFYjkWXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KKlOVDnN; arc=none smtp.client-ip=209.85.215.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2a3e89aa5d0so43317135ad.1
-        for <linux-watchdog@vger.kernel.org>; Sun, 11 Jan 2026 09:14:14 -0800 (PST)
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-c46d68f2b4eso3537416a12.2
+        for <linux-watchdog@vger.kernel.org>; Sun, 11 Jan 2026 09:30:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768151654; x=1768756454; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1768152632; x=1768757432; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gk+oWVMa9/CD8uMm+hfIDhfGbzYjaq5rsbbO2b6oknw=;
-        b=iQ5xRKPUbdL1yiIpmRYtn/kfZyhFTfqzO/vApleVm+bdPi2tZyX+Z5w6XVPjs152Gf
-         SG6s6WstzFKX1EiRDzNrVqoQcTDUrui41WgAC9JLUXxC/FKG1EQdLPUgs3H3UnFVMRYQ
-         gy+68wAUUbbuMCkSRbNOJhPgj4epyxDac64yAZmCwpruiu0KaOCse2aDIkeRvjBz+zsK
-         O5c7cGILGPucUv67zmhoL2gaylL2cTwUwbbITNdUwm+Fvc5WQC5X0p3oh4jO6kf1N8c4
-         wn0R2XcabQuIf0xJVCYrJb4vojfnJ27GPAjbxhTLr9QahtGhQbqVEHTWLZS4f9GWgo8A
-         /2mA==
+        bh=7nrSGen9ELczdoZIkrP+ZjFm7clYGQK8MfF+8Qg6DBA=;
+        b=KKlOVDnNOQbYXBA5cgeAqfEG6NW/IimBbjy9r/zVHhhYmQdDjjiqjAKseOr1uCozX0
+         XBb6eijqwBIbrfwVkz2DEK/VKS1uAy8tM5Sit1KctbU/1lpCjuqw7ZsHa5xmj+q06ezM
+         yTJa4qF24PcuXLGk1xk4u4tZMDP7tX0ME3BX4/5HsWXIReaow3mDKlP76aN/CCZVmnK9
+         o7Gdg5n9+PBkPlT03kM3JyHbni8CUEjzjITmJZyAHQftEsPbQqRjz8Wfw9PG5n1JWuYW
+         54uuLTEu+Qpf327EnQOkZNeQeg9RubJGDd0XXDjzFs/wKhaVK5NDyteTutGHJLAUHpgM
+         UHfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768151654; x=1768756454;
+        d=1e100.net; s=20230601; t=1768152632; x=1768757432;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gk+oWVMa9/CD8uMm+hfIDhfGbzYjaq5rsbbO2b6oknw=;
-        b=PkJj3k/K8xAWGPFhSfoTyCYreDUx8W83QFF4zS902n2nSuIhvy7+lpjR90zl+oCGp0
-         UYcp9+nYRqPQvttlGoGJmeJjVjkVj2C25yUC7wWFFUFNkY3n/piP1S+qT5J6vISPmd56
-         E4Afm9xFf4mthOoR8eFzA/U22Nd12AG4oNtEtzDa802B8QXMbZIfqJTxu5Hm4n1RBEv5
-         8wM4XzXcMG9i6tKEhptyZ8W7cixqgDjGAgxFvV/Io2b0kHuFf2xsxNRvBll5fLXvasbZ
-         Xkke0kYFj0O+/URHRcFWyFggRaOlni82AjR4F6pusz5iJjaAxe9+j7+sw+QwxI9w4Rgv
-         S5Og==
-X-Forwarded-Encrypted: i=1; AJvYcCULxMn7Z0kV5EDR3SykQdLAmbC7ATW9EEleI8x0HoNv2ITe9VLxHUzmC4LjgZYIAnEUUBgHnMvsW4cj0h/XjQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxaAj3Uo/JV0gb+s0rIpAkUieACYs4HWlpUj+U3HFVi+wolXFG8
-	fhKskZB4XB2OpqUGi3FF/qEf4byGVQFXPIXWoIyJUo+wA/G3g2K2wn+YjdBinad7xPLD4wLIqg=
-	=
-X-Gm-Gg: AY/fxX5C5Q402Xnni7vxq4cUfz7vJFbDVBFI8NEeQOQiRn1oH1M66C9KK3i1a9+msNY
-	AGTJphrulR+epZM/Vm9doTffbth1nRC7ePwK2kPqj2ER2RA+az7VFe0eD2rXmkTKesZohWJmWYz
-	ukdhPCDr0k36NjWvQxSaA5XzkvtA1qzE812XPbkMyQcXmuYeUq7Gnzg4fcT1Bw4zw3y7lRn7Tzq
-	sYD7QtVbgfLPIPx31m9IquDmD2UE0/Y91Ihm/Rwi0eyaVCeF3j7dk7cs81nRmjLAHCUCzsKbdbj
-	4HXtJuqgBLirRmd9W3x6QlC3226K4Hmg4FpxN4dLl1U6ynk0gcuGO85UAn7xXczpICblte7u8tX
-	WGPMIzkrxZRcyAe1j4wazou6oa2Z80XQhsQXtoeQeQdLhvMXogWlTknaUbyJMuX9BrJwisx88yU
-	D2NKHbKbN/2rKa7cxk
-X-Google-Smtp-Source: AGHT+IHTPKewwcqIeEBotpOhs/jd5E0sIedoNy6/NEG/mnKKoH+OfHASgZuXJnELaveSqCb1zOjgiw==
-X-Received: by 2002:a17:903:234a:b0:298:2e7a:3c47 with SMTP id d9443c01a7336-2a3ee49c6cemr151068525ad.42.1768151653664;
-        Sun, 11 Jan 2026 09:14:13 -0800 (PST)
+        bh=7nrSGen9ELczdoZIkrP+ZjFm7clYGQK8MfF+8Qg6DBA=;
+        b=pDrllDUmJLqNyYvxSnyA2QjQdEkO4kYnEYAXkmKuQJ++OAA02YilKgN2KAmTr+Ogu1
+         wNFdARSv+Cwrx+VMoQudzaVmF9fzEUsIXrTgkzxw2VazwT/htio0TcvKXmFzJyqsC9PR
+         5LsWXu+oDGLn8mZCzg8Zl/b3/NxbEe/Xae6UkQAsuHbGLeB84eeOPRolFRNnuXEMzXXR
+         PNZUnSnyBw3eFbBUeS44Yik6ZEO4c+DNXDIb5QdACjw+Jmfpga4LUBW3Uowp2OkwlD5k
+         fI1PuwI0mvKjTU7wygX8nylmP4u/V7xjmY8oW+XDh9bQRMHgPJD+6S5xadUFYSGxaN1h
+         wokg==
+X-Forwarded-Encrypted: i=1; AJvYcCW09Nt1y9FjEtifaGbWNyN/bCbkQ6iAbA/QWsSYEzmrb9TM50vtgQkoEKINz/tVyqCN297qH9vbEb9Y0JbcHQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzBAp/SWJQHbUaxNJMe+BOprXv2BlXWZoF/BArtG8BWArRWL5xz
+	UbevEcb/GvCi9Gc9NUKpAbCe3b9njUkrPMKmN+J7E5iS3prW8T0rhzI=
+X-Gm-Gg: AY/fxX7fAAeGtZGOeJdBGhkrAco4XORDMDfvVWNk15Hz1/iZCsSsnIY+bxFwbidhY+k
+	NR72gDsGgch3pqwMWaUXjbfPDlrSMM5BhERIM5HSIEVLiWXd/ByaB4vxfBCVaDQDquf0gpJPYrS
+	/2NrOSsilk5R99isuFqijQ0gtF43wqQtnXIgRzLyeOtj5EQsgYrqzrV8xqwVx8EHvKPE5obZl3g
+	uKmR3vZBNjR3gbzzzpaEnCT0p4qCRNTobkTyXV5Vdttb2IbCfzQEE4DV/MQh5WTToviVqdm8lDo
+	CePdxl0PTpfjYByPlckr+cwTnCaRSp3yyapyHgc0gR9/02Lp5fbpttu6tWr3U+u8CXHiXVTilvc
+	RkPrEXWe7n5vuYAr/dH89SX6YRH569LN6bZ9n/K957DAHrSJDIXSjEG5GZVFJASN+AP2ix7Ctl3
+	636XiQQ3WQiguz//6TXwBfm+h208I=
+X-Google-Smtp-Source: AGHT+IEeqHwYLv7QxsawYg2jczXhkYltIB2FIksnniX2UukfReFNgpA9EFXp0v3MzGEAKGHJ7GFDgw==
+X-Received: by 2002:a05:6a20:7d8a:b0:34f:afaa:125b with SMTP id adf61e73a8af0-3898f992bfcmr14037306637.50.1768152632273;
+        Sun, 11 Jan 2026 09:30:32 -0800 (PST)
 Received: from DESKTOP-BKIPFGN ([45.136.255.173])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a3e3c4796asm154741615ad.34.2026.01.11.09.14.10
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34f6b9a3d32sm5066831a91.14.2026.01.11.09.30.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jan 2026 09:14:13 -0800 (PST)
+        Sun, 11 Jan 2026 09:30:31 -0800 (PST)
 From: Kery Qi <qikeyu2017@gmail.com>
-To: xingyu.wu@starfivetech.com
-Cc: ziv.xu@starfivetech.com,
+To: wim@linux-watchdog.org
+Cc: linux@roeck-us.net,
 	linux-watchdog@vger.kernel.org,
 	Kery Qi <qikeyu2017@gmail.com>
-Subject: [PATCH] i2c: cadence: fix reference leak when pm_runtime_get_sync fails The PM reference count is not expected to be incremented on return in functions starfive_wdt_probe.
-Date: Mon, 12 Jan 2026 01:13:46 +0800
-Message-ID: <20260111171347.2170-1-qikeyu2017@gmail.com>
+Subject: [PATCH] watchdog: starfive-wdt: Fix PM reference leak in probe error path 
+Date: Mon, 12 Jan 2026 01:29:15 +0800
+Message-ID: <20260111172914.2191-2-qikeyu2017@gmail.com>
 X-Mailer: git-send-email 2.50.1.windows.1
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
@@ -87,6 +86,9 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+
+The PM reference count is not expected to be incremented on return in
+functions starfive_wdt_probe.
 
 However, pm_runtime_get_sync will increment pm usage counter
 even failed. Forgetting to putting operation will result in a
