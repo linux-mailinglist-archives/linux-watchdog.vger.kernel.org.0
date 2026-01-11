@@ -1,290 +1,157 @@
-Return-Path: <linux-watchdog+bounces-4789-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4790-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9978D0F54F
-	for <lists+linux-watchdog@lfdr.de>; Sun, 11 Jan 2026 16:46:56 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AD5ED0F60C
+	for <lists+linux-watchdog@lfdr.de>; Sun, 11 Jan 2026 16:55:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A9A4A30533D2
-	for <lists+linux-watchdog@lfdr.de>; Sun, 11 Jan 2026 15:46:04 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 51C913016374
+	for <lists+linux-watchdog@lfdr.de>; Sun, 11 Jan 2026 15:52:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BCD434D3A5;
-	Sun, 11 Jan 2026 15:45:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D770834B191;
+	Sun, 11 Jan 2026 15:52:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="h5fp5/fY";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="IoGiwdLm"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="ZmIYPdUY";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="NZ8y6r4d"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8458934CFD3
-	for <linux-watchdog@vger.kernel.org>; Sun, 11 Jan 2026 15:45:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 902D0306B11
+	for <linux-watchdog@vger.kernel.org>; Sun, 11 Jan 2026 15:52:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768146349; cv=none; b=mGTSFDKQS/1RlBlq/Fa0GkY0+B6wdOZH8cn40fI5lt2OZKjcP3kp2nMj5pBxVhUPtuC6z6mjUJlgnI28w4haLpdZ+wyjm85RSXxqbOhe6FGGVWKltINxhCWBeGdmBrkIDJ95plolbdq59ZeMDwMlCxixyTETgRdH5wp+jmROMU0=
+	t=1768146769; cv=none; b=I8nVeA2OO37yTLbTg42p2TnVOtac/geVt4l6aKyaJVB8j/KDwJSf14O8k+gJwbr2rB3b6qq0F/EX8tf+cBOg3SJ3k2bgN7BktcAc01Tbhvvgjd//DTnhLWctkPaKm7MQSnX9cD4lQLHoK7/V9c525vrpLLrKAaRy3xPeuS9Gems=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768146349; c=relaxed/simple;
-	bh=3n8ScSa9U5u4J9FORj/r+W2S9YcBhcL6ToUsDlBBb8w=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=YUeuNvpykpPBo2Ui/TnKFfEWEpyTu3x2dF0K1bgmUmoE7jY/knQvgQDZa9WyhwAU6JPbwpIuU49U27EVnZ7NekUlEFEyWnd8Sf9MzCiEYz0JlG/eyy6eqeOs3YleYiJ+7BcI2zRM8sFEio8xQWlOVw7CSEz2upK6DKp5Y/c0Gu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=h5fp5/fY; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=IoGiwdLm; arc=none smtp.client-ip=205.220.180.131
+	s=arc-20240116; t=1768146769; c=relaxed/simple;
+	bh=8l+oE5/ydcmL36vqKsACJnrox1h/uViSmRXsmGplOjc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=sPjSPK3GPjlGyazdaWN4zZ/e1Scbq01HHounvhqBBrVAwT/SbI5H1Nl17KQo24JEO6ffDYDxlMpxOd3OmPbwm4RsTc5Pc2iPUKTG3H/ZaaYgI+VpV/R7n+YdD2m2FxcvgPmEAlOmA47b2XaiNW1a1kdy0fv5RmJADI7s/VEN3ng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=ZmIYPdUY; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=NZ8y6r4d; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60B5NwW41931946
-	for <linux-watchdog@vger.kernel.org>; Sun, 11 Jan 2026 15:45:46 GMT
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60BDrGrq220312
+	for <linux-watchdog@vger.kernel.org>; Sun, 11 Jan 2026 15:52:48 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	YWkiFRWGmUEeIfo9pk1+SznEx7y/iiY47QRvAY739P8=; b=h5fp5/fYf8Cp1u+J
-	eNTAV/cR0CVaewv9cUKxrGQdU0Seky51/sS8dGfd4k4x1+bpQ/XLZEywiHkajwFp
-	fkUtmzXWhF7YzKB53+ZqsjKEjNn67rTZePTQbDuRrC6nok7rADYo7ue0Eq/mWX5j
-	fvGW3OuGqdanLEseF445GDBxLCbcG4wia3crPz5T69WuQEcqYm1kzBOUre7ok5Nx
-	JuP3ZDU8Bc632si73nPakeDRozNw9pRsZqbUqMc6QchjCBYZq8RyxrCWtu72W+0v
-	/MM3TOrhhgeM5DzM3Pif6mwAatw56DvdVbg/ozQ5kF793n3fNzag8DR0+YMMHdNk
-	c7YnXQ==
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bkeusjd9r-1
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=l2pDAmt+vZJ8y/1vGLOD/L9ZJDYKF5uRkJ2
+	hob/H1bY=; b=ZmIYPdUYe2/tTsG/rsinNKs3d5AraeT/tzZEUYvng9ivDXZfnPd
+	0Dal5y1jM/yADyW9HNkrMBhzDO81KGnTV1NMPWJsYNYrct2UgyWbNIzcqWy/8H4V
+	4N5epCNHeqZ3tYDALs4ScGlsbrexj9mPEQpVFk1XDkRe4LUBstYG1qr/+EAIeeyg
+	vmNp3O6DWR948K2bGipO+Pt+dwpF3V6P4Pc5J1BEXvih4Z+UZYifSkGY0KHCfpdi
+	yBv6k3qG2X3tYnva3dCkyedMAk9HoCxcqWpmnnEtG6sZtHUwLtwfTQkFD9KPVv2K
+	L548MeJN6DsaSfXNMYghW1TKdjshPuQbaQw==
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bkfxftbce-1
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-watchdog@vger.kernel.org>; Sun, 11 Jan 2026 15:45:46 +0000 (GMT)
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-8b6a9c80038so610041285a.2
-        for <linux-watchdog@vger.kernel.org>; Sun, 11 Jan 2026 07:45:46 -0800 (PST)
+	for <linux-watchdog@vger.kernel.org>; Sun, 11 Jan 2026 15:52:48 +0000 (GMT)
+Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-c56848e6f45so1150610a12.2
+        for <linux-watchdog@vger.kernel.org>; Sun, 11 Jan 2026 07:52:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1768146346; x=1768751146; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YWkiFRWGmUEeIfo9pk1+SznEx7y/iiY47QRvAY739P8=;
-        b=IoGiwdLm5NSZ+UTcRjRFJM7jR8n5QV6N+9xSbvNjTLBS4opdzZrIqZlduULImNsEcN
-         pPRAoTlU6g1qp8NE5PBie1Cl+wGpEtOQrKJqF4kFdTWBb5UMjJjYtB0ECk0wDdqFSAzq
-         uOlBKdXsI5uyOrCKZv6orMNpYkEzfbeP6SHlyLB8zzkh9dAq8Nlz/brfRL935l91Z8nI
-         yGJL+qXmYllg/4bo5c1diLJVZ/cgc6JPNvPQya6Pt+UfwFpKC6zdlwqSDs+ADknIkoqA
-         fndRW2Yeme+TU32FgYDyx54pEjwP8KdDch65Xp02zV+Bl1BRVbctWIAmaA0z7bq2krHX
-         5M2g==
+        d=oss.qualcomm.com; s=google; t=1768146767; x=1768751567; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=l2pDAmt+vZJ8y/1vGLOD/L9ZJDYKF5uRkJ2hob/H1bY=;
+        b=NZ8y6r4d5QbydAfNSfQU7bMhrUXE7O8n3kyLtfC/unzhLuIPCiD0TZkzQuww+qLr5R
+         yClTxF9szy3IuiP7pgjbjt3fOf3JmUSmBkFOU29gsRVonZxhdnASbIkSRnSVLV0JFPiL
+         M/AUxbuxf+2b/ozgYoioadcvQWA4JUvtm36NJbMkdHlqh7V3k+wkzZZ/RhejHxvjJWbT
+         xJMBF6OeArVti1cBF+ksBad7XXzXG4cau+j2q/94QcbvqtiIDsqi6XH+WfyrMJNqPeQA
+         VDhHl0fu5s4d0pnTviH7dPImBoScD6O5QV6/MEH3sYMr8A1vOANBXmo4ZhIQAl0Tccf1
+         oi9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768146346; x=1768751146;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=YWkiFRWGmUEeIfo9pk1+SznEx7y/iiY47QRvAY739P8=;
-        b=MKr3C6KotyeOXGDYCayATN5nMNrALfKCHnrfvDt5CZjtZEoqmi95uhgd41oXD+BsMs
-         Id/g0xnUvt9wIfc5yoWchRYkfALwGe9k0GF3QjQqt1WsxY/lG3NtwmEO3Jchaht5Yza/
-         xUNFdZzn2CivbFoRPCYu1a7R2ChOl/j/PWcP4STe75oTrN+QOOj6bSkYr+8avYcqMNq3
-         +NhXIjH49mSS/4LSWScKlJrsJaYo7aBN92UWHnPJQUwtBnWlSHvitagRhZS6JynJTll8
-         xDVNusMQAUYXMSjOfpoDtTGhH22VomtFZ3YWqb9SS6HsU7pm0SG/ZVyOiF7dpxjJo9x8
-         h2ag==
-X-Gm-Message-State: AOJu0YzO4VIF6F8PXASj8w9qEnzNT90IRA3BOrjd7yLC2Jv3l4+fNODA
-	aBu/0/OFAn1xKAVtd8NteUDXFmhaUMoe6wWfNoNcLMlVuF8mhp9CqAUzIP1xGkNQ0RA0YcpNZNa
-	6fyCaziFhlCVn/ea+0Lh5uI54cUDWZ1rP1NdcuGjbYssd42yGc3y8633tVjEs6WXp6vNQTw==
-X-Gm-Gg: AY/fxX4pqRpyeGRa6wKPfrh42cVALibwq13/SmfdWrO+3uDh+B/FDNIwakyiB0m7VGv
-	T7iSobB6MGOf/LBQolva2JyYZw66thCIvQMYENRlvyGfkQT5O/Va8HMfu89Owih3G5pmNLbpAzV
-	NmPpFkVW7PFc0NyRyDtNGN5eUrxlUq72+AEbd2upnnMonpTFy8a1DAe3iDyCSHl+26jb+qvdhqf
-	wvGrb8RedfD7j+2C7UUSzizwh3arqmy93m53IKqdxSJ/fcwu1i3mFV+7/Sh+AacQ1iV9MSy4LhB
-	CHkuHP/OWgKec1trIUc23W5w1T2Bieuz3FFVOWN1ciRS+gJYm0Vxs6iVjOOrQobSk0Gv1afONzD
-	wcQM/IkXYV6wHUPqpFUJuk+EbwXZieJKThQ==
-X-Received: by 2002:a05:620a:3714:b0:8c3:7e51:94c6 with SMTP id af79cd13be357-8c3893de845mr2022081785a.60.1768146345895;
-        Sun, 11 Jan 2026 07:45:45 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEGKCvt3hBx24DOeWZG5DTt6M06psOg3clXXiYCgTQKo6WJrNjb3r8dXi6KuFzWcDmgDp9+yw==
-X-Received: by 2002:a05:620a:3714:b0:8c3:7e51:94c6 with SMTP id af79cd13be357-8c3893de845mr2022078285a.60.1768146345392;
-        Sun, 11 Jan 2026 07:45:45 -0800 (PST)
-Received: from [127.0.1.1] ([178.197.218.229])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b842a5180bdsm1636605566b.57.2026.01.11.07.45.44
+        d=1e100.net; s=20230601; t=1768146767; x=1768751567;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l2pDAmt+vZJ8y/1vGLOD/L9ZJDYKF5uRkJ2hob/H1bY=;
+        b=Oow4IkLBq3w7RmLmy/cyrJ7o7m3KeIOe0M6yS/8JZ5/ExpBqASCIn6872kIHHSfVc7
+         pt7mWA3e3d+FThRrRc9p8nETFiHzY2WLG2G1jbNQowjy4dJrAWerC++RAmYbN+JHjVWo
+         th9+MbWpePPKtqD3nsYFmKUsKIBqQmHuD+/GI3IAO7ChA8zpELxnQn0vcPpMtni13q+h
+         Z/fGLzYaHrj0HWwXNNXtQ4+x1NFEofnP8wwyrVcEH84rFRMMM6yzF3lqCnoKtMbSkRz7
+         9P+vFEuFIh5v/97zra687VlULlSWoKyW9vTaYZJKuLRypJSxa7lovvZ979K3PBROEEcA
+         /exA==
+X-Forwarded-Encrypted: i=1; AJvYcCVPHayErv5IgF9mBS4svsk7+2gAVoYnazh/eC5f9Zc6TyW/YjuCqnq+ej0R1sNfMlswNMhZSrDls5Lm60ImvA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLopl6TyLGovrtpNfl7d2omtMvzwN0ccAe87i4lwzPPpDECE7C
+	irpGtjdq+zZJXJsKOmM0D9K2Jz4ko9A6jUThzEXQo8V9cWX82c+TYQEiB8fR6ai6uX6CA0kGTSp
+	vN37vZuGO6GWG6SoZfxM1O2XmXdth6OAcE/n+KEJrCPFto1q1O4N2+snRv5hQ8qAd2/CyvQ==
+X-Gm-Gg: AY/fxX5TCXmQ34ZhzMlkbFna4rLR2bYbb80vehhstSPveAR04DpOvHyRTw/Oflvg46Q
+	n9D5QnyAk/VMKIe836sr57HIHNJxgIKvfeoaZeiWLMnlK3unpCCv1ts1vbPoPJFrQ7IO7kJGEYG
+	VXhufVHF/Wi4e9LCNfElUhp0z2lI9DxGorwMDuVPIH/vZTulSWOzrRU5otaCVQsLhv6oqgU1beE
+	BP8lKykn+Pl7kUalXuSkME1Q0p+PfJsMn/SOwdraTH70oEdwdJJ2+5VCaptNRp0/NBl3WrhS2Mw
+	VEDAluKc88kfBEpxjHiil+mswXDUEZ38ZkXvSA9kkR8cjthCDbVsGTSVvFgkagOYwWuzk7AAcfT
+	kdT2akenrX3MfuCwrsf1ltO0YLOdpadbdTuFDKekoHaZ4Zi7n+WivZzbzBB4Sbmg+i6SVW+qIWY
+	hKCWzpeGEDvCSs0ieRiNE64ZJz7nJmEQ==
+X-Received: by 2002:a05:6300:210d:b0:384:d0fc:f518 with SMTP id adf61e73a8af0-3898fa174aemr14449376637.79.1768146767356;
+        Sun, 11 Jan 2026 07:52:47 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGxPuuDAYDdmjGEASuvCN1GVxCQSLBpt8L2f0b6eOml2ugb6D2LyZDOnn16Ta/XhQo/7fJhjA==
+X-Received: by 2002:a05:6300:210d:b0:384:d0fc:f518 with SMTP id adf61e73a8af0-3898fa174aemr14449360637.79.1768146766853;
+        Sun, 11 Jan 2026 07:52:46 -0800 (PST)
+Received: from hu-pankpati-blr.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com. [103.229.18.19])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c4cbfc2f6d3sm15188241a12.9.2026.01.11.07.52.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jan 2026 07:45:44 -0800 (PST)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Date: Sun, 11 Jan 2026 16:45:33 +0100
-Subject: [PATCH RESEND v2 4/4] dt-bindings: watchdog: samsung-wdt: Split
- if:then: and constrain more
+        Sun, 11 Jan 2026 07:52:46 -0800 (PST)
+From: Pankaj Patil <pankaj.patil@oss.qualcomm.com>
+To: wim@linux-watchdog.org, linux@roeck-us.net, robh@kernel.org,
+        krzk+dt@kernel.org, conor+dt@kernel.org,
+        rajendra.nayak@oss.qualcomm.com
+Cc: linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: watchdog: qcom-wdt: Document Glymur watchdog
+Date: Sun, 11 Jan 2026 21:22:34 +0530
+Message-Id: <20260111155234.5829-1-pankaj.patil@oss.qualcomm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260111-watchdog-s3c-cleanup-v2-4-fab2d21a2048@oss.qualcomm.com>
-References: <20260111-watchdog-s3c-cleanup-v2-0-fab2d21a2048@oss.qualcomm.com>
-In-Reply-To: <20260111-watchdog-s3c-cleanup-v2-0-fab2d21a2048@oss.qualcomm.com>
-To: Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Cc: linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3929;
- i=krzysztof.kozlowski@oss.qualcomm.com; h=from:subject:message-id;
- bh=3n8ScSa9U5u4J9FORj/r+W2S9YcBhcL6ToUsDlBBb8w=;
- b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBpY8WhdFP5yqpjM3ZPjrwLVRO3GL56PVsbsEIff
- KyB3+gLX3GJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaWPFoQAKCRDBN2bmhouD
- 1/KgD/41ajtitwvCnpMd6WTsG/peGerhYrdHSWLTNBE88YKohzQug76g2yb2FEezfpBDGmBCSex
- lbTw35oqqX5Q4G/NrQfaEoauXl1v4txxnODhunRRpHbA4aakwYdR6l0A9xkZ1SaxaBqrr14vPhn
- IiKoYHhQfWS36aQ2GC1bkSVkHWn+P/GMfdpqfgzDhVFrF44eFTRkvoqkqpZ00FSskZhQ9GtoV6U
- CXemanWg85tCLKDeiqUsyUlyQ7sjI7Xyw81ojW248XQkBf4Du+tUSVtcqtkEDTp0VTGaMrnnXZp
- SlRjQENldY3e6FR0DpkMQ805ImLmtEIT39PXyoWqAj2+BZ3TBdX0AB5M6QDOZfzXLzUArNv5NFq
- x6rt5a/iYoGutMAMiNMoNgDOjKRvFpGCrewzO0YYGZrBgn2ID7T7TvJLmDhPBH0XrNcwFfqkuvq
- eT3i6oG0kDSJa/Jd9OQqe5NkuJxvfWWEjFN61zoN2qWs6Di2egLKDTfb7uWI/vh3lNGZbG94kkL
- m6CGpbUI6k3yiuG/JOS6wgDDeJ49VArLfFy4zBWGU4AfsUazBlbN6uK0eAMP/zrHuiLZ8+AAVwu
- zD4JyeqGb0SKokpTfp1PF5gWKuptqd2g0SG1+wxnBOCFcStZiZv7V8MoBAwFVeW2kSgqiM8gItA
- TIUAaj5Mgl8upOA==
-X-Developer-Key: i=krzysztof.kozlowski@oss.qualcomm.com; a=openpgp;
- fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
-X-Proofpoint-ORIG-GUID: FLus8krY8GzQlVOv4lRDpFPixrEeWJIl
-X-Authority-Analysis: v=2.4 cv=GNMF0+NK c=1 sm=1 tr=0 ts=6963c5aa cx=c_pps
- a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=Eb9f15NH/cHKzfGOmZSO4Q==:17
- a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=_jlGtV7tAAAA:8 a=VwQbUJbxAAAA:8 a=hD80L64hAAAA:8
- a=EUspDBNiAAAA:8 a=l-N3HDM6Fn6Kim4WiOwA:9 a=QEXdDO2ut3YA:10
- a=PEH46H7Ffwr30OY-TuGO:22 a=nlm17XC03S6CtCLSeiRr:22
-X-Proofpoint-GUID: FLus8krY8GzQlVOv4lRDpFPixrEeWJIl
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTExMDE0NiBTYWx0ZWRfXznNN8hfkWxOw
- EOCkRPXM0EerLEI9VhhDsf0cL7wNxAgSIbUR/XnpVGooVq35kyWaOdysK2qeCqWJUWtGgUEx0TU
- HOrjBbvJ5h7Z/rPV0mhYdyfqepIiotTSNzljAGaoW3x23RiPTHu4CgbPPo5t0NSnWiAAMZa1bGV
- 37rep/G/Wy+7gXKADtgxhQvi1igvKrs7Sc97y/TrxuFYzv0pklou0EAt/NN8SzTqGZSMcbj7BjW
- PURZ3WqDtilosp6aen3LYZol4WH7jr63eo/c3H1jtZE5Naz1bocb9zM7jf8t7KnhkNnCQdLgNyb
- zPa9nfWOE+q7ZYnolGVDK5cY77F6AvogzNbkc7ICbRNpiFiBROBrz6emgLmHUDnT2XPN6+Lh6Gp
- T1iI9zhqto/IitUR0nWj85lYdD3iLlKzhqBJwhU1uwe6l1/fKw5jSDVMnJLDyb1hqFKQUuGGp/k
- 3LnmaCG9ECNl+NMbUHA==
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1768146754; l=790; i=pankaj.patil@oss.qualcomm.com; s=20251121; h=from:subject; bh=8l+oE5/ydcmL36vqKsACJnrox1h/uViSmRXsmGplOjc=; b=hiOGL4coSK0fhqmbF62bkwvEPEtn3I7vPgcqdzePfY0EQENtfuO7pCelH74ctkfRxH5AOaeDV K9YNMMot8iyCFv7NCRkaW6UZTyphJFRYxVP9zU8kzwXcDtcH9Mw0v0i
+X-Developer-Key: i=pankaj.patil@oss.qualcomm.com; a=ed25519; pk=pWpEq/tlX6TaKH1UQolvxjRD+Vdib/sEkb8bH8AL6gc=
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: MlFZE-4teAsx0AsOK3n6EJUh8Llolssy
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTExMDE0NyBTYWx0ZWRfX0BQmuRReDXFj
+ /H7bP6P4IF/6/3wOK9/RT4pnzIjcIpOTZ0lu+YP/oULHpA26bnfufLB3UincQCo9rHIuGeCYjz9
+ Yf4p/+yIcSyO6QpOysg1HuAdvRTv6jFdTUT8MiU1HP+w7HIQ2q8HGSZuKvd6b4pGBBm16ggn3Ql
+ 9nRnogPzt9BoEE4S/qW1XpVjigG7weIhDBqBqGAx97jEOdir1muCnBgbyIWnB2ItHBG5OWIK/Uj
+ SEyjaiRu5pD5I8F6hJSsUy4zxXzW54/8QgYP1gJv1Wk19tIGg0aogzrX4c7sfxyoiHV1Kr94lo3
+ y8O4XFHhJN5rIorAsT89j16BNQAcDNfYtGmNYJRqTpOxa08hXrFFFnB1nxOvY5ZRFELlFWlwibE
+ 3AVo/L4VWhEVbWr2ERGwTtICUVpFKAotWlIN83TXUTZiIQlT+UAMaBpJvRHe78VWh+BVf7IvmjM
+ Qt9fvO4TTrkUmvtN3Nw==
+X-Authority-Analysis: v=2.4 cv=c7WmgB9l c=1 sm=1 tr=0 ts=6963c750 cx=c_pps
+ a=Oh5Dbbf/trHjhBongsHeRQ==:117 a=Ou0eQOY4+eZoSc0qltEV5Q==:17
+ a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=EUspDBNiAAAA:8 a=FN4xVkFXDHB5uStvxEgA:9 a=_Vgx9l1VpLgwpw_dHYaR:22
+X-Proofpoint-GUID: MlFZE-4teAsx0AsOK3n6EJUh8Llolssy
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2026-01-11_06,2026-01-09_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 phishscore=0 bulkscore=0 adultscore=0 malwarescore=0
- lowpriorityscore=0 suspectscore=0 spamscore=0 priorityscore=1501
- impostorscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2512120000
- definitions=main-2601110146
+ clxscore=1011 phishscore=0 priorityscore=1501 lowpriorityscore=0 bulkscore=0
+ spamscore=0 impostorscore=0 suspectscore=0 adultscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2601110147
 
-Binding defined two if:then: blocks covering different conditions but
-not fully constraining the properties per each variant:
-1. "if:" to require samsung,syscon-phandle,
-2. "if:" with "else:" to narrow number of clocks and require or disallow
-   samsung,cluster-index.
+Add devicetree binding for watchdog present on Qualcomm's Glymur SoC
 
-This still did not cover following cases:
-1. Disallow samsung,syscon-phandle when not applicable,
-2. Narrow samsung,cluster-index to [0, 1], for SoCs with only two
-   clusters.
-
-Solving this in current format would lead to spaghetti code, so re-write
-entire "if:then:" approach into mutually exclusive cases so each SoC
-appears only in one "if:" block.  This allows to forbid
-samsung,syscon-phandle for S3C6410, and narrow samsung,cluster-index
-to [0, 1].
-
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-Acked-by: Rob Herring (Arm) <robh@kernel.org>
-Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Signed-off-by: Pankaj Patil <pankaj.patil@oss.qualcomm.com>
 ---
- .../devicetree/bindings/watchdog/samsung-wdt.yaml  | 70 ++++++++++++++++------
- 1 file changed, 52 insertions(+), 18 deletions(-)
+ Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml b/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml
-index 51e597ba7db2..41aee1655b0c 100644
---- a/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml
-@@ -74,24 +74,7 @@ allOf:
-           contains:
-             enum:
-               - google,gs101-wdt
--              - samsung,exynos5250-wdt
--              - samsung,exynos5420-wdt
--              - samsung,exynos7-wdt
-               - samsung,exynos850-wdt
--              - samsung,exynos990-wdt
--              - samsung,exynosautov9-wdt
--              - samsung,exynosautov920-wdt
--    then:
--      required:
--        - samsung,syscon-phandle
--  - if:
--      properties:
--        compatible:
--          contains:
--            enum:
--              - google,gs101-wdt
--              - samsung,exynos850-wdt
--              - samsung,exynos990-wdt
-               - samsung,exynosautov9-wdt
-               - samsung,exynosautov920-wdt
-     then:
-@@ -104,9 +87,41 @@ allOf:
-           items:
-             - const: watchdog
-             - const: watchdog_src
-+        samsung,cluster-index:
-+          enum: [0, 1]
-       required:
-         - samsung,cluster-index
--    else:
-+        - samsung,syscon-phandle
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - samsung,exynos990-wdt
-+    then:
-+      properties:
-+        clocks:
-+          items:
-+            - description: Bus clock, used for register interface
-+            - description: Source clock (driving watchdog counter)
-+        clock-names:
-+          items:
-+            - const: watchdog
-+            - const: watchdog_src
-+      required:
-+        - samsung,cluster-index
-+        - samsung,syscon-phandle
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - samsung,exynos5250-wdt
-+              - samsung,exynos5420-wdt
-+              - samsung,exynos7-wdt
-+    then:
-       properties:
-         clocks:
-           items:
-@@ -115,6 +130,25 @@ allOf:
-           items:
-             - const: watchdog
-         samsung,cluster-index: false
-+      required:
-+        - samsung,syscon-phandle
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - samsung,s3c6410-wdt
-+    then:
-+      properties:
-+        clocks:
-+          items:
-+            - description: Bus clock, which is also a source clock
-+        clock-names:
-+          items:
-+            - const: watchdog
-+        samsung,cluster-index: false
-+        samsung,syscon-phandle: false
- 
- unevaluatedProperties: false
- 
-
+diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+index 54f5311ed016..f5eb648e2801 100644
+--- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+@@ -17,6 +17,7 @@ properties:
+     oneOf:
+       - items:
+           - enum:
++              - qcom,apss-wdt-glymur
+               - qcom,kpss-wdt-ipq4019
+               - qcom,apss-wdt-ipq5018
+               - qcom,apss-wdt-ipq5332
 -- 
-2.51.0
+2.34.1
 
 
