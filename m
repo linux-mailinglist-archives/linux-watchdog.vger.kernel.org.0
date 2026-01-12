@@ -1,46 +1,80 @@
-Return-Path: <linux-watchdog+bounces-4800-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4801-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CC3BD12FB4
-	for <lists+linux-watchdog@lfdr.de>; Mon, 12 Jan 2026 15:03:06 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id E085BD14C77
+	for <lists+linux-watchdog@lfdr.de>; Mon, 12 Jan 2026 19:31:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 762DB3053734
-	for <lists+linux-watchdog@lfdr.de>; Mon, 12 Jan 2026 13:56:32 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 84A9F30060F9
+	for <lists+linux-watchdog@lfdr.de>; Mon, 12 Jan 2026 18:31:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F041358D14;
-	Mon, 12 Jan 2026 13:56:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DE373090E0;
+	Mon, 12 Jan 2026 18:31:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FeAocew6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UGp7ENy7"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 291CC352F95;
-	Mon, 12 Jan 2026 13:56:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2415C2DCBF7
+	for <linux-watchdog@vger.kernel.org>; Mon, 12 Jan 2026 18:31:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768226189; cv=none; b=Dr7rGzzhUirrwA8nv1T+so4laRjZcZIhDEhwgxTTAvbuyHCmBxCVbF0g++gTBmpXj/AqkCZG1nmVcPYpdeOjr+fr9D8hyo8cULLp4PCUcn0DsTd7efDPXyaYBRTukx6RV7DtTZp17mV880ft6eWRoYNs19hvcsvvkHV7Ol9yItM=
+	t=1768242703; cv=none; b=edRgbr2VTMny2KDANfCSJA8h+IbEYm+Grgg4WsUb6gAs+j6NSm0tyb+Qad8koDOF5rVDgO/n0qLs1I2Wz49mex/esnblnoGZAPra40DmIguy/ebYRltdD7ntI79yGxZOLAA79tHVI2EnsxkSlsqyosn49856rbnujgghPYegN04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768226189; c=relaxed/simple;
-	bh=nTOWUyppmdziosK5hC+4lapcYTGSSnyVm7zOVtqp8M0=;
+	s=arc-20240116; t=1768242703; c=relaxed/simple;
+	bh=q3Eh1eOk0KY9COaWecDtDBcWzeZGOrEQL+B+wKxicj4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=A5ROoZ+Zs+H90iHngDKjFV4/K1yRqcO1g4gFISsrPl7nlTts+GqPG8wpolY5GXxTU+8fNtJPP16WZiGgvuOz5RyPR+vQslX/y2Hx1x3kstpJSEroIKQmdAnO0BvYwEVEfzxBUHdw26Qf9p9HnvBlvt4h/pCRPOhgZtR+inLgPxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FeAocew6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB2C6C16AAE;
-	Mon, 12 Jan 2026 13:56:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768226189;
-	bh=nTOWUyppmdziosK5hC+4lapcYTGSSnyVm7zOVtqp8M0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=FeAocew6ZwUQ24IpZZlNx4LFCD0z0wEn3RWO6QKKLw39I1ZGaKv5lLQ7VxeoLwh9t
-	 mVULJHsw/busSOvuV0gsKBLsZq57QjLORdfYnxR3UfAk1QKbv2xMXnZ8N0usEmfAiG
-	 2DGzx4L3GD8K929oKD6CdXg4ZkSm9hNbPGvY8VpFeGNE3n9t82ge/XwqBovQ4uIDiO
-	 NZZeDhFhzTQo2t8Nf4XZn8HYtSXienGr5HIWQpxJiOvqbMMRgCPBq7BOCAuzXfEUdt
-	 bqCygXVSprM6U7QfwplXvLd+JVJfUaYYdYIvG03j4mmJ3rV7Ib7UUIODXNbY/s+mY0
-	 oy8A+65dSKgoQ==
-Message-ID: <c9575d58-4320-4c72-938b-16cd0a400ef0@kernel.org>
-Date: Mon, 12 Jan 2026 14:56:24 +0100
+	 In-Reply-To:Content-Type; b=mJ3FdIf11hVwrkDXkQ+rSsxYqM5Q+REPfWfstdS3gKPQIOYV1QJjdaEqxqlkxktF9WHbkLe8Du3rJ6+bh8WI/rvfVcgrKA67CM/DoHIb+tcUXvarqebbtDYP2y7CBJarRD4+7Oa2jnzfT0n/w+lmFvCLJewDjARzELHHAAcI7rE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UGp7ENy7; arc=none smtp.client-ip=74.125.82.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-2ae5af476e1so2677405eec.1
+        for <linux-watchdog@vger.kernel.org>; Mon, 12 Jan 2026 10:31:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768242701; x=1768847501; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=mV4AojHvRyhYno3Akkk2iFwkIjDptGliuZ7lzw/dL3k=;
+        b=UGp7ENy7bsVQR8V8o3za8uOWLOE3HqfW4ceVop55O/z1UBRpFS0D4iX6LmRQYbO19o
+         dOB0MElFKcG3eizbzlS2+96JuRSe8SOKWg8xm+dNirGL8A4GBvrqTqhrrX39yrsSq0xA
+         Vgfg4vPcM+qvn9qO6txvlHqD9A5MT+BrGIJZMPP1Ryknu7F87UzCUkYkEqIrhE6jgtW3
+         KvMvMMWlH4LW49uBp120vsNVq5bTkl/aQvkvXQuypcS7IvWtFiu2dcE1E7qGIfHKeMQx
+         rCtkMmKq/mWlTj2YCw3EOJJLr/lIo52Kua6wUPZj5Y2f9n78zp6SY42aZW8gCBVhseec
+         8/Dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768242701; x=1768847501;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mV4AojHvRyhYno3Akkk2iFwkIjDptGliuZ7lzw/dL3k=;
+        b=sIH4OEjH2D7a8OHHGhAXI1UHW5ucwGDCLhvhDYfOwrA3z6uU2SdT8QUGzGEyWrbnEL
+         etXqHZtLH+7FUr58lh5YsJQoiHlswcYShyXvyXu+/HnH2pMxCpkFw/2z57HfT74wji77
+         mhnDd1kPNsGY5YFJ7g8A24EqsTatGlyM7UTHWTpCm66mLsQDBei+MAFyCfcx2dt7J7pX
+         +bEaJHWqZhMsyU/N8bB5q9ix/FLOv3b5qRNvVW55l2v1hwI6rAAlxB+OaCxR5ELJwXbm
+         u2HH79tpcQWjCa79xjEebN5AnFCTFcWUbyEIgDT+jv8AHZ7N50+NGbDF4pVZrnjmyHnl
+         K0xg==
+X-Gm-Message-State: AOJu0Yx8UPnxRE1Le+lzQrZE+2/fuqDVgPVSauyTUciR94Lu9AQ6JiNr
+	atC9fWOnmhPDBJULOt4ESA2qvMVgvRsgJ5ovGoiOqVHwEpv2flNVd7vX
+X-Gm-Gg: AY/fxX4ljScltKTWE/AaxG9zDtFMMykQMPwC4Ti0HeNNaDmHOE8BIQud2DXP6qv0ENJ
+	mcUvJom0z43ioqPiHd7sGtKTbTPS6fHowetv1C/RLeVWpbLc4JC8tlHZlo5Y2sO/T0r26frk9Xc
+	z6nsqwcu0iIar1AbWHLGkU0HXlke6Efknti75RHgov4JxQ2RX4QJISdcExmtpj3FRkXzHoKrfVo
+	Rq3t678MOwmtPNECpFPrfe1K9sFUFIeypYGmBjLaT6825yveTPKWQCqqhlrHAraufc1z77W+vCd
+	QXFsUnu6SCiIPmByHie8nM6rt796guPrLdwyIyDAV2h63h3InYtb1MGHiEuXB7otgWf2BDl571n
+	Q2OhmHZxian6hM+syOnR8p6qTirIFlvUwhLZE+QUT45YRrzY6CpPbj2FJajhaNzgI/+dWduZnqz
+	A0o9fBIQT/e1x9nG/g+b2Y0Hdm1AgTu6l2ju/yVNHCoW2mv1Rub8U5D+ZcD+kNci/3UibP5GE=
+X-Google-Smtp-Source: AGHT+IGoabbmVtHntJRf0P9vIMvdCUpQSdMtCmrGN8qBz6n/dmXqJqmfbMu4VAow/Rb6YJ5HYthgYQ==
+X-Received: by 2002:a05:7300:1912:b0:2a4:701a:b9ba with SMTP id 5a478bee46e88-2b44f49d28amr212062eec.14.1768242701114;
+        Mon, 12 Jan 2026 10:31:41 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b1707da231sm17895409eec.34.2026.01.12.10.31.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jan 2026 10:31:40 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <3bcf4710-9b4b-4e08-83c0-64659ee8d36c@roeck-us.net>
+Date: Mon, 12 Jan 2026 10:31:39 -0800
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -48,140 +82,92 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] dt-bindings: watchdog: fsl-imx: document continue in
- low power mode
-To: Nandor Han <nandor.han@gehealthcare.com>
-Cc: wim@linux-watchdog.org, linux@roeck-us.net, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, shawnguo@kernel.org,
- s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
- linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
- imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org
-References: <20251229145000.421426-1-nandor.han@gehealthcare.com>
- <20251229145000.421426-3-nandor.han@gehealthcare.com>
- <20251230-hidden-okapi-of-reputation-6ef8be@quoll>
- <e24ec822-4d13-4136-8fb6-1bc6cbaf8e20@gehealthcare.com>
- <04d8766f-0f79-409b-9290-3170e99e9750@kernel.org>
- <493b1bac-2eae-4c78-9c07-801eaf954b04@gehealthcare.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH] watchdog: starfive-wdt: Fix PM reference leak in probe
+ error path
+To: Kery Qi <qikeyu2017@gmail.com>, wim@linux-watchdog.org
+Cc: linux-watchdog@vger.kernel.org
+References: <20260111172914.2191-2-qikeyu2017@gmail.com>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <493b1bac-2eae-4c78-9c07-801eaf954b04@gehealthcare.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260111172914.2191-2-qikeyu2017@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 08/01/2026 08:58, Nandor Han wrote:
+On 1/11/26 09:29, Kery Qi wrote:
+> The PM reference count is not expected to be incremented on return in
+> functions starfive_wdt_probe.
 > 
-> On 1/7/26 12:48, Krzysztof Kozlowski wrote:
->> CAUTION: This email originated from outside of GE HealthCare. Only open links or attachments if you trust the sender. Report suspicious emails using Outlook’s “Report” button.
->>
->> On 07/01/2026 10:12, Nandor Han wrote:
->>> On 12/30/25 14:34, Krzysztof Kozlowski wrote:
->>>> CAUTION: This email originated from outside of GE HealthCare. Only open links or attachments if you trust the sender. Report suspicious emails using Outlook’s “Report” button.
->>>>
->>>> On Mon, Dec 29, 2025 at 04:50:00PM +0200, Nandor Han wrote:
->>>>> Property "fsl,wdt-continue-in-low-power" allows the watchdog to continue
->>>>> running in low power modes (STOP and DOZE). By default, the watchdog is
->>>>> suspended in these modes. This property provides the option to keep the
->>>>> watchdog active during low power states when needed.
->>>> And why exactly would that be a DT property? If system is sleeping
->>>> (assuming this is what you meant by low power), no one will pet the dog,
->>>> thus watchdog makes no sense.
->>> Thanks for the feedback Krzysztof and Guenter.
->>>
->>> In our case, low-power mode is disabled. However, we have identified that under certain conditions,
->> If your system has low power mode disabled, then you do not need this
->> property - you already know that watchdog must continue (or whatever you
->> want to achieve here).
->>
->>> specifically during simulated high-load scenarios, the device becomes unresponsive because it enters
->>> one of these power states.
->> Device as watchdog? I really do not understand your explanations, but
->> for sure system load is not relevant to DT property.
->>
->>>> Otherwise I fail to see how this is a hardware property and we do not
->>>> accept SW properties (see writing bindings, numerous presentations).
->>> Our system is based on the i.MX7D CPU and the watchdog peripheral supports the configuration:
->>>
->>> (From i.MX 7Dual Applications Processor Reference Manual, Rev. 1, 01/2018, page: 1174)
->>> ---
->>> WDZST
->>> Watchdog Low Power. Determines the operation of the WDOG during low-power modes. This bit is write
->>> once-only.
->>> ---
->>> Given that our system does not support low-power modes, we intend to enable the watchdog across all power
->>> states to ensure the device can recover properly under these conditions.
->> That's not what your property said. Your property said watchdog should
->> continue in low power modes. So when system enters low power mode, how
->> the watchdog petting would work?
->>
->> Now you claim you want to enable it in low power mode but you do not
->> have low power mode? Does not make sense to me at all.
->>
->> Best regards,
->> Krzysztof
->>
-> Sorry if anything is unclear. I would try to explain the change from the driver's point of view.
-
-I want "logical" point of view, not driver's.
-
+> However, pm_runtime_get_sync will increment pm usage counter
+> even failed. Forgetting to putting operation will result in a
+> reference leak here.
 > 
-> According to i.MX7D Reference Manual, the watchdog controller allows, via the WDOGx_WCR register, control over whether the watchdog continues or suspends in:
+> Replace it with pm_runtime_resume_and_get to keep usage
+> counter balanced.
 > 
-> a)WAIT power state (bit 7: WDW)
-> b)STOP and DOSE power state(bit 0: WDZST).
+> Fixes: db728ea9c7be ("drivers: watchdog: Add StarFive Watchdog driver")
+> Signed-off-by: Kery Qi <qikeyu2017@gmail.com>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+> ---
+>   drivers/watchdog/starfive-wdt.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> The current driver implementation provides a Device Tree binding `fsl,suspend-in-wait` for configuring case (a) and forces the watchdog to be suspended in case (b).
-> 
-> My patch adds the ability to configure case (b) as well.
+> diff --git a/drivers/watchdog/starfive-wdt.c b/drivers/watchdog/starfive-wdt.c
+> index ed71d3960a0f..af55adc4a3c6 100644
+> --- a/drivers/watchdog/starfive-wdt.c
+> +++ b/drivers/watchdog/starfive-wdt.c
+> @@ -446,7 +446,7 @@ static int starfive_wdt_probe(struct platform_device *pdev)
+>   	platform_set_drvdata(pdev, wdt);
+>   	pm_runtime_enable(&pdev->dev);
+>   	if (pm_runtime_enabled(&pdev->dev)) {
+> -		ret = pm_runtime_get_sync(&pdev->dev);
+> +		ret = pm_runtime_resume_and_get(&pdev->dev);
+>   		if (ret < 0)
+>   			return ret;
+>   	} else {
 
-Just because you want to do something in the driver is not yet
-justification we want it in DT. Why can't you enable it always? Why this
-is system load (!!!) dependent?
-
-
-Best regards,
-Krzysztof
 
