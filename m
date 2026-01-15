@@ -1,49 +1,52 @@
-Return-Path: <linux-watchdog+bounces-4818-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4817-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05DB0D23121
-	for <lists+linux-watchdog@lfdr.de>; Thu, 15 Jan 2026 09:21:55 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62145D2311A
+	for <lists+linux-watchdog@lfdr.de>; Thu, 15 Jan 2026 09:21:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5A6113016983
-	for <lists+linux-watchdog@lfdr.de>; Thu, 15 Jan 2026 08:17:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id EE30C300D492
+	for <lists+linux-watchdog@lfdr.de>; Thu, 15 Jan 2026 08:17:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0431A2877D4;
-	Thu, 15 Jan 2026 08:17:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 697BE283FDD;
+	Thu, 15 Jan 2026 08:17:46 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net [60.248.80.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 959452E11A6;
-	Thu, 15 Jan 2026 08:17:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA8C0324B1B;
+	Thu, 15 Jan 2026 08:17:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.248.80.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768465073; cv=none; b=cpeBo0TWS3dUR764gktUHbZx5LMRk9C93/tnxSgkBR2eoHD0osQ9TehqIVDnWSd/Tk2BHgxlD2obM4AIwyApjgs7rYhWdJxEUYszSIY7vPd0FBVwr25aY5eb2eX4aFlCtbDCIl9HO1ofv0k3elyzRkX+lWPQ1YRe7amjKPZo0x8=
+	t=1768465066; cv=none; b=NMvWQlifP1vW/iFgsBvdjO4Nn1mUEQE6/ZHvR2JQ78j3XwYRts2IHKIQnSgsW8BiyJZHH1hM7MsdSP2BwF1GY3KWo7zpMrYHN+lgT1kpGLqEP3SdtJlC7ENbIy2v+Uxx7crcTX2/YDjM73twOHCI+8wmiuaxkQ+DxiyL/zOTfMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768465073; c=relaxed/simple;
-	bh=f7DoDK8YktICt95JRDktRPwcZqr50IqTbI4V9CCKlM4=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Z9XxRT38iRkbcmreE0ggDzkln3rxxVEy/+8P8sg21EyeD2fTZJfvYMrrKrgc75EcPYbP5fmIYKRqQbbOxSeu/4cnpoa8x+4vVjM0BWqIdG+dIfu7qkeOwK8rFI+fLv68GSmtZXUWwP0UNO/994C0L3SooRV0fXZG++qgPpgyEr0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=andestech.com; spf=pass smtp.mailfrom=andestech.com; arc=none smtp.client-ip=60.248.80.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=andestech.com
+	s=arc-20240116; t=1768465066; c=relaxed/simple;
+	bh=tC0HZpV4U8DbjEwVPwyUVaNS8zCyAsPHCwq4O6BnFiU=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=cTSSVLoLBTlMNfpxO3chshiWDi450ROPJApb0hnJ++v3x/8w8zvhYWISMkwnHS7GZ5GUX1FXf/MBAKabRzStHfmSINJl8GPByb3HT3hkCtYnLsHD+jdxw3DyvIX72uNFCo0AOWwyA4huvygBEXAptKq1WhAi8LCL6NswpufJaHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=permerror header.from=andestech.com; spf=pass smtp.mailfrom=andestech.com; arc=none smtp.client-ip=60.248.80.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=permerror header.from=andestech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=andestech.com
 Received: from mail.andestech.com (ATCPCS34.andestech.com [10.0.1.134])
-	by Atcsqr.andestech.com with ESMTPS id 60F8FEvm082627
+	by Atcsqr.andestech.com with ESMTPS id 60F8FNEV082800
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-	Thu, 15 Jan 2026 16:15:14 +0800 (+08)
+	Thu, 15 Jan 2026 16:15:23 +0800 (+08)
 	(envelope-from cl634@andestech.com)
 Received: from swlinux02.andestech.com (10.0.15.183) by ATCPCS34.andestech.com
  (10.0.1.134) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 15 Jan
- 2026 16:15:13 +0800
+ 2026 16:15:23 +0800
 From: CL Wang <cl634@andestech.com>
 To: <cl634@andestech.com>, <wim@linux-watchdog.org>, <linux@roeck-us.net>,
         <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>
 CC: <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-watchdog@vger.kernel.org>, <tim609@andestech.com>
-Subject: [PATCH v2 0/3] watchdog: Add support for Andes ATCWDT200
-Date: Thu, 15 Jan 2026 16:14:41 +0800
-Message-ID: <20260115081444.2452357-1-cl634@andestech.com>
+Subject: [PATCH V2 1/3] dt-bindings: watchdog: Add support for Andes ATCWDT200
+Date: Thu, 15 Jan 2026 16:14:42 +0800
+Message-ID: <20260115081444.2452357-2-cl634@andestech.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260115081444.2452357-1-cl634@andestech.com>
+References: <20260115081444.2452357-1-cl634@andestech.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -57,45 +60,88 @@ X-ClientProxiedBy: ATCPCS33.andestech.com (10.0.1.100) To
 X-DKIM-Results: atcpcs34.andestech.com; dkim=none;
 X-DNSRBL: 
 X-SPAM-SOURCE-CHECK: pass
-X-MAIL:Atcsqr.andestech.com 60F8FEvm082627
+X-MAIL:Atcsqr.andestech.com 60F8FNEV082800
 
-This series adds support for the Andes ATCWDT200 watchdog timer.
+Add the devicetree binding documentation for the Andes ATCWDT200
+watchdog timer.
 
-The driver integrates with the Linux watchdog framework and supports:
-  - Basic watchdog operations (start, stop, ping, set_timeout).
-  - Programmable reset and interrupt intervals.
-  - Automatic detection of the supported interrupt timer bit-width.
-  - System reset via the watchdog restart handler.
+ATCWDT200 is the IP name, which is embedded in AndesCore-based
+platforms or SoCs such as AE350 and Qilai.
 
+Signed-off-by: CL Wang <cl634@andestech.com>
+---
 Changes in v2:
-  - dt-bindings:
-    - Drop redundant text "including supported properties..." from the
-      commit message.
-    - Clarify the relationship between ATCWDT200 IP and SoCs (AE350/Qilai)
-      in the commit message.
-    - Add missing type definition ($ref: uint32), enum constraint, and
-      description for 'andestech,clock-source' property. 
-  - watchdog: atcwdt200:
-    - Use devm_clk_get_enabled() instead of devm_clk_get() and
-      clk_prepare_enable()
-    - Drop unnecessary "andestech,qilai-wdt" compatible
-    - Remove .owner assignment from platform_driver
-    - Simplify resume error handling
+  - Drop redundant text "including supported properties..." from the
+    commit message.
+  - Clarify the relationship between ATCWDT200 IP and SoCs (AE350/Qilai)
+    in the commit message.
+  - Add missing type definition ($ref: uint32), enum constraint, and
+    description for 'andestech,clock-source' property.
 
-CL Wang (3):
-  dt-bindings: watchdog: Add support for Andes ATCWDT200
-  watchdog: atcwdt200: Add driver for Andes ATCWDT200
-  MAINTAINERS: Add entry for Andes ATCWDT200
-
- .../watchdog/andestech,ae350-wdt.yaml         |  53 ++
- MAINTAINERS                                   |   6 +
- drivers/watchdog/Kconfig                      |   9 +
- drivers/watchdog/Makefile                     |   1 +
- drivers/watchdog/atcwdt200_wdt.c              | 580 ++++++++++++++++++
- 5 files changed, 649 insertions(+)
+---
+ .../watchdog/andestech,ae350-wdt.yaml         | 53 +++++++++++++++++++
+ 1 file changed, 53 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/watchdog/andestech,ae350-wdt.yaml
- create mode 100644 drivers/watchdog/atcwdt200_wdt.c
 
+diff --git a/Documentation/devicetree/bindings/watchdog/andestech,ae350-wdt.yaml b/Documentation/devicetree/bindings/watchdog/andestech,ae350-wdt.yaml
+new file mode 100644
+index 000000000000..f1107c552788
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/andestech,ae350-wdt.yaml
+@@ -0,0 +1,53 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/andestech,ae350-wdt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Andes ATCWDT200 Watchdog Timer
++
++maintainers:
++  - CL Wang <cl634@andestech.com>
++
++allOf:
++  - $ref: watchdog.yaml#
++
++properties:
++  compatible:
++    oneOf:
++      - items:
++          - enum:
++              - andestech,qilai-wdt
++          - const: andestech,ae350-wdt
++      - const: andestech,ae350-wdt
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  andestech,clock-source:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    enum: [0, 1]
++    description: |
++      Select the clock source for the watchdog timer.
++      0 - External clock
++      1 - P clock
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - andestech,clock-source
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    watchdog@f0500000 {
++        compatible = "andestech,ae350-wdt";
++        reg = <0xf0500000 0x20>;
++        clocks = <&clk_wdt>;
++        andestech,clock-source = <0>;
++    };
 -- 
 2.34.1
 
