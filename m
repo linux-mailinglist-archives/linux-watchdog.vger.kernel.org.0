@@ -1,388 +1,332 @@
-Return-Path: <linux-watchdog+bounces-4831-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4832-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oGZ1M8Kdc2lgxgAAu9opvQ
-	(envelope-from <linux-watchdog+bounces-4831-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
-	for <lists+linux-watchdog@lfdr.de>; Fri, 23 Jan 2026 17:11:46 +0100
+	id iHbgDPlvdGme5gAAu9opvQ
+	(envelope-from <linux-watchdog+bounces-4832-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
+	for <lists+linux-watchdog@lfdr.de>; Sat, 24 Jan 2026 08:08:41 +0100
 X-Original-To: lists+linux-watchdog@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E6DA782DD
-	for <lists+linux-watchdog@lfdr.de>; Fri, 23 Jan 2026 17:11:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E71177CC63
+	for <lists+linux-watchdog@lfdr.de>; Sat, 24 Jan 2026 08:08:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 1C0913022553
-	for <lists+linux-watchdog@lfdr.de>; Fri, 23 Jan 2026 16:11:44 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 414143014841
+	for <lists+linux-watchdog@lfdr.de>; Sat, 24 Jan 2026 07:08:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CD032F547F;
-	Fri, 23 Jan 2026 16:11:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD4EB27F73A;
+	Sat, 24 Jan 2026 07:08:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cSsBBhRo"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xl7/qPlD"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
+Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6089D279329
-	for <linux-watchdog@vger.kernel.org>; Fri, 23 Jan 2026 16:11:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 619CD22756A
+	for <linux-watchdog@vger.kernel.org>; Sat, 24 Jan 2026 07:08:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769184703; cv=none; b=YgSsVBLDjc8jVUzN/Q19X8j86jQDuWqqG8yiRghZ1xszk+0qxZoJGkjww/GnKinGBhNF03j7uE7dvTGQQRiz0c8UkIJgeCiuOyleixC0fxhdnpAKGVJKQtneXnpC3OrAgloAeu7ljSAshgFmJDJZqEoXyF+1JDYlGz7lrIf7U5g=
+	t=1769238511; cv=none; b=Jh6CTapGM8AyLPvIrjI1mJpIUE0opCvQFvf8OOowAFS3zPxmaIdy7HTTl202VPumxLvYnEHrcVIbqeLcx95J95NDWfz4jTPmQshE40NOObVh2qfTkM9nvh+y7m6lWmYbMLQP9A5/UMrBDSHvrzPvDYM9f0fj/EKQkODutCfOytA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769184703; c=relaxed/simple;
-	bh=ShDHrT3c+abDBBhxTloYbbftFyE3FCc4zYe9oXwoWjs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=m1aMORv+yEMFrSBUUmCpiaWmZnoAM3opSAXku8O1waHmrCthbJG2jM+RBE5qotVM47Gbwh+KMn+osd3Bor+R5RbqW8SmG+bBS3pH7nuREi0DSbgzDdMwR2OQzcidbYp61nqC6Pmg0GiN4V8hPf65XDOV5nPA1GxJ833+1GDhhqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cSsBBhRo; arc=none smtp.client-ip=74.125.82.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1769238511; c=relaxed/simple;
+	bh=f0WroCkTqRKE2T125f7PZut/lKVaRERWCDmHSoTNRxA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=iA6vPNaJYwtNMVJRef2hEqS9jK4ew35ptmCpqAjB/Pm3aKXnhU3k7CR2eskEb/W+kjDClSj4uQylpsmX91s48Ox9nblj0XYzzXBNxG6CLnD9np1Q1lKBt0iyQvYPfRgJM/oEIajod0/9iG7PHTZ5vPXkBNy7zoKNYWQmU+Dtayc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xl7/qPlD; arc=none smtp.client-ip=74.125.82.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-2b720e4dcb4so2419605eec.0
-        for <linux-watchdog@vger.kernel.org>; Fri, 23 Jan 2026 08:11:40 -0800 (PST)
+Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-2b4520f6b32so4694482eec.0
+        for <linux-watchdog@vger.kernel.org>; Fri, 23 Jan 2026 23:08:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769184699; x=1769789499; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=7Nv+D7/oDfhYCes3ePW/oYFM+Gz/3sVUZ2L90WrV7a0=;
-        b=cSsBBhRoQ21RCou00O18LmsVDq+bvRJz8Pz45dykMoGAi820rTzP2doafHRGhCTyvs
-         1odIXVcSOAfs6gIk6ZDoP4H5HaohMR/9uo0oQaEYI5iisoWjmcGL4uAVDZ/EJksWYvrO
-         uFVrh1O/fm8gXLaGDQvqNH4qmLK98LgQDzF5Z6JQknwcZMzW05ji92sfCxT2AWk+sqKT
-         L2rqknyDwSrGhxb1Jc1yF6g0XLLawgK135vO4pjq2/CBfNxoW9UpEmvXOfpk5YN5XtMR
-         WLMdAnB2np6vGtICgqdBjrAwbPZrUMNX9vvTEAHSFhnNyav6htQaTrlG1+5stDBvWgZC
-         0GkA==
+        d=gmail.com; s=20230601; t=1769238508; x=1769843308; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iAlcDf31qBBwSv93L3Z4uMSzJzYFnwNA3ebbhkgX8oI=;
+        b=Xl7/qPlD1uUQQYMO1kMG0uZs/0fn0BwIUVHH03domQk+oe2StTfDKMDPfor37Gk1O3
+         0pA6H7k/2xNdYTeRnyLG1V1WM50SZtyBvHuCedGtp5Uu7bnVge0a2BsfL7Zbv+aIaJ/n
+         xyGgMcyGmbr/o+0O/q6iUStJ0fxI4okjDmttv28vCrtzmhN13LS4b0sFlna0vVppvaQc
+         MTwI+KRvPFrkSRM5ycPydQ470eCpWjHX5VgHJ23ajXc4xHr3U1kSavcOYgZTu4H1yujq
+         QmK8a/+ncbi2xMrfQkzqVedOzyX8xGHtSs1hfZmrFejIgTfnRLSQsE8xZ//Dh8gMo5UP
+         sDbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769184699; x=1769789499;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7Nv+D7/oDfhYCes3ePW/oYFM+Gz/3sVUZ2L90WrV7a0=;
-        b=Si37IaFpeEmOYO/WPYNNaIcNVWrl+eNQhxblIAa38UrqBPR7kiy6/ndP51dqImTLyL
-         jCoscKbupybvNv1GYuoFI10Uvzz2BCzxuhPtPMgVm79qVkxDQIbK30JPCJFz5Bxzih6e
-         /mOPRZreEtHDAI1pzPgruKioa517kAaqkyFN5cjoWRFNFU3er5Hs1L3vyVrYDaOKziFj
-         qo2DsvAhedNtL1wPmaNZgCvMuwKI7rkLRRrlPZNpIAbaN8tzBpaJhqAJET9GGrUevub8
-         g47fcf3j2FwwJ7NODGpeBQ+OX8ozwkycZACo+/heUjdyW1ruFJi9wpt6LxlOZDaHux+a
-         KBQw==
-X-Forwarded-Encrypted: i=1; AJvYcCUMgkPnbn4+DhpHPgoxo0xkd959JbpbjFSBCeoUyIGX0zXNwjSLyyT9Wz1lyLs3aGzlkmFMPFiZbfkaCghAig==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz6Ckdgqu60DldgXwbxHumM9nXmWOrMZkBxE+vEHQ0cKf4iThUO
-	ayiYsSOV1b745VbsHI/5Pa/n3nPtjWLjrVonlu0YblG8lLneVUpYoYA0
-X-Gm-Gg: AZuq6aLUUcRQnpjnkl6Ze/TCqdUPRAZU8RkCLO7piPnR/I5jbR9e3Wz2CeKrH0BmeKs
-	XZpsetoyeo6pNaUl7LuO+wRKJxnJFKZdarEwdbGpFjWl/WZMhRllrSmynpDgaviFbVvBOUmbH4q
-	YwcdG5MlcsEQBwYk56w+Kb5Jtz2kNvvLr0gwsFneBH+JePDWUE90781/f8hZrtoQIHX2iBF608i
-	VXXrUXcXt0j8nDajFvzt7N5z0Cx4fXe+2jk1NMMvhAbq81MnU355MJejFwj+1pEJt9L2VE1EfYS
-	RYlJe4AHTwenZVhkMl77/03uIZF9MAgKXv1Zx3PFw1KPXTnnlNYg8cnAOU6mT0J/Z4r6FnfzKjo
-	JDJ5Prj0/XYYFUS4iXQ1IAeIFmvV4zLdyRMLKA5yIriF8UO/rukSOXpuhNK6ufBWRnqNN7O6q9X
-	qlgdJVU20ndVWnd+W84LmGO+/t4z3apUM+DbMTBJyzE+sr8HrF6h1Li1EaQU5n
-X-Received: by 2002:a05:7300:e613:b0:2b0:5b6b:6529 with SMTP id 5a478bee46e88-2b739bcd778mr1678782eec.39.1769184699220;
-        Fri, 23 Jan 2026 08:11:39 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b73a9e1bc8sm3455841eec.22.2026.01.23.08.11.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jan 2026 08:11:38 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f8af59e1-29a0-4b32-929a-b30580dad62a@roeck-us.net>
-Date: Fri, 23 Jan 2026 08:11:36 -0800
+        d=1e100.net; s=20230601; t=1769238508; x=1769843308;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=iAlcDf31qBBwSv93L3Z4uMSzJzYFnwNA3ebbhkgX8oI=;
+        b=tXKbUTTUErCyP5NJ1b9+UEMQ/sgQ8hg2PMpjh90L43/Bukso3V8sq60kfTmVjX1kMQ
+         ZWcH6y4kInkNSaQWL9Bi+uBMJbC1V+uTprPzWZErxVxCl1JrQ2B4HPXvauZXVvbTqIBP
+         rhTkn/XWLQyr8vpcIH2r9s7qSIUIerjY3xN5IsPpw7vz9QUU1yXOF6AvyQVUplAZ3Oxw
+         SUj0EtoDG3uI7uHJiyaQd9QSuG08ELkbQwROT+lQRBiO2lkjlrGlGsV63pTrrWUhRrad
+         3Iz7r9M/2w2AUkAM3OvGm6jz9r/4p9/UIK1Onjgx4lU7alI8r47ZTaF9b3V/htt2Ssnx
+         0auQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW1Ziospp2vbda2fQV0Ii1T0AfUGlmwgd4btW7/29jFOtNKsaicgFQ/SDVf/WysWQxIiEQ/HEkNUOY8AVN+pA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyviJX1/uQMLC7ZLcocipooaTQiEpK4IiJqCqW/SYg/rftmCnQB
+	LY9yzAmLqjUbU4aYGf0fq4xgiH1JPH10Wr3wNI6wM+v8RHhIk7VG4UY/
+X-Gm-Gg: AZuq6aLIs66SvR+0m0QdYXvczhnfyUun5iUPG5JvNyCrFbK/tWusdbiR8MC8o9j0Mz+
+	gOdINHvUYKdp81gHsh1vOsel8k9N8eNMr4dVUIzULvGMyTZ//G0s4B2E4/GYiGaxPGRm/DICkS6
+	+PDQBLE1MlWLDGfesHT+H4SvYKudeYHq/FdAaSSuSyGwy17TJZIdGx6aIk5AT5YYgDaWiLIscnM
+	9a7Nv876fPi8DZKPUpgIKf4NvUij6nQwHwxPTqXZM7CCFllJUrjYpfmf1X7RzdGnO0usVIdlOK1
+	nab3p6tZKcQd9VslOBDB7HKUAibdJ/XqUTvUZ1i19mQ2vsXjRGITn/E3t/4SSjNoiPtq+g70acU
+	XrbBMmnESXtpvYB37WU58eZcZnG/y/jYfFwhitFoWJBkIxSLaQQMjXqRAM8zlvFxDmaKpaJIGkL
+	6gLY0=
+X-Received: by 2002:a05:7300:bc0e:b0:2b7:3780:810f with SMTP id 5a478bee46e88-2b739b73be3mr3051286eec.23.1769238508267;
+        Fri, 23 Jan 2026 23:08:28 -0800 (PST)
+Received: from debian ([74.48.213.230])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b749e301f0sm3798342eec.35.2026.01.23.23.08.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Jan 2026 23:08:27 -0800 (PST)
+From: Qiliang Yuan <realwujing@gmail.com>
+To: dianders@chromium.org
+Cc: akpm@linux-foundation.org,
+	lihuafei1@huawei.com,
+	linux-kernel@vger.kernel.org,
+	mingo@kernel.org,
+	mm-commits@vger.kernel.org,
+	realwujing@gmail.com,
+	song@kernel.org,
+	stable@vger.kernel.org,
+	sunshx@chinatelecom.cn,
+	thorsten.blum@linux.dev,
+	wangjinchao600@gmail.com,
+	yangyicong@hisilicon.com,
+	yuanql9@chinatelecom.cn,
+	zhangjn11@chinatelecom.cn,
+	linux-watchdog@vger.kernel.org
+Subject: [PATCH v4] watchdog/hardlockup: Fix UAF in perf event cleanup due to migration race
+Date: Sat, 24 Jan 2026 02:08:14 -0500
+Message-ID: <20260124070814.806828-1-realwujing@gmail.com>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <CAD=FV=WHWrKS_LVjod6nhnPdEk9_ZqeubGpft3PJOUJNMbBxfg@mail.gmail.com>
+References: <CAD=FV=WHWrKS_LVjod6nhnPdEk9_ZqeubGpft3PJOUJNMbBxfg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 5/5] watchdog: aaeon: Add watchdog driver for
- SRG-IMX8PL MCU
-To: "Thomas Perrot (Schneider Electric)" <thomas.perrot@bootlin.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Linus Walleij <linusw@kernel.org>,
- Bartosz Golaszewski <brgl@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>,
- =?UTF-8?B?SsOpcsOpbWllIERhdXRoZXJpYmVz?= <jeremie.dautheribes@bootlin.com>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, Lee Jones <lee@kernel.org>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-gpio@vger.kernel.org, imx@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linux-watchdog@vger.kernel.org,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20260123-dev-b4-aaeon-mcu-driver-v2-0-9f4c00bfb5cb@bootlin.com>
- <20260123-dev-b4-aaeon-mcu-driver-v2-5-9f4c00bfb5cb@bootlin.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260123-dev-b4-aaeon-mcu-driver-v2-5-9f4c00bfb5cb@bootlin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+X-Spamd-Result: default: False [2.94 / 15.00];
+	SUSPICIOUS_URL_IN_SUSPICIOUS_MESSAGE(1.00)[];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	URIBL_RED(0.50)[chinatelecom.cn:email];
 	MAILLIST(-0.15)[generic];
+	HAS_ANON_DOMAIN(0.10)[];
+	BAD_REP_POLICIES(0.10)[];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-4831-lists,linux-watchdog=lfdr.de];
+	FREEMAIL_CC(0.00)[linux-foundation.org,huawei.com,vger.kernel.org,kernel.org,gmail.com,chinatelecom.cn,linux.dev,hisilicon.com];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	DMARC_POLICY_ALLOW(0.00)[gmail.com,none];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[bootlin.com,kernel.org,pengutronix.de,gmail.com,linux-watchdog.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DMARC_NA(0.00)[roeck-us.net];
-	RCPT_COUNT_TWELVE(0.00)[20];
 	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-4832-lists,linux-watchdog=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	R_DKIM_ALLOW(0.00)[gmail.com:s=20230601];
 	DKIM_TRACE(0.00)[gmail.com:+];
 	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[linux@roeck-us.net,linux-watchdog@vger.kernel.org];
+	RCVD_COUNT_FIVE(0.00)[5];
+	FROM_NEQ_ENVFROM(0.00)[realwujing@gmail.com,linux-watchdog@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
-	TAGGED_RCPT(0.00)[linux-watchdog,dt];
-	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_NONE(0.00)[];
+	TAGGED_RCPT(0.00)[linux-watchdog];
+	ARC_ALLOW(0.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	NEURAL_HAM(-0.00)[-0.677];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,bootlin.com:email]
-X-Rspamd-Queue-Id: 4E6DA782DD
+	R_SPF_ALLOW(0.00)[+ip4:172.105.105.114:c];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[chinatelecom.cn:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: E71177CC63
 X-Rspamd-Action: no action
 
-On 1/23/26 01:54, Thomas Perrot (Schneider Electric) wrote:
-> Add watchdog driver for the Aaeon SRG-IMX8PL embedded controller.
-> This driver provides system monitoring and recovery capabilities
-> through the MCU's watchdog timer.
-> 
-> The watchdog supports start, stop, and ping operations with a maximum
-> hardware heartbeat of 25 seconds and a default timeout of 240 seconds.
-> The driver assumes the watchdog is already running at probe time, as
-> the MCU typically enables it by default.
-> 
-> Co-developed-by: Jérémie Dautheribes (Schneider Electric) <jeremie.dautheribes@bootlin.com>
-> Signed-off-by: Jérémie Dautheribes (Schneider Electric) <jeremie.dautheribes@bootlin.com>
-> Signed-off-by: Thomas Perrot (Schneider Electric) <thomas.perrot@bootlin.com>
-> ---
->   MAINTAINERS                      |   1 +
->   drivers/watchdog/Kconfig         |  10 ++++
->   drivers/watchdog/Makefile        |   1 +
->   drivers/watchdog/aaeon_mcu_wdt.c | 110 +++++++++++++++++++++++++++++++++++++++
->   4 files changed, 122 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 28dd964cdf69bdcaec3eb82d6df851a2bad47415..66cc4a5dcbe0977e6baee6d3b5e6023dcc06847b 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -193,6 +193,7 @@ S:	Maintained
->   F:	Documentation/devicetree/bindings/mfd/aaeon,srg-imx8pl-mcu.yaml
->   F:	drivers/gpio/gpio-aaeon-mcu.c
->   F:	drivers/mfd/aaeon-mcu.c
-> +F:	drivers/watchdog/aaeon_mcu_wdt.c
->   F:	include/linux/mfd/aaeon-mcu.h
->   
->   AAEON UPBOARD FPGA MFD DRIVER
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index d3b9df7d466b0b7215ee87b3040811d44ee53d2a..1bd4a7bee303e5e2508f540dc2c16e9e19ed18b0 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -168,6 +168,16 @@ config SOFT_WATCHDOG_PRETIMEOUT
->   	  watchdog. Be aware that governors might affect the watchdog because it
->   	  is purely software, e.g. the panic governor will stall it!
->   
-> +config AAEON_MCU_WATCHDOG
-> +	tristate "Aaeon MCU Watchdog"
-> +	depends on MFD_AAEON_MCU
-> +	select WATCHDOG_CORE
-> +	help
-> +	  Select this option to enable watchdog timer support for the Aaeon
-> +	  SRG-IMX8PL onboard microcontroller (MCU). This driver provides
-> +	  watchdog functionality through the MCU, allowing system monitoring
-> +	  and automatic recovery from system hangs.
-> +
->   config BD957XMUF_WATCHDOG
->   	tristate "ROHM BD9576MUF and BD9573MUF PMIC Watchdog"
->   	depends on MFD_ROHM_BD957XMUF
-> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-> index ba52099b125398a32f80dad23317e223cc4af028..2deec425d3eafb6b208e061fda9f216f4baa8ecc 100644
-> --- a/drivers/watchdog/Makefile
-> +++ b/drivers/watchdog/Makefile
-> @@ -37,6 +37,7 @@ obj-$(CONFIG_USBPCWATCHDOG) += pcwd_usb.o
->   # ALPHA Architecture
->   
->   # ARM Architecture
-> +obj-$(CONFIG_AAEON_MCU_WATCHDOG) += aaeon_mcu_wdt.o
->   obj-$(CONFIG_ARM_SP805_WATCHDOG) += sp805_wdt.o
->   obj-$(CONFIG_ARM_SBSA_WATCHDOG) += sbsa_gwdt.o
->   obj-$(CONFIG_ARMADA_37XX_WATCHDOG) += armada_37xx_wdt.o
-> diff --git a/drivers/watchdog/aaeon_mcu_wdt.c b/drivers/watchdog/aaeon_mcu_wdt.c
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..99be3ce327f44063fce6ba77a7d4efcba34361df
-> --- /dev/null
-> +++ b/drivers/watchdog/aaeon_mcu_wdt.c
-> @@ -0,0 +1,110 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Aaeon MCU Watchdog driver
-> + *
-> + * Copyright (C) 2025 Bootlin
-> + * Author: Jérémie Dautheribes <jeremie.dautheribes@bootlin.com>
-> + * Author: Thomas Perrot <thomas.perrot@bootlin.com>
-> + */
-> +
-> +#include <linux/mfd/aaeon-mcu.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/watchdog.h>
-> +
-> +#define AAEON_MCU_CONTROL_WDT	0x63
-> +#define AAEON_MCU_PING_WDT	0x73
-> +
-> +#define AAEON_MCU_WDT_TIMEOUT         240
-> +#define AAEON_MCU_WDT_HEARTBEAT_MS    25000
-> +
-> +struct aaeon_mcu_wdt {
-> +	struct watchdog_device wdt;
-> +	struct device *dev;
-> +};
-> +
-> +static int aaeon_mcu_wdt_cmd(struct device *dev, u8 opcode, u8 arg)
-> +{
-> +	u8 cmd[3] = { opcode, arg, 0x00 };
-> +	u8 rsp;
-> +
-> +	return aaeon_mcu_i2c_xfer(dev, cmd, sizeof(cmd), &rsp, sizeof(rsp));
-> +}
-> +
-> +static int aaeon_mcu_wdt_start(struct watchdog_device *wdt)
-> +{
-> +	struct aaeon_mcu_wdt *data = watchdog_get_drvdata(wdt);
-> +
-> +	return aaeon_mcu_wdt_cmd(data->dev, AAEON_MCU_CONTROL_WDT, 0x01);
-> +}
-> +
-> +static int aaeon_mcu_wdt_stop(struct watchdog_device *wdt)
-> +{
-> +	struct aaeon_mcu_wdt *data = watchdog_get_drvdata(wdt);
-> +
-> +	return aaeon_mcu_wdt_cmd(data->dev, AAEON_MCU_CONTROL_WDT, 0x00);
-> +}
-> +
-> +static int aaeon_mcu_wdt_ping(struct watchdog_device *wdt)
-> +{
-> +	struct aaeon_mcu_wdt *data = watchdog_get_drvdata(wdt);
-> +
-> +	return aaeon_mcu_wdt_cmd(data->dev, AAEON_MCU_PING_WDT, 0x00);
-> +}
-> +
-> +static const struct watchdog_info aaeon_mcu_wdt_info = {
-> +	.identity	= "Aaeon MCU Watchdog",
-> +	.options	= WDIOF_KEEPALIVEPING
-> +};
-> +
-> +static const struct watchdog_ops aaeon_mcu_wdt_ops = {
-> +	.owner		= THIS_MODULE,
-> +	.start		= aaeon_mcu_wdt_start,
-> +	.stop		= aaeon_mcu_wdt_stop,
-> +	.ping		= aaeon_mcu_wdt_ping,
-> +};
-> +
-> +static int aaeon_mcu_wdt_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct watchdog_device *wdt;
-> +	struct aaeon_mcu_wdt *data;
-> +	int ret;
-> +
-> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	data->dev = dev->parent;
-> +
-> +	wdt = &data->wdt;
-> +	wdt->parent = dev;
-> +	wdt->info = &aaeon_mcu_wdt_info;
-> +	wdt->ops = &aaeon_mcu_wdt_ops;
-> +	wdt->timeout = AAEON_MCU_WDT_TIMEOUT;
-> +	wdt->max_hw_heartbeat_ms = AAEON_MCU_WDT_HEARTBEAT_MS;
+Original analysis on Linux 4.19 showed a race condition in the hardlockup
+detector's initialization phase. Specifically, during the early probe
+phase, hardlockup_detector_perf_init() (renamed to
+watchdog_hardlockup_probe() in newer kernels via commit d9b3629ade8e)
+interacted with the per-cpu 'watchdog_ev' variable.
 
-If this is the only supported timeout, and the timeout can not be updated,
-that should be explained in the code. That explanation will need to include
-the reason why the timeout is being fixed to 240 seconds and can not be
-updated, even in software. Without that, it just does not make sense
-to have a fixed hardware timeout of 25 seconds and a fixed software timeout
-of 240 seconds without means to change the latter.
+If the initializing task migrates to another CPU during this probe phase,
+two issues arise:
+1. The 'watchdog_ev' pointer on the original CPU is set but not cleared,
+   leaving a stale pointer to a freed perf event.
+2. The 'watchdog_ev' pointer on the new CPU might be incorrectly cleared.
 
-> +
-> +	watchdog_set_drvdata(wdt, data);
-> +	platform_set_drvdata(pdev, data);
-> +
+Note: Although the logs below reference hardlockup_detector_perf_init(),
+the same logic persists in the current watchdog_hardlockup_probe()
+implementation.
 
-platform_set_drvdata() seems unnecessary; I don't see where it is used.
+This race condition was observed in console logs:
+[23.038376] hardlockup_detector_perf_init 313 cur_cpu=2
+...
+[23.076385] hardlockup_detector_event_create 203 cpu(cur)=2 set watchdog_ev
+...
+[23.095788] perf_event_release_kernel 4623 cur_cpu=2
+...
+[23.116963] lockup_detector_reconfigure 577 cur_cpu=3
 
-> +	ret = aaeon_mcu_wdt_start(wdt);
-> +	if (ret)
-> +		return ret;
-> +
-> +	set_bit(WDOG_HW_RUNNING, &wdt->status);
-> +
+The log shows the task started on CPU 2, set watchdog_ev on CPU 2,
+released the event on CPU 2, but then migrated to CPU 3 before the
+cleanup logic could run. This left watchdog_ev on CPU 2 pointing to a
+freed event, resulting in a UAF when later accessed:
 
-This is only acceptable if there is no means to detect if the watchdog is
-running. If so, that warrants a comment in the code.
+[26.540732] BUG: KASAN: use-after-free in perf_event_ctx_lock_nested.isra.72+0x6b/0x140
+[26.542442] Read of size 8 at addr ff110006b360d718 by task kworker/2:1/94
 
-Thanks,
-Guenter
+Fix this by refactoring hardlockup_detector_event_create() to return the
+created perf event instead of directly assigning it to the per-cpu variable.
+In the probe function, use an arbitrary CPU but ensure it remains
+online via cpu_hotplug_disable() during the check.
 
-> +	return devm_watchdog_register_device(dev, wdt);
-> +}
-> +
-> +static struct platform_driver aaeon_mcu_wdt_driver = {
-> +	.driver		= {
-> +		.name	= "aaeon-mcu-wdt",
-> +	},
-> +	.probe		= aaeon_mcu_wdt_probe,
-> +};
-> +
-> +module_platform_driver(aaeon_mcu_wdt_driver);
-> +
-> +MODULE_DESCRIPTION("Aaeon MCU Watchdog Driver");
-> +MODULE_AUTHOR("Jérémie Dautheribes <jeremie.dautheribes@bootlin.com>");
-> +MODULE_LICENSE("GPL");
-> 
+Fixes: 930d8f8dbab9 ("watchdog/perf: adapt the watchdog_perf interface for async model")
+Signed-off-by: Shouxin Sun <sunshx@chinatelecom.cn>
+Signed-off-by: Junnan Zhang <zhangjn11@chinatelecom.cn>
+Signed-off-by: Qiliang Yuan <realwujing@gmail.com>
+Signed-off-by: Qiliang Yuan <yuanql9@chinatelecom.cn>
+Cc: Song Liu <song@kernel.org>
+Cc: Douglas Anderson <dianders@chromium.org>
+Cc: Jinchao Wang <wangjinchao600@gmail.com>
+Cc: Wang Jinchao <wangjinchao600@gmail.com>
+Cc: <stable@vger.kernel.org>
+---
+v4:
+- Add cpu_hotplug_disable() in watchdog_hardlockup_probe() to ensure the
+  sampled CPU remains online during probing. 
+- Update commit message to explain the relevance of 4.19 logs even
+  though functions were renamed in modern kernels. 
+v3:
+- Refactor hardlockup_detector_event_create() to return the event pointer
+  instead of directly assigning to per-cpu variables to fix the UAF.
+- Restore PMU cycle fallback and unify the enable/probe paths.
+v2:
+- Add Cc: <stable@vger.kernel.org>.
+v1:
+- Avoid 'watchdog_ev' in probe path by manually creating and releasing a
+  local perf event.
+ kernel/watchdog_perf.c | 56 +++++++++++++++++++++++++-----------------
+ 1 file changed, 34 insertions(+), 22 deletions(-)
+
+diff --git a/kernel/watchdog_perf.c b/kernel/watchdog_perf.c
+index d3ca70e3c256..887b61c65c1b 100644
+--- a/kernel/watchdog_perf.c
++++ b/kernel/watchdog_perf.c
+@@ -17,6 +17,7 @@
+ #include <linux/atomic.h>
+ #include <linux/module.h>
+ #include <linux/sched/debug.h>
++#include <linux/cpu.h>
+ 
+ #include <asm/irq_regs.h>
+ #include <linux/perf_event.h>
+@@ -118,18 +119,11 @@ static void watchdog_overflow_callback(struct perf_event *event,
+ 	watchdog_hardlockup_check(smp_processor_id(), regs);
+ }
+ 
+-static int hardlockup_detector_event_create(void)
++static struct perf_event *hardlockup_detector_event_create(unsigned int cpu)
+ {
+-	unsigned int cpu;
+ 	struct perf_event_attr *wd_attr;
+ 	struct perf_event *evt;
+ 
+-	/*
+-	 * Preemption is not disabled because memory will be allocated.
+-	 * Ensure CPU-locality by calling this in per-CPU kthread.
+-	 */
+-	WARN_ON(!is_percpu_thread());
+-	cpu = raw_smp_processor_id();
+ 	wd_attr = &wd_hw_attr;
+ 	wd_attr->sample_period = hw_nmi_get_sample_period(watchdog_thresh);
+ 
+@@ -143,14 +137,7 @@ static int hardlockup_detector_event_create(void)
+ 						       watchdog_overflow_callback, NULL);
+ 	}
+ 
+-	if (IS_ERR(evt)) {
+-		pr_debug("Perf event create on CPU %d failed with %ld\n", cpu,
+-			 PTR_ERR(evt));
+-		return PTR_ERR(evt);
+-	}
+-	WARN_ONCE(this_cpu_read(watchdog_ev), "unexpected watchdog_ev leak");
+-	this_cpu_write(watchdog_ev, evt);
+-	return 0;
++	return evt;
+ }
+ 
+ /**
+@@ -159,17 +146,26 @@ static int hardlockup_detector_event_create(void)
+  */
+ void watchdog_hardlockup_enable(unsigned int cpu)
+ {
++	struct perf_event *evt;
++
+ 	WARN_ON_ONCE(cpu != smp_processor_id());
+ 
+-	if (hardlockup_detector_event_create())
++	evt = hardlockup_detector_event_create(cpu);
++	if (IS_ERR(evt)) {
++		pr_debug("Perf event create on CPU %d failed with %ld\n", cpu,
++			 PTR_ERR(evt));
+ 		return;
++	}
+ 
+ 	/* use original value for check */
+ 	if (!atomic_fetch_inc(&watchdog_cpus))
+ 		pr_info("Enabled. Permanently consumes one hw-PMU counter.\n");
+ 
++	WARN_ONCE(this_cpu_read(watchdog_ev), "unexpected watchdog_ev leak");
++	this_cpu_write(watchdog_ev, evt);
++
+ 	watchdog_init_timestamp();
+-	perf_event_enable(this_cpu_read(watchdog_ev));
++	perf_event_enable(evt);
+ }
+ 
+ /**
+@@ -263,19 +259,35 @@ bool __weak __init arch_perf_nmi_is_available(void)
+  */
+ int __init watchdog_hardlockup_probe(void)
+ {
++	struct perf_event *evt;
++	unsigned int cpu;
+ 	int ret;
+ 
+ 	if (!arch_perf_nmi_is_available())
+ 		return -ENODEV;
+ 
+-	ret = hardlockup_detector_event_create();
++	if (!hw_nmi_get_sample_period(watchdog_thresh))
++		return -EINVAL;
+ 
+-	if (ret) {
++	/*
++	 * Test hardware PMU availability by creating a temporary perf event.
++	 * The requested CPU is arbitrary; preemption is not disabled, so
++	 * raw_smp_processor_id() is used. Surround with cpu_hotplug_disable()
++	 * to ensure the arbitrarily chosen CPU remains online during the check.
++	 * The event is released immediately.
++	 */
++	cpu_hotplug_disable();
++	cpu = raw_smp_processor_id();
++	evt = hardlockup_detector_event_create(cpu);
++	if (IS_ERR(evt)) {
+ 		pr_info("Perf NMI watchdog permanently disabled\n");
++		ret = PTR_ERR(evt);
+ 	} else {
+-		perf_event_release_kernel(this_cpu_read(watchdog_ev));
+-		this_cpu_write(watchdog_ev, NULL);
++		perf_event_release_kernel(evt);
++		ret = 0;
+ 	}
++	cpu_hotplug_enable();
++
+ 	return ret;
+ }
+ 
+-- 
+2.51.0
 
 
