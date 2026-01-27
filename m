@@ -1,104 +1,103 @@
-Return-Path: <linux-watchdog+bounces-4832-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4833-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iHbgDPlvdGme5gAAu9opvQ
-	(envelope-from <linux-watchdog+bounces-4832-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
-	for <lists+linux-watchdog@lfdr.de>; Sat, 24 Jan 2026 08:08:41 +0100
+	id YIq0OJQheGk/oQEAu9opvQ
+	(envelope-from <linux-watchdog+bounces-4833-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
+	for <lists+linux-watchdog@lfdr.de>; Tue, 27 Jan 2026 03:23:16 +0100
 X-Original-To: lists+linux-watchdog@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id E71177CC63
-	for <lists+linux-watchdog@lfdr.de>; Sat, 24 Jan 2026 08:08:40 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A15D8EFEA
+	for <lists+linux-watchdog@lfdr.de>; Tue, 27 Jan 2026 03:23:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 414143014841
-	for <lists+linux-watchdog@lfdr.de>; Sat, 24 Jan 2026 07:08:36 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id D4BA73007521
+	for <lists+linux-watchdog@lfdr.de>; Tue, 27 Jan 2026 02:23:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD4EB27F73A;
-	Sat, 24 Jan 2026 07:08:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FBC52C08D5;
+	Tue, 27 Jan 2026 02:23:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xl7/qPlD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dlcal7hw"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
+Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 619CD22756A
-	for <linux-watchdog@vger.kernel.org>; Sat, 24 Jan 2026 07:08:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DA1729BD9A
+	for <linux-watchdog@vger.kernel.org>; Tue, 27 Jan 2026 02:23:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769238511; cv=none; b=Jh6CTapGM8AyLPvIrjI1mJpIUE0opCvQFvf8OOowAFS3zPxmaIdy7HTTl202VPumxLvYnEHrcVIbqeLcx95J95NDWfz4jTPmQshE40NOObVh2qfTkM9nvh+y7m6lWmYbMLQP9A5/UMrBDSHvrzPvDYM9f0fj/EKQkODutCfOytA=
+	t=1769480592; cv=none; b=ULt1yr+BlIp0FnVDIyc4yKbDUymrfItWmtkwJ0KwiAyq3R/DjeffysSEgjWt9+BaUiKCDQJ61w3CaM/smLKErQcN6mxMzn/owjejG7XuZr5lgzaskp/sjMRH70kiTrPGruNMyKJe2MK5CTlngdYoRHKNn0xVsk4b3BqT/EYjxSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769238511; c=relaxed/simple;
-	bh=f0WroCkTqRKE2T125f7PZut/lKVaRERWCDmHSoTNRxA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iA6vPNaJYwtNMVJRef2hEqS9jK4ew35ptmCpqAjB/Pm3aKXnhU3k7CR2eskEb/W+kjDClSj4uQylpsmX91s48Ox9nblj0XYzzXBNxG6CLnD9np1Q1lKBt0iyQvYPfRgJM/oEIajod0/9iG7PHTZ5vPXkBNy7zoKNYWQmU+Dtayc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xl7/qPlD; arc=none smtp.client-ip=74.125.82.177
+	s=arc-20240116; t=1769480592; c=relaxed/simple;
+	bh=N64M/JIJLJwol49yhjrUkcj2FnRP1GWKH932vmf5iHg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VGoQTNW9kbsw2SaFwe3192yYYsT48MZ0OKY0RjnNx98wiognWTVtwdJhRY76tkV1aTMYnBJz9tPr+CWJP1XltUqcEUwicvP77qNf9V6ytLX6jqcuFhVT5GFrpvicoan7OWIaYvYeiV/DG4GYr5SjgJuli8hgafmsVBOPUcpxQUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Dlcal7hw; arc=none smtp.client-ip=74.125.82.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-2b4520f6b32so4694482eec.0
-        for <linux-watchdog@vger.kernel.org>; Fri, 23 Jan 2026 23:08:29 -0800 (PST)
+Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-12339e2e2c1so3339009c88.1
+        for <linux-watchdog@vger.kernel.org>; Mon, 26 Jan 2026 18:23:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769238508; x=1769843308; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iAlcDf31qBBwSv93L3Z4uMSzJzYFnwNA3ebbhkgX8oI=;
-        b=Xl7/qPlD1uUQQYMO1kMG0uZs/0fn0BwIUVHH03domQk+oe2StTfDKMDPfor37Gk1O3
-         0pA6H7k/2xNdYTeRnyLG1V1WM50SZtyBvHuCedGtp5Uu7bnVge0a2BsfL7Zbv+aIaJ/n
-         xyGgMcyGmbr/o+0O/q6iUStJ0fxI4okjDmttv28vCrtzmhN13LS4b0sFlna0vVppvaQc
-         MTwI+KRvPFrkSRM5ycPydQ470eCpWjHX5VgHJ23ajXc4xHr3U1kSavcOYgZTu4H1yujq
-         QmK8a/+ncbi2xMrfQkzqVedOzyX8xGHtSs1hfZmrFejIgTfnRLSQsE8xZ//Dh8gMo5UP
-         sDbA==
+        d=gmail.com; s=20230601; t=1769480588; x=1770085388; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=C/BKwe8/Yc0esAHXSWFatM1ucuc0hnp+X30KfdTTAPY=;
+        b=Dlcal7hwWTDZxQTCOfnwtmBy8iOvHqQIJvt/bhR9jpoyNep7Rzy7GxNkhmxJEQKiQy
+         yYbwJRA7THKCc62/Oe3LpKzIQLxIhYdawEv3GACkuWacW2saOFh5qwxg+ghI3gDDlq/+
+         zYPK3zG9q6qrP4+UrIUPinfQI9nTB7T/7MelW+2SJgfIDF2JoXjokE0L+fHpYYhpjoI9
+         XrxZFXbu60IM2lNwJKeH+dzEWgwjUyUWS9VvRS1ISFYdIP0dBsd2ehNY7maJApDM+pgj
+         GxoSfdAarSs5FxsD3pr4dZldhTssR+MFqx+6aQawuiMl+T2nneWZASvc6zDA1jV1Y0b4
+         Y10A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769238508; x=1769843308;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=iAlcDf31qBBwSv93L3Z4uMSzJzYFnwNA3ebbhkgX8oI=;
-        b=tXKbUTTUErCyP5NJ1b9+UEMQ/sgQ8hg2PMpjh90L43/Bukso3V8sq60kfTmVjX1kMQ
-         ZWcH6y4kInkNSaQWL9Bi+uBMJbC1V+uTprPzWZErxVxCl1JrQ2B4HPXvauZXVvbTqIBP
-         rhTkn/XWLQyr8vpcIH2r9s7qSIUIerjY3xN5IsPpw7vz9QUU1yXOF6AvyQVUplAZ3Oxw
-         SUj0EtoDG3uI7uHJiyaQd9QSuG08ELkbQwROT+lQRBiO2lkjlrGlGsV63pTrrWUhRrad
-         3Iz7r9M/2w2AUkAM3OvGm6jz9r/4p9/UIK1Onjgx4lU7alI8r47ZTaF9b3V/htt2Ssnx
-         0auQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW1Ziospp2vbda2fQV0Ii1T0AfUGlmwgd4btW7/29jFOtNKsaicgFQ/SDVf/WysWQxIiEQ/HEkNUOY8AVN+pA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyviJX1/uQMLC7ZLcocipooaTQiEpK4IiJqCqW/SYg/rftmCnQB
-	LY9yzAmLqjUbU4aYGf0fq4xgiH1JPH10Wr3wNI6wM+v8RHhIk7VG4UY/
-X-Gm-Gg: AZuq6aLIs66SvR+0m0QdYXvczhnfyUun5iUPG5JvNyCrFbK/tWusdbiR8MC8o9j0Mz+
-	gOdINHvUYKdp81gHsh1vOsel8k9N8eNMr4dVUIzULvGMyTZ//G0s4B2E4/GYiGaxPGRm/DICkS6
-	+PDQBLE1MlWLDGfesHT+H4SvYKudeYHq/FdAaSSuSyGwy17TJZIdGx6aIk5AT5YYgDaWiLIscnM
-	9a7Nv876fPi8DZKPUpgIKf4NvUij6nQwHwxPTqXZM7CCFllJUrjYpfmf1X7RzdGnO0usVIdlOK1
-	nab3p6tZKcQd9VslOBDB7HKUAibdJ/XqUTvUZ1i19mQ2vsXjRGITn/E3t/4SSjNoiPtq+g70acU
-	XrbBMmnESXtpvYB37WU58eZcZnG/y/jYfFwhitFoWJBkIxSLaQQMjXqRAM8zlvFxDmaKpaJIGkL
-	6gLY0=
-X-Received: by 2002:a05:7300:bc0e:b0:2b7:3780:810f with SMTP id 5a478bee46e88-2b739b73be3mr3051286eec.23.1769238508267;
-        Fri, 23 Jan 2026 23:08:28 -0800 (PST)
+        d=1e100.net; s=20230601; t=1769480588; x=1770085388;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=C/BKwe8/Yc0esAHXSWFatM1ucuc0hnp+X30KfdTTAPY=;
+        b=qfOEcwb6bfM8n3AtxbRuiTCAWfdwitIl8hYqu2ZvTue1y94uK6pNrv3qNiw7rEtaBx
+         QMV7yDvdJw+jPuxjmQqVN3r51iCETNCVphflFEputJ0dtv50RN3Mg8Fqk7+Pku7lFQj2
+         7ehNA6E8mkEDiBzLnxpUltW88ucQLpDiK08iJ4QxN4ohVS5S6Eyu5KAOoyvvUuIW3JET
+         hLGQeNlq14tjzSQsPS2gNF0dTF6+e0SogR/raY632YJyRzRGQcFtNWqCG6k8opMjwhAp
+         ot9BH+KBPmc+BdjdMfZrNrXKUh3AL2pDSR0h+a5YdkkqK9gxMCWo57V1wS/JZe3/8Wbf
+         vOug==
+X-Gm-Message-State: AOJu0YzmLFueFawrEPxU8gBVBUxtUfyBFigl6RUz57YIBj3h2pU93K9O
+	evC/rOQ9SxIhwsi6BxZ2TSZGAP/d9x0AECMox7gDNvb2d0fNsPGOsSoX
+X-Gm-Gg: AZuq6aKyEnUSo558cxuAV/CNHY5ZQSy/cck7k6+WVhRi39+6QhvUbBvK9u2FHb03piU
+	sP7b8PltK8QjIAiDlrQ1WryHc1cJ5Q4R4tc51Vn0ovMdsRkVS8gCXVKuxGdNWViD8o0Clyseq/K
+	BC/pkf5Utz9pgw9YZE6EokABMmPjvCeFIkhkTK4h6y6uqcOcH/+rO8U15BAMtMhk3CTL1SENMUM
+	eIt3ZfZp6/dnNki5CVOv/SOI5CGUCGBt3G4jaL9ygk+zuGxs3JSf7nUsd8ar1i3zOhdBD/8Mjtw
+	syuvMz1isFxZovHE6VQ+bKy6or2QWjV09NqKZu09qv3C0IMzDRhNOR1tqbjkWuiQE1K/7h/PAH0
+	Ajr9m8aTzkKjoi19NrdU6EjC/sPQZrqJ/d6T1hSllUcQGyBlsM6DCnVDBHg6rO31MaKiIRDIhMc
+	tqmCw=
+X-Received: by 2002:a05:7022:6725:b0:11b:9386:a383 with SMTP id a92af1059eb24-124a0e8a130mr52799c88.22.1769480588356;
+        Mon, 26 Jan 2026 18:23:08 -0800 (PST)
 Received: from debian ([74.48.213.230])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b749e301f0sm3798342eec.35.2026.01.23.23.08.23
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1247d90cda6sm20111224c88.1.2026.01.26.18.23.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jan 2026 23:08:27 -0800 (PST)
+        Mon, 26 Jan 2026 18:23:08 -0800 (PST)
 From: Qiliang Yuan <realwujing@gmail.com>
-To: dianders@chromium.org
-Cc: akpm@linux-foundation.org,
-	lihuafei1@huawei.com,
-	linux-kernel@vger.kernel.org,
-	mingo@kernel.org,
+To: Ingo Molnar <mingo@kernel.org>,
+	Qiliang Yuan <realwujing@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Li Huafei <lihuafei1@huawei.com>,
+	Thorsten Blum <thorsten.blum@linux.dev>,
+	Jinchao Wang <wangjinchao600@gmail.com>,
+	Yicong Yang <yangyicong@hisilicon.com>,
+	Petr Mladek <pmladek@suse.com>,
+	Pingfan Liu <kernelfans@gmail.com>,
+	Lecopzer Chen <lecopzer.chen@mediatek.com>,
+	Douglas Anderson <dianders@chromium.org>
+Cc: linux-watchdog@vger.kernel.org,
 	mm-commits@vger.kernel.org,
-	realwujing@gmail.com,
-	song@kernel.org,
+	Shouxin Sun <sunshx@chinatelecom.cn>,
+	Junnan Zhang <zhangjn11@chinatelecom.cn>,
+	Qiliang Yuan <yuanql9@chinatelecom.cn>,
+	Song Liu <song@kernel.org>,
 	stable@vger.kernel.org,
-	sunshx@chinatelecom.cn,
-	thorsten.blum@linux.dev,
-	wangjinchao600@gmail.com,
-	yangyicong@hisilicon.com,
-	yuanql9@chinatelecom.cn,
-	zhangjn11@chinatelecom.cn,
-	linux-watchdog@vger.kernel.org
-Subject: [PATCH v4] watchdog/hardlockup: Fix UAF in perf event cleanup due to migration race
-Date: Sat, 24 Jan 2026 02:08:14 -0500
-Message-ID: <20260124070814.806828-1-realwujing@gmail.com>
+	"Yury Norov (NVIDIA)" <yury.norov@gmail.com>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v5] watchdog/hardlockup: Fix UAF in perf event cleanup due to migration race
+Date: Mon, 26 Jan 2026 21:22:24 -0500
+Message-ID: <20260127022238.1182079-1-realwujing@gmail.com>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <CAD=FV=WHWrKS_LVjod6nhnPdEk9_ZqeubGpft3PJOUJNMbBxfg@mail.gmail.com>
-References: <CAD=FV=WHWrKS_LVjod6nhnPdEk9_ZqeubGpft3PJOUJNMbBxfg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -107,79 +106,69 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [2.94 / 15.00];
-	SUSPICIOUS_URL_IN_SUSPICIOUS_MESSAGE(1.00)[];
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_MISSING_CHARSET(0.50)[];
-	URIBL_RED(0.50)[chinatelecom.cn:email];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
-	HAS_ANON_DOMAIN(0.10)[];
-	BAD_REP_POLICIES(0.10)[];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[linux-foundation.org,huawei.com,vger.kernel.org,kernel.org,gmail.com,chinatelecom.cn,linux.dev,hisilicon.com];
-	RCPT_COUNT_TWELVE(0.00)[16];
-	DMARC_POLICY_ALLOW(0.00)[gmail.com,none];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-4832-lists,linux-watchdog=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	R_DKIM_ALLOW(0.00)[gmail.com:s=20230601];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FREEMAIL_CC(0.00)[vger.kernel.org,chinatelecom.cn,kernel.org,gmail.com];
 	FREEMAIL_FROM(0.00)[gmail.com];
+	TAGGED_FROM(0.00)[bounces-4833-lists,linux-watchdog=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[20];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[kernel.org,gmail.com,linux-foundation.org,huawei.com,linux.dev,hisilicon.com,suse.com,mediatek.com,chromium.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
 	FROM_NEQ_ENVFROM(0.00)[realwujing@gmail.com,linux-watchdog@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_NONE(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-watchdog];
-	ARC_ALLOW(0.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	NEURAL_HAM(-0.00)[-0.677];
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	R_SPF_ALLOW(0.00)[+ip4:172.105.105.114:c];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[chinatelecom.cn:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: E71177CC63
+	DBL_BLOCKED_OPENRESOLVER(0.00)[chinatelecom.cn:email,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,chromium.org:email]
+X-Rspamd-Queue-Id: 8A15D8EFEA
 X-Rspamd-Action: no action
 
-Original analysis on Linux 4.19 showed a race condition in the hardlockup
-detector's initialization phase. Specifically, during the early probe
-phase, hardlockup_detector_perf_init() (renamed to
-watchdog_hardlockup_probe() in newer kernels via commit d9b3629ade8e)
-interacted with the per-cpu 'watchdog_ev' variable.
+The hardlockup detector's probe path (watchdog_hardlockup_probe()) can
+be executed in a non-pinned context, such as during the asynchronous
+retry mechanism (lockup_detector_delay_init) which runs in a standard
+unbound workqueue.
 
-If the initializing task migrates to another CPU during this probe phase,
-two issues arise:
-1. The 'watchdog_ev' pointer on the original CPU is set but not cleared,
-   leaving a stale pointer to a freed perf event.
-2. The 'watchdog_ev' pointer on the new CPU might be incorrectly cleared.
+In this context, the existing implementation of
+hardlockup_detector_event_create() suffers from a race condition due to
+potential task migration. It relies on is_percpu_thread() to ensure
+CPU-locality, but worker threads in a global workqueue do not carry the
+PF_PERCPU_THREAD flag, causing the WARN_ON() to trigger and violating
+the assumption of stable per-cpu access.
 
-Note: Although the logs below reference hardlockup_detector_perf_init(),
-the same logic persists in the current watchdog_hardlockup_probe()
-implementation.
+If the task migrates during the probe:
+1. It might set 'watchdog_ev' on one CPU but fail to clear it if the
+   subsequent migration causes the cleanup logic to run on a different CPU.
+2. This leaves a stale pointer to a freed perf_event in the original
+   CPU's 'watchdog_ev' variable, leading to a use-after-free (UAF) when
+   the watchdog is later enabled or reconfigured.
 
-This race condition was observed in console logs:
-[23.038376] hardlockup_detector_perf_init 313 cur_cpu=2
-...
-[23.076385] hardlockup_detector_event_create 203 cpu(cur)=2 set watchdog_ev
-...
-[23.095788] perf_event_release_kernel 4623 cur_cpu=2
-...
-[23.116963] lockup_detector_reconfigure 577 cur_cpu=3
+While this issue was prominently observed in downstream kernels (like
+openEuler 4.19) where initialization timings are shifted to a post-SMP
+phase, it represents a latent bug in the mainline asynchronous
+initialization path.
 
-The log shows the task started on CPU 2, set watchdog_ev on CPU 2,
-released the event on CPU 2, but then migrated to CPU 3 before the
-cleanup logic could run. This left watchdog_ev on CPU 2 pointing to a
-freed event, resulting in a UAF when later accessed:
-
-[26.540732] BUG: KASAN: use-after-free in perf_event_ctx_lock_nested.isra.72+0x6b/0x140
-[26.542442] Read of size 8 at addr ff110006b360d718 by task kworker/2:1/94
-
-Fix this by refactoring hardlockup_detector_event_create() to return the
-created perf event instead of directly assigning it to the per-cpu variable.
-In the probe function, use an arbitrary CPU but ensure it remains
-online via cpu_hotplug_disable() during the check.
+Refactor hardlockup_detector_event_create() to be stateless by returning
+the created perf_event pointer instead of directly modifying the per-cpu
+'watchdog_ev' variable. This allows the probe logic to safely manage
+the temporary event. Use cpu_hotplug_disable() during the probe to ensure
+the target CPU remains valid throughout the check.
 
 Fixes: 930d8f8dbab9 ("watchdog/perf: adapt the watchdog_perf interface for async model")
 Signed-off-by: Shouxin Sun <sunshx@chinatelecom.cn>
@@ -189,23 +178,20 @@ Signed-off-by: Qiliang Yuan <yuanql9@chinatelecom.cn>
 Cc: Song Liu <song@kernel.org>
 Cc: Douglas Anderson <dianders@chromium.org>
 Cc: Jinchao Wang <wangjinchao600@gmail.com>
-Cc: Wang Jinchao <wangjinchao600@gmail.com>
 Cc: <stable@vger.kernel.org>
 ---
+v5:
+- Refine description: clarify it identifies a latent bug in the mainline
+  asynchronous retry path where worker threads lack PF_PERCPU_THREAD.
 v4:
-- Add cpu_hotplug_disable() in watchdog_hardlockup_probe() to ensure the
-  sampled CPU remains online during probing. 
-- Update commit message to explain the relevance of 4.19 logs even
-  though functions were renamed in modern kernels. 
+- Add cpu_hotplug_disable() in watchdog_hardlockup_probe() to stabilize
+  the probe CPU.
+- Update description to explain the relevance of 4.19 logs.
 v3:
-- Refactor hardlockup_detector_event_create() to return the event pointer
-  instead of directly assigning to per-cpu variables to fix the UAF.
-- Restore PMU cycle fallback and unify the enable/probe paths.
+- Refactor hardlockup_detector_event_create() to be stateless.
 v2:
-- Add Cc: <stable@vger.kernel.org>.
-v1:
-- Avoid 'watchdog_ev' in probe path by manually creating and releasing a
-  local perf event.
+- Add Cc stable.
+
  kernel/watchdog_perf.c | 56 +++++++++++++++++++++++++-----------------
  1 file changed, 34 insertions(+), 22 deletions(-)
 
