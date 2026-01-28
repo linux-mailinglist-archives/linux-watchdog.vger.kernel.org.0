@@ -1,463 +1,302 @@
-Return-Path: <linux-watchdog+bounces-4836-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4837-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uPIELYyLeGmqqwEAu9opvQ
-	(envelope-from <linux-watchdog+bounces-4836-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
-	for <lists+linux-watchdog@lfdr.de>; Tue, 27 Jan 2026 10:55:24 +0100
+	id qNMcDaV1eWkSxQEAu9opvQ
+	(envelope-from <linux-watchdog+bounces-4837-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
+	for <lists+linux-watchdog@lfdr.de>; Wed, 28 Jan 2026 03:34:13 +0100
 X-Original-To: lists+linux-watchdog@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B2C3922A0
-	for <lists+linux-watchdog@lfdr.de>; Tue, 27 Jan 2026 10:55:24 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A82E9C4D3
+	for <lists+linux-watchdog@lfdr.de>; Wed, 28 Jan 2026 03:34:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 30FB93019105
-	for <lists+linux-watchdog@lfdr.de>; Tue, 27 Jan 2026 09:54:22 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E38BF300AB38
+	for <lists+linux-watchdog@lfdr.de>; Wed, 28 Jan 2026 02:32:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 515E43370E2;
-	Tue, 27 Jan 2026 09:54:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D58F23AB87;
+	Wed, 28 Jan 2026 02:32:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y0+7sslX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D3FpUrpA"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E1BD3358AD
-	for <linux-watchdog@vger.kernel.org>; Tue, 27 Jan 2026 09:54:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 216F7284898
+	for <linux-watchdog@vger.kernel.org>; Wed, 28 Jan 2026 02:32:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769507659; cv=none; b=WP06GC/LOo1BbsJZMdOnqiAUBkmn4NFM+4yynp2oneu06HHjIKm7cTOjPNmgfaQyYY3Aye7sbyrBMr4GEZiHmicWteFVy6M+OCXSXvMcbp2Eaw6wEs6CYTVqmMJdsAelwu+B970MsW1HFNnJ/be8BsdeA2YW+CXdw4yDId5ymgg=
+	t=1769567524; cv=none; b=WFL+EWqw5t32/zPNdPk/FXIsVJEWw1l0xC6JMrGWnDBnt51tbhSQwkVvlWGc6xSE/Q+doEx/2iDnalvJu8W4EwuEQ38GoXtCzWBBpIL1Vuxue5HhyPGfB7OYds4bzoZLWwoJ43ygdTxqjNSXL1elE7CnbFeqpXmU8+NT5u1RFNg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769507659; c=relaxed/simple;
-	bh=q3on6zXQlBcRn83TcC1mwoIQdTfMogS1m+JCEdUOHdg=;
-	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Llp1CxWixXLemFZ4L7Pqo37UWNVJChNtbJMvB7ZBWF19RM4vjrfl92ohe6A1nnfWZao2obsfJT0zP4QpfzI8wJ7h9k4QZY2TsUBb8Y3QpDz+GGCjYxGt9pns/OZtyoQCV4RRvsT1R8+dT0xMKmh/sPKNCwPJFkZ/ZPQM9sQoItU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y0+7sslX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDB52C4AF0B
-	for <linux-watchdog@vger.kernel.org>; Tue, 27 Jan 2026 09:54:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769507659;
-	bh=q3on6zXQlBcRn83TcC1mwoIQdTfMogS1m+JCEdUOHdg=;
-	h=From:In-Reply-To:References:Date:Subject:To:Cc:From;
-	b=Y0+7sslXPA4UMdogs5ANhTkrlJaPLfmFM1izAhTvIv7O0yDYW9K5B4MW4skmVHQIM
-	 Oh/IrSuMorP1ANOssCPD46vcKK9k5KEC2JLfiklINjsnaQ4aa8o+kGzJ9Uivim+eyh
-	 OKkTeE0vM4Ze8C6cA7WVzZjWOuO6+Bm18x+cjhP05M+77TSiz+p/GOmPn5z3v7mXsl
-	 L8X18UdR5y0loIqxFMwfg25Emg+NomFWuTBltoNFyi6AK/WVCBXDU8YO2i4LPgR8bF
-	 SCMDZbuL7DZwjoyxIprz55mjRIrXl2xEGLpMn53/3T+w6mJNLFakGCQyVuUCEJ0Ni6
-	 M7DfKlxuT8S9w==
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-59dcdf60427so6464658e87.3
-        for <linux-watchdog@vger.kernel.org>; Tue, 27 Jan 2026 01:54:18 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXyJKu9qXykPsjOR/V/3KPwNQjIprvM2wIY9KJdDmOihdkwFi6ikhdwylbNKXU2cE6wCSFp7rKU6eemJklOww==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzAWjpslYjTiWVpVyRPgwulp+Hw2q5Zadrm17Td/wz3bEx0PQpS
-	xJvOHSXDtGRqkTbRcc4HWQ4WUFCf31/vI7AXseBzNvtn8WP9GiC+t035N0ysQ1uVu9B41dtgVMH
-	JCgUQ1n7MdWIhvFg+OcDA8/M6JB3izp6cKbyxzYp/ug==
-X-Received: by 2002:ac2:4f07:0:b0:59d:e350:3c45 with SMTP id
- 2adb3069b0e04-59e0412c85dmr497277e87.52.1769507657517; Tue, 27 Jan 2026
- 01:54:17 -0800 (PST)
-Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 27 Jan 2026 01:54:15 -0800
-Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 27 Jan 2026 01:54:15 -0800
-From: Bartosz Golaszewski <brgl@kernel.org>
-In-Reply-To: <20260123-dev-b4-aaeon-mcu-driver-v2-4-9f4c00bfb5cb@bootlin.com>
+	s=arc-20240116; t=1769567524; c=relaxed/simple;
+	bh=3zyzKCSekqq7FHMYW7I4Xhmf24lrfieQrozQP0dABJg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Qiti8sz+9KX7IRVo/otZa78B8xCT7ZjjXY1oKLTnilBYo2HP8CyvRLhGDxFKvaRfBk+a3vm3jDSRWgGPqNpRlnYZqEfO0m9iTo5U888kUwGZo7CemfUukcTRxTwyX/BHXpprw0LPErE5JYrnf/74IJ29zdIx3khmrKRPzQMn9OE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D3FpUrpA; arc=none smtp.client-ip=74.125.82.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-2b73112ab62so5455957eec.1
+        for <linux-watchdog@vger.kernel.org>; Tue, 27 Jan 2026 18:32:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769567522; x=1770172322; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=egAN9VsiBBmLS+EOoK2lXqZdjZw63twFvoDba+Q9+sA=;
+        b=D3FpUrpAPSkq7c5MzDpfnDRX1BXrInzAxy5VejW8UEwXDOqHIk+aricbX3hVMVBZqI
+         sHY/58vamS2jVQIV4OGRmXNXqMmWGjdc6XNn7oRuyOCMWxjF/mhJTRAfqOR7U2wYlV4u
+         EErl6jV0zCVvYqQ7iGRIrFN9agSrm7Mw/594UYDO+mrYfvJFMKQPsmtXBNn117Agmf2v
+         H3LbAnMXzeSBkRzrE8uy/LjsFuy8YWCNQJlb80SwFahxnelv371Ekwkw9TKGL6yfHzHs
+         pAxLDd0X2fLdvO+3jtMdWjcERLj5Sj1J2cyNwQ9OTfQpOczSFIMXjRVRhkNnzhq4okZC
+         xAXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769567522; x=1770172322;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=egAN9VsiBBmLS+EOoK2lXqZdjZw63twFvoDba+Q9+sA=;
+        b=dKUsherLQPiJTCCC4yl5L2iNc1ujxAHgOaPagsGk/HRnZYyJEmV1NVDpYOjVqNsUME
+         q9ABGXkYOZYTL8ygN56NWfgK8QXZpZS/miYzGviEn1VrQ6U7e5t0+mNAHuPbWhq37GGF
+         ZulmhG1fQ+c/QpjVc7lNip5cztyBgN0SYNdHHy0qwfJdPwVZkMpq064pfJKyywsbUB7p
+         vnkXp6LJ/oGNOd1RRrO5mV59yqFrbIhgPFWJ2+TLPnjslTEdPWDPf86V7f/egT3L0aAQ
+         p3fl/R1lGwbIEjIjHpM94tTeovyuX1pSYzMOds87UsS5kJenihwXbJKYklW8d1IhT30B
+         /Dyg==
+X-Gm-Message-State: AOJu0YyPe4eHxz21dAtua8kjU4DZOC7QIWuHCFllxVFTIYkaQYLoLY/f
+	qxM7Z8DVQRdxP/CyKjFkbLrJVnu5EUPBrf1wtPTtpm54jgiKKnUuL9Ga
+X-Gm-Gg: AZuq6aLE05NSXmTryX8AKAJwtxuwFUtbLS+i02ffPEBurQPseAV1r6c0A7pLOvkMiJ5
+	bX9npZQbVJ/BdbPzzS2rNg/neUA16EWh1tE1XvCtD38XqCIWQMGLn9fOm4OOsMyXdVMBhUefppk
+	fGw1YMIKu0RU3iKQzUpZ0ag4ySPYrc6QCoZ+9CCKMBbHpyezDpmcniHvNjQvquxuWL9PKZLLaQi
+	A+vJfZ22mXz2eG91yVR5MLnQ7OcwOaI/q+0+Jd8TSgv6y0/nSGu7s05yNlRGUBhQqJuhw7ZgC3J
+	I4biC15sjqqSY5E7QOPOZeb7d7PXNP+rGz7tCrbgier+nXSOfGF6CEAnZzhyJYAnUJZ1Zb6LPfF
+	uFXWsZGXlInOVXOawfNKIZVvabn4bGbWEI6aEXJSziQndweGMDDWL1vqQHm4a9AW+fWh6ab4H0g
+	AYDfNSE1sDRMXfrQ==
+X-Received: by 2002:a05:693c:60cd:b0:2b7:97b0:82b9 with SMTP id 5a478bee46e88-2b797b09200mr1234573eec.9.1769567522217;
+        Tue, 27 Jan 2026 18:32:02 -0800 (PST)
+Received: from debian ([74.48.213.230])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b7a17083dasm930663eec.14.2026.01.27.18.31.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jan 2026 18:32:01 -0800 (PST)
+From: Qiliang Yuan <realwujing@gmail.com>
+To: Qiliang Yuan <realwujing@gmail.com>,
+	Li Huafei <lihuafei1@huawei.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Jinchao Wang <wangjinchao600@gmail.com>,
+	Yicong Yang <yangyicong@hisilicon.com>,
+	Thorsten Blum <thorsten.blum@linux.dev>
+Cc: linux-watchdog@vger.kernel.org,
+	mm-commits@vger.kernel.org,
+	Shouxin Sun <sunshx@chinatelecom.cn>,
+	Junnan Zhang <zhangjn11@chinatelecom.cn>,
+	Qiliang Yuan <yuanql9@chinatelecom.cn>,
+	Song Liu <song@kernel.org>,
+	Douglas Anderson <dianders@chromium.org>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v6] watchdog/hardlockup: simplify perf event probe and remove per-cpu dependency
+Date: Tue, 27 Jan 2026 21:31:22 -0500
+Message-ID: <20260128023136.1691973-1-realwujing@gmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260123-dev-b4-aaeon-mcu-driver-v2-0-9f4c00bfb5cb@bootlin.com> <20260123-dev-b4-aaeon-mcu-driver-v2-4-9f4c00bfb5cb@bootlin.com>
-Date: Tue, 27 Jan 2026 01:54:15 -0800
-X-Gmail-Original-Message-ID: <CAMRc=Mf_=PY6QL8fA7v0GQPA-m6dEfyPYv9pm84_z_EF5Yewbw@mail.gmail.com>
-X-Gm-Features: AZwV_Qj8CKcS1FFb3PqQsuTgXOVMPEaGS00ey8cIdqqL78URlgFTGWvnaXxD5qA
-Message-ID: <CAMRc=Mf_=PY6QL8fA7v0GQPA-m6dEfyPYv9pm84_z_EF5Yewbw@mail.gmail.com>
-Subject: Re: [PATCH v2 4/5] gpio: aaeon: Add GPIO driver for SRG-IMX8PL MCU
-To: "Thomas Perrot (Schneider Electric)" <thomas.perrot@bootlin.com>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-watchdog@vger.kernel.org, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, 
-	=?UTF-8?B?SsOpcsOpbWllIERhdXRoZXJpYmVz?= <jeremie.dautheribes@bootlin.com>, 
-	Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, Lee Jones <lee@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-4836-lists,linux-watchdog=lfdr.de];
-	FREEMAIL_CC(0.00)[vger.kernel.org,lists.linux.dev,lists.infradead.org,bootlin.com,kernel.org,pengutronix.de,gmail.com,linux-watchdog.org,roeck-us.net];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,bootlin.com:email];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	TAGGED_FROM(0.00)[bounces-4837-lists,linux-watchdog=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[15];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[21];
+	FREEMAIL_TO(0.00)[gmail.com,huawei.com,linux-foundation.org,kernel.org,hisilicon.com,linux.dev];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[brgl@kernel.org,linux-watchdog@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[realwujing@gmail.com,linux-watchdog@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-watchdog];
 	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-watchdog,dt];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 6B2C3922A0
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,chinatelecom.cn:email,chromium.org:email]
+X-Rspamd-Queue-Id: 8A82E9C4D3
 X-Rspamd-Action: no action
 
-On Fri, 23 Jan 2026 10:54:33 +0100, "Thomas Perrot (Schneider
-Electric)" <thomas.perrot@bootlin.com> said:
-> Add GPIO driver for the Aaeon SRG-IMX8PL embedded controller. This
-> driver supports 7 GPO (General Purpose Output) pins and 12 GPIO pins
-> that can be configured as inputs or outputs.
->
-> The driver implements proper state management for GPO pins (which are
-> output-only) and full direction control for GPIO pins. During probe,
-> all pins are reset to a known state (GPOs low, GPIOs as inputs) to
-> prevent undefined behavior across system reboots, as the MCU does not
-> reset GPIO states on soft reboot.
->
-> Co-developed-by: J=C3=A9r=C3=A9mie Dautheribes (Schneider Electric) <jere=
-mie.dautheribes@bootlin.com>
-> Signed-off-by: J=C3=A9r=C3=A9mie Dautheribes (Schneider Electric) <jeremi=
-e.dautheribes@bootlin.com>
-> Signed-off-by: Thomas Perrot (Schneider Electric) <thomas.perrot@bootlin.=
-com>
-> ---
->  MAINTAINERS                   |   1 +
->  drivers/gpio/Kconfig          |  10 ++
->  drivers/gpio/Makefile         |   1 +
->  drivers/gpio/gpio-aaeon-mcu.c | 238 ++++++++++++++++++++++++++++++++++++=
-++++++
->  4 files changed, 250 insertions(+)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 175c1e1b28b8151580ed340207d4a6fd59aa8853..28dd964cdf69bdcaec3eb82d6=
-df851a2bad47415 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -191,6 +191,7 @@ M:	Thomas Perrot <thomas.perrot@bootlin.com>
->  R:	J=C3=A9r=C3=A9mie Dautheribes <jeremie.dautheribes@bootlin.com>
->  S:	Maintained
->  F:	Documentation/devicetree/bindings/mfd/aaeon,srg-imx8pl-mcu.yaml
-> +F:	drivers/gpio/gpio-aaeon-mcu.c
->  F:	drivers/mfd/aaeon-mcu.c
->  F:	include/linux/mfd/aaeon-mcu.h
->
-> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-> index c74da29253e810b51540684b1186e8f274066b69..6142d50b92b3d8c1fac8b0d81=
-397dc22428fbb51 100644
-> --- a/drivers/gpio/Kconfig
-> +++ b/drivers/gpio/Kconfig
-> @@ -157,6 +157,16 @@ config GPIO_74XX_MMIO
->  	    8 bits:	74244 (Input), 74273 (Output)
->  	    16 bits:	741624 (Input), 7416374 (Output)
->
-> +config GPIO_AAEON_MCU
-> +	tristate "Aaeon MCU GPIO support"
-> +	depends on MFD_AAEON_MCU
+Simplify the hardlockup detector's probe path and remove its implicit
+dependency on pinned per-cpu execution.
 
-Can you add support for COMPILE_TEST here and in the MFD part?
+Refactor hardlockup_detector_event_create() to be stateless. Return
+the created perf_event pointer to the caller instead of directly
+modifying the per-cpu 'watchdog_ev' variable. This allows the probe
+path to safely manage a temporary event without the risk of leaving
+stale pointers should task migration occur.
 
-> +	select GPIO_GENERIC
-> +	help
-> +	  Select this option to enable GPIO support for the Aaeon SRG-IMX8PL
-> +	  onboard MCU. This driver provides access to GPIO pins and GPO
-> +	  (General Purpose Output) pins controlled by the microcontroller.
-> +	  The driver handles both input and output configuration.
-> +
->  config GPIO_ALTERA
->  	tristate "Altera GPIO"
->  	select GPIOLIB_IRQCHIP
-> diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
-> index 2421a8fd3733e0b06c2581262aaa9cd629f66c7d..1ba6318bc558743fbe5910966=
-c2c8fc3f792efe9 100644
-> --- a/drivers/gpio/Makefile
-> +++ b/drivers/gpio/Makefile
-> @@ -29,6 +29,7 @@ obj-$(CONFIG_GPIO_104_IDI_48)		+=3D gpio-104-idi-48.o
->  obj-$(CONFIG_GPIO_104_IDIO_16)		+=3D gpio-104-idio-16.o
->  obj-$(CONFIG_GPIO_74X164)		+=3D gpio-74x164.o
->  obj-$(CONFIG_GPIO_74XX_MMIO)		+=3D gpio-74xx-mmio.o
-> +obj-$(CONFIG_GPIO_AAEON_MCU)		+=3D gpio-aaeon-mcu.o
->  obj-$(CONFIG_GPIO_ADNP)			+=3D gpio-adnp.o
->  obj-$(CONFIG_GPIO_ADP5520)		+=3D gpio-adp5520.o
->  obj-$(CONFIG_GPIO_ADP5585)		+=3D gpio-adp5585.o
-> diff --git a/drivers/gpio/gpio-aaeon-mcu.c b/drivers/gpio/gpio-aaeon-mcu.=
-c
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..533eaf3e7f82f3b9e3f50a1a6=
-31c8e853adc1226
-> --- /dev/null
-> +++ b/drivers/gpio/gpio-aaeon-mcu.c
-> @@ -0,0 +1,238 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Aaeon MCU GPIO driver
-> + *
-> + * Copyright (C) 2025 Bootlin
-> + * Author: J=C3=A9r=C3=A9mie Dautheribes <jeremie.dautheribes@bootlin.co=
-m>
-> + * Author: Thomas Perrot <thomas.perrot@bootlin.com>
-> + */
-> +
-> +#include <linux/bitops.h>
-> +#include <linux/device.h>
-> +#include <linux/gpio/driver.h>
-> +#include <linux/mfd/aaeon-mcu.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +
-> +#define AAEON_MCU_CONFIG_GPIO_INPUT 0x69
-> +#define AAEON_MCU_CONFIG_GPIO_OUTPUT 0x6F
-> +#define AAEON_MCU_READ_GPIO 0x72
-> +#define AAEON_MCU_WRITE_GPIO 0x77
-> +
-> +#define AAEON_MCU_CONTROL_GPO 0x6C
-> +
-> +#define MAX_GPIOS 12
-> +#define MAX_GPOS 7
-> +
-> +struct aaeon_mcu_gpio {
-> +	struct gpio_chip gc;
-> +	struct device *dev;
-> +	DECLARE_BITMAP(dir_in, MAX_GPOS + MAX_GPIOS);
-> +	DECLARE_BITMAP(gpo_state, MAX_GPOS);
-> +};
-> +
-> +static int aaeon_mcu_gpio_config_input_cmd(struct aaeon_mcu_gpio *data,
-> +					    unsigned int offset)
-> +{
-> +	u8 cmd[3], rsp;
-> +
-> +	cmd[0] =3D AAEON_MCU_CONFIG_GPIO_INPUT;
-> +	cmd[1] =3D offset - 7;
-> +	cmd[2] =3D 0x00;
-> +
-> +	return aaeon_mcu_i2c_xfer(data->dev, cmd, 3, &rsp, 1);
-> +}
-> +
-> +static int aaeon_mcu_gpio_direction_input(struct gpio_chip *gc, unsigned=
- int offset)
-> +{
-> +	struct aaeon_mcu_gpio *data =3D gpiochip_get_data(gc);
-> +	int ret;
-> +
-> +	if (offset < MAX_GPOS) {
-> +		dev_err(gc->parent, "GPIO offset (%d) must be an output GPO\n", offset=
-);
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	ret =3D aaeon_mcu_gpio_config_input_cmd(data, offset);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	__set_bit(offset, data->dir_in);
-> +
-> +	return 0;
-> +}
-> +
-> +static int aaeon_mcu_gpio_config_output_cmd(struct aaeon_mcu_gpio *data,
-> +					     unsigned int offset,
-> +					     int value)
-> +{
-> +	u8 cmd[3], rsp;
-> +	int ret;
-> +
-> +	cmd[0] =3D AAEON_MCU_CONFIG_GPIO_OUTPUT;
-> +	cmd[1] =3D offset - 7;
-> +	cmd[2] =3D 0x00;
-> +
-> +	ret =3D aaeon_mcu_i2c_xfer(data->dev, cmd, 3, &rsp, 1);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	cmd[0] =3D AAEON_MCU_WRITE_GPIO;
-> +	/* cmd[1] =3D offset - 7; */
-> +	cmd[2] =3D !!value;
-> +
-> +	return aaeon_mcu_i2c_xfer(data->dev, cmd, 3, &rsp, 1);
-> +}
-> +
-> +static int aaeon_mcu_gpio_direction_output(struct gpio_chip *gc, unsigne=
-d int offset, int value)
-> +{
-> +	struct aaeon_mcu_gpio *data =3D gpiochip_get_data(gc);
-> +	int ret;
-> +
-> +	if (offset < MAX_GPOS)
-> +		return 0;
-> +
-> +	ret =3D aaeon_mcu_gpio_config_output_cmd(data, offset, value);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	__clear_bit(offset, data->dir_in);
-> +
-> +	return 0;
-> +}
-> +
-> +static int aaeon_mcu_gpio_get_direction(struct gpio_chip *gc, unsigned i=
-nt offset)
-> +{
-> +	struct aaeon_mcu_gpio *data =3D gpiochip_get_data(gc);
-> +
-> +	return test_bit(offset, data->dir_in) ?
-> +		GPIO_LINE_DIRECTION_IN : GPIO_LINE_DIRECTION_OUT;
-> +}
-> +
-> +static int aaeon_mcu_gpio_get(struct gpio_chip *gc, unsigned int offset)
-> +{
-> +	struct aaeon_mcu_gpio *data =3D gpiochip_get_data(gc);
-> +	u8 cmd[3], rsp;
-> +	int ret;
-> +
-> +	if (offset < MAX_GPOS)
-> +		return test_bit(offset, data->gpo_state);
-> +
-> +	cmd[0] =3D AAEON_MCU_READ_GPIO;
-> +	cmd[1] =3D offset - 7;
-> +	cmd[2] =3D 0x00;
-> +
-> +	ret =3D aaeon_mcu_i2c_xfer(data->dev, cmd, 3, &rsp, 1);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	return rsp;
-> +}
-> +
-> +static int aaeon_mcu_gpo_set_cmd(struct aaeon_mcu_gpio *data, unsigned i=
-nt offset, int value)
-> +{
-> +	u8 cmd[3], rsp;
-> +
-> +	cmd[0] =3D AAEON_MCU_CONTROL_GPO;
-> +	cmd[1] =3D offset + 1;
-> +	cmd[2] =3D !!value;
-> +
-> +	return aaeon_mcu_i2c_xfer(data->dev, cmd, 3, &rsp, 1);
-> +}
-> +
-> +static int aaeon_mcu_gpio_set_cmd(struct aaeon_mcu_gpio *data, unsigned =
-int offset, int value)
-> +{
-> +	u8 cmd[3], rsp;
-> +
-> +	cmd[0] =3D AAEON_MCU_WRITE_GPIO;
-> +	cmd[1] =3D offset - 7;
-> +	cmd[2] =3D !!value;
-> +
-> +	return aaeon_mcu_i2c_xfer(data->dev, cmd, 3, &rsp, 1);
-> +}
-> +
-> +static int aaeon_mcu_gpio_set(struct gpio_chip *gc, unsigned int offset,
-> +			      int value)
-> +{
-> +	struct aaeon_mcu_gpio *data =3D gpiochip_get_data(gc);
-> +
-> +	if (offset >=3D MAX_GPOS)
-> +		return aaeon_mcu_gpio_set_cmd(data, offset, value);
-> +
-> +	if (aaeon_mcu_gpo_set_cmd(data, offset, value) =3D=3D 0)
-> +		__assign_bit(offset, data->gpo_state, value);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct gpio_chip aaeon_mcu_chip =3D {
-> +	.label			=3D "gpio-aaeon-mcu",
-> +	.owner			=3D THIS_MODULE,
-> +	.get_direction		=3D aaeon_mcu_gpio_get_direction,
-> +	.direction_input	=3D aaeon_mcu_gpio_direction_input,
-> +	.direction_output	=3D aaeon_mcu_gpio_direction_output,
-> +	.get			=3D aaeon_mcu_gpio_get,
-> +	.set			=3D aaeon_mcu_gpio_set,
-> +	.base			=3D -1,
-> +	.ngpio			=3D MAX_GPOS + MAX_GPIOS,
-> +	.can_sleep		=3D true,
-> +};
-> +
-> +static void aaeon_mcu_gpio_reset(struct aaeon_mcu_gpio *data, struct dev=
-ice *dev)
-> +{
-> +	unsigned int i;
-> +	int ret;
-> +
-> +	/* Reset all GPOs */
-> +	for (i =3D 0; i < MAX_GPOS; i++) {
-> +		ret =3D aaeon_mcu_gpo_set_cmd(data, i, 0);
-> +		if (ret < 0)
-> +			dev_warn(dev, "Failed to reset GPO %u state: %d\n", i, ret);
-> +		__clear_bit(i, data->dir_in);
-> +	}
-> +
-> +	/* Reset all GPIOs */
-> +	for (i =3D MAX_GPOS; i < MAX_GPOS + MAX_GPIOS; i++) {
-> +		ret =3D aaeon_mcu_gpio_config_input_cmd(data, i);
-> +		if (ret < 0)
-> +			dev_warn(dev, "Failed to reset GPIO %u state: %d\n", i, ret);
-> +		__set_bit(i, data->dir_in);
-> +	}
-> +}
-> +
-> +static int aaeon_mcu_gpio_probe(struct platform_device *pdev)
-> +{
-> +	struct aaeon_mcu_gpio *data;
-> +
-> +	data =3D devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	data->dev =3D pdev->dev.parent;
-> +	data->gc =3D aaeon_mcu_chip;
-> +	data->gc.parent =3D data->dev;
-> +
-> +	/*
-> +	 * Reset all GPIO states to a known configuration. The MCU does not
-> +	 * reset GPIO state on soft reboot, only on power cycle (hard reboot).
-> +	 * Without this reset, GPIOs would retain their previous state across
-> +	 * reboots, which could lead to unexpected behavior.
-> +	 */
-> +	aaeon_mcu_gpio_reset(data, &pdev->dev);
-> +
-> +	return devm_gpiochip_add_data(&pdev->dev, &data->gc, data);
-> +}
-> +
-> +static struct platform_driver aaeon_mcu_gpio_driver =3D {
-> +	.driver =3D {
-> +		.name =3D "aaeon-mcu-gpio",
-> +	},
-> +	.probe =3D aaeon_mcu_gpio_probe,
-> +};
-> +
+Use cpu_hotplug_disable() during the probe to ensure the target CPU
+remains stable throughout the availability check.
 
-Drop the newline.
+Signed-off-by: Shouxin Sun <sunshx@chinatelecom.cn>
+Signed-off-by: Junnan Zhang <zhangjn11@chinatelecom.cn>
+Signed-off-by: Qiliang Yuan <yuanql9@chinatelecom.cn>
+Cc: Song Liu <song@kernel.org>
+Cc: Douglas Anderson <dianders@chromium.org>
+Cc: Jinchao Wang <wangjinchao600@gmail.com>
+---
+v6:
+- Change title to "simplify/cleanup" and remove "Fixes" tag since the issue
+  is not reproducible on mainline.
+- Rewrite commit message in imperative mood.
+- Clarify that mainline is safe while this improves robustness.
+- v5 link: https://lore.kernel.org/all/20260127022238.1182079-1-realwujing@gmail.com/
+v5:
+- Refine description: clarify that the retry path uses worker threads
+  without PF_PERCPU_THREAD (though mainline is safe due to system_percpu_wq).
+- v4 link: https://lore.kernel.org/all/20260124070814.806828-1-realwujing@gmail.com/
+v4:
+- Add cpu_hotplug_disable() in watchdog_hardlockup_probe() to stabilize
+  the probe CPU.
+- Update description to explain the relevance of 4.19 logs.
+v3:
+- Refactor hardlockup_detector_event_create() to be stateless by returning
+  the event pointer instead of directly assigning to per-cpu variables.
+- Restore PMU cycle fallback and unify the enable/probe paths.
+v2:
+- Add Cc: stable@vger.kernel.org.
+v1:
+- Avoid 'watchdog_ev' in probe path by manually creating and releasing a
+  local perf event.
 
-> +module_platform_driver(aaeon_mcu_gpio_driver);
-> +
-> +MODULE_DESCRIPTION("GPIO interface for Aaeon MCU");
-> +MODULE_AUTHOR("J=C3=A9r=C3=A9mie Dautheribes <jeremie.dautheribes@bootli=
-n.com>");
-> +MODULE_LICENSE("GPL");
->
-> --
-> 2.52.0
->
->
+ kernel/watchdog_perf.c | 56 +++++++++++++++++++++++++-----------------
+ 1 file changed, 34 insertions(+), 22 deletions(-)
 
-Looks pretty good, just some nits.
+diff --git a/kernel/watchdog_perf.c b/kernel/watchdog_perf.c
+index d3ca70e3c256..887b61c65c1b 100644
+--- a/kernel/watchdog_perf.c
++++ b/kernel/watchdog_perf.c
+@@ -17,6 +17,7 @@
+ #include <linux/atomic.h>
+ #include <linux/module.h>
+ #include <linux/sched/debug.h>
++#include <linux/cpu.h>
+ 
+ #include <asm/irq_regs.h>
+ #include <linux/perf_event.h>
+@@ -118,18 +119,11 @@ static void watchdog_overflow_callback(struct perf_event *event,
+ 	watchdog_hardlockup_check(smp_processor_id(), regs);
+ }
+ 
+-static int hardlockup_detector_event_create(void)
++static struct perf_event *hardlockup_detector_event_create(unsigned int cpu)
+ {
+-	unsigned int cpu;
+ 	struct perf_event_attr *wd_attr;
+ 	struct perf_event *evt;
+ 
+-	/*
+-	 * Preemption is not disabled because memory will be allocated.
+-	 * Ensure CPU-locality by calling this in per-CPU kthread.
+-	 */
+-	WARN_ON(!is_percpu_thread());
+-	cpu = raw_smp_processor_id();
+ 	wd_attr = &wd_hw_attr;
+ 	wd_attr->sample_period = hw_nmi_get_sample_period(watchdog_thresh);
+ 
+@@ -143,14 +137,7 @@ static int hardlockup_detector_event_create(void)
+ 						       watchdog_overflow_callback, NULL);
+ 	}
+ 
+-	if (IS_ERR(evt)) {
+-		pr_debug("Perf event create on CPU %d failed with %ld\n", cpu,
+-			 PTR_ERR(evt));
+-		return PTR_ERR(evt);
+-	}
+-	WARN_ONCE(this_cpu_read(watchdog_ev), "unexpected watchdog_ev leak");
+-	this_cpu_write(watchdog_ev, evt);
+-	return 0;
++	return evt;
+ }
+ 
+ /**
+@@ -159,17 +146,26 @@ static int hardlockup_detector_event_create(void)
+  */
+ void watchdog_hardlockup_enable(unsigned int cpu)
+ {
++	struct perf_event *evt;
++
+ 	WARN_ON_ONCE(cpu != smp_processor_id());
+ 
+-	if (hardlockup_detector_event_create())
++	evt = hardlockup_detector_event_create(cpu);
++	if (IS_ERR(evt)) {
++		pr_debug("Perf event create on CPU %d failed with %ld\n", cpu,
++			 PTR_ERR(evt));
+ 		return;
++	}
+ 
+ 	/* use original value for check */
+ 	if (!atomic_fetch_inc(&watchdog_cpus))
+ 		pr_info("Enabled. Permanently consumes one hw-PMU counter.\n");
+ 
++	WARN_ONCE(this_cpu_read(watchdog_ev), "unexpected watchdog_ev leak");
++	this_cpu_write(watchdog_ev, evt);
++
+ 	watchdog_init_timestamp();
+-	perf_event_enable(this_cpu_read(watchdog_ev));
++	perf_event_enable(evt);
+ }
+ 
+ /**
+@@ -263,19 +259,35 @@ bool __weak __init arch_perf_nmi_is_available(void)
+  */
+ int __init watchdog_hardlockup_probe(void)
+ {
++	struct perf_event *evt;
++	unsigned int cpu;
+ 	int ret;
+ 
+ 	if (!arch_perf_nmi_is_available())
+ 		return -ENODEV;
+ 
+-	ret = hardlockup_detector_event_create();
++	if (!hw_nmi_get_sample_period(watchdog_thresh))
++		return -EINVAL;
+ 
+-	if (ret) {
++	/*
++	 * Test hardware PMU availability by creating a temporary perf event.
++	 * The requested CPU is arbitrary; preemption is not disabled, so
++	 * raw_smp_processor_id() is used. Surround with cpu_hotplug_disable()
++	 * to ensure the arbitrarily chosen CPU remains online during the check.
++	 * The event is released immediately.
++	 */
++	cpu_hotplug_disable();
++	cpu = raw_smp_processor_id();
++	evt = hardlockup_detector_event_create(cpu);
++	if (IS_ERR(evt)) {
+ 		pr_info("Perf NMI watchdog permanently disabled\n");
++		ret = PTR_ERR(evt);
+ 	} else {
+-		perf_event_release_kernel(this_cpu_read(watchdog_ev));
+-		this_cpu_write(watchdog_ev, NULL);
++		perf_event_release_kernel(evt);
++		ret = 0;
+ 	}
++	cpu_hotplug_enable();
++
+ 	return ret;
+ }
+ 
+-- 
+2.51.0
 
-Bartosz
 
