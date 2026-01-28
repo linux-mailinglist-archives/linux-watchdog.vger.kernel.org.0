@@ -1,99 +1,103 @@
-Return-Path: <linux-watchdog+bounces-4844-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4845-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +M1AF4shemmv2wEAu9opvQ
-	(envelope-from <linux-watchdog+bounces-4844-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
-	for <lists+linux-watchdog@lfdr.de>; Wed, 28 Jan 2026 15:47:39 +0100
+	id YImULBoiemmv2wEAu9opvQ
+	(envelope-from <linux-watchdog+bounces-4845-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
+	for <lists+linux-watchdog@lfdr.de>; Wed, 28 Jan 2026 15:50:02 +0100
 X-Original-To: lists+linux-watchdog@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDDBFA3170
-	for <lists+linux-watchdog@lfdr.de>; Wed, 28 Jan 2026 15:47:38 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 547FBA32B6
+	for <lists+linux-watchdog@lfdr.de>; Wed, 28 Jan 2026 15:50:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9EB5530AD614
-	for <lists+linux-watchdog@lfdr.de>; Wed, 28 Jan 2026 14:42:08 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id B28E830225B4
+	for <lists+linux-watchdog@lfdr.de>; Wed, 28 Jan 2026 14:48:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 042DA21A457;
-	Wed, 28 Jan 2026 14:42:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06D5E2417DE;
+	Wed, 28 Jan 2026 14:47:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sg0cnP1b"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VvqzSDlq"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF3FF23C4F4
-	for <linux-watchdog@vger.kernel.org>; Wed, 28 Jan 2026 14:42:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94683225390
+	for <linux-watchdog@vger.kernel.org>; Wed, 28 Jan 2026 14:47:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769611327; cv=none; b=VddV0g6Sn7XA64ELwqPGUXTcgD4g6K3Iqj3dH3F0vTfSQKzgQfZ3TeK+Io5ppK5Jcip3KA7CPLTj8xFilL5VIN9QJrU+OO5+G55j3RtIQnKgz4F+gfD1/4LHlIJKK4hVnAtoSXNuBRLcFaVmZ6Z8VGWHxS6hBjRBF+Hdw6f19y0=
+	t=1769611674; cv=none; b=p641pRH+GNBQbpoBZ2P6irmotPfH8KkzxHWz0WW3f6cXK12egSM9tqXB9U5FZqPdONnm6mBN4Cr5KstQBpKmx7RDvM8Q7bzmHWuNj2UUspcxVu/ZgkXO0oI/Hp/18ZamIeeA0z8DJ8na2/E4ZIwguXS1jB4U4skeZQjrGN1UB7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769611327; c=relaxed/simple;
-	bh=e4Y0gnq911FKNdWWWGAQnFXylREVdGWOawghZntWz9g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tWOfSsKX3DXnScr6NBxR2VQH7NyXkVkNAS493nVj5wl/lnQ9p07/Ipp4XRVgvzbnGCq8t1cVzlhWFJ7xgil2RlvDVSGzM29rB2zDtFM47baotjCCy0ATNUMJwl3sz3O43LIkUeP2UCIAA691lwtVdGp3Xkk+mnCbMdNP2TxLkqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sg0cnP1b; arc=none smtp.client-ip=209.85.222.176
+	s=arc-20240116; t=1769611674; c=relaxed/simple;
+	bh=uMb0+6hrAqyTAxCgTOBma+V9UGLo8wqxbLjyFwatDo4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=JbEMZ2364y8gVaD2hCpPqzn+EH9fapysi63btQvM606ZfzJwVa27uqK/7r/oRpop6eS5nVFWQgjAFS2e6UYlQ1hCgP6FfbEFYvCJm+zAbszkdHkXA+4mVNr1T+/YZUNSiP+GLZvFPzYZn0UIZQuJ+PomiubQwq9MkaJwbUE5Ey0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VvqzSDlq; arc=none smtp.client-ip=209.85.222.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-8c6a50c17fdso738066285a.2
-        for <linux-watchdog@vger.kernel.org>; Wed, 28 Jan 2026 06:42:05 -0800 (PST)
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-8c69ffb226eso948121185a.1
+        for <linux-watchdog@vger.kernel.org>; Wed, 28 Jan 2026 06:47:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769611325; x=1770216125; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NvwAkydsJHGg+bpnKIjXBjgXWCnzFDla2aq6C1Z3aaY=;
-        b=Sg0cnP1bUlm8LAV5YAUbj5Ez0Ugxvth/Nd6AIzuwfj84c5yl6qGI/hpjWGUZ/jTRII
-         6O7EEMPwSmJLlMeHSUrNwqYzA8vgzPRkXzRZ8Pjq/3R74hQoQS9LV/Nj/YeIhOcCiyVw
-         L84/We9C/FhQ3rlIl3nBCgwS1vtSih1lbnaqgt79e0AyFUrLbEdz5ZxebC5AT0jO2Zat
-         TsxR/zDMwtSXdPh0xnsDB3wt+3Wdn+NjWa0vHnlTyqkjKERkvop0Y8RSkC2f4Wtd87I8
-         Upi/zK+P3FcKho8hMotNu4kAE2b1PzRMsyt4LNrpL46agd9q4NcVL1WmvbnoeGx51tLy
-         f0SA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769611325; x=1770216125;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1769611672; x=1770216472; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NvwAkydsJHGg+bpnKIjXBjgXWCnzFDla2aq6C1Z3aaY=;
-        b=BDnyqPoN3N8qeqYIklkHtmZg1egAqq4dh2PLtEmfBJHGvg8M1XZ+Cvr8ajoIphiTru
-         /jX727Krn7kOu7sFi6dlnFnljh+Tnm6SCJ45jUPnlXjcrOKFOMDDcjVMvCmOxUE2R+ub
-         +H5Ct2A6daInU9pq1G3ghsBi5xa+aiDqJkQitfEYe2vqOkJpurq+6DNJ6ZSVoAU9AE5+
-         9m4EBjYlR/Y+lqSLn7WYJhrjx0CqaIqV0XEJWnyBxg6wW6XK4UVPzGMB7ZVQKpvWGiIx
-         fPpyqA3Tjwp4Me3aWBvuWNOJKQzfH1nCDKe9lcOwPa8KjmFkXvddkB6WsemzdkcrCSmA
-         fwyA==
-X-Gm-Message-State: AOJu0YxiDD8WBHTZn6AjTQ4alVPadyF1NLBSKdIQJY59c7nsJPgk/uK7
-	oEe0ItjP551u2Yf6D6ixxLa+UCzE6gW23TtM431Nc9OssPCN9tqVxBytFVytcxqQ
-X-Gm-Gg: AZuq6aLELx3A9Jqe1SRMG0razoYdRNVxQUyVCbUU+ny/CTIjChr4FSZmtTMo9IQWYDB
-	A+o/Y3ybNSmPv7739OrASKoJKFzLWBbQ3U5cKMzqAgU4zUy2yAnwRkGVBKYbOGjIbXNSA5l/2qB
-	2xtmkaLH/KNHGqoMT/TWH54ELKPJuAyRecs+a+Vn0pDzg9np6J3PO5EziuASlV3LWDQUV14aT01
-	8CgmLAf08dDzwMvssmUsdaQeaSIPFY533kMqbWdkcvNP1VnyhsbeF4eLZ82I7evw8DYK9J3RNrc
-	PNacqjo8o8Q836zRcdQWLu3w2LIrk77Qo9M/eRidPPAcU+taX2fSzrgFUAIDT2hgMPwKkHssl+E
-	BFpuI5gP5RhFAS7pd9H46OefcY8cXDKvu9uDdKEoFKJ5iRhSw57VMBq5kdOoW5/QsLmWMLW/idd
-	WusbA=
-X-Received: by 2002:a05:7022:6728:b0:11b:9386:a3bf with SMTP id a92af1059eb24-124a0129edfmr3289311c88.42.1769605012180;
-        Wed, 28 Jan 2026 04:56:52 -0800 (PST)
+        bh=eZiqzZAKTrzELIcyvdKxAtY7K6R+zYGAN6Fj59XN2kA=;
+        b=VvqzSDlqRzZKfeOw2ZByPfl/3CuxXzePLMf22HGgRI5DWOPjsMcJEkVIGJxAe69O0N
+         R5qrd9A4v63AVNYaaiiPmT1gvKaZFHYSIk6G8wIiSvTBYfxH7kDxf9x8G/aisFj1bfJZ
+         IvixILUK0qOQOr2kBY3+vKCnmWBGhqlM3udO7rLjWqwwbnlxFlVtAHbRMA1TVl9quqw3
+         Rst8oa/seFsNZTL+HZvNhZbuCt1NfIZRhFsjpycj9shX4gqbXmsSRMnDPBJGCQPiigUU
+         XtQNHycy2dvs8rZlVGruXFBdbcFFPnNfUZoPwVBckoOnM1mCA4QuDV8OocbLbSaGcFeV
+         jZ7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769611672; x=1770216472;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=eZiqzZAKTrzELIcyvdKxAtY7K6R+zYGAN6Fj59XN2kA=;
+        b=oY5HEwtajXBniVW6d6X+W/55hUnFFDi0U8/XCzggjBPM288K+djRIloefGZBtsizZT
+         Rp387fyttY1pc7bkGGZ1FSFy9/gFrYz/+/GahFVV1ll83pdCnLmU6m795ZPX3bIOyKoU
+         LaJBk0tGgr9r59FyFmHOcky4mRPtACFyvuGNcZkO3aY+VF6wSC7cRq5pBw3Nhvv/+SZK
+         hlo1zbe5SGfT5AGCBNWxhUiHD4IgZdhpShlxIn1qaUR1pBTp088r4K81GbL1shvWvTG5
+         gDJ1v8D7ro5aO2ysN0fVFaFcCnqAE2MXPJlFTT5eBIFTocA0gsFcgMUAN+lhIfKnJx3v
+         ZCcw==
+X-Forwarded-Encrypted: i=1; AJvYcCWkizsEHuQxEyxJFypTpkPJe3UQXU/EKPTffmX1d4/s/8Dj0Wztc5qBBZfobopA2hBqPDd098HeL/LVmPIUbw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxHHYsRglEs62GwwCdwNSWQ770xLhBKkVFHDbvxeKG+Wmcko3uf
+	4JHovUshk9DVzUTVJITWXSeBqDk8XA34pkacIz71r/iIumtew+5TjLrchM3IERUo
+X-Gm-Gg: AZuq6aKYKUXErwb8cvcD8q1X6SI0Hm1xENtAW0+SOvvX1weaVix4yTTMN3fhWWxWFQq
+	gO6/duCCyC6xqKHMNQsWwiI5tc6M8aTe5sSxy7kj0PdW0h5FNvMu2J+PsPpqXvmJ41neJagH2Y/
+	R86H2xQ4thu/+5kPLNsXbndq7KaISQjc5E2unOxIAZw7mmDn8OnOKWfuna8VOhqNr8s4dP+GYi+
+	KS89IfAI8oqOX4MjVBzR5RzvPxIjSnoWWYOci8SIQoJukSlK6sZy9REUntp0hLx6wKIoLTDuGsF
+	g92I5X6i9YW2x/vC4OHWUVWssRuYp9CkESbPDWzNqehe2yS5dsmruq1J946iXtrsyGD4J81+Tdp
+	pjvoIVR0WsrcCb0MHy6J1PtcG3xx1o3xBExqSvz706nJriG02+bYezZNbnp9E9q2YZSoDGzfXeD
+	52wHk=
+X-Received: by 2002:a05:7022:68b:b0:11a:4ffb:9849 with SMTP id a92af1059eb24-124a007c94dmr3573082c88.21.1769605603152;
+        Wed, 28 Jan 2026 05:06:43 -0800 (PST)
 Received: from debian ([74.48.213.230])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-124a9efb4casm2192986c88.16.2026.01.28.04.56.47
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-124a9de7febsm2126691c88.10.2026.01.28.05.06.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jan 2026 04:56:51 -0800 (PST)
+        Wed, 28 Jan 2026 05:06:42 -0800 (PST)
 From: Qiliang Yuan <realwujing@gmail.com>
-To: Qiliang Yuan <realwujing@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Li Huafei <lihuafei1@huawei.com>,
-	Ingo Molnar <mingo@kernel.org>,
-	"Yury Norov (NVIDIA)" <yury.norov@gmail.com>,
-	Jinchao Wang <wangjinchao600@gmail.com>,
-	Yicong Yang <yangyicong@hisilicon.com>,
-	Thorsten Blum <thorsten.blum@linux.dev>
-Cc: linux-watchdog@vger.kernel.org,
+To: dianders@chromium.org
+Cc: akpm@linux-foundation.org,
+	lihuafei1@huawei.com,
+	linux-kernel@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	mingo@kernel.org,
 	mm-commits@vger.kernel.org,
-	Shouxin Sun <sunshx@chinatelecom.cn>,
-	Junnan Zhang <zhangjn11@chinatelecom.cn>,
-	Qiliang Yuan <yuanql9@chinatelecom.cn>,
-	Douglas Anderson <dianders@chromium.org>,
-	Song Liu <song@kernel.org>,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v8] watchdog/hardlockup: simplify perf event probe and remove per-cpu dependency
-Date: Wed, 28 Jan 2026 07:56:25 -0500
-Message-ID: <20260128125639.1767682-1-realwujing@gmail.com>
+	realwujing@gmail.com,
+	song@kernel.org,
+	sunshx@chinatelecom.cn,
+	thorsten.blum@linux.dev,
+	wangjinchao600@gmail.com,
+	yangyicong@hisilicon.com,
+	yuanql9@chinatelecom.cn,
+	zhangjn11@chinatelecom.cn
+Subject: Re: [PATCH v6] watchdog/hardlockup: simplify perf event probe and remove per-cpu dependency
+Date: Wed, 28 Jan 2026 08:06:29 -0500
+Message-ID: <20260128130634.1769702-1-realwujing@gmail.com>
 X-Mailer: git-send-email 2.51.0
+In-Reply-To: <CAD=FV=XX0dJ2jEaQ21M4Kas6pbJL0SSCxYhr8-1kqSTEiJP_UA@mail.gmail.com>
+References: <CAD=FV=XX0dJ2jEaQ21M4Kas6pbJL0SSCxYhr8-1kqSTEiJP_UA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -102,202 +106,73 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-4844-lists,linux-watchdog=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[16];
-	FREEMAIL_TO(0.00)[gmail.com,linux-foundation.org,huawei.com,kernel.org,hisilicon.com,linux.dev];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[realwujing@gmail.com,linux-watchdog@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
+	TAGGED_FROM(0.00)[bounces-4845-lists,linux-watchdog=lfdr.de];
+	FREEMAIL_CC(0.00)[linux-foundation.org,huawei.com,vger.kernel.org,kernel.org,gmail.com,chinatelecom.cn,linux.dev,hisilicon.com];
 	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-watchdog];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	FROM_NEQ_ENVFROM(0.00)[realwujing@gmail.com,linux-watchdog@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_NONE(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TAGGED_RCPT(0.00)[linux-watchdog];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[chinatelecom.cn:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,chromium.org:email]
-X-Rspamd-Queue-Id: BDDBFA3170
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[chinatelecom.cn:email,chromium.org:email,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 547FBA32B6
 X-Rspamd-Action: no action
 
-Simplify the hardlockup detector's probe path and remove its implicit
-dependency on pinned per-cpu execution.
+Hi Doug,
 
-Refactor hardlockup_detector_event_create() to be stateless. Return
-the created perf_event pointer to the caller instead of directly
-modifying the per-cpu 'watchdog_ev' variable. This allows the probe
-path to safely manage a temporary event without the risk of leaving
-stale pointers should task migration occur.
+Just a quick follow-up to my previous reply. I've just sent out v8 which 
+addresses the Signed-off-by issues and some final cleanups.
 
-Signed-off-by: Shouxin Sun <sunshx@chinatelecom.cn>
-Signed-off-by: Junnan Zhang <zhangjn11@chinatelecom.cn>
-Signed-off-by: Qiliang Yuan <yuanql9@chinatelecom.cn>
-Signed-off-by: Qiliang Yuan <realwujing@gmail.com>
-Cc: Douglas Anderson <dianders@chromium.org>
-Cc: Song Liu <song@kernel.org>
-Cc: Jinchao Wang <wangjinchao600@gmail.com>
----
-v8:
-- Add Signed-off-by with work email.
-- v7 link: https://lore.kernel.org/all/20260128060833.1715622-1-realwujing@gmail.com/
-v7:
-- Update Signed-off-by to match author email.
-- Remove redundant cpu_hotplug_disable() in probe path.
-- v6 link: https://lore.kernel.org/all/20260128023136.1691973-1-realwujing@gmail.com/
-v6:
-- Change title to "simplify/cleanup" and remove "Fixes" tag since the issue
-  is not reproducible on mainline.
-- Rewrite commit message in imperative mood.
-- Clarify that mainline is safe while this improves robustness.
-- v5 link: https://lore.kernel.org/all/20260127022238.1182079-1-realwujing@gmail.com/
-v5:
-- Refine description: clarify that the retry path uses worker threads
-  without PF_PERCPU_THREAD (though mainline is safe due to system_percpu_wq).
-- v4 link: https://lore.kernel.org/all/20260124070814.806828-1-realwujing@gmail.com/
-v4:
-- Add cpu_hotplug_disable() in watchdog_hardlockup_probe() to stabilize
-  the probe CPU.
-- Update description to explain the relevance of 4.19 logs.
-v3:
-- Refactor hardlockup_detector_event_create() to be stateless by returning
-  the event pointer instead of directly assigning to per-cpu variables.
-- Restore PMU cycle fallback and unify the enable/probe paths.
-v2:
-- Add Cc: stable@vger.kernel.org.
-v1:
-- Avoid 'watchdog_ev' in probe path by manually creating and releasing a
-  local perf event.
+On Tue, Jan 27, 2026 at 8:08 PM Doug Anderson <dianders@chromium.org> wrote:
+> One last note is that your Signed-off-by tags don't match. When I
+> apply your patch, I see:
+>
+> Author:     Qiliang Yuan <realwujing@gmail.com>
+>
+> ...but your Signed-off-by is your "@chinatelecom.cn" address. That's
+> generally not okay. You need to do something to make those match.
 
- kernel/watchdog_perf.c | 51 ++++++++++++++++++++++++------------------
- 1 file changed, 29 insertions(+), 22 deletions(-)
+Regarding the Signed-off-by tags, I've included both in v8:
+- Signed-off-by: Qiliang Yuan <realwujing@gmail.com> (Personal email)
+- Signed-off-by: Qiliang Yuan <yuanql9@chinatelecom.cn> (Work email)
 
-diff --git a/kernel/watchdog_perf.c b/kernel/watchdog_perf.c
-index d3ca70e3c256..4a798443033b 100644
---- a/kernel/watchdog_perf.c
-+++ b/kernel/watchdog_perf.c
-@@ -17,6 +17,7 @@
- #include <linux/atomic.h>
- #include <linux/module.h>
- #include <linux/sched/debug.h>
-+#include <linux/cpu.h>
- 
- #include <asm/irq_regs.h>
- #include <linux/perf_event.h>
-@@ -118,18 +119,11 @@ static void watchdog_overflow_callback(struct perf_event *event,
- 	watchdog_hardlockup_check(smp_processor_id(), regs);
- }
- 
--static int hardlockup_detector_event_create(void)
-+static struct perf_event *hardlockup_detector_event_create(unsigned int cpu)
- {
--	unsigned int cpu;
- 	struct perf_event_attr *wd_attr;
- 	struct perf_event *evt;
- 
--	/*
--	 * Preemption is not disabled because memory will be allocated.
--	 * Ensure CPU-locality by calling this in per-CPU kthread.
--	 */
--	WARN_ON(!is_percpu_thread());
--	cpu = raw_smp_processor_id();
- 	wd_attr = &wd_hw_attr;
- 	wd_attr->sample_period = hw_nmi_get_sample_period(watchdog_thresh);
- 
-@@ -143,14 +137,7 @@ static int hardlockup_detector_event_create(void)
- 						       watchdog_overflow_callback, NULL);
- 	}
- 
--	if (IS_ERR(evt)) {
--		pr_debug("Perf event create on CPU %d failed with %ld\n", cpu,
--			 PTR_ERR(evt));
--		return PTR_ERR(evt);
--	}
--	WARN_ONCE(this_cpu_read(watchdog_ev), "unexpected watchdog_ev leak");
--	this_cpu_write(watchdog_ev, evt);
--	return 0;
-+	return evt;
- }
- 
- /**
-@@ -159,17 +146,26 @@ static int hardlockup_detector_event_create(void)
-  */
- void watchdog_hardlockup_enable(unsigned int cpu)
- {
-+	struct perf_event *evt;
-+
- 	WARN_ON_ONCE(cpu != smp_processor_id());
- 
--	if (hardlockup_detector_event_create())
-+	evt = hardlockup_detector_event_create(cpu);
-+	if (IS_ERR(evt)) {
-+		pr_debug("Perf event create on CPU %d failed with %ld\n", cpu,
-+			 PTR_ERR(evt));
- 		return;
-+	}
- 
- 	/* use original value for check */
- 	if (!atomic_fetch_inc(&watchdog_cpus))
- 		pr_info("Enabled. Permanently consumes one hw-PMU counter.\n");
- 
-+	WARN_ONCE(this_cpu_read(watchdog_ev), "unexpected watchdog_ev leak");
-+	this_cpu_write(watchdog_ev, evt);
-+
- 	watchdog_init_timestamp();
--	perf_event_enable(this_cpu_read(watchdog_ev));
-+	perf_event_enable(evt);
- }
- 
- /**
-@@ -263,19 +259,30 @@ bool __weak __init arch_perf_nmi_is_available(void)
-  */
- int __init watchdog_hardlockup_probe(void)
- {
-+	struct perf_event *evt;
-+	unsigned int cpu;
- 	int ret;
- 
- 	if (!arch_perf_nmi_is_available())
- 		return -ENODEV;
- 
--	ret = hardlockup_detector_event_create();
-+	if (!hw_nmi_get_sample_period(watchdog_thresh))
-+		return -EINVAL;
- 
--	if (ret) {
-+	/*
-+	 * Test hardware PMU availability by creating a temporary perf event.
-+	 * The event is released immediately.
-+	 */
-+	cpu = raw_smp_processor_id();
-+	evt = hardlockup_detector_event_create(cpu);
-+	if (IS_ERR(evt)) {
- 		pr_info("Perf NMI watchdog permanently disabled\n");
-+		ret = PTR_ERR(evt);
- 	} else {
--		perf_event_release_kernel(this_cpu_read(watchdog_ev));
--		this_cpu_write(watchdog_ev, NULL);
-+		perf_event_release_kernel(evt);
-+		ret = 0;
- 	}
-+
- 	return ret;
- }
- 
--- 
-2.51.0
+My work email often has trouble receiving external mailing list replies, 
+so I've included both to ensure I don't miss any feedback and to 
+properly attribute the work. The v8 version should have everything 
+matching correctly now.
 
+I've already sent v8 twice today, but for some reason, they are still not visible on lore.kernel.org.
+Here are the Message-IDs from those three attempts for your reference:
+- <20260128115358.1757147-1-realwujing@gmail.com>
+- <20260128122330.1761777-1-realwujing@gmail.com>
+- <20260128125639.1767682-1-realwujing@gmail.com>
+
+Therefore, I cannot provide a lore link for v8 yet. You may use the v7 version from lore as well, 
+I have already added "Signed-off-by: Qiliang Yuan <realwujing@gmail.com>" to match the author's identity in v7, 
+but please help to include "Signed-off-by: Qiliang Yuan <yuanql9@chinatelecom.cn>".
+
+Thanks!
+
+Best regards,
+Qiliang
 
