@@ -1,215 +1,179 @@
-Return-Path: <linux-watchdog+bounces-4854-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4855-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aPYhNFqIe2mlFQIAu9opvQ
-	(envelope-from <linux-watchdog+bounces-4854-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
-	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Jan 2026 17:18:34 +0100
+	id IIv3Jf+be2nOGAIAu9opvQ
+	(envelope-from <linux-watchdog+bounces-4855-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
+	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Jan 2026 18:42:23 +0100
 X-Original-To: lists+linux-watchdog@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48891B208D
-	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Jan 2026 17:18:34 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C63BB3207
+	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Jan 2026 18:42:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 32A6C3002E59
-	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Jan 2026 16:18:33 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 13313300DF4C
+	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Jan 2026 17:39:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4822B33D6F5;
-	Thu, 29 Jan 2026 16:18:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C98F126CE2C;
+	Thu, 29 Jan 2026 17:39:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="mpKiW3AA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R/bz7/nU"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E61B1DE3B5
-	for <linux-watchdog@vger.kernel.org>; Thu, 29 Jan 2026 16:18:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A19F618BC3B;
+	Thu, 29 Jan 2026 17:39:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769703511; cv=none; b=nd9wJ6ChNNQlMDaZOZKZgdC+0mtJ02GuXW8n4/wY+4G5QsDduZ8MS0CB64/SJ3oIz2RZuLGvtfvg5xiAk6sRmcXAw3etRMW9wEUizYMP4RypPb0qjtks9/KqmVDLjHE0tAMxLSsvYeuktL+fSSF627NECZjJ+6XW9rbJJ1UWt7A=
+	t=1769708365; cv=none; b=NlwPqwu16xV07pMWAOJ1UYTHW02U7UUjXqXluBoMHJqVJ/z0ikYWOLvPYJZEng/b9wjNKkIZ9twa3SW/C5SiLKUcxBHZai9optOe42PPFWggi64JKvtXcuthmkAKz4b0h2sUsezcRfMXORhDU5jGfy7ZB7MA/ARWmmc+EHCjVOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769703511; c=relaxed/simple;
-	bh=FyxdE3i0S0sOMCiAqRnDE/JGv8BUQ7rwgYssZ0u2i1s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qok2OgxRwA7Xud6uGC0hNoJ9DnFWYLR3VxDTF+XXiSDnsKLU5wHAUvlJa41Oyb/MRUIJuyqTZg6Ie5Yr7Dxv7ZthwEHDtA08Yf9tXa9O8u6lnDjw/P7Xn266IDuJxya+whvSVGjmHpmFpZT+hUe27QkV5FfOfng6J5L+3HfOZ5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=mpKiW3AA; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b872f1c31f1so159827566b.0
-        for <linux-watchdog@vger.kernel.org>; Thu, 29 Jan 2026 08:18:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1769703504; x=1770308304; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KB9Cy4FVJg8wm+puQzne477B0+DW4cZTlodUY8Maklc=;
-        b=mpKiW3AAVH2AtuAXbuY+ageyixoiafnWFO/SjGRNRSqMScZJ5bgAkAFaA+2V7SRdIe
-         zVS4Qp7OvTYEFyGES7MvErzbkWe3yPmLSSIxu6EzIOcWePw1DyaOwEO/CjHdPkHnk+j+
-         QM82x1xzee3gwns9z0kpFh5G4sdGuHOyT1wMI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769703504; x=1770308304;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=KB9Cy4FVJg8wm+puQzne477B0+DW4cZTlodUY8Maklc=;
-        b=qOT8dejawKBdr791Lq/yvz3UDg1qBLxTyQsrKJcuJLH5KHlmERH6xwN4A+F0l5xLSa
-         xqp9SSVfWUOrxIXVGV0FiBdWzHeeDCg+lw7OaVcW6c1tD6fy+mKlvZIryZluBJJgJdxW
-         ho5/6orjUNNDb68l0T7dt65KCc5nbpleRYUWoDH5QKctR+k9rBMajjZ1LRfun91SsGXA
-         hLTet+pbaVkhj88MFE49pfibUkFaMaklLZJO3RJcEGg+vWhz62Aw2KIIoY/hSFW1WK4n
-         ElRxLEn9fiEtfHjCgPCGwxsrgYUDP7wlvI3UnrOzfWUP65XehW2kmRw8Am0QDxjHaH+/
-         V8WQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW34sQeqDMxi2N/t7ye0oOC0vLENChNqqvTNYGadZc2xxsP0kEcHHpzx6DSqaxtdSH0Y46S9usTfLfh7gtvrA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyvu6Mf8UYgqWPhfdaRi5sHw1C8G9MiysPQv2qdVaPM9vJtkJ8L
-	nx7XB6dMW/PTLR7BU1i8K7mwtaz2WrawHNIVb1WmKbxs+CKRu2oSKpg1U/R61WyAA7lwBkWommK
-	Ymb/pNA==
-X-Gm-Gg: AZuq6aIiT9Wc5a73KsVqnpQWBMFqSgu0OkqJwpqsuEZZ37msYdCaN/2a/5gHiZkvpVO
-	x2/1dFyx92UKhsMOF+jr0wtjcf6lxfCzjDDVJPQBCH4VhleRIEt1sMqUV6aCDMassc0I9vRI8ND
-	OPJXG7Nvy6wwhE0AakWeFOZTRE/E237lw3zr9SGd/ZkP8+dfKxA6wSUGdHIs+RVTLtpn8nGQDEQ
-	0zLc7IYgrakuB2DmLzi/awE07WSiDKVVG7BXSIFRNE1cde5ljw9V4ZGmuQlwT/v0X7SJE4N8AwA
-	4pz3SSumTnO99TDHTcjVa1Gkn/tnSvyBaL0Fker9pTyO9AynjBoJARQbDLuKqQmZ+UIYvVq3smN
-	jNdv/jjPkbLJK8uRKL9R8bvKzkH2rynsXbcQWarLc2zrZFyD55xlhhDjLw7UF32nCLhhurTShps
-	Bum0odQfs8zSeG2F2WG61geTzdUhMatlhppJmsqsNBfGh4jXTcWw==
-X-Received: by 2002:a17:907:9691:b0:b83:15cb:d491 with SMTP id a640c23a62f3a-b8dab361960mr641610266b.53.1769703504504;
-        Thu, 29 Jan 2026 08:18:24 -0800 (PST)
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com. [209.85.128.54])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8dbf1c0213sm282989266b.48.2026.01.29.08.18.21
-        for <linux-watchdog@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Jan 2026 08:18:21 -0800 (PST)
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-48068127f00so10057475e9.3
-        for <linux-watchdog@vger.kernel.org>; Thu, 29 Jan 2026 08:18:21 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVXAA1spUyAUg+w0xo8UXWUAG2ZijBRTyTBeGbQ7U0AfU8cIOxbYfE+YJ10B3bUEQwrciv9f0+t4agViEGzeQ==@vger.kernel.org
-X-Received: by 2002:a05:600c:a44:b0:47e:e2ec:995b with SMTP id
- 5b1f17b1804b1-48069c2098cmr117091455e9.9.1769703501228; Thu, 29 Jan 2026
- 08:18:21 -0800 (PST)
+	s=arc-20240116; t=1769708365; c=relaxed/simple;
+	bh=KT9Y+oFfVF9aQj5amwkO7yZGPBVgZJex/Cd1L2xGskk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sQ/3dSvRmsQtgCmlrnkZGJqlrPFmXeQ9m2ACwJ6yPb22WasIIsX6RoLFs0gcpNaM04TqvaH2huBOTxxGJj8uynvpELzLCkuMRCNaMz21rmKHXpQch6pzm1GIrrVT03tX7NhhtBTIfdv/Bp8HBH1dFFOgIpkgqJdejDrqkdYi4pA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R/bz7/nU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDA3CC4CEF7;
+	Thu, 29 Jan 2026 17:39:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769708365;
+	bh=KT9Y+oFfVF9aQj5amwkO7yZGPBVgZJex/Cd1L2xGskk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=R/bz7/nUcm73NNHYaXDjV6LlDtTC/cbxkrnckPacaYuKwkpLN2JIqD8MBfcF4Usbl
+	 BYynq79zVE8C4QxGbq7Dx/bL9qczwl8MXMWF99/mHTlcCeDiFtuSZ9dNtfecCKWddD
+	 yyX/d+ZDzhoiKiL38eld+fGuPo8qyEiaB3iz4U4indW3UFg1J/ww/5GW13AWIerv9g
+	 2G0o/3wm1FFTcRBcA+tRrpGldtjgZDVVn7AhxsTMV7nXvQ+3ka6Sc9Vb/qcgzk/c8G
+	 KosTS+EWSAf5k5pnDLWbWRQ+2IsPctDu41Ll5SVAlex53VCZg1CSdfg008d+DI7IOK
+	 bEBv8PFlxpEeA==
+Date: Thu, 29 Jan 2026 17:39:19 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc: Rob Herring <robh@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	linux-clk@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH mainline-linux 1/3] dt-bindings: watchdog:
+ renesas,r9a09g057-wdt: Rework example
+Message-ID: <20260129-stapling-nemesis-66ba56d68967@spud>
+References: <20260129140731.12633-1-fabrizio.castro.jz@renesas.com>
+ <20260129140731.12633-2-fabrizio.castro.jz@renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260129022629.2201331-1-realwujing@gmail.com>
-In-Reply-To: <20260129022629.2201331-1-realwujing@gmail.com>
-From: Doug Anderson <dianders@chromium.org>
-Date: Thu, 29 Jan 2026 08:18:09 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=VpV19wB5uGUCRDnCO_SktL3Svnh3V+NT5oNji70Ff3pw@mail.gmail.com>
-X-Gm-Features: AZwV_Qi6iIvkb9CRih937uKay1QnRrNoDBbLHqezMGvplj5D710QE3pctSSd19g
-Message-ID: <CAD=FV=VpV19wB5uGUCRDnCO_SktL3Svnh3V+NT5oNji70Ff3pw@mail.gmail.com>
-Subject: Re: [PATCH v9] watchdog/hardlockup: simplify perf event probe and
- remove per-cpu dependency
-To: Qiliang Yuan <realwujing@gmail.com>
-Cc: Ingo Molnar <mingo@kernel.org>, Li Huafei <lihuafei1@huawei.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Jinchao Wang <wangjinchao600@gmail.com>, 
-	Yicong Yang <yangyicong@hisilicon.com>, Thorsten Blum <thorsten.blum@linux.dev>, 
-	linux-watchdog@vger.kernel.org, mm-commits@vger.kernel.org, 
-	Shouxin Sun <sunshx@chinatelecom.cn>, Junnan Zhang <zhangjn11@chinatelecom.cn>, 
-	Qiliang Yuan <yuanql9@chinatelecom.cn>, Song Liu <song@kernel.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="36Iy0USQuZYBEeUt"
+Content-Disposition: inline
+In-Reply-To: <20260129140731.12633-2-fabrizio.castro.jz@renesas.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-2.26 / 15.00];
+	SIGNED_PGP(-2.00)[];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[chromium.org,none];
-	R_DKIM_ALLOW(-0.20)[chromium.org:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,huawei.com,linux-foundation.org,gmail.com,hisilicon.com,linux.dev,vger.kernel.org,chinatelecom.cn];
-	TAGGED_FROM(0.00)[bounces-4854-lists,linux-watchdog=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-4855-lists,linux-watchdog=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	DKIM_TRACE(0.00)[chromium.org:+];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dianders@chromium.org,linux-watchdog@vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[18];
+	FREEMAIL_CC(0.00)[kernel.org,roeck-us.net,baylibre.com,linux-watchdog.org,glider.be,gmail.com,bp.renesas.com,vger.kernel.org,sang-engineering.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[conor@kernel.org,linux-watchdog@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-watchdog,dt,renesas];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-watchdog];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[chinatelecom.cn:email,mail.gmail.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 48891B208D
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[11c00400:email,0.219.186.0:email,renesas.com:email]
+X-Rspamd-Queue-Id: 3C63BB3207
 X-Rspamd-Action: no action
 
-Hi,
 
-On Wed, Jan 28, 2026 at 6:26=E2=80=AFPM Qiliang Yuan <realwujing@gmail.com>=
- wrote:
->
-> Simplify the hardlockup detector's probe path and remove its implicit
-> dependency on pinned per-cpu execution.
->
-> Refactor hardlockup_detector_event_create() to be stateless. Return
-> the created perf_event pointer to the caller instead of directly
-> modifying the per-cpu 'watchdog_ev' variable. This allows the probe
-> path to safely manage a temporary event without the risk of leaving
-> stale pointers should task migration occur.
->
-> Signed-off-by: Shouxin Sun <sunshx@chinatelecom.cn>
-> Signed-off-by: Junnan Zhang <zhangjn11@chinatelecom.cn>
-> Signed-off-by: Qiliang Yuan <yuanql9@chinatelecom.cn>
-> Signed-off-by: Qiliang Yuan <realwujing@gmail.com>
-> Cc: Douglas Anderson <dianders@chromium.org>
-> Cc: Song Liu <song@kernel.org>
-> Cc: Jinchao Wang <wangjinchao600@gmail.com>
+--36Iy0USQuZYBEeUt
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Jan 29, 2026 at 02:07:29PM +0000, Fabrizio Castro wrote:
+> When the bindings for the Renesas RZ/V2H(P) SoC were factored
+> out IP WDT0 was selected for the example, however the HW user
+> manual states that only IP WDT1 can be used by Linux.
+>=20
+> This commit is part of a series that removes WDT{0,2,3} support
+> from the kernel, therefore the example from the bindings has
+> lost its meaning.
+>=20
+> Update the example accordingly.
+>=20
+> Fixes: fcba2855251f ("dt-bindings: watchdog: factor out RZ/V2H(P) watchdo=
+g")
+
+Given this is an example, I don't think a fixes tag is appropriate here.
+
+> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
 > ---
-> v9:
-> - remove unused `#include <linux/cpu.h>`
-> v8:
-> - Add Signed-off-by with work email.
-> v7:
-> - Update Signed-off-by to match author email.
-> - Remove redundant cpu_hotplug_disable() in probe path.
-> v6:
-> - Change title to "simplify/cleanup" and remove "Fixes" tag since the iss=
-ue
->   is not reproducible on mainline.
-> - Rewrite commit message in imperative mood.
-> - Clarify that mainline is safe while this improves robustness.
-> v5:
-> - Refine description: clarify that the retry path uses worker threads
->   without PF_PERCPU_THREAD (though mainline is safe due to system_percpu_=
-wq).
-> v4:
-> - Add cpu_hotplug_disable() in watchdog_hardlockup_probe() to stabilize
->   the probe CPU.
-> - Update description to explain the relevance of 4.19 logs.
-> v3:
-> - Refactor hardlockup_detector_event_create() to be stateless by returnin=
-g
->   the event pointer instead of directly assigning to per-cpu variables.
-> - Restore PMU cycle fallback and unify the enable/probe paths.
-> v2:
-> - Add Cc: stable@vger.kernel.org.
-> v1:
-> - Avoid 'watchdog_ev' in probe path by manually creating and releasing a
->   local perf event.
->
->  kernel/watchdog_perf.c | 50 +++++++++++++++++++++++-------------------
->  1 file changed, 28 insertions(+), 22 deletions(-)
+>  .../bindings/watchdog/renesas,r9a09g057-wdt.yaml          | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/watchdog/renesas,r9a09g057=
+-wdt.yaml b/Documentation/devicetree/bindings/watchdog/renesas,r9a09g057-wd=
+t.yaml
+> index 099200c4f136..975c5aa4d747 100644
+> --- a/Documentation/devicetree/bindings/watchdog/renesas,r9a09g057-wdt.ya=
+ml
+> +++ b/Documentation/devicetree/bindings/watchdog/renesas,r9a09g057-wdt.ya=
+ml
+> @@ -89,11 +89,11 @@ examples:
+>    - |
+>      #include <dt-bindings/clock/renesas,r9a09g057-cpg.h>
+> =20
+> -    watchdog@11c00400 {
+> +    watchdog@14400000 {
+>              compatible =3D "renesas,r9a09g057-wdt";
+> -            reg =3D <0x11c00400 0x400>;
+> -            clocks =3D <&cpg CPG_MOD 0x4b>, <&cpg CPG_MOD 0x4c>;
+> +            reg =3D <0x14400000 0x400>;
+> +            clocks =3D <&cpg CPG_MOD 0x4d>, <&cpg CPG_MOD 0x4e>;
+>              clock-names =3D "pclk", "oscclk";
+> -            resets =3D <&cpg 0x75>;
+> +            resets =3D <&cpg 0x76>;
+>              power-domains =3D <&cpg>;
+>      };
+> --=20
+> 2.34.1
+>=20
 
-Since I previously gave you my Reviewed-by tag and the changes you
-made were minor (and exactly what I requested when I gave you my tag),
-you should have kept my Reviewed-by tag in your v9. In general,
-knowing whether to keep someone's Reviewed-by or Tested-by tag when
-sending a new version is a bit of a judgement call, but in this case
-it should have been pretty clear. Generally, if you remove someone's
-tag that was given before it's good to mention "after the cut" why you
-removed it. If you are unsure about keeping a tag but still decide to
-keep it, you can still call attention to that fact "after the cut".
+--36Iy0USQuZYBEeUt
+Content-Type: application/pgp-signature; name="signature.asc"
 
-In any case:
+-----BEGIN PGP SIGNATURE-----
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaXubRwAKCRB4tDGHoIJi
+0lBcAQC0EDSn53pnjYPwW7yaAQRSTfdNWkeeDh0Helx+Uio94QD/c6Dq+BmG2MpU
+dkCXXyCps/axpgVwbMc1XZ3mmP6/cA0=
+=ebJj
+-----END PGP SIGNATURE-----
 
-No need to send a v10 adding that tag unless other changes are needed.
-Andrew will add it when landing.
-
--Doug
+--36Iy0USQuZYBEeUt--
 
