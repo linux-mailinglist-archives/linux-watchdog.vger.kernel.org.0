@@ -1,41 +1,42 @@
-Return-Path: <linux-watchdog+bounces-4879-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4880-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kENFLW/tgWkFMAMAu9opvQ
-	(envelope-from <linux-watchdog+bounces-4879-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
-	for <lists+linux-watchdog@lfdr.de>; Tue, 03 Feb 2026 13:43:27 +0100
+	id MGdsH9TtgWkFMAMAu9opvQ
+	(envelope-from <linux-watchdog+bounces-4880-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
+	for <lists+linux-watchdog@lfdr.de>; Tue, 03 Feb 2026 13:45:08 +0100
 X-Original-To: lists+linux-watchdog@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21952D92A4
-	for <lists+linux-watchdog@lfdr.de>; Tue, 03 Feb 2026 13:43:27 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9926DD937D
+	for <lists+linux-watchdog@lfdr.de>; Tue, 03 Feb 2026 13:45:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 9E45F301A876
-	for <lists+linux-watchdog@lfdr.de>; Tue,  3 Feb 2026 12:43:04 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 32194301AC89
+	for <lists+linux-watchdog@lfdr.de>; Tue,  3 Feb 2026 12:43:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3408C3446D1;
-	Tue,  3 Feb 2026 12:43:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C2E83446D1;
+	Tue,  3 Feb 2026 12:43:06 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CF84284B2F;
-	Tue,  3 Feb 2026 12:42:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62B87344DA7;
+	Tue,  3 Feb 2026 12:43:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770122583; cv=none; b=NTGNp33PkVH26Dh8SJmoa4Knvaj5vN2RBDCzVpwpDJa4j95aL/TmCR1W4yENzvB12FXhTvMomGbASHbALgipEXeUePlVGys56GZscJKmRzOfY2bgToF5LSH95Oycj4ZGyasTZdVIvFldZi83/JnoT+EGW86eVaSDhbLFhDvvlyA=
+	t=1770122586; cv=none; b=IxDLlD627jAzxb0KmphjFBtwd2COFjfibgB/pQwu0VjtkoZ4z/eeXfncSIeOjjORWipQmEVvbCXcwl+L1U528evvGRzOP6ayUrVkZRgyLmeUKtQMm1TuHu+WOPhisGNYSvZcrhjiAOhEex0dFDiVX1hFXza0q/Pe/QzB6GYgSKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770122583; c=relaxed/simple;
-	bh=1r1wJaK96k6khESuIJA4mwNVAP/qdoAkDd1Bk3e5jRQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tIvHPVq3tTuARvBWPNH1guUW2VU9Tl1Lk8LZi1UlBDszQVHEdsayXflzAT2wMyb0dnc6ULQb4X319eWvd+oJNye+siSiGCQp3+h1RxohvDLAI53dQ2L0sOQ+DcZo/WgK8rIk9IgV0ii7k+/A/i+KIoCAZBYzSuA/tmoCKUi/+lA=
+	s=arc-20240116; t=1770122586; c=relaxed/simple;
+	bh=mBgkmTID+NEO7eE7rcOhcirl/O4tZXLLRlW7B7E+Fio=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=U8HH1B8iivyAt7wkZCZ2oX069tagiQSeGXSYnkE7BcQTLzKtI088EBm39KfuIdsaXrA+j6d9djfbic4Up+QhkokrriWq9bojpugMRsRkv3V4riBJtANIk2+1BIToXFoseE4ddgl+bRMWXYxwF43UiL07Zv/Hucx2pxLAndnN0Aw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; arc=none smtp.client-ip=210.160.252.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
-X-CSE-ConnectionGUID: 9wDW7ugPQqiZuHrAcW4mwQ==
-X-CSE-MsgGUID: ZVFn7VjkTPW+xdM6fEaeZg==
+X-CSE-ConnectionGUID: Swbxv3F3T4mxp1xentWd0w==
+X-CSE-MsgGUID: x2FV4cDnSA+TBUqCCEySHw==
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 03 Feb 2026 21:42:53 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 03 Feb 2026 21:42:58 +0900
 Received: from mind-2s.example.org (unknown [10.226.36.118])
-	by relmlir5.idc.renesas.com (Postfix) with ESMTP id 92BCC400B551;
-	Tue,  3 Feb 2026 21:42:48 +0900 (JST)
+	by relmlir5.idc.renesas.com (Postfix) with ESMTP id CF2CA40134EE;
+	Tue,  3 Feb 2026 21:42:53 +0900 (JST)
 From: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
 To: Rob Herring <robh@kernel.org>,
 	Guenter Roeck <linux@roeck-us.net>,
@@ -53,10 +54,12 @@ Cc: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
 	devicetree@vger.kernel.org,
 	linux-clk@vger.kernel.org,
 	Biju Das <biju.das.jz@bp.renesas.com>
-Subject: [PATCH v2 0/3] Remove WDT{0,2,3} support from RZ/V2H(P)
-Date: Tue,  3 Feb 2026 12:42:44 +0000
-Message-ID: <20260203124247.7320-1-fabrizio.castro.jz@renesas.com>
+Subject: [PATCH v2 1/3] dt-bindings: watchdog: renesas,r9a09g057-wdt: Rework example
+Date: Tue,  3 Feb 2026 12:42:45 +0000
+Message-ID: <20260203124247.7320-2-fabrizio.castro.jz@renesas.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260203124247.7320-1-fabrizio.castro.jz@renesas.com>
+References: <20260203124247.7320-1-fabrizio.castro.jz@renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -70,7 +73,7 @@ X-Spamd-Result: default: False [1.64 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	DMARC_POLICY_SOFTFAIL(0.10)[renesas.com : SPF not aligned (relaxed), No valid DKIM,none];
@@ -80,47 +83,62 @@ X-Spamd-Result: default: False [1.64 / 15.00];
 	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-4879-lists,linux-watchdog=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-4880-lists,linux-watchdog=lfdr.de];
 	RCPT_COUNT_TWELVE(0.00)[16];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.962];
+	NEURAL_HAM(-0.00)[-0.954];
 	FROM_NEQ_ENVFROM(0.00)[fabrizio.castro.jz@renesas.com,linux-watchdog@vger.kernel.org];
 	TAGGED_RCPT(0.00)[linux-watchdog,dt,renesas];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,renesas.com:mid]
-X-Rspamd-Queue-Id: 21952D92A4
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,renesas.com:mid,renesas.com:email,0.219.186.0:email,11c00400:email,microchip.com:email]
+X-Rspamd-Queue-Id: 9926DD937D
 X-Rspamd-Action: no action
 
-Dear All,
+When the bindings for the Renesas RZ/V2H(P) SoC were factored
+out IP WDT0 was selected for the example, however the HW user
+manual states that only IP WDT1 can be used by Linux.
 
-The HW user manual states that the CA55 cores from the Renesas RZ/V2H(P)
-SoC are only allowed access to WDT1, however when WDT support was added
-it included all the WDT IPs (WDT0, WDT1, WDT2, and WDT3).
+This commit is part of a series that removes WDT{0,2,3} support
+from the kernel, therefore the example from the bindings has
+lost its meaning.
 
-Address this by removing the device tree nodes and clock/reset entries
-for WDT{0,2,3}.
+Update the example accordingly.
 
-Cheers,
-Fab
+Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
+---
 v1->v2:
-* Removed Fixes tag from patch 1
-* Added Conor's Acked-by tag to patch 1
+* Removed Fixes tag
+* Added Conor's Acked-by tag
 
-Fabrizio Castro (3):
-  dt-bindings: watchdog: renesas,r9a09g057-wdt: Rework example
-  arm64: dts: renesas: r9a09g057: Remove wdt{0,2,3} nodes
-  clk: renesas: r9a09g057: Remove entries for WDT{0,2,3}
+ .../bindings/watchdog/renesas,r9a09g057-wdt.yaml          | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
- .../watchdog/renesas,r9a09g057-wdt.yaml       |  8 ++---
- arch/arm64/boot/dts/renesas/r9a09g057.dtsi    | 30 -------------------
- drivers/clk/renesas/r9a09g057-cpg.c           | 15 ----------
- 3 files changed, 4 insertions(+), 49 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/watchdog/renesas,r9a09g057-wdt.yaml b/Documentation/devicetree/bindings/watchdog/renesas,r9a09g057-wdt.yaml
+index 099200c4f136..975c5aa4d747 100644
+--- a/Documentation/devicetree/bindings/watchdog/renesas,r9a09g057-wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/renesas,r9a09g057-wdt.yaml
+@@ -89,11 +89,11 @@ examples:
+   - |
+     #include <dt-bindings/clock/renesas,r9a09g057-cpg.h>
+ 
+-    watchdog@11c00400 {
++    watchdog@14400000 {
+             compatible = "renesas,r9a09g057-wdt";
+-            reg = <0x11c00400 0x400>;
+-            clocks = <&cpg CPG_MOD 0x4b>, <&cpg CPG_MOD 0x4c>;
++            reg = <0x14400000 0x400>;
++            clocks = <&cpg CPG_MOD 0x4d>, <&cpg CPG_MOD 0x4e>;
+             clock-names = "pclk", "oscclk";
+-            resets = <&cpg 0x75>;
++            resets = <&cpg 0x76>;
+             power-domains = <&cpg>;
+     };
 -- 
 2.34.1
 
