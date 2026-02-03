@@ -1,163 +1,199 @@
-Return-Path: <linux-watchdog+bounces-4882-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4883-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qFqjJ0DvgWlAMwMAu9opvQ
-	(envelope-from <linux-watchdog+bounces-4882-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
-	for <lists+linux-watchdog@lfdr.de>; Tue, 03 Feb 2026 13:51:12 +0100
+	id SAHDL58hgmmQPgMAu9opvQ
+	(envelope-from <linux-watchdog+bounces-4883-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
+	for <lists+linux-watchdog@lfdr.de>; Tue, 03 Feb 2026 17:26:07 +0100
 X-Original-To: lists+linux-watchdog@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00E53D9593
-	for <lists+linux-watchdog@lfdr.de>; Tue, 03 Feb 2026 13:51:11 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66591DBEA3
+	for <lists+linux-watchdog@lfdr.de>; Tue, 03 Feb 2026 17:26:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A27F13149FBC
-	for <lists+linux-watchdog@lfdr.de>; Tue,  3 Feb 2026 12:43:33 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 2B8A83051050
+	for <lists+linux-watchdog@lfdr.de>; Tue,  3 Feb 2026 16:21:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6AFB344DA1;
-	Tue,  3 Feb 2026 12:43:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEA473B9606;
+	Tue,  3 Feb 2026 16:21:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="LVqrzIAB"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 906EC1C69D;
-	Tue,  3 Feb 2026 12:43:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ED473C1976
+	for <linux-watchdog@vger.kernel.org>; Tue,  3 Feb 2026 16:21:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770122598; cv=none; b=t7l/ghASUdbIQ7SaHY8iiAkwa1V+MAdmrYldJ0+Ke+lBFlDGFcTHkftK4EtXgrPXrvtrA6PJg93QDaNKcc8baNn+YZVngqhkPjcIJ3ZaEr+ztgmFQtKOXT8q8KcI68NUIccl+YnQp5Ji+yP5IW1rNTtFTBemQvDnDuHhUy+LiIA=
+	t=1770135698; cv=none; b=L7pez7MLjAPSPJbJFqi5b2gUMBf/v5/sgn4VT3IHilEBhDA8RnCzFkyo9tu5PEW4EpWXrULcJkEEz16HRGz9jKm/VgRnMnTEdVCQDRnGMwmjkHW8bvY/dyFcB3XK6PFH5uebbA1CrzRMnULNDe7UANiAbNqHmurP+4tOWWhBAE4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770122598; c=relaxed/simple;
-	bh=5KB4s5v20dnYhByP6f+brbZkGfV7lqcvH3j1ABaoc0o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iCRFxbiQsEufQuPT7kEsCWpAOJ3+3MH/HO0hG9Hyn7pqyEOp6Yq5AzHizgzs9XrG0Mhiz7J1YUnwbIyrc6HKj/bXU0QCTFP0w6fDWyObLuloVaX+EOC+ZgTANhC5YhU10v9rczo2WHhy23FKYuHIVHscQIQQFwY7wAudhLIbB2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; arc=none smtp.client-ip=210.160.252.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
-X-CSE-ConnectionGUID: WznixfsNTOagJuL5bPGPEA==
-X-CSE-MsgGUID: 5hmqY40DRSuWPG2R/FaV0Q==
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 03 Feb 2026 21:43:09 +0900
-Received: from mind-2s.example.org (unknown [10.226.36.118])
-	by relmlir5.idc.renesas.com (Postfix) with ESMTP id 555BF400F78B;
-	Tue,  3 Feb 2026 21:43:04 +0900 (JST)
-From: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-To: Rob Herring <robh@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Magnus Damm <magnus.damm@gmail.com>
-Cc: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	linux-watchdog@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	Biju Das <biju.das.jz@bp.renesas.com>
-Subject: [PATCH v2 3/3] clk: renesas: r9a09g057: Remove entries for WDT{0,2,3}
-Date: Tue,  3 Feb 2026 12:42:47 +0000
-Message-ID: <20260203124247.7320-4-fabrizio.castro.jz@renesas.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260203124247.7320-1-fabrizio.castro.jz@renesas.com>
-References: <20260203124247.7320-1-fabrizio.castro.jz@renesas.com>
+	s=arc-20240116; t=1770135698; c=relaxed/simple;
+	bh=pYZrOZ6Yy5u23dVF0oWwYvp55KhzdGxhsfGau41DMmg=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ObTF+iMLz9f6OSZ9IRsdk6+Hk6XFqJArUMszOpbaNhcvsKpnLWO5oVcBJULhs6FMwpz+tlQcmB+AJABbexEAexbITVYkvRWDhvopV4q1WES0cFDNUsIBfI2J7W7yj/XoN28qraMnkDShHCXkPZ9WfTi633PfzbaM/RPZlaxy9L8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=LVqrzIAB; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 0DA141A2BBF;
+	Tue,  3 Feb 2026 16:21:34 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id D3FC360728;
+	Tue,  3 Feb 2026 16:21:33 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 85147119A88EE;
+	Tue,  3 Feb 2026 17:21:27 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1770135692; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=8LJqS/2E0H9PKwMlKUB8AnsR++v79Cw7Lva3b/sVBPY=;
+	b=LVqrzIABq/k69eNJmTs3oIfAlK+JcA+GwZEts50A6W5/DmPONpeiMmgnx8CTDMX+cVGP0h
+	U8Yasx5mGplOhWaxgQ6gnsX0E3dYWnIHHlKKnSVjHLHOFsfnI7hUCfCrhWDc8R5DKPawxK
+	c1ugX0GBjHsLz9BaLEqZF6epJRqUjTWtPB6NhasngpirjlGuRpGbjeIpRr1IHSkTM0URKI
+	UY1qw+9+aKepe6eY6hz0nBHYJU5TefGal5L8OUfql132+Wtm5D+y+NYLuuvCK8HwTv3vum
+	jDpQWyti0qnbtatwCLllRB2q6X1ERyTzzD/WkQ025ZeoOg5QkW7g/vcY03rHRQ==
+From: "Thomas Perrot (Schneider Electric)" <thomas.perrot@bootlin.com>
+Subject: [PATCH v3 0/5] Add support for AAEON SRG-IMX8P MCU
+Date: Tue, 03 Feb 2026 17:21:09 +0100
+Message-Id: <20260203-dev-b4-aaeon-mcu-driver-v3-0-0a19432076ac@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHUggmkC/4XOTQ6CMBAF4KuQrh3Tlp+AK+9hXHTKVJoINS02G
+ sLdLUQXLNTlm2S+9yYWyFsK7JBNzFO0wbohhXyXMd2p4UJg25SZ5LIUUghoKQIWoBS5AXp9h9b
+ bSB6IU90QmkIZZOn75snYxyqfzil3NozOP9eiKJbrfzMK4FA2aJRApXOTH9G58WqHvXb9UvIW5
+ G+hwrYqUddkhNwIy64oP1sqLmT+XZJJakyhOUeDpcatNM/zC9QQI99MAQAA
+X-Change-ID: 20251211-dev-b4-aaeon-mcu-driver-e0e89ebf4afb
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Linus Walleij <linusw@kernel.org>, 
+ Bartosz Golaszewski <brgl@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+ Sascha Hauer <s.hauer@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Fabio Estevam <festevam@gmail.com>, 
+ =?utf-8?q?J=C3=A9r=C3=A9mie_Dautheribes?= <jeremie.dautheribes@bootlin.com>, 
+ Wim Van Sebroeck <wim@linux-watchdog.org>, 
+ Guenter Roeck <linux@roeck-us.net>, Lee Jones <lee@kernel.org>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-gpio@vger.kernel.org, imx@lists.linux.dev, 
+ linux-arm-kernel@lists.infradead.org, linux-watchdog@vger.kernel.org, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ "Thomas Perrot (Schneider Electric)" <thomas.perrot@bootlin.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3125;
+ i=thomas.perrot@bootlin.com; h=from:subject:message-id;
+ bh=pYZrOZ6Yy5u23dVF0oWwYvp55KhzdGxhsfGau41DMmg=;
+ b=owEB7QES/pANAwAKAZ/ACwVx/grtAcsmYgBpgiCGPe5CMYR5qidOEqsNGGdA2MNMNCsbzP/1a
+ tNtrbLBb86JAbMEAAEKAB0WIQSHQHfGpqMKIwOoEiGfwAsFcf4K7QUCaYIghgAKCRCfwAsFcf4K
+ 7WQlC/9H4YMZCeeoow2g7nj6e1fWHqHSwTUmjGfl//AZxWMlAMBbZC5gomsAAFEUsAMIfMcQWNr
+ CrIXzc3ce/WsTc6paEy46BCqU6VmgSOGLrmyHvj7zd1XKe15FkzaxQ0Y2Jyqkzwe7JHKYWV7Cw2
+ xmqRYMcRqAOK+W44ZpSxSnM78ExWozgjeo+dYHWTasitImJRQhsSQ1XI+tyBuJKg6lurMwhkYdC
+ BCMNR5d/zy33XpiDLqnayw4ag11NKSrWbACVx1LwjcdNDg3KZS2UIg5X5oyK0cJVnjfMmcdtQPT
+ rupXTXkjiFCysnONNGDk4AMQ6N+mLUSCJL602Z4Nrr9iYVy0IVEoc7RsEHflbeVI+AAPRd3Nf0A
+ h/WgGg6Fc5K9g4shyYDNPqVX70Qqes1GnfkORzcqiuNQ8Sj/M1GZuWeBbr3W/pkr9XkxB1TvJNy
+ EQ+97xHe1sK92PhFNQl1IV8+FOxyaNg9DyaeZEsfkCWi25gsAXOLf7tmYc7dj7tXxY0DY=
+X-Developer-Key: i=thomas.perrot@bootlin.com; a=openpgp;
+ fpr=874077C6A6A30A2303A812219FC00B0571FE0AED
+X-Last-TLS-Session-Version: TLSv1.3
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.64 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
+	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	DMARC_POLICY_SOFTFAIL(0.10)[renesas.com : SPF not aligned (relaxed), No valid DKIM,none];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[kernel.org,roeck-us.net,baylibre.com,linux-watchdog.org,glider.be,gmail.com];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-4882-lists,linux-watchdog=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[16];
+	TAGGED_FROM(0.00)[bounces-4883-lists,linux-watchdog=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	FREEMAIL_TO(0.00)[kernel.org,pengutronix.de,gmail.com,bootlin.com,linux-watchdog.org,roeck-us.net];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[bootlin.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	RCPT_COUNT_TWELVE(0.00)[22];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.954];
-	FROM_NEQ_ENVFROM(0.00)[fabrizio.castro.jz@renesas.com,linux-watchdog@vger.kernel.org];
-	TAGGED_RCPT(0.00)[linux-watchdog,dt,renesas];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,renesas.com:mid,renesas.com:email]
-X-Rspamd-Queue-Id: 00E53D9593
+	FROM_NEQ_ENVFROM(0.00)[thomas.perrot@bootlin.com,linux-watchdog@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
+	TAGGED_RCPT(0.00)[linux-watchdog,dt];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Queue-Id: 66591DBEA3
 X-Rspamd-Action: no action
 
-The HW user manual for the Renesas RZ/V2H(P) SoC specifies
-that only the WDT1 IP is supposed to be used by Linux,
-while the WDT{0,2,3} IPs are supposed to be used by the CM33
-and CR8 cores.
+This patch series introduces support for the AAEON SRG-IMX8P embedded
+controller (MCU). The MCU is connected via I2C and provides GPIO and
+watchdog functionality for the SRG-IMX8P board.
 
-Remove the clock and reset entries for WDT{0,2,3} to prevent
-interfering with the CM33 and CR8 cores.
+The series includes:
+- Device tree binding for the MFD driver
+- MFD driver that serves as the core driver for the MCU
+- GPIO driver implementing the GPIO functionality
+- Watchdog driver for system monitoring
+- MAINTAINERS entry for the new drivers
 
-This change is harmless as only WDT1 is used by Linux, there
-are no users for the WDT{0,2,3} cores.
+The drivers follow the standard Linux kernel subsystem patterns, with
+the MFD driver registering the sub-devices (GPIO and watchdog) which
+are then handled by their respective subsystem drivers.
 
-Fixes: 3aeccbe08171 ("clk: renesas: r9a09g057: Add clock and reset entries for GTM/RIIC/SDHI/WDT")
-Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Signed-off-by: Thomas Perrot (Schneider Electric) <thomas.perrot@bootlin.com>
+---
+Changes in v3:
+- Renamed SRG-IMX8PL to SRG-IMX8P
+- dt-bindings: add gpio-controller properties as required
+- mfd: move struct aaeon_mcu_dev from header to .c file (private)
+- mfd: use guard(mutex) and devm_mutex_init() for cleanup
+- mfd: firmware version log changed to dev_dbg()
+- mfd: add select MFD_CORE to Kconfig
+- Kconfig: add || COMPILE_TEST to all three drivers
+- watchdog: add comments explaining hardware timeout and WDOG_HW_RUNNING
+- watchdog: remove unused platform_set_drvdata()
+- watchdog: add a function to query the status
+- Link to v2: https://lore.kernel.org/r/20260123-dev-b4-aaeon-mcu-driver-v2-0-9f4c00bfb5cb@bootlin.com
+
+Changes in v2:
+- Fold GPIO and watchdog bindings into MFD binding
+- Drop OF_GPIO dependency in GPIO Kconfig
+- Use __set_bit/__clear_bit/__assign_bit instead of atomic variants
+- Various driver cleanups and improvements
+- Link to v1: https://lore.kernel.org/r/20251212-dev-b4-aaeon-mcu-driver-v1-0-6bd65bc8ef12@bootlin.com
 
 ---
-v1->v2:
-* No change.
+Thomas Perrot (Schneider Electric) (5):
+      dt-bindings: vendor-prefixes: Add AAEON vendor prefix
+      dt-bindings: mfd: Add AAEON embedded controller
+      mfd: aaeon: Add SRG-IMX8P MCU driver
+      gpio: aaeon: Add GPIO driver for SRG-IMX8P MCU
+      watchdog: aaeon: Add watchdog driver for SRG-IMX8P MCU
 
- drivers/clk/renesas/r9a09g057-cpg.c | 15 ---------------
- 1 file changed, 15 deletions(-)
+ .../bindings/mfd/aaeon,srg-imx8p-mcu.yaml          |  67 ++++++
+ .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+ MAINTAINERS                                        |  10 +
+ drivers/gpio/Kconfig                               |  10 +
+ drivers/gpio/Makefile                              |   1 +
+ drivers/gpio/gpio-aaeon-mcu.c                      | 237 +++++++++++++++++++++
+ drivers/mfd/Kconfig                                |  10 +
+ drivers/mfd/Makefile                               |   2 +
+ drivers/mfd/aaeon-mcu.c                            | 137 ++++++++++++
+ drivers/watchdog/Kconfig                           |  10 +
+ drivers/watchdog/Makefile                          |   1 +
+ drivers/watchdog/aaeon_mcu_wdt.c                   | 136 ++++++++++++
+ include/linux/mfd/aaeon-mcu.h                      |  20 ++
+ 13 files changed, 643 insertions(+)
+---
+base-commit: d358e5254674b70f34c847715ca509e46eb81e6f
+change-id: 20251211-dev-b4-aaeon-mcu-driver-e0e89ebf4afb
 
-diff --git a/drivers/clk/renesas/r9a09g057-cpg.c b/drivers/clk/renesas/r9a09g057-cpg.c
-index 6943cad318b5..07803e0c91de 100644
---- a/drivers/clk/renesas/r9a09g057-cpg.c
-+++ b/drivers/clk/renesas/r9a09g057-cpg.c
-@@ -280,22 +280,10 @@ static const struct rzv2h_mod_clk r9a09g057_mod_clks[] __initconst = {
- 						BUS_MSTOP(11, BIT(15))),
- 	DEF_MOD("gtm_7_pclk",			CLK_PLLCLN_DIV16, 4, 10, 2, 10,
- 						BUS_MSTOP(12, BIT(0))),
--	DEF_MOD("wdt_0_clkp",			CLK_PLLCM33_DIV16, 4, 11, 2, 11,
--						BUS_MSTOP(3, BIT(10))),
--	DEF_MOD("wdt_0_clk_loco",		CLK_QEXTAL, 4, 12, 2, 12,
--						BUS_MSTOP(3, BIT(10))),
- 	DEF_MOD("wdt_1_clkp",			CLK_PLLCLN_DIV16, 4, 13, 2, 13,
- 						BUS_MSTOP(1, BIT(0))),
- 	DEF_MOD("wdt_1_clk_loco",		CLK_QEXTAL, 4, 14, 2, 14,
- 						BUS_MSTOP(1, BIT(0))),
--	DEF_MOD("wdt_2_clkp",			CLK_PLLCLN_DIV16, 4, 15, 2, 15,
--						BUS_MSTOP(5, BIT(12))),
--	DEF_MOD("wdt_2_clk_loco",		CLK_QEXTAL, 5, 0, 2, 16,
--						BUS_MSTOP(5, BIT(12))),
--	DEF_MOD("wdt_3_clkp",			CLK_PLLCLN_DIV16, 5, 1, 2, 17,
--						BUS_MSTOP(5, BIT(13))),
--	DEF_MOD("wdt_3_clk_loco",		CLK_QEXTAL, 5, 2, 2, 18,
--						BUS_MSTOP(5, BIT(13))),
- 	DEF_MOD("rsci0_pclk",			CLK_PLLCLN_DIV16, 5, 13, 2, 29,
- 						BUS_MSTOP(11, BIT(3))),
- 	DEF_MOD("rsci0_tclk",			CLK_PLLCLN_DIV16, 5, 14, 2, 30,
-@@ -598,10 +586,7 @@ static const struct rzv2h_reset r9a09g057_resets[] __initconst = {
- 	DEF_RST(7, 2, 3, 3),		/* GTM_5_PRESETZ */
- 	DEF_RST(7, 3, 3, 4),		/* GTM_6_PRESETZ */
- 	DEF_RST(7, 4, 3, 5),		/* GTM_7_PRESETZ */
--	DEF_RST(7, 5, 3, 6),		/* WDT_0_RESET */
- 	DEF_RST(7, 6, 3, 7),		/* WDT_1_RESET */
--	DEF_RST(7, 7, 3, 8),		/* WDT_2_RESET */
--	DEF_RST(7, 8, 3, 9),		/* WDT_3_RESET */
- 	DEF_RST(8, 1, 3, 18),		/* RSCI0_PRESETN */
- 	DEF_RST(8, 2, 3, 19),		/* RSCI0_TRESETN */
- 	DEF_RST(8, 3, 3, 20),		/* RSCI1_PRESETN */
+Best regards,
 -- 
-2.34.1
+Thomas Perrot (Schneider Electric) <thomas.perrot@bootlin.com>
 
 
