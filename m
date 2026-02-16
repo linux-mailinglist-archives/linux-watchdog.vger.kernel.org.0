@@ -1,163 +1,114 @@
-Return-Path: <linux-watchdog+bounces-4949-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4950-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id XQoJMf5bk2ny3wEAu9opvQ
-	(envelope-from <linux-watchdog+bounces-4949-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
-	for <lists+linux-watchdog@lfdr.de>; Mon, 16 Feb 2026 19:03:42 +0100
+	id CJcTL0WAk2nm5wEAu9opvQ
+	(envelope-from <linux-watchdog+bounces-4950-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
+	for <lists+linux-watchdog@lfdr.de>; Mon, 16 Feb 2026 21:38:29 +0100
 X-Original-To: lists+linux-watchdog@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54472146D91
-	for <lists+linux-watchdog@lfdr.de>; Mon, 16 Feb 2026 19:03:42 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3162F1477D0
+	for <lists+linux-watchdog@lfdr.de>; Mon, 16 Feb 2026 21:38:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 949EC301F320
-	for <lists+linux-watchdog@lfdr.de>; Mon, 16 Feb 2026 18:03:39 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id BD2F2301D339
+	for <lists+linux-watchdog@lfdr.de>; Mon, 16 Feb 2026 20:38:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8037C17A2F6;
-	Mon, 16 Feb 2026 18:03:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 346AA313E17;
+	Mon, 16 Feb 2026 20:38:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QDduNgEO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KUV689Nb"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 587AB3C2D;
-	Mon, 16 Feb 2026 18:03:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1122032AAA7;
+	Mon, 16 Feb 2026 20:38:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771265018; cv=none; b=XJeS8EaB5x7y1/BkW+f5QQYhPvGY1BiVuSDGUWAqWgSv7ubR/QO8Ie8SQsEbELG0G0BxvDTBS5aqrnlcVUVZI6BY4n3s0pHj/dlCaELVKRjTT7VKSUqTSN6QebirtUc+Vq1GtB9HrfWU4mdx5+7hCl+Awd3PzGweAgzI3wv9ZcU=
+	t=1771274306; cv=none; b=d782RphNNJXaalgfWI2o3ep4AsmW20/h5BLENIJM6JEaD1BmLWkW602LZN9LJUQj9scKmXo4tvALpHY/qZNJ531jOv+vHBU9nBm1zqiYrW9sIknC9i3CnoDn2pMCNdht4oHXCCguyY0TR0s8dk3Of33MFRDnQR+xfYvBL06t45Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771265018; c=relaxed/simple;
-	bh=12AobuvfJC0/Rr3kiMzktENzoZVeN1x1pS64b07jWBI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Sk6Ny5I0CDcR0rw5P/xBis11gnT4HW9WET03L+MGrKOKWCrtl2aRUAiT8wBK9KVcAcWgISTWszh92Jm+0RYtUTwKvj83JwFvksiqOtTkQuc1PEW1on/0WqB+JTia/RYX2rRHIdkBYxbSgo9+sZ6lYSK/l5QEDDy/z7ogFeht4hY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QDduNgEO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55C3AC116C6;
-	Mon, 16 Feb 2026 18:03:37 +0000 (UTC)
+	s=arc-20240116; t=1771274306; c=relaxed/simple;
+	bh=u0VfjmmsDlgzjZPOYle0W3yqw54kKVcI7EUkfkHBvmw=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=B6vTgWESpKFHseLGeH/ZX+1HsdvPg8h4MpHDEtJBfgGj8aAXrdMeaEBvW3/RbtIbHcBTNh+omvuVDG6ou5S47EqNOfN6IXV6HqG3CfTf4OAjGblc6i2LK/wci0oytODQnDXMhX6Wzvv3D8CwklNtYUXRVpVKBuzzR6M+TaQOygo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KUV689Nb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8C13C19422;
+	Mon, 16 Feb 2026 20:38:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771265017;
-	bh=12AobuvfJC0/Rr3kiMzktENzoZVeN1x1pS64b07jWBI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QDduNgEOcqajMkaro+wm6lM84ZiDLoeR3Vbzlbe+KK03k2fqCPjOe4giRn7+UeXZu
-	 BAsF2nw1KPHivF+8b3EhqXSraau6Vi5DwRcBik5uDmvklN/DPYXIlC1XKtKYUMHKAD
-	 c+bISUM8EiIwjtXVCZDvURseuxeiscpq77i80dhKUvj8k5viIJmLsm4wWgp4vXy2Cd
-	 BwFxwu9h++MVvlw99tfHzlfXht/sLShN7Znj0Y27vvhM1CpUMeATAUFq0uSI3tSewO
-	 k3LxBduIeJQQ0D5R/4v3mxxs8/72oxil35egyvvvHuT85KdKrjWOn6Dj3/p97AFDLp
-	 9GczmUS2sdFEg==
-Date: Mon, 16 Feb 2026 19:03:35 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Tomer Maimon <tmaimon77@gmail.com>
-Cc: andrew@codeconstruct.com.au, avifishman70@gmail.com, 
-	tali.perry1@gmail.com, wim@linux-watchdog.org, linux@roeck-us.net, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, venture@google.com, yuenn@google.com, 
-	benjaminfair@google.com, joel@jms.id.au, openbmc@lists.ozlabs.org, 
-	linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] dt-bindings: watchdog: Add NPCM reset status
- support
-Message-ID: <20260216-prompt-boisterous-worm-fed8d9@quoll>
-References: <20260210133843.1078463-1-tmaimon77@gmail.com>
- <20260210133843.1078463-2-tmaimon77@gmail.com>
- <b746dd7d-550c-4877-9210-754ae278e1a2@kernel.org>
- <CAP6Zq1jZorLxXQYqm5KzcYdoRzcFtD1KQqzmgaa6KKy-+Tpv+Q@mail.gmail.com>
- <92197c45-2921-47ad-9680-7339d6308b8f@kernel.org>
- <CAP6Zq1hLkT-xMwV99yVE-hLsf_nT+V_3v7sEshfqEkkRCkEevA@mail.gmail.com>
- <1522cec8-8259-4404-86fa-18bd91473087@kernel.org>
- <CAP6Zq1iWpHc-Rsq62iBN0VtYmYS2=KhU12TE_5nxztr+HbB+tA@mail.gmail.com>
+	s=k20201202; t=1771274306;
+	bh=u0VfjmmsDlgzjZPOYle0W3yqw54kKVcI7EUkfkHBvmw=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=KUV689Nbm8fxLjEJenKxwJw9c/+gqoHEB+HB6MoQXJmjtFZD9D3ohdDaXchiF5aB8
+	 +3xTmMt8KvY3vmyiRpauLg9kEB/iNxGDX+mqrzu1LbsrXillM2hsrcV0a+URjFsdhR
+	 N9MATfdyqhceGHRnaXudpuwDg02jbLK6E9Hb1XgKfsvyVZ1WvdbQZRRnJU51R1p/0B
+	 D+N+y2AYzIdMNDc3XO74QMlMHMG22oTy9Wpt3Wq+QqwmU3ADbg6WQ2IVxFj9TxrSJe
+	 X+bXqeSHOXyRjxdbBFwufnEWuGsWPittur2pB6+UYCNML/BtBxD4rZ0ZceLeAzY37W
+	 0S2RzQIwnLM3w==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 8539139308C1;
+	Mon, 16 Feb 2026 20:38:19 +0000 (UTC)
+Subject: Re: [GIT PULL REQUEST] watchdog - v6.20 release cycle.
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20260216132051.GA30445@www.linux-watchdog.org>
+References: <20260216132051.GA30445@www.linux-watchdog.org>
+X-PR-Tracked-List-Id: <linux-watchdog.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20260216132051.GA30445@www.linux-watchdog.org>
+X-PR-Tracked-Remote: git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.20-rc1
+X-PR-Tracked-Commit-Id: 450517fa5aae98b857c68743fd12ce93e4b8989d
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 57d76ceccee4b497eb835831206b50e72915a501
+Message-Id: <177127429813.3994460.12362055280942309332.pr-tracker-bot@kernel.org>
+Date: Mon, 16 Feb 2026 20:38:18 +0000
+To: Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>, LKML <linux-kernel@vger.kernel.org>, Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>, Guenter Roeck <linux@roeck-us.net>, =?iso-8859-1?Q?J=2E_Neusch=E4fer?= <j.ne@posteo.net>, Kari Argillander <kari.argillander@gmail.com>, Kery Qi <qikeyu2017@gmail.com>, Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>, Naina Mehta <naina.mehta@oss.qualcomm.com>, Oleksandr Suvorov <cryosay@gmail.com>, Pankaj Patil <pankaj.patil@oss.qualcomm.com>, "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, =?iso-8859-1?Q?Ren=E9?= Rebe <rene@exactco.de>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAP6Zq1iWpHc-Rsq62iBN0VtYmYS2=KhU12TE_5nxztr+HbB+tA@mail.gmail.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-4949-lists,linux-watchdog=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[17];
+	FREEMAIL_CC(0.00)[linux-foundation.org,vger.kernel.org,roeck-us.net,posteo.net,gmail.com,oss.qualcomm.com,intel.com,exactco.de];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TO_DN_SOME(0.00)[];
-	TAGGED_RCPT(0.00)[linux-watchdog,dt];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-watchdog@vger.kernel.org];
-	FREEMAIL_CC(0.00)[codeconstruct.com.au,gmail.com,linux-watchdog.org,roeck-us.net,kernel.org,google.com,jms.id.au,lists.ozlabs.org,vger.kernel.org];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TO_DN_ALL(0.00)[];
+	TAGGED_FROM(0.00)[bounces-4950-lists,linux-watchdog=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 54472146D91
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[pr-tracker-bot@kernel.org,linux-watchdog@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-watchdog];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	FROM_NO_DN(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 3162F1477D0
 X-Rspamd-Action: no action
 
-On Mon, Feb 16, 2026 at 04:59:18PM +0200, Tomer Maimon wrote:
-> On Mon, 16 Feb 2026 at 16:48, Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> > >>>>> +  syscon:
-> > >>>>
-> > >>>> First iteration. See "How to Get Your DT Schema Bindings Accepted =
-in
-> > >>>> Less Than 10 Iterations"
-> > >>>>
-> > >>> Thanks, it was very helpful.
-> > >>> the syscon property is already found in the WD node
-> > >>> in nuvoton-common-npcm8xx.dtsi file, what should I do:
-> > >>
-> > >> How is that file related to this binding?
-> > >>
-> > >> Either you document existing ABI or you add new (for new device). Co=
-mmit
-> > >> msg MUST be explicit about it and provide the reasons. If wrong (e.g.
-> > >> discouraged) ABI was already used then it depends how and when it got
-> > >> into the kernel, e.g. if someone bypassed DT completely just to get =
-it
-> > >> inside.
-> > >>
-> > > The syscon property is already used in the upstream NPCM8xx DTSI watc=
-hdog
-> > > node, so I will document it as existing ABI and mark it deprecated. I
-> > will
-> >
-> > And how it is used? I cannot find its usage, so I do not agree on
-> > documenting it. Property should be removed or at least provide the
-> > justification/impact of removal, if you need it to stay.
-> >
-> > Understood. The syscon phandle is used by the watchdog driver to read a=
-nd
+The pull request you sent on Mon, 16 Feb 2026 14:20:51 +0100:
 
-You messed up quotes.
+> git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.20-rc1
 
-Can you point me to the line? I REALLY want to be sure that we are not
-wasting each other time, e.g. me looking at wrong code or you telling me
-some bollocks from downstream.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/57d76ceccee4b497eb835831206b50e72915a501
 
-> clear the GCR reset=E2=80=91status registers and then report the reset ca=
-use
-> through the watchdog bootstatus bits.
-> Therefore, this property should appear in the binding only because the
-> watchdog driver actually uses it =E2=80=94 which I am implementing in thi=
-s patch
-> set.
-> I will document it accordingly, and also add the new nuvoton,sysgcr phand=
-le
-> as the preferred name.
+Thank you!
 
-Best regards,
-Krzysztof
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
