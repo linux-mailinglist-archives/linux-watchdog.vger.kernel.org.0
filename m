@@ -1,228 +1,178 @@
-Return-Path: <linux-watchdog+bounces-4955-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4956-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2K4vHGdxlmlqfQIAu9opvQ
-	(envelope-from <linux-watchdog+bounces-4955-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
-	for <lists+linux-watchdog@lfdr.de>; Thu, 19 Feb 2026 03:11:51 +0100
+	id 8D84Gk6Qm2nJ2AMAu9opvQ
+	(envelope-from <linux-watchdog+bounces-4956-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
+	for <lists+linux-watchdog@lfdr.de>; Mon, 23 Feb 2026 00:25:02 +0100
 X-Original-To: lists+linux-watchdog@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F2E615B94A
-	for <lists+linux-watchdog@lfdr.de>; Thu, 19 Feb 2026 03:11:51 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B53B2170BE8
+	for <lists+linux-watchdog@lfdr.de>; Mon, 23 Feb 2026 00:25:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 5BC64303B198
-	for <lists+linux-watchdog@lfdr.de>; Thu, 19 Feb 2026 02:08:19 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E73C3300DE3D
+	for <lists+linux-watchdog@lfdr.de>; Sun, 22 Feb 2026 23:24:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 273E230F549;
-	Thu, 19 Feb 2026 02:05:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0895135CBA2;
+	Sun, 22 Feb 2026 23:24:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nMoGASr1"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KBno2Lf9";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="h4emjof4"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0391928D8FD;
-	Thu, 19 Feb 2026 02:05:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB5AE35BDBD
+	for <linux-watchdog@vger.kernel.org>; Sun, 22 Feb 2026 23:24:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771466705; cv=none; b=oxoTmmIF9+Xvh0lZxailjr4Wih5JYIjcbOSrNQ9O/iHcOyosTPq7H3L7mqf8ST73JCp6F1EWVGF6BpZvsLDdPgQP7E+QDFWwRyvComh/980YhaLCKZIhngX4ZB4K5cpznJmnKIZRR7yBpXunjHenGT12uci6LbEGj2/E/3rHt4Y=
+	t=1771802697; cv=none; b=Uz4d60TCm4KHYBq9JCUPImS+jOzL0t6W85hHHWrEn/UiHkpHPCJW0Z2yZx87mA1irHzmujvTDKFpzFOZnz1HTZuMOLOW7DmUDRfi7YdePqZJDmUnaXgivHVTQKjzLUjD1NYQqP1CpABZ5wCF8IUrMtkmPNdQpY5kCQaMtvJ4iJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771466705; c=relaxed/simple;
-	bh=OWUyDUYLIGpfdDvH7M8IARbFsrGTB/uGSAMlqlNkjUw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mabrLmi2/Gs+zmchZFtdFRdZaJmwoAK0GhLNG2JjfP35XJPr7Kpmj+EuAvN2BuA4RjMTrlkCAardJL3CewcTMo1cMIzmdy/BypktktXymKpYuX8k3mY/zYqvJHFyhbMGvX9S/Z2TtDIt7ks8z5SoU0FSfiGzxSpcazP5rlbSZkc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nMoGASr1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5E55C19425;
-	Thu, 19 Feb 2026 02:05:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771466704;
-	bh=OWUyDUYLIGpfdDvH7M8IARbFsrGTB/uGSAMlqlNkjUw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=nMoGASr1olw2h3vlyaZKeFhIjGTmlMUt9V6urvzm2E+XGtJ8evXQkPDXsQ1bWASQ1
-	 are63hgEDvkW5a/oXxkpEXQ2/nHha2CMDNQm019Lya0yr9ORI7DB+/I1NK2jUlScCE
-	 7DYcGgN87fzv7uStGv0D3C/qFElmMHGlzqDZbkdFjcsjR5SOZXIENqJIiAYX7YwvJd
-	 Lj+UpotiX5AQXICu+Qm8vHFBbs1+kxpZZ/goKJcANbfMyBlLQGZFveJ2vEvDaW3uLS
-	 DgWHylmrKaXyOuwH89H+COrL3VVpBC5nH3D2DmqXMfc7TC/bOYWyAeocNYhd1hO/DU
-	 xOVGRrmAuwRVw==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Sasha Levin <sashal@kernel.org>,
-	linux-watchdog@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.19-6.18] watchdog: rzv2h_wdt: Discard pm_runtime_put() return value
-Date: Wed, 18 Feb 2026 21:04:08 -0500
-Message-ID: <20260219020422.1539798-32-sashal@kernel.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260219020422.1539798-1-sashal@kernel.org>
-References: <20260219020422.1539798-1-sashal@kernel.org>
+	s=arc-20240116; t=1771802697; c=relaxed/simple;
+	bh=NjKc4brhodNTJOK8xVobB4IRxzXA3EqBZko8QSTwez4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=jc8mB7g0QLmke/NjHRVS4CvVxWtHqXXyvBxwbuD8ZLt+E5Dv5g0bY3raWujiFEInEsRSTXkC3vYYXPh81vExBo4BIEMFoJA2YQA2ES2VIvFBv3MQO6pa1W3sq6Sd1/PZAlrFQ1Y3M9fsm+FDbLKNyb849CT8uU7KGcA7fyDbjB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KBno2Lf9; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=h4emjof4; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1771802696;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=12cDH34yK+DF/dtdAbJQhV5dW0R4WK3HC3JjcJ6miTU=;
+	b=KBno2Lf9vz+qIwwxU5OUb+gloYXr+tGcmllKjMzcbNQ7gfch/0jxOoQADQFbrLIpPFBm9O
+	JuibEUjekmnk/k1UdBCvpqQZOe/Hqst6W0kuVfalZxEVHGizxSqSxLVv9lYLj62KjDxSnY
+	g3Lve1Xy9aYBevx5yRukPT1fw4RZY2I=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-136-KpeGmJA1NVeApxWod652yg-1; Sun, 22 Feb 2026 18:24:54 -0500
+X-MC-Unique: KpeGmJA1NVeApxWod652yg-1
+X-Mimecast-MFC-AGG-ID: KpeGmJA1NVeApxWod652yg_1771802694
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-503915b0a88so62263891cf.1
+        for <linux-watchdog@vger.kernel.org>; Sun, 22 Feb 2026 15:24:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1771802694; x=1772407494; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=12cDH34yK+DF/dtdAbJQhV5dW0R4WK3HC3JjcJ6miTU=;
+        b=h4emjof42CGitOLAQLwZmpEP7CPVmMuDAZ8hXsbXrvNhZMm9hS2PmZTfn7/N4dm4Ly
+         1Ub/ddbHwSsWyTYhHT+7Opz+qczKd97IAFDds2Q2fhxxVFGQlf7URCcB/GNvkdEXDYqC
+         hlStNVTw4Ikj4IuKlMDs7kObxGCKfFAWNM5u4MXTRxTgr7mxlT1L/gGmeFirgzl76Ex9
+         /gGTbzEBW+z/0c/lemVifrBdhEhBhm877YfovO+4gg4xTW1nYuxxa1G2XV6MqFkBnDqd
+         Vn42UsGXEp4ovK8nP1iKuB0f79MWqho0wIwMpbGNejlpZcM8iPuU0cSe9KkK+3FHMD9L
+         KUpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771802694; x=1772407494;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=12cDH34yK+DF/dtdAbJQhV5dW0R4WK3HC3JjcJ6miTU=;
+        b=D71gBRVM2oxgUDGn0Qkkt39IyHzgO1DlOWQnmgLrZLoNePOLuDleFunnmIo87qanJq
+         /JYa4qWTzGo33CRFXl1QBMvJz+n8pq9sCkf0tTP5sOw6QPFceEO0iXqeWQFBBWbusmWP
+         mHjAaeMDtk1bz1DG6o2LlOwC993O9STZsrxgMsQ7z283e544pa/MHpYwYOWZiGEJsejL
+         VzRxRnYDCZddRmFVM3vW7WyRisAGNTI8WWo734+j3+OD0XVTXkkcZXnNfn0CGFu9g2XI
+         s9EBQpoBiiZQBep9Cfit4Dt7E1e8r5FHKOs3R1DCodlLNoQS75cwWqJpTDUwaClF8RuT
+         IDlQ==
+X-Gm-Message-State: AOJu0YxxS7eAz/+FbgYo6BKpv3BylRFFBjXKNo1vE41aSwfwFdYB6MPC
+	H01rkdkYmrWiy+VkU6lXZrlZuPU0qoCAD6AmKySZaEV2/5axEYTxduXIkqi3Bz+Z+ZXqtODpDiG
+	T9Q3F1BUuv0cMLThSuZwd/yZhMSJSFmq+i1Uztgcp5MDYQKosV1zqwD85hAp15EsSxlkX6EwMnJ
+	2jCxMOZXjhDFKT8iD0VfDcJDfqMwgdeF48FnZqKYdPh7o7F7ZhRsY=
+X-Gm-Gg: AZuq6aKGNAvCwEP+LhGBDmzbcdD0AKHzVIphmXmUYkgjFPkqetGvAEgNaffohc0Ymwo
+	MVD0bfOAAD053D2e9uEL21IGyqg20Z1XENRHDSq5LpG3lFlh+8XkH4gFWQfHyrSOsu7j/ZVV6cL
+	aOyz6gBBuHlRBK0SmBxp0ukenFePjeYnKqE5Jfl8TPRYDNg2sW/HLL8vcri6VPoPUP6LnjPqhor
+	fcKvTy8KtkrdITYiQ+isVC9oeXDk75yM+u9IWajo7wJ4FlkCSC4YA7Q2B8WPRXiCNzoBmys/Da3
+	cnce0uU8x/R/C7i03cDaHGK/zp+5q2SYk27dghrXupZ9UnN22x6Ye2x5mumbeLeP3ZKfqG1Ptax
+	3E9oDm1zM3R1R3WW8yXEFvG3QMYPCGPr2BGvju+IQ7CwSB655uuTjd4ZzhpSFkw==
+X-Received: by 2002:ac8:5906:0:b0:4ee:2352:1bb1 with SMTP id d75a77b69052e-5070bba117emr98297841cf.5.1771802693800;
+        Sun, 22 Feb 2026 15:24:53 -0800 (PST)
+X-Received: by 2002:ac8:5906:0:b0:4ee:2352:1bb1 with SMTP id d75a77b69052e-5070bba117emr98297631cf.5.1771802693405;
+        Sun, 22 Feb 2026 15:24:53 -0800 (PST)
+Received: from [192.168.1.15] (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8997e242fadsm53860936d6.34.2026.02.22.15.24.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 Feb 2026 15:24:52 -0800 (PST)
+From: Brian Masney <bmasney@redhat.com>
+Subject: [PATCH 0/2] watchdog: pic32: allow two drivers to be compiled on
+ all architectures with COMPILE_TEST
+Date: Sun, 22 Feb 2026 18:24:15 -0500
+Message-Id: <20260222-watchdog-pic32-v1-0-a2538aa528d1@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.19.2
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MQQqAIBBA0avErBNsjKCuEi1MJ52NhkYF4t2Tl
+ m/xf4FMiSnD0hVIdHPmGBqGvgPjdXAk2DYDSpwkIopHX8bb6MTJRqGQctjn0ZI2pKBFZ6KD33+
+ 4brV+b2Uz52AAAAA=
+X-Change-ID: 20260222-watchdog-pic32-001b94deace3
+To: Wim Van Sebroeck <wim@linux-watchdog.org>, 
+ Guenter Roeck <linux@roeck-us.net>
+Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Brian Masney <bmasney@redhat.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=845; i=bmasney@redhat.com;
+ s=20250903; h=from:subject:message-id;
+ bh=NjKc4brhodNTJOK8xVobB4IRxzXA3EqBZko8QSTwez4=;
+ b=owGbwMvMwCW2/dJd9di6A+2Mp9WSGDJnT7At9A97/+r/0S1VxWWiLnu43U58+yUqdfDMFT3tg
+ /6sW8QjO0pZGMS4GGTFFFmW5BoVRKSusr13R5MFZg4rE8gQBi5OAZjIsZ8Mv1lflBnuXqX+z/X7
+ I+bsCIYV8xoz5vDV6pl9Wz8lReC9TwDD/8h3onMNYhi2cypwvTd+cDjUPDQy7EpOpL14t0qa0JJ
+ NvAA=
+X-Developer-Key: i=bmasney@redhat.com; a=openpgp;
+ fpr=A46D32705865AA3DDEDC2904B7D2DD275D7EC087
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.16 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
+	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-4955-lists,linux-watchdog=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sashal@kernel.org,linux-watchdog@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-4956-lists,linux-watchdog=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[redhat.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[bmasney@redhat.com,linux-watchdog@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	NEURAL_HAM(-0.00)[-0.999];
 	TAGGED_RCPT(0.00)[linux-watchdog];
-	RCPT_COUNT_SEVEN(0.00)[8];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux-watchdog.org:email,intel.com:email,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,roeck-us.net:email]
-X-Rspamd-Queue-Id: 0F2E615B94A
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: B53B2170BE8
 X-Rspamd-Action: no action
 
-From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+While migrating a pic32 clk driver off of a legacy API, I mistakenly
+broke one of the drivers, and the issue could have been caught with a
+simple compile test. Now that the dependent patches have been merged
+into Linus's tree via the MIPS tree, we can now enable COMPILE_TEST
+for all of pic32 drivers in this subsystem.
 
-[ Upstream commit 2dea984a74265a67e3210f818416a83b87f70200 ]
-
-Failing device probe due to pm_runtime_put() returning an error is not
-particularly useful.
-
-Returning an error code from pm_runtime_put() merely means that it has
-not queued up a work item to check whether or not the device can be
-suspended and there are many perfectly valid situations in which that
-can happen, like after writing "on" to the devices' runtime PM "control"
-attribute in sysfs for one example.  It also happens when the kernel is
-configured with CONFIG_PM unset.
-
-Accordingly, update rzt2h_wdt_wdtdcr_init() to simply discard the return
-value of pm_runtime_put() and return success to the caller after
-invoking that function.
-
-This will facilitate a planned change of the pm_runtime_put() return
-type to void in the future.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Brian Masney <bmasney@redhat.com>
 ---
+Brian Masney (2):
+      watchdog: pic32-wdt: allow driver to be compiled on all architectures with COMPILE_TEST
+      watchdog: pic32-dmt: allow driver to be compiled on all architectures with COMPILE_TEST
 
-LLM Generated explanations, may be completely bogus:
+ drivers/watchdog/Kconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+---
+base-commit: 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f
+change-id: 20260222-watchdog-pic32-001b94deace3
 
-So the driver was introduced in v6.12-rc1, meaning it would be present
-in the 6.12.y stable tree.
-
-### Assessment
-
-**What the commit fixes:**
-The commit fixes a real bug where the watchdog driver probe fails in
-perfectly valid configurations, specifically:
-1. When `CONFIG_PM` is not set — probe **always** fails because
-   `pm_runtime_put()` returns `-ENOSYS`
-2. When runtime PM has been configured in ways that prevent idle
-   queueing — probe fails spuriously
-
-**Stable kernel criteria assessment:**
-- **Obviously correct**: Yes — the return value of `pm_runtime_put()` is
-  not meaningful for success/failure of the initialization. The
-  `pm_runtime_resume_and_get()` call that preceded it already succeeded,
-  and the device configuration (stopping WDTDCR counter) was already
-  done. The "put" is just releasing the runtime PM reference.
-- **Fixes a real bug**: Yes — probe failure preventing a watchdog device
-  from being usable.
-- **Small and contained**: Yes — 3 lines removed, 1 line added, single
-  file, single function.
-- **No new features**: Correct, this is purely a bug fix.
-- **Reviewed**: Yes — by Guenter Roeck (the watchdog subsystem
-  maintainer).
-
-**Risk assessment:**
-- Extremely low risk. The change simply ignores a return value that was
-  incorrectly being treated as a probe error.
-- The `pm_runtime_put()` operation itself still happens; only the error
-  check is removed.
-
-**However**, this driver was only introduced in v6.12-rc1. It's only
-applicable to the 6.12.y stable tree (and possibly 6.13.y if that
-exists). This limits its scope somewhat but doesn't change whether it
-should be backported.
-
-**The "preparation for future API change" angle:**
-While the commit mentions preparation for changing `pm_runtime_put()` to
-return `void`, that's the motivation for the broader cleanup campaign.
-The actual fix here independently addresses a real probe failure bug,
-making it valid for stable.
-
-### Verification
-
-- **Verified CONFIG_PM=n behavior**: Read
-  `include/linux/pm_runtime.h:261-264` — `__pm_runtime_idle()` returns
-  `-ENOSYS` when CONFIG_PM is not set. `pm_runtime_put()` at line
-  561-563 calls `__pm_runtime_idle()`, so it returns `-ENOSYS` without
-  CONFIG_PM.
-- **Verified driver introduction version**: `git describe --tags
-  --contains f6febd0a30b6e` showed `v6.12-rc1~92^2~6`, confirming the
-  driver was introduced in v6.12.
-- **Verified the code change scope**: The diff shows exactly 3 lines
-  removed (the `ret = pm_runtime_put()`, `if (ret < 0)`, `return ret;`)
-  and 1 line added (`pm_runtime_put(&pdev->dev);`), all in
-  `rzt2h_wdt_wdtdcr_init()`.
-- **Verified reviewer**: Guenter Roeck (watchdog maintainer) gave
-  Reviewed-by.
-- **Unverified**: Whether anyone actually reported the CONFIG_PM=n probe
-  failure — the commit message doesn't reference a specific report.
-  However, the bug is clear from code analysis.
-
-### Conclusion
-
-This is a small, obviously correct bug fix that prevents the watchdog
-driver probe from failing in valid configurations (notably CONFIG_PM=n).
-It's reviewed by the subsystem maintainer, touches a single function in
-a single file, and has zero risk of regression. While the driver only
-exists in 6.12+, it should be backported to applicable stable trees.
-
-**YES**
-
- drivers/watchdog/rzv2h_wdt.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/watchdog/rzv2h_wdt.c b/drivers/watchdog/rzv2h_wdt.c
-index a694786837e11..f9bb4ef3d327b 100644
---- a/drivers/watchdog/rzv2h_wdt.c
-+++ b/drivers/watchdog/rzv2h_wdt.c
-@@ -270,9 +270,7 @@ static int rzt2h_wdt_wdtdcr_init(struct platform_device *pdev,
- 
- 	rzt2h_wdt_wdtdcr_count_stop(priv);
- 
--	ret = pm_runtime_put(&pdev->dev);
--	if (ret < 0)
--		return ret;
-+	pm_runtime_put(&pdev->dev);
- 
- 	return 0;
- }
+Best regards,
 -- 
-2.51.0
+Brian Masney <bmasney@redhat.com>
 
 
