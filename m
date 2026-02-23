@@ -1,182 +1,191 @@
-Return-Path: <linux-watchdog+bounces-4970-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4971-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eL4KNydBnGk7CgQAu9opvQ
-	(envelope-from <linux-watchdog+bounces-4970-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
-	for <lists+linux-watchdog@lfdr.de>; Mon, 23 Feb 2026 12:59:35 +0100
+	id iE/uKptunGmcGAQAu9opvQ
+	(envelope-from <linux-watchdog+bounces-4971-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
+	for <lists+linux-watchdog@lfdr.de>; Mon, 23 Feb 2026 16:13:31 +0100
 X-Original-To: lists+linux-watchdog@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 452AF175C98
-	for <lists+linux-watchdog@lfdr.de>; Mon, 23 Feb 2026 12:59:35 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D66517893B
+	for <lists+linux-watchdog@lfdr.de>; Mon, 23 Feb 2026 16:13:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 16A3F3007AFA
-	for <lists+linux-watchdog@lfdr.de>; Mon, 23 Feb 2026 11:59:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id EAA2D300A63C
+	for <lists+linux-watchdog@lfdr.de>; Mon, 23 Feb 2026 15:09:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41116362137;
-	Mon, 23 Feb 2026 11:59:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CD3536074B;
+	Mon, 23 Feb 2026 15:09:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kpiJRUCb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hTPVZefn"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DF7835B64E
-	for <linux-watchdog@vger.kernel.org>; Mon, 23 Feb 2026 11:59:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FFD04A32
+	for <linux-watchdog@vger.kernel.org>; Mon, 23 Feb 2026 15:09:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771847966; cv=none; b=EHdrt0IVo3dSyvnv/5Gzi3uowJgpy0sNMKMU7Jro6tKK0YP4WKPMy96y7K8N9j3Bi4MJ3ltM8D7WWu9O13rLZ0P6DuDxcxkM72dsKJoCYSe1o7qsC/Q+jusj3BYX3UfBLc2ym7xVW1TdnRpwFyONnA2CXtoDkrHpqSxQVCeKNAk=
+	t=1771859393; cv=none; b=enxYiP9Gju8AjTnbtdQg4m3bSBVQlDNAyKZv6k1oGbGNHQnBKD//C6WksH2BRbIfzLsi3ceD48G4BPMHZqCBjD3hqSgP5ezAMdwfPb11Pid+px8o2Y2MqMZt8biMhlv/A1V3bZXXYfZPH+X9sJn+om1KgEhWOMOGhOxVYuIqCvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771847966; c=relaxed/simple;
-	bh=SzD9Iaa5T3Eo/a0uF31MTvQLnlT9Ly7wKbfUGpbTGO4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=BriXGffy22QtHuFTfIhbL0fPu5FYiZ3+WuOU/GwBJr/fwr2zLkE8mfiP3q5oprErNIkSN0BbzgavDNPgQIFvmLD7NS2r52t2gMUgzBtkiYYMjUxCNQK0KWLB29fFdbBcwIMCkda2IQkK84DyJF52Ir8GyEwfwSk8onEEjCXTyN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kpiJRUCb; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1771859393; c=relaxed/simple;
+	bh=PdXNirrhrGzvskIWnoARIqLHN2ASq5MjCY2ClYaa+zM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NktXWEm5gxdvJtKzha1XZyAAuynZfcfLaqOjnfepOuBpVEu29TZrH8z8SW4B+pi/M88gg10X/2UYrmgrPJ1vGTIrkC+hYt41x4z1sdkh8gL5A3xm/KVj8bRbcABny03sMm4aGQyLcqYU94fTxcXw1tgyY3I8m4qsimE/O20D+3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hTPVZefn; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-8230c2d3128so1719587b3a.0
-        for <linux-watchdog@vger.kernel.org>; Mon, 23 Feb 2026 03:59:25 -0800 (PST)
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-8230c33f477so1879495b3a.2
+        for <linux-watchdog@vger.kernel.org>; Mon, 23 Feb 2026 07:09:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771847964; x=1772452764; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bZ3Uv4dBfKrGypQF2iUd8rVEcAKA1IuNWDJE7r42I1Q=;
-        b=kpiJRUCbVB42l2FHchQ/A9DfNI0BsNBNR5RHiNjouJfI4iz7iMX33grFzKwmb7BDcH
-         wgYmTJi6ETuWLo0KWIdAKqT6P1CaCZP/UrS6G/f/CH8t65JDI8tH8SnTlM2suePIPMqL
-         R+8tSQB6x5qAUuY8Wf0hXdqx4AIhsb1952X94GLl2qh9yWrIzgB3B8emHlMXSHsBVLX8
-         +6guMxqyy5ViHdCIs7eNCIdwvu+etS1CFXZCEJjVay/BI3UmhC+pu/goYfYllvCLz9da
-         RdgIrlAJMGlac4t0oeNqreOoT9+mt10QDk/zqIg0r0qYjRpRn1sV+nzcNcPS90i7XUCM
-         tKOA==
+        d=gmail.com; s=20230601; t=1771859392; x=1772464192; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=IFPS7lJhuN4r3Jnm4VFTzNOt4dETUD/SPcPN5c9c4ek=;
+        b=hTPVZefnKoP9PFjv+lCV49gQMt4uRCwzeHOkYcd4DHCDX8/R+VO6bLfCLagi9FVgnq
+         nNwVAqpEmOeImszWkXfwS5v0dSP1R998iUg5IxgWN44jCBSTBEyY8is+Bogc3z/EtD7V
+         +5td+KM8NBLB6pf5lrcL6cKNw/VsZ3l3SjP6KJQDrz213P8+6xH7CZj3E3kTta+X/ubH
+         ZaFqpoSQqX+44ILccWrMEyRWk2uLHaxNDtmqw9SUMnHbN2ttLW9/P/Hzk558Fhbz2Fl9
+         2+3uXzlGzAd/vaM131qMsekSocXfIB/DH+0kgXj5T4Yrsl4nPnTL8P/VHDg4xduhA8iv
+         rKww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771847964; x=1772452764;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bZ3Uv4dBfKrGypQF2iUd8rVEcAKA1IuNWDJE7r42I1Q=;
-        b=a4y0e7+GywM3gG01HPaS2FwZJMBaopFvkx0rGiSXBCFCh9eTajvRzmqmrFYynbvbfS
-         tP0wmAE1q8qSpZb+tB6iRs/UaFy2gU44Sywj6+96PXejnQXZ2WkgzHozWjF10x4Q7mRS
-         /UrwjMwnCdtWWKpmIFIp9oopH39CGmYqc5KtURg0qYOF0uz6izrHe6w6oVTpt5rHnLKY
-         dq7OdsBG9dwQiHLousyJcmhuvCQFRINj3ZRRFSSEelQNODHLSOqh5nh2x8fLiknLUW4P
-         PrrzK/Hl5hLO2bJ8nKC+uYyJ8ZhYmryVrMEUrqYLjmL0HZaWns9zyGPzR/A7gbdWABQ0
-         OmEw==
-X-Gm-Message-State: AOJu0YxlPrskPccuBAhIzQHVS/yHf0d+bzOn0BZK6HQTwlpJixpDwR2e
-	368Y8vQxnXlQHhcvOtN6b+LvdUqOC7gi9OtIDwT0MG/MpSCsd5PxVZwY
-X-Gm-Gg: AZuq6aI6Uqncadk2wvnE7LZHLit7Ob/mbr9sTIlD+0QwTIeN16hMhNE1LtrvzgtTsqq
-	Gwy5Nq1k1HdRxq3eyAr5NDRvUWYM6avgOySbKvOX/OY+mrH9hj7SToxnG23U0Mp/2R/unStmP2A
-	m/2FKGiN1Vb3v/u0YlVZyR8M6Re6dHbLMO8jz9nJBtfWXJw21nFMhybpB3ytwBvco7dUeiKrskb
-	QmOHdtYs8gSvRfym2/hOXqbeV82PD9pYIkR9T+I6wISYUsM9zVt4LN5p4Yb4gZuiZHyYia22gzI
-	UgKLiNhAhGTdFRAhIOrxv11S2jhS0tg0SX0GShFHYOr8+Pe23TGIu6oonkoy6USLQDwqHtLANQ1
-	FbQVa1R0yRExLGSoXRGQqjj0DZQWi7CTPB9W5Q2xvlPwlLedgK0geQ2Asjw0sn89xesjrPkGVRn
-	0ctqheILPaUbueFcxPNSdySLSqF5XkEodUnOkMAQ==
-X-Received: by 2002:a05:6a00:ab03:b0:824:9451:c1e1 with SMTP id d2e1a72fcca58-826daa82eeemr6723768b3a.58.1771847964413;
-        Mon, 23 Feb 2026 03:59:24 -0800 (PST)
-Received: from junjungu-PC.localdomain ([2408:820c:9008:ba52:1cfe:ae34:fdd6:6b97])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-826dd641040sm7261616b3a.10.2026.02.23.03.59.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Feb 2026 03:59:24 -0800 (PST)
-From: Felix Gu <ustc.gu@gmail.com>
-Date: Mon, 23 Feb 2026 19:59:20 +0800
-Subject: [PATCH] watchdog: sprd_wdt: Remove redundant sprd_wdt_disable() on
- register failure
+        d=1e100.net; s=20230601; t=1771859392; x=1772464192;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IFPS7lJhuN4r3Jnm4VFTzNOt4dETUD/SPcPN5c9c4ek=;
+        b=bZr1ucefzHhWrAp01kDuv7Mo0kk3O4oR+WEEXPSybL69HzafDhOrJe1qRXVeEpJMdL
+         6GAV1ZrsXL31qIPkbbbdEQNNeO5nzXj0PbMtFShQI08jYHoyFz3qjlS3jd0PY6UmATxL
+         kdKIn009IdeoTFjelCovAgsz6b69Jd/7HJEJJB4Z2uFDutuA7Aq7QcvD6sn/to/bW/u+
+         sSxASfxr7OLJ2vs9x3DObv/9kpjZdpBsgU0rhGhUQnFwcEvYFUFeNBj56JSvJWWCn/VT
+         YURo+1U+nDax0GvDDvdRRlOWmkiQ682cuMRy32Yo/zCTyy+0fDMRNZJBfZPupH6sCUXF
+         7XAQ==
+X-Gm-Message-State: AOJu0YyCAO6o0V9LPOZCRPUbGlg7RYq1XsBGBVwIiaD14siZOnIlxJ5D
+	WBsJ7iiFP2e7elhdccw55iseO8w9OgVBxgLlTV6iRpSOETSFXioBPLLV
+X-Gm-Gg: AZuq6aKzwK0yL4/G60jkJbxKypOXUd19g8KhibfY2nRCTJmOqk8iWABB8THHEFqcfD0
+	9bt67sYFFigyZzJBqOi71MWATeyWTdYyLLa0O0+eZsKq811A6+9Os+RuEmgZQNZKrjm/1JvlUZA
+	e0mvCx5a4RJH9nbbesRe6wJCZu6IaJpoz/56zdOhh3O2AwS4la9J8E49oDIa8cCcZwnjuZGrMCD
+	GXiytusGI8o1kmrtWlFxJxG54qK8P7TZb5bEgq23a+a3W+kei80bAoNsTzrJpBt2fy3v+LIdsdB
+	95g0bsrxnfz7twXzLheTsJLF4yn6HKc02rBnX8VzcMv0qwrpTRMraRqNDr29U2GIFvZFUjUjeps
+	45mCKE8J5Jx3DWKqZcXSkAvOnyQOTEfDZrrzhQcOC4jnJ58isDjSIvUyoskVZD6hoFQ1ZNA55xP
+	lMYW2LiDDhYm+DgQf3GC7qZn8qzVyGua4Pun7LY16SmAeMxHdhcHOpTTK7UL2iW4CxDxL8lUa0
+X-Received: by 2002:a05:6a00:21c3:b0:81f:852b:a936 with SMTP id d2e1a72fcca58-826da9039b1mr8790827b3a.15.1771859391555;
+        Mon, 23 Feb 2026 07:09:51 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-826dd68c0b8sm8597569b3a.17.2026.02.23.07.09.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Feb 2026 07:09:50 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <f25c295f-e352-4ae6-bebd-65a1ab8bc78e@roeck-us.net>
+Date: Mon, 23 Feb 2026 07:09:48 -0800
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] watchdog: sprd_wdt: Remove redundant sprd_wdt_disable()
+ on register failure
+To: Felix Gu <ustc.gu@gmail.com>, Wim Van Sebroeck <wim@linux-watchdog.org>,
+ Orson Zhai <orsonzhai@gmail.com>, Baolin Wang
+ <baolin.wang@linux.alibaba.com>, Chunyan Zhang <zhang.lyra@gmail.com>
+Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260223-sprd_wdt-v1-1-2e71f9a76ecb@gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260223-sprd_wdt-v1-1-2e71f9a76ecb@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260223-sprd_wdt-v1-1-2e71f9a76ecb@gmail.com>
-X-B4-Tracking: v=1; b=H4sIABdBnGkC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIzMDIyNj3eKCopT48pQSXeNU89Rkc0ML8zRjAyWg8oKi1LTMCrBR0bG1tQB
- ZYgweWgAAAA==
-X-Change-ID: 20260223-sprd_wdt-3e7ec7187f30
-To: Wim Van Sebroeck <wim@linux-watchdog.org>, 
- Guenter Roeck <linux@roeck-us.net>, Orson Zhai <orsonzhai@gmail.com>, 
- Baolin Wang <baolin.wang@linux.alibaba.com>, 
- Chunyan Zhang <zhang.lyra@gmail.com>
-Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Felix Gu <ustc.gu@gmail.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1771847961; l=1230;
- i=ustc.gu@gmail.com; h=from:subject:message-id;
- bh=SzD9Iaa5T3Eo/a0uF31MTvQLnlT9Ly7wKbfUGpbTGO4=;
- b=xEJkwp9hPUX9493/u6Pu+C/xw3zAGIisitj4cjWmQ/EMJRg/UjPNFnetNPrndVm3+lI70/lsC
- BTD6AifmAkaAth+pFDAhOb1t0dLmvlSUF9GdGla1sT/nbDyQW8/itei
-X-Developer-Key: i=ustc.gu@gmail.com; a=ed25519;
- pk=fjUXwmjchVN7Ja6KGP55IXOzFeCl9edaHoQIEUA+/hw=
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
-	TAGGED_FROM(0.00)[bounces-4970-lists,linux-watchdog=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[linux-watchdog.org,roeck-us.net,gmail.com,linux.alibaba.com];
-	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-4971-lists,linux-watchdog=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	DMARC_NA(0.00)[roeck-us.net];
+	FREEMAIL_TO(0.00)[gmail.com,linux-watchdog.org,linux.alibaba.com];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ustcgu@gmail.com,linux-watchdog@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[8];
+	FROM_NEQ_ENVFROM(0.00)[linux@roeck-us.net,linux-watchdog@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	NEURAL_HAM(-0.00)[-0.997];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-watchdog];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 452AF175C98
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,roeck-us.net:mid,roeck-us.net:email]
+X-Rspamd-Queue-Id: 0D66517893B
 X-Rspamd-Action: no action
 
-The driver uses devm_add_action_or_reset() to register sprd_wdt_disable()
-as a managed cleanup action.
+On 2/23/26 03:59, Felix Gu wrote:
+> The driver uses devm_add_action_or_reset() to register sprd_wdt_disable()
+> as a managed cleanup action.
+> 
+> When devm_watchdog_register_device() fails, the devm core will invoke
+> the cleanup action automatically.
+> 
+> The explicit sprd_wdt_disable() call in the error path is therefore
+> redundant and results in adouble cleanup.
+> 
+> Fixes: 78d9bfad2e89 ("watchdog: sprd_wdt: Convert to use device managed functions and other improvements")
+> Signed-off-by: Felix Gu <ustc.gu@gmail.com>
 
-When devm_watchdog_register_device() fails, the devm core will invoke
-the cleanup action automatically.
-
-The explicit sprd_wdt_disable() call in the error path is therefore
-redundant and results in adouble cleanup.
-
-Fixes: 78d9bfad2e89 ("watchdog: sprd_wdt: Convert to use device managed functions and other improvements")
-Signed-off-by: Felix Gu <ustc.gu@gmail.com>
----
- drivers/watchdog/sprd_wdt.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/watchdog/sprd_wdt.c b/drivers/watchdog/sprd_wdt.c
-index 4e689b6ff141..aacf04616fef 100644
---- a/drivers/watchdog/sprd_wdt.c
-+++ b/drivers/watchdog/sprd_wdt.c
-@@ -320,10 +320,9 @@ static int sprd_wdt_probe(struct platform_device *pdev)
- 	watchdog_init_timeout(&wdt->wdd, 0, dev);
- 
- 	ret = devm_watchdog_register_device(dev, &wdt->wdd);
--	if (ret) {
--		sprd_wdt_disable(wdt);
-+	if (ret)
- 		return ret;
--	}
-+
- 	platform_set_drvdata(pdev, wdt);
- 
- 	return 0;
-
----
-base-commit: d4906ae14a5f136ceb671bb14cedbf13fa560da6
-change-id: 20260223-sprd_wdt-3e7ec7187f30
-
-Best regards,
--- 
-Felix Gu <ustc.gu@gmail.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 
