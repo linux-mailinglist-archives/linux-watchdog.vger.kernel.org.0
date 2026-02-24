@@ -1,146 +1,143 @@
-Return-Path: <linux-watchdog+bounces-4973-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-4974-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SHjjFT6gnGnqJgQAu9opvQ
-	(envelope-from <linux-watchdog+bounces-4973-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
-	for <lists+linux-watchdog@lfdr.de>; Mon, 23 Feb 2026 19:45:18 +0100
+	id mAt0Ka0NnWnLMgQAu9opvQ
+	(envelope-from <linux-watchdog+bounces-4974-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
+	for <lists+linux-watchdog@lfdr.de>; Tue, 24 Feb 2026 03:32:13 +0100
 X-Original-To: lists+linux-watchdog@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECAFD17BB0E
-	for <lists+linux-watchdog@lfdr.de>; Mon, 23 Feb 2026 19:45:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E558B18106B
+	for <lists+linux-watchdog@lfdr.de>; Tue, 24 Feb 2026 03:32:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C4620312DA38
-	for <lists+linux-watchdog@lfdr.de>; Mon, 23 Feb 2026 18:43:14 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 57A0D30427D2
+	for <lists+linux-watchdog@lfdr.de>; Tue, 24 Feb 2026 02:32:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 332F736828E;
-	Mon, 23 Feb 2026 18:43:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B27A27E0E4;
+	Tue, 24 Feb 2026 02:32:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DzcT11NJ"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="IPs3ABNo"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out199-5.us.a.mail.aliyun.com (out199-5.us.a.mail.aliyun.com [47.90.199.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CC66368276;
-	Mon, 23 Feb 2026 18:43:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DAAEB640;
+	Tue, 24 Feb 2026 02:32:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=47.90.199.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771872193; cv=none; b=Kmijc5FKNflv7lMFd7KJJzUyx7tZox8ruJnukZpu88V5ID5wh35CmZY1VrKLD68Xlp8l676CADiuWQFjJA/B1ifxG5XytxKZEiZYmgHOjRO6drkjGcRsGXEj9ILT+IsDhUUKbmsB55Rfn+Lu2WBd23iOXH5DZR+AWH3NRb5ODLM=
+	t=1771900329; cv=none; b=bc6PgVmSdlSuHp6SEa34nP9y+fmro792TtjADBC+fxYA4Rm/VA2AfbCGaAlf8JuGtW9kvCIgsmqEWxUIfR9iBo1WgDGHlGcsYxiWu5Q7BUQt9wRZAw3yU5NqXrparBaf5VazSa56vWckKkbQQk0XvMUvMzqMRUjTTj9uRSi81To=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771872193; c=relaxed/simple;
-	bh=vrd7zHbcCuyX9gaUTyYT9blxEyQJTB9kGMP/Ud0pMcg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZYNpd8YZdfkAe+G6TC6AR+6utIs3mXlgmAiWAoO1D/Av4QuoDkXfxqX1rB7q5cdZ2ZOzdRVbeGhEu7KF1Jbqk9n6lerC+XWXlgPNfZgbaWyjVwf/7VEE/xorBvHnHvPKU0jg8lysVuAyt/FP9NoaSHMNSSOenEB935erKpZXUVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DzcT11NJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 648A0C19421;
-	Mon, 23 Feb 2026 18:43:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771872192;
-	bh=vrd7zHbcCuyX9gaUTyYT9blxEyQJTB9kGMP/Ud0pMcg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DzcT11NJ1/NzhHD22SYOT304H7f7RqGoPDn550YVTQeorlJHPe2FW9lNVHTChNJIo
-	 AkBW58G7a107+3CNzb0IxXxyBUYb3vyERuf3n+WbqplKwEaPHhdQot8YGfAliF1fSj
-	 Tg5D3rXcKFTQZOPfoWC21pvHfx0VK1GmQLy7r3/bg6US18fZgatusl7TtAmoSCikop
-	 bcN3znOKKgX2g2fJTUR52A3rhZnrYn+bv6zMmUsyoT18W4nvhPcc5BvzMkK1TJYwUC
-	 +yQj5uDO3yo47yyLwhJkrx6fJvKdCktyqgl8i/QlL04ZLDSvHVjTSHKQCMUz74JBR4
-	 fWZX2c0Gxpefw==
-Date: Mon, 23 Feb 2026 18:43:06 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Michael Walle <mwalle@kernel.org>
-Cc: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-	Tero Kristo <kristo@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Srinivas Kandagatla <srini@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH 0/8] Remove the Kontron SMARC-sAM67 board
-Message-ID: <20260223-coroner-perceive-bc5302b228b0@spud>
-References: <20260223100459.844967-1-mwalle@kernel.org>
+	s=arc-20240116; t=1771900329; c=relaxed/simple;
+	bh=1LzhitC1w/0xH0zBaZ+YkGLQzP+IExO/+Ro4EGuaO3Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZD4ksHC3Z+wdjjw/uUeOy6JI0gqCbrb9vMBG7tkno8QuvaC5a2i3bMKwm+6py+fGNZUPWO3sGOxKdOOwXL1OXhQZbbrKspH/l5wp3/eJ6B77AI2mzkEL3Qjxg/uNnZi343yyOk0ZSbgf1+2GcjGM/CjB9Jg8hQAoxHF7gzAC1GI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=IPs3ABNo; arc=none smtp.client-ip=47.90.199.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1771900314; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=36AXy7Q/UgsZa0h1DoN/jPBwkeT/dUhwv1HVTQ5GxEo=;
+	b=IPs3ABNo+QWODShGjAKtUnxCo+KAKE85e4IVTPEUlBb/IDkeZ6bCKjwMDGz6DSEoRjNfrSrdkHpHhOPO0mNkBww4QhuMdjNsg727yak4T9yVan5jk/4idMRNOALSLbEv8jLfw4xKJ9B20YZl9EeQL08NhCjREpLMjAQ8PiZKXsE=
+Received: from 30.74.144.111(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0WzhpIc9_1771896637 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Tue, 24 Feb 2026 09:30:37 +0800
+Message-ID: <5ec9bd47-4c58-485a-bc20-1a74cbdef40b@linux.alibaba.com>
+Date: Tue, 24 Feb 2026 09:30:36 +0800
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="XJhr9EQZubmCTvTK"
-Content-Disposition: inline
-In-Reply-To: <20260223100459.844967-1-mwalle@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] watchdog: sprd_wdt: Remove redundant sprd_wdt_disable()
+ on register failure
+To: Felix Gu <ustc.gu@gmail.com>, Wim Van Sebroeck <wim@linux-watchdog.org>,
+ Guenter Roeck <linux@roeck-us.net>, Orson Zhai <orsonzhai@gmail.com>,
+ Chunyan Zhang <zhang.lyra@gmail.com>
+Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260223-sprd_wdt-v1-1-2e71f9a76ecb@gmail.com>
+From: Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20260223-sprd_wdt-v1-1-2e71f9a76ecb@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.26 / 15.00];
-	SIGNED_PGP(-2.00)[];
+X-Spamd-Result: default: False [-7.66 / 15.00];
+	WHITELIST_DMARC(-7.00)[alibaba.com:D:+];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[linux.alibaba.com,none];
+	R_DKIM_ALLOW(-0.20)[linux.alibaba.com:s=default];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-4973-lists,linux-watchdog=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-4974-lists,linux-watchdog=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	FREEMAIL_TO(0.00)[gmail.com,linux-watchdog.org,roeck-us.net];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[18];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[conor@kernel.org,linux-watchdog@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-watchdog,dt];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.986];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[baolin.wang@linux.alibaba.com,linux-watchdog@vger.kernel.org];
+	DKIM_TRACE(0.00)[linux.alibaba.com:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-watchdog];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: ECAFD17BB0E
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,alibaba.com:email]
+X-Rspamd-Queue-Id: E558B18106B
 X-Rspamd-Action: no action
 
 
---XJhr9EQZubmCTvTK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 23, 2026 at 11:04:45AM +0100, Michael Walle wrote:
-> I was informed two weeks ago that this product is discontinued
-> (without being ever released to the market). Unfortunately, this
-> collided with the merge window and I had to wait two more weeks.
->=20
-> Pull the plug and let's not waste any more maintainers time.
->=20
-> Please let me know if this can be picked up in one go or if the
-> device tree has to be removed first and then the drivers together
-> with the dt-bindings.
+On 2/23/26 7:59 PM, Felix Gu wrote:
+> The driver uses devm_add_action_or_reset() to register sprd_wdt_disable()
+> as a managed cleanup action.
+> 
+> When devm_watchdog_register_device() fails, the devm core will invoke
+> the cleanup action automatically.
+> 
+> The explicit sprd_wdt_disable() call in the error path is therefore
+> redundant and results in adouble cleanup.
+> 
+> Fixes: 78d9bfad2e89 ("watchdog: sprd_wdt: Convert to use device managed functions and other improvements")
+> Signed-off-by: Felix Gu <ustc.gu@gmail.com>
 
-I dunno, not like the order matters all that much to users. Ripping the
-dts out immediately probably works nicely in terms of avoiding warnings,
-but I think you'd be safe enough sending all but the hwmon stuff via
-soc for -rc2/3. Platform addition often is a mix of
-bindings/dts/defconfig, so I suppose platform removal could be too.
+Good catch. Thanks.
+Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 
-For the lot:
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>   drivers/watchdog/sprd_wdt.c | 5 ++---
+>   1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/watchdog/sprd_wdt.c b/drivers/watchdog/sprd_wdt.c
+> index 4e689b6ff141..aacf04616fef 100644
+> --- a/drivers/watchdog/sprd_wdt.c
+> +++ b/drivers/watchdog/sprd_wdt.c
+> @@ -320,10 +320,9 @@ static int sprd_wdt_probe(struct platform_device *pdev)
+>   	watchdog_init_timeout(&wdt->wdd, 0, dev);
+>   
+>   	ret = devm_watchdog_register_device(dev, &wdt->wdd);
+> -	if (ret) {
+> -		sprd_wdt_disable(wdt);
+> +	if (ret)
+>   		return ret;
+> -	}
+> +
+>   	platform_set_drvdata(pdev, wdt);
+>   
+>   	return 0;
+> 
+> ---
+> base-commit: d4906ae14a5f136ceb671bb14cedbf13fa560da6
+> change-id: 20260223-sprd_wdt-3e7ec7187f30
+> 
+> Best regards,
 
---XJhr9EQZubmCTvTK
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaZyfugAKCRB4tDGHoIJi
-0gffAP417TFDzpCWdbpGc6XVZHCsiylXwB5TYuT7AOMGCO5TDwD+JAlyzmYcTFju
-uuWhRfYd0j6rIxl4Rdr7B1MQW2brigM=
-=u9n1
------END PGP SIGNATURE-----
-
---XJhr9EQZubmCTvTK--
 
