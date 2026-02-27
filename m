@@ -1,205 +1,234 @@
-Return-Path: <linux-watchdog+bounces-5002-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-5003-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uBNGAl1LoWkKsAQAu9opvQ
-	(envelope-from <linux-watchdog+bounces-5002-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
-	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Feb 2026 08:44:29 +0100
+	id 0GceIpdNoWkfsAQAu9opvQ
+	(envelope-from <linux-watchdog+bounces-5003-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
+	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Feb 2026 08:53:59 +0100
 X-Original-To: lists+linux-watchdog@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C6951B40EF
-	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Feb 2026 08:44:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E91451B4245
+	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Feb 2026 08:53:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 979673031EAE
-	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Feb 2026 07:44:15 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DCE7630C1547
+	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Feb 2026 07:52:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E07D36F437;
-	Fri, 27 Feb 2026 07:44:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 762B7355F51;
+	Fri, 27 Feb 2026 07:52:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lJiYCA02"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="GDsbHRps"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBF57374168
-	for <linux-watchdog@vger.kernel.org>; Fri, 27 Feb 2026 07:44:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4511428314B
+	for <linux-watchdog@vger.kernel.org>; Fri, 27 Feb 2026 07:52:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772178249; cv=none; b=MW5xYozxnn9Hi726dwQ6do+pkCGYxcYMuqBwjzId0bpZZy6QnTGsK9lQIQGzeXg452xVFe5gAUW35ORi6cEik1Ld4hRgA/OA7rhRaHCdzl2WECoIT/ktgyX0E9UlYRLrf5PI8DOdbHM4wgUUy5kbS4upkijAJ2YsoSLS5brUzh4=
+	t=1772178775; cv=none; b=Int6q4M0cDILx4+Jo9MZtLVY+pFsHc/eSI6+YNqYSY+jk9odNOiLNxLqYcAVbotFxkdrlYkb4KC9QXNrrWsRry82e6Ft9k/0mICjyF3KI55B8jkDYs0JKFYUwSPzHGpkzRLgKjnae3Tx91QU3o/yr5ZPS7Fb26KfxNzFty0O/4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772178249; c=relaxed/simple;
-	bh=84TxcVVnLLZ21GHiYnfom/Tm/4rsR33MtXnG34S9MjM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Xu9wr9fjLlmcCk0yiiz3pq6EM2qnkLvDXUA3sE39HQD+W1B5c9PSYNLQo9Mn+AtEZsw984PrhO6ST4crnJJz0J9XYL6bgCMHKBidwsBwyzdcyT1lyUETvlF7ZmlBzmbPDqc48VPbZa0hPsaJSo/+JqvQDBrT67mBLPqLpjJYPSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lJiYCA02; arc=none smtp.client-ip=209.85.216.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3590408a093so936695a91.2
-        for <linux-watchdog@vger.kernel.org>; Thu, 26 Feb 2026 23:44:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772178246; x=1772783046; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=k7eVWufdRnuJaMT82ARr6mUQU8+3LuBH9hu4HQmbar0=;
-        b=lJiYCA02M5Q3Q0JwhFeYUSWxN77x1xWaV07kuUXNf9fvPt9osLJvtXh5ZAtM7TmR6w
-         q+cZb+RYz0OTltkWbXeD3VL62+7Dy+7SMu9lqFLIUAfvc56uPoEtkDOGFY0xzbkhIfsD
-         UPezOdgYbZuam5lsrJbDdHSQC2XxffO+Bwp//wCVnV7HptpO+6uX+9CwZVx3PWCFIagN
-         Eq8Fi/171uljyKEJ2emowZkowwuZlmo8k0gMPqdxyXKRSgTy6h616K9GrFhsUpu4NPru
-         n3CFJ/pyekzR5TCj5BA30cYqAsTSNdK9rtE5FkvqdaJyBSBC7l3r00LDZNCaNlg+6sug
-         udPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772178246; x=1772783046;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=k7eVWufdRnuJaMT82ARr6mUQU8+3LuBH9hu4HQmbar0=;
-        b=raTsp7V91VDwBuW+Kv4J4RQjWwnaZ85nzrgjgxag98WZzL28sjrzSOBIs7LchsEtfJ
-         bkLYd+vl4YL9CZS+zdFo4O/9+2jaYi0PDVlh2CIsw8rZ6uvdTLDAoKJOzc0aweNTfjR5
-         qKF/Nd3zfATjWfemjeWdFPLXNBwRQYkfoZzyXRi+yPBhgbWmu3o6u6Kn7K4/tIwV6MT7
-         +Il+s3G4wLaeR5RtyGHmZrHTN92dTIXVzM3DLiAIcnYN3V27S0ZeVcYY5mVmzor8caFl
-         f2UTm1L8tnGTj7fcIxPuKWT8U69OosCkQpsJ3k/fgWPO9Dg69Ont5vFhDGp0EDGj6IjW
-         vNFA==
-X-Forwarded-Encrypted: i=1; AJvYcCUN+igqinO11/6DoDdGijtPil9VWk3WJ6I7GeR4FGNAfJ4zrah9gpHoYlwbbX06AzhfZpxjPvYZvAc6UdtkjA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yygpvv5yz29Oy4cjkQ2QOjAO2Rar7TDxFfAY5fYjFoXSOLSrwCD
-	Bsrmpt2pWyMo3rebvJ6fci/VJ/Lk4jddHyWRhleDB5sZEaN099NVnaul587bnTeW
-X-Gm-Gg: ATEYQzx0aM8saROLCJiK+29/9/uYQI1SZyp2+Wc0XTiW6Qc3VgkHTfmvNhVoEMiUktz
-	VvynY4DoRaqlH6Lx5SlYwzya/AkZ6/E1kwMZmxfslkONmiutY7yWtx5Z9YGF0YR331TMBoJkdn2
-	yaqWCZ+BlF0C12BIWVAFevKriJ275pHwt22z1m98R7exxIz6DN0H0O+mMdA2ZHdjfqLbLnZalbD
-	efpCl0kJk4AJOfOdyh9/VFkM5//TV2gmy6Q6O//x69i4/tHajYRVLQyWNhssp0/7JFjJkQT2pwf
-	8NAJeDEYqQn2roSOVCcPw3+DE0AyYKeF+vrS0yFk0aUnkxmnbQrUt+mb54/SX0XuJ8l9vL96edn
-	O9FZr7/kZpwnUSVluMD2chOM4KKA+/d/InIDLyFQy9nxcJuFAafpQO+dt7XbwAYRyauRHYHkNR3
-	ZEiOx8wEUO3JVIIiZM2FbFL4PlTpzcIAApE2bONlSsLSyrb0WfzGimXQ95mwkW+gmeiyJjgrSS
-X-Received: by 2002:a17:90a:da85:b0:32e:3829:a71c with SMTP id 98e67ed59e1d1-35965c93b31mr2286620a91.16.1772178245932;
-        Thu, 26 Feb 2026 23:44:05 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35912e19c4csm7147007a91.0.2026.02.26.23.44.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Feb 2026 23:44:05 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e69972db-20c3-4ce7-ad12-bb91a8eadfb2@roeck-us.net>
-Date: Thu, 26 Feb 2026 23:44:04 -0800
+	s=arc-20240116; t=1772178775; c=relaxed/simple;
+	bh=t/N8FP2PTycAc9OCBe7oikzfKFx5hflAKK47VGsJjP8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qm9GgPd3f8Vcqwt4iuOts5wf8rt6iMe73e/v1rqpgO2x/fnELkx4+F+sHunoNJXse8SGAui986M4CUu16UdcqB6iECmC/U2dnpFV75O6ShWDzMuYtt0Ehr5Kkr9UkXLzxaaZVYvF3GgY8k2XwuejYyU4nJlpyHuiP+KTsw2Ex8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=GDsbHRps; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id B17F71A199B;
+	Fri, 27 Feb 2026 07:52:51 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 76D035FE46;
+	Fri, 27 Feb 2026 07:52:51 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 334181036921D;
+	Fri, 27 Feb 2026 08:52:48 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1772178770; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=XeSGj5Dm4pJG5BITfxYeiMkJ31GOO56vEhVegrdik1Y=;
+	b=GDsbHRpskTwbgPCwbTo43xynJyZkgTgFYfyHpCTsnpwEHZpZCegYn4WbFulSq7CjsIYAYK
+	mJrzWuXbigpntKfAPj/UMVo8J+bpYYQjVnMRYUtSKdcFYeA2AoHrZ3MQ7wRLJZUYlvHE83
+	VVXalmgapClSSjRbBdOTDLXJNfyYdt+1da79GtxntUpwxIEQVoaEcmX8siASRnWz4o/GZD
+	4/3b2U3gJzPmfUv7oebo/n/KCI5PB/Z7QTQIPnGaquuEEuv5bnIjQEH69WjFBhRzqFmGTZ
+	iLkR4odNOe2XKtAClS6o6i0258v24jEmGHC1PZwoxvdiq4hwCo/EE9M9jP/RGQ==
+Date: Fri, 27 Feb 2026 08:52:39 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Balakrishnan Sambath <balakrishnan.s@microchip.com>
+Cc: wim@linux-watchdog.org, linux@roeck-us.net, nicolas.ferre@microchip.com,
+	claudiu.beznea@tuxon.dev, linux-watchdog@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Andrei Simion <andrei.simion@microchip.com>
+Subject: Re: [PATCH 1/3] watchdog: at91sam9_wdt.h: Cleanup the header file
+Message-ID: <202602270752399219b90c@mail.local>
+References: <20260227073116.30447-1-balakrishnan.s@microchip.com>
+ <20260227073116.30447-2-balakrishnan.s@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/3] watchdog: at91/sama5d4: header cleanup and driver
- refactor
-To: Balakrishnan Sambath <balakrishnan.s@microchip.com>,
- wim@linux-watchdog.org
-Cc: nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
- claudiu.beznea@tuxon.dev, linux-watchdog@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20260227073116.30447-1-balakrishnan.s@microchip.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260227073116.30447-1-balakrishnan.s@microchip.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260227073116.30447-2-balakrishnan.s@microchip.com>
+X-Last-TLS-Session-Version: TLSv1.3
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	TAGGED_FROM(0.00)[bounces-5002-lists,linux-watchdog=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	DMARC_NA(0.00)[roeck-us.net];
-	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[bootlin.com:+];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-watchdog];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[linux@roeck-us.net,linux-watchdog@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-5003-lists,linux-watchdog=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[alexandre.belloni@bootlin.com,linux-watchdog@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[roeck-us.net:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 5C6951B40EF
+	TAGGED_RCPT(0.00)[linux-watchdog];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[bootlin.com:url,bootlin.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,microchip.com:email]
+X-Rspamd-Queue-Id: E91451B4245
 X-Rspamd-Action: no action
 
-On 2/26/26 23:31, Balakrishnan Sambath wrote:
-> This series cleans up the AT91 watchdog header and refactors the
-> sama5d4 watchdog driver.
+On 27/02/2026 13:01:14+0530, Balakrishnan Sambath wrote:
+> From: Andrei Simion <andrei.simion@microchip.com>
 > 
-> The header reorganization introduces consistent register naming and
-> makes the WDDIS bit handling explicit for modern (SAM9X60, SAMA7G5,
-> SAM9X7) and legacy (SAMA5, AT91SAM9261) SoCs. The driver refactor
-> improves readability and fixes the reset regression introduced by
-> commit 266da53c35fc ("watchdog: sama5d4: readout initial state").
+> This patch reorganizes the header file by renaming the registers using
+> a general pattern also this patch simplifies the watchdog disable logic
+> in the at91sam9_wdt.h header by differentiating between modern
+> (SAM9X60, SAMA7G5, SAM9X7) and legacy (SAMA5, AT91SAM9261) chips based
+> on the watchdog disable bit.
+> For modern chips, the disable bit is at bit 12, while for legacy chips
+> it is at bit 15.
+> 
+> Signed-off-by: Andrei Simion <andrei.simion@microchip.com>
+> [Remove Kconfig-based WDDIS selection and define explicit legacy and
+> modern masks]
+> Signed-off-by: Balakrishnan Sambath <balakrishnan.s@microchip.com>
+> ---
+>  drivers/watchdog/at91sam9_wdt.h | 65 ++++++++++++++++-----------------
+>  1 file changed, 32 insertions(+), 33 deletions(-)
+> 
+> diff --git a/drivers/watchdog/at91sam9_wdt.h b/drivers/watchdog/at91sam9_wdt.h
+> index 298d545df1a1..1e0aeecb489f 100644
+> --- a/drivers/watchdog/at91sam9_wdt.h
+> +++ b/drivers/watchdog/at91sam9_wdt.h
+> @@ -3,59 +3,58 @@
+>   * drivers/watchdog/at91sam9_wdt.h
+>   *
+>   * Copyright (C) 2007 Andrew Victor
+>   * Copyright (C) 2007 Atmel Corporation.
+>   * Copyright (C) 2019 Microchip Technology Inc. and its subsidiaries
+>   *
+>   * Watchdog Timer (WDT) - System peripherals regsters.
+>   * Based on AT91SAM9261 datasheet revision D.
+>   * Based on SAM9X60 datasheet.
+> + * Based on SAMA7G5 datasheet.
+> + * Based on SAM9X75 datasheet.
+>   *
+>   */
+>  
+>  #ifndef AT91_WDT_H
+>  #define AT91_WDT_H
+>  
+>  #include <linux/bits.h>
+>  
+> -#define AT91_WDT_CR		0x00			/* Watchdog Control Register */
+> -#define  AT91_WDT_WDRSTT	BIT(0)			/* Restart */
+> -#define  AT91_WDT_KEY		(0xa5UL << 24)		/* KEY Password */
+> -
+> -#define AT91_WDT_MR		0x04			/* Watchdog Mode Register */
+> -#define  AT91_WDT_WDV		(0xfffUL << 0)		/* Counter Value */
+> -#define  AT91_WDT_SET_WDV(x)	((x) & AT91_WDT_WDV)
+> -#define  AT91_SAM9X60_PERIODRST	BIT(4)		/* Period Reset */
+> -#define  AT91_SAM9X60_RPTHRST	BIT(5)		/* Minimum Restart Period */
+> +#define AT91_WDT_CR		0x00		/* Watchdog Control Register */
+> +#define  AT91_WDT_WDRSTT	BIT(0)		/* Restart */
+> +#define  AT91_WDT_KEY		(0xa5UL << 24)	/* KEY Password */
+> +#define AT91_WDT_MR		0x04		/* Watchdog Mode Register */
+> +#define  AT91_WDT_WDV		(0xfffUL << 0)	/* Counter Value */
+>  #define  AT91_WDT_WDFIEN	BIT(12)		/* Fault Interrupt Enable */
+> -#define  AT91_SAM9X60_WDDIS	BIT(12)		/* Watchdog Disable */
+> -#define  AT91_WDT_WDRSTEN	BIT(13)		/* Reset Processor */
+> -#define  AT91_WDT_WDRPROC	BIT(14)		/* Timer Restart */
+> -#define  AT91_WDT_WDDIS		BIT(15)		/* Watchdog Disable */
+> -#define  AT91_WDT_WDD		(0xfffUL << 16)		/* Delta Value */
+> -#define  AT91_WDT_SET_WDD(x)	(((x) << 16) & AT91_WDT_WDD)
+> -#define  AT91_WDT_WDDBGHLT	BIT(28)		/* Debug Halt */
+> -#define  AT91_WDT_WDIDLEHLT	BIT(29)		/* Idle Halt */
+> -
+> +#define  AT91_WDT_WDRSTEN	BIT(13)
+> +#define  AT91_WDT_WDRPROC	BIT(14)
+> +#define  AT91_WDT_WDD		(0xfffUL << 16)
+> +#define  AT91_WDT_WDDBGHLT	BIT(28)
+> +#define  AT91_WDT_WDIDLEHLT	BIT(29)
+>  #define AT91_WDT_SR		0x08		/* Watchdog Status Register */
+>  #define  AT91_WDT_WDUNF		BIT(0)		/* Watchdog Underflow */
+>  #define  AT91_WDT_WDERR		BIT(1)		/* Watchdog Error */
+>  
+> -/* Watchdog Timer Value Register */
+> -#define AT91_SAM9X60_VR		0x08
+> +#define  AT91_WDT_SET_WDV(x)	((x) & AT91_WDT_WDV)
+> +#define  AT91_WDT_SET_WDD(x)	(((x) << 16) & AT91_WDT_WDD)
+>  
+> -/* Watchdog Window Level Register */
+> -#define AT91_SAM9X60_WLR	0x0c
+> -/* Watchdog Period Value */
+> -#define  AT91_SAM9X60_COUNTER	(0xfffUL << 0)
+> -#define  AT91_SAM9X60_SET_COUNTER(x)	((x) & AT91_SAM9X60_COUNTER)
+> +#define AT91_WDT_VR		0x08	/* Watchdog Timer Value Register */
+> +#define AT91_WDT_ISR		0x1c	/* Interrupt Status Register */
+> +#define AT91_WDT_IER		0x14	/* Interrupt Enable Register */
+> +#define AT91_WDT_IDR		0x18	/* Interrupt Disable Register */
+> +#define AT91_WDT_WLR		0x0c	/* Watchdog Window Level Register */
+> +#define AT91_WDT_PERIODRST	BIT(4)	/* Period Reset */
+> +#define AT91_WDT_RPTHRST	BIT(5)		/* Minimum Restart Period */
+> +#define  AT91_WDT_PERINT	BIT(0)	/* Period Interrupt Enable */
+> +#define  AT91_WDT_COUNTER	(0xfffUL << 0)	/* Watchdog Period Value */
+> +#define  AT91_WDT_SET_COUNTER(x)	((x) & AT91_WDT_COUNTER)
+>  
+> -/* Interrupt Enable Register */
+> -#define AT91_SAM9X60_IER	0x14
+> -/* Period Interrupt Enable */
+> -#define  AT91_SAM9X60_PERINT	BIT(0)
+> -/* Interrupt Disable Register */
+> -#define AT91_SAM9X60_IDR	0x18
+> -/* Interrupt Status Register */
+> -#define AT91_SAM9X60_ISR	0x1c
+> +/*
+> + * WDDIS bit differs by SoC:
+> + *   - SAMA5, AT91SAM9261: bit 15
+> + *   - SAM9X60, SAMA7G5, SAM9X75: bit 12
+> + * Select at runtime via compatible string.
+> + */
+> +#define AT91_WDT_WDDIS_LEGACY   BIT(15)
+> +#define AT91_WDT_WDDIS_MODERN   BIT(12)
+
+This is bad naming, we are going to end up with
+AT91_WDT_WDDIS_LEGACY_LEGACY, AT91_WDT_WDDIS_MODERN_LEGACY and
+AT91_WDT_WDDIS_MODERN next time. The proper name would use the name of
+the SoC introducing the new position.
+
+>  
+>  #endif
+> -- 
+> 2.34.1
 > 
 
-That is inappropriate as a bug fix. Ther bug fix should come first,
-in a form that can be backported, followed by an optional cleanup.
-
-Guenter
-
-> Andrei Simion (2):
->    watchdog: at91sam9_wdt.h: Cleanup the header file
->    watchdog: sama5d4_wdt: Refactor the driver
-> 
-> Balakrishnan Sambath (1):
->    watchdog: at91sam9_wdt: Rename AT91_WDT_WDDIS to AT91_WDT_WDDIS_LEGACY
-> 
->   drivers/watchdog/at91sam9_wdt.c |   8 +-
->   drivers/watchdog/at91sam9_wdt.h |  65 +++++++------
->   drivers/watchdog/sama5d4_wdt.c  | 156 ++++++++++++++++----------------
->   3 files changed, 113 insertions(+), 116 deletions(-)
-> 
-
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
