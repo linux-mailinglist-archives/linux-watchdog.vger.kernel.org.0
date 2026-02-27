@@ -1,86 +1,85 @@
-Return-Path: <linux-watchdog+bounces-5001-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-5002-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SCwuER1LoWkKsAQAu9opvQ
-	(envelope-from <linux-watchdog+bounces-5001-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
-	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Feb 2026 08:43:25 +0100
+	id uBNGAl1LoWkKsAQAu9opvQ
+	(envelope-from <linux-watchdog+bounces-5002-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
+	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Feb 2026 08:44:29 +0100
 X-Original-To: lists+linux-watchdog@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91BF71B40B3
-	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Feb 2026 08:43:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C6951B40EF
+	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Feb 2026 08:44:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 635293045008
-	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Feb 2026 07:42:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 979673031EAE
+	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Feb 2026 07:44:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7FB61925BC;
-	Fri, 27 Feb 2026 07:42:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E07D36F437;
+	Fri, 27 Feb 2026 07:44:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AUeZZOls"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lJiYCA02"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EFA3345CB2
-	for <linux-watchdog@vger.kernel.org>; Fri, 27 Feb 2026 07:42:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBF57374168
+	for <linux-watchdog@vger.kernel.org>; Fri, 27 Feb 2026 07:44:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772178144; cv=none; b=TRLJTgttRGuX/bCXKL1k7GKb31l75AwVUlCQfSmdrm6C7PMtzR5is9RvYAHraQdQdYItOHoNm4sgJkx3MHwPV8Htlbh7d5wMV4wLwNbdfpY/neBtQQN9J0SKkjNQuJEoJard7vt+/jHSmGfaOrbdwrXkbwU6pTSKwzvuQYak32c=
+	t=1772178249; cv=none; b=MW5xYozxnn9Hi726dwQ6do+pkCGYxcYMuqBwjzId0bpZZy6QnTGsK9lQIQGzeXg452xVFe5gAUW35ORi6cEik1Ld4hRgA/OA7rhRaHCdzl2WECoIT/ktgyX0E9UlYRLrf5PI8DOdbHM4wgUUy5kbS4upkijAJ2YsoSLS5brUzh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772178144; c=relaxed/simple;
-	bh=wnp1Lq8mmX33B8twyR7sFcRofmw9bR6EbHCp61lLaCo=;
+	s=arc-20240116; t=1772178249; c=relaxed/simple;
+	bh=84TxcVVnLLZ21GHiYnfom/Tm/4rsR33MtXnG34S9MjM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HWGYBGpTuzVRv4zBwGwFZehkigqi6iOAMMcnBMZlWkfAhi85OpENctaQeA+PLPAyWsE/3hwtwsqjhdsNM76DClBOMRfssWZm9qaOqOCWo4dmSiz0+ncAVDtOmeSNzXKwNjkPcjCDP+WrF2cw7H1CUPYval4PfrgMOzDAe4GTpjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AUeZZOls; arc=none smtp.client-ip=209.85.210.178
+	 In-Reply-To:Content-Type; b=Xu9wr9fjLlmcCk0yiiz3pq6EM2qnkLvDXUA3sE39HQD+W1B5c9PSYNLQo9Mn+AtEZsw984PrhO6ST4crnJJz0J9XYL6bgCMHKBidwsBwyzdcyT1lyUETvlF7ZmlBzmbPDqc48VPbZa0hPsaJSo/+JqvQDBrT67mBLPqLpjJYPSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lJiYCA02; arc=none smtp.client-ip=209.85.216.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-8249fc726e9so1069935b3a.2
-        for <linux-watchdog@vger.kernel.org>; Thu, 26 Feb 2026 23:42:23 -0800 (PST)
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3590408a093so936695a91.2
+        for <linux-watchdog@vger.kernel.org>; Thu, 26 Feb 2026 23:44:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772178143; x=1772782943; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1772178246; x=1772783046; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=RSpBFk6h7GjXDnU1XJIlOR6UlooIlnl0CsiskOpIsE0=;
-        b=AUeZZOlswcxNYNsbOtVIhiYMSPkhC4p/SX0dSp6mcCHcDMIxNmYAaDRyHNtrFenQX0
-         kfq8wG+527JGC6Zx24Lmo6Mrz8TatvNLUsBbjzQxmt5/soQvXfmH3lsRnxNE+m4H0KCF
-         Nd6e2PAxAN0kYdXbI/OgA1kVGbHP2edHExna4e3VgDRiJf7JfUfPDf6C2blD1Ml23jbl
-         ISY1PNDmgmm3iaPvUaHQW3mM31erqql5sPIL4vwjY9lDg9X+CF154pPQ8g5KaEtYa9oc
-         V40hWyW9I3vV7bkQyauvKQV6KTQmPsOYwPV07vKUJ0CDNODNehemaovl0jTuBsvRZH7B
-         /VGg==
+        bh=k7eVWufdRnuJaMT82ARr6mUQU8+3LuBH9hu4HQmbar0=;
+        b=lJiYCA02M5Q3Q0JwhFeYUSWxN77x1xWaV07kuUXNf9fvPt9osLJvtXh5ZAtM7TmR6w
+         q+cZb+RYz0OTltkWbXeD3VL62+7Dy+7SMu9lqFLIUAfvc56uPoEtkDOGFY0xzbkhIfsD
+         UPezOdgYbZuam5lsrJbDdHSQC2XxffO+Bwp//wCVnV7HptpO+6uX+9CwZVx3PWCFIagN
+         Eq8Fi/171uljyKEJ2emowZkowwuZlmo8k0gMPqdxyXKRSgTy6h616K9GrFhsUpu4NPru
+         n3CFJ/pyekzR5TCj5BA30cYqAsTSNdK9rtE5FkvqdaJyBSBC7l3r00LDZNCaNlg+6sug
+         udPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772178143; x=1772782943;
+        d=1e100.net; s=20230601; t=1772178246; x=1772783046;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RSpBFk6h7GjXDnU1XJIlOR6UlooIlnl0CsiskOpIsE0=;
-        b=e2qp7zkjENtlreCfAj1w6Lc/1M3YD1UbPblGYA2uGDnmet0Rg6Jo2Cwrz0LurFsRL1
-         MWYZxJn0wnxOAnUOax3W74JBG1jrtwwi4cM0eXTyGTZ2QQY9mUNeGidsrP8z+qzJGxAt
-         78ohAh83ojQ0Z6Ep0Gbhs8GC1Z31H8nwCCuNIw1Fg5mp4/ZSL0LAjnm7vkEy8NhjMgOH
-         SrQLTVhnhOe2cmjSvRyb0GpTbIb5bCM4BekCGZurgmpFX9GpuhA8zvdygs6OWehKUTnK
-         /n5N9I98h185kn4qpCUZzXz2cT8ZDASxFWg6hi8FvP6ED1cIX7Sq32KeezCqbOQH7Q28
-         UDRg==
-X-Forwarded-Encrypted: i=1; AJvYcCW3TBqlJxhinUglc9r2+/hOJElDGk4OpepWI4t0OdMzTvm9zNocj/5h7Ne6uwMt0sLuhW7pb/+U8gC4Xj1+Fw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw1tTsBup2l0hbO7uAdFiJTGXj/WG1eCj/dvh5CcvS2JaUSej4W
-	hrDP/6W8CwfaCHxa7VTiQ3qYUctKm4PHmDaZXmxOGhEbLabmPeEAgeZg
-X-Gm-Gg: ATEYQzxdO19IDxhN51hrkCQ5GUaHLYQ2Eju+d78Lij94NcCVPJIg406G2YJ/Q0ItKzd
-	vB8BqhgrCQTmMs/xuZeHEdpJx/3KFESWLcQO3AU3CHjkSf01ivo8mm99mrrCNBgRMyP36Sjt8+F
-	IuZNLJbz5SqS83OWEGsXUbZw/MkqUetfUhCHx5Q7ucDT6Fe9d/c7W+2GvJYB9M+7A9G63CcZl4y
-	MxAed6lALNFI8qNGT0zlV4QVKcWEb1bMZBBOX0MU4f8Qvqk6IOjHuGmn4xdquvTO0IJoJR4ophQ
-	Av/a+M96Kp29zHKBSf1FSbVF9QK6kL+v2Y73jtUR9GfwM8zcIESx8kX1YhKaJVdLiq6Lj2zdtcj
-	t5mh7ENpjYGzqVGxPW6co9nXWmi6CDNxxHbcW32baWP9fUC8P17l2DN89gf7wS+/1OzlFvou31f
-	DUyniS0HqzS/wBdtd7fFTjB/M8YpDB/Vcmsywr+/yzZAHT7jSZOEWCstYUzx8k138ZE9ggauBjG
-	II+sSfZaHE=
-X-Received: by 2002:a05:6a00:301f:b0:81f:852b:a91e with SMTP id d2e1a72fcca58-8274da3a29emr1774463b3a.59.1772178142752;
-        Thu, 26 Feb 2026 23:42:22 -0800 (PST)
+        bh=k7eVWufdRnuJaMT82ARr6mUQU8+3LuBH9hu4HQmbar0=;
+        b=raTsp7V91VDwBuW+Kv4J4RQjWwnaZ85nzrgjgxag98WZzL28sjrzSOBIs7LchsEtfJ
+         bkLYd+vl4YL9CZS+zdFo4O/9+2jaYi0PDVlh2CIsw8rZ6uvdTLDAoKJOzc0aweNTfjR5
+         qKF/Nd3zfATjWfemjeWdFPLXNBwRQYkfoZzyXRi+yPBhgbWmu3o6u6Kn7K4/tIwV6MT7
+         +Il+s3G4wLaeR5RtyGHmZrHTN92dTIXVzM3DLiAIcnYN3V27S0ZeVcYY5mVmzor8caFl
+         f2UTm1L8tnGTj7fcIxPuKWT8U69OosCkQpsJ3k/fgWPO9Dg69Ont5vFhDGp0EDGj6IjW
+         vNFA==
+X-Forwarded-Encrypted: i=1; AJvYcCUN+igqinO11/6DoDdGijtPil9VWk3WJ6I7GeR4FGNAfJ4zrah9gpHoYlwbbX06AzhfZpxjPvYZvAc6UdtkjA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yygpvv5yz29Oy4cjkQ2QOjAO2Rar7TDxFfAY5fYjFoXSOLSrwCD
+	Bsrmpt2pWyMo3rebvJ6fci/VJ/Lk4jddHyWRhleDB5sZEaN099NVnaul587bnTeW
+X-Gm-Gg: ATEYQzx0aM8saROLCJiK+29/9/uYQI1SZyp2+Wc0XTiW6Qc3VgkHTfmvNhVoEMiUktz
+	VvynY4DoRaqlH6Lx5SlYwzya/AkZ6/E1kwMZmxfslkONmiutY7yWtx5Z9YGF0YR331TMBoJkdn2
+	yaqWCZ+BlF0C12BIWVAFevKriJ275pHwt22z1m98R7exxIz6DN0H0O+mMdA2ZHdjfqLbLnZalbD
+	efpCl0kJk4AJOfOdyh9/VFkM5//TV2gmy6Q6O//x69i4/tHajYRVLQyWNhssp0/7JFjJkQT2pwf
+	8NAJeDEYqQn2roSOVCcPw3+DE0AyYKeF+vrS0yFk0aUnkxmnbQrUt+mb54/SX0XuJ8l9vL96edn
+	O9FZr7/kZpwnUSVluMD2chOM4KKA+/d/InIDLyFQy9nxcJuFAafpQO+dt7XbwAYRyauRHYHkNR3
+	ZEiOx8wEUO3JVIIiZM2FbFL4PlTpzcIAApE2bONlSsLSyrb0WfzGimXQ95mwkW+gmeiyJjgrSS
+X-Received: by 2002:a17:90a:da85:b0:32e:3829:a71c with SMTP id 98e67ed59e1d1-35965c93b31mr2286620a91.16.1772178245932;
+        Thu, 26 Feb 2026 23:44:05 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82739d87e78sm5139592b3a.17.2026.02.26.23.42.20
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35912e19c4csm7147007a91.0.2026.02.26.23.44.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Feb 2026 23:42:20 -0800 (PST)
+        Thu, 26 Feb 2026 23:44:05 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <52bf19af-7cf3-4e20-89ad-813fad8aa9c1@roeck-us.net>
-Date: Thu, 26 Feb 2026 23:42:19 -0800
+Message-ID: <e69972db-20c3-4ce7-ad12-bb91a8eadfb2@roeck-us.net>
+Date: Thu, 26 Feb 2026 23:44:04 -0800
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -88,19 +87,14 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 4/5] watchdog: qcom: add support to get the bootstatus
- from IMEM
-To: Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>,
- Wim Van Sebroeck <wim@linux-watchdog.org>,
- Rajendra Nayak <quic_rjendra@quicinc.com>
-Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
- Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-References: <20260226-wdt_reset_reason-v8-0-011c3a8cb6ff@oss.qualcomm.com>
- <20260226-wdt_reset_reason-v8-4-011c3a8cb6ff@oss.qualcomm.com>
+Subject: Re: [PATCH 0/3] watchdog: at91/sama5d4: header cleanup and driver
+ refactor
+To: Balakrishnan Sambath <balakrishnan.s@microchip.com>,
+ wim@linux-watchdog.org
+Cc: nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+ claudiu.beznea@tuxon.dev, linux-watchdog@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20260227073116.30447-1-balakrishnan.s@microchip.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -146,184 +140,66 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260226-wdt_reset_reason-v8-4-011c3a8cb6ff@oss.qualcomm.com>
+In-Reply-To: <20260227073116.30447-1-balakrishnan.s@microchip.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-5001-lists,linux-watchdog=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[roeck-us.net];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TAGGED_FROM(0.00)[bounces-5002-lists,linux-watchdog=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	DMARC_NA(0.00)[roeck-us.net];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-watchdog];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[linux@roeck-us.net,linux-watchdog@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	NEURAL_HAM(-0.00)[-0.998];
-	TAGGED_RCPT(0.00)[linux-watchdog,dt];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,0.0.0.0:email,qualcomm.com:email,roeck-us.net:mid]
-X-Rspamd-Queue-Id: 91BF71B40B3
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[roeck-us.net:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 5C6951B40EF
 X-Rspamd-Action: no action
 
-On 2/26/26 08:59, Kathiravan Thirumoorthy wrote:
-> When the system boots up after a watchdog reset, the EXPIRED_STATUS bit
-> in the WDT_STS register is cleared. To identify if the system was
-> restarted due to WDT expiry, XBL update the information in the IMEM region.
-> Update the driver to read the restart reason from IMEM and populate the
-> bootstatus accordingly.
+On 2/26/26 23:31, Balakrishnan Sambath wrote:
+> This series cleans up the AT91 watchdog header and refactors the
+> sama5d4 watchdog driver.
 > 
-> With the CONFIG_WATCHDOG_SYSFS enabled, user can extract the information
-> as below:
+> The header reorganization introduces consistent register naming and
+> makes the WDDIS bit handling explicit for modern (SAM9X60, SAMA7G5,
+> SAM9X7) and legacy (SAMA5, AT91SAM9261) SoCs. The driver refactor
+> improves readability and fixes the reset regression introduced by
+> commit 266da53c35fc ("watchdog: sama5d4: readout initial state").
 > 
-> cat /sys/devices/platform/soc@0/f410000.watchdog/watchdog/watchdog0/bootstatus
-> 32
-> 
-> For backward compatibility, keep the EXPIRED_STATUS bit check. Add a new
-> function qcom_wdt_get_bootstatus() to read the restart reason from
-> IMEM.
-> 
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> Signed-off-by: Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>
-> ---
-> Changes in v8:
-> 	- Picked up the R-b tag
-> 	- Updated the comment as suggested by Konrad
-> Changes in v7:
-> 	- no changes
-> Changes in v6:
-> 	- Reworked to get the restart reason code from SRAM region
-> 
-> Changes in v5:
-> 	- Use dev_err_probe instead of dev_err
-> 
-> Changes in v4:
-> 	- Kept only WDIOF_CARDRESET and dropped other codes
-> 	- Renamed qcom_wdt_get_reason_reason() to
-> 	  qcom_wdt_get_bootstatus()
-> 	- Moved the existing check inside qcom_wdt_get_bootstatus()
-> 	- Dropped the device data and put all the details in the DT node
-> 
-> Changes in v3:
-> 	- Split the introduction of device data into separate patch
-> 	- s/bootloaders/XBL - for clarity of which bootloader is
-> 	  involved
-> 	- Mention the sysfs path on to extract this information
-> 	- s/compatible/imem_compatible in the device data structure to
-> 	  avoid the confusion / better naming
-> 
-> Changes in v2:
-> 	- Use the syscon API to access the IMEM region
-> 	- Handle the error cases returned by qcom_wdt_get_restart_reason
-> 	- Define device specific data to retrieve the IMEM compatible,
-> 	  offset and the value for non secure WDT, which allows to
-> 	  extend the support for other SoCs
-> ---
->   drivers/watchdog/qcom-wdt.c | 42 ++++++++++++++++++++++++++++++++++++++++--
->   1 file changed, 40 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/watchdog/qcom-wdt.c b/drivers/watchdog/qcom-wdt.c
-> index dfaac5995c84c1f377023e6e62770c5548528a4c..bbf229a7b5840714b9429f4b092ec3f7a6a26961 100644
-> --- a/drivers/watchdog/qcom-wdt.c
-> +++ b/drivers/watchdog/qcom-wdt.c
-> @@ -9,6 +9,7 @@
->   #include <linux/kernel.h>
->   #include <linux/module.h>
->   #include <linux/of.h>
-> +#include <linux/of_address.h>
->   #include <linux/platform_device.h>
->   #include <linux/watchdog.h>
->   
-> @@ -42,6 +43,7 @@ struct qcom_wdt_match_data {
->   	const u32 *offset;
->   	bool pretimeout;
->   	u32 max_tick_count;
-> +	u32 wdt_reason_val;
->   };
->   
->   struct qcom_wdt {
-> @@ -185,6 +187,7 @@ static const struct qcom_wdt_match_data match_data_ipq5424 = {
->   	.offset = reg_offset_data_kpss,
->   	.pretimeout = true,
->   	.max_tick_count = 0xFFFFFU,
-> +	.wdt_reason_val = 5,
->   };
->   
->   static const struct qcom_wdt_match_data match_data_kpss = {
-> @@ -193,6 +196,40 @@ static const struct qcom_wdt_match_data match_data_kpss = {
->   	.max_tick_count = 0xFFFFFU,
->   };
->   
-> +static int qcom_wdt_get_bootstatus(struct device *dev, struct qcom_wdt *wdt,
-> +				   u32 val)
-> +{
-> +	struct device_node *imem;
-> +	struct resource res;
-> +	void __iomem *addr;
-> +	int ret;
-> +
-> +	imem = of_parse_phandle(dev->of_node, "sram", 0);
-> +	if (!imem) {
-> +		/* Read the EXPIRED_STATUS bit as a fallback */
-> +		if (readl(wdt_addr(wdt, WDT_STS)) & 1)
-> +			wdt->wdd.bootstatus = WDIOF_CARDRESET;
-> +
-> +		return 0;
-> +	}
-> +
-> +	ret = of_address_to_resource(imem, 0, &res);
-> +	of_node_put(imem);
-> +	if (ret)
-> +		return ret;
-> +
-> +	addr = ioremap(res.start, resource_size(&res));
-> +	if (!addr)
-> +		return -ENOMEM;
-> +
-> +	if (readl(addr) == val)
-> +		wdt->wdd.bootstatus = WDIOF_CARDRESET;
-> +
-> +	iounmap(addr);
-> +
-> +	return 0;
-> +}
-> +
->   static int qcom_wdt_probe(struct platform_device *pdev)
->   {
->   	struct device *dev = &pdev->dev;
-> @@ -273,8 +310,9 @@ static int qcom_wdt_probe(struct platform_device *pdev)
->   	wdt->wdd.parent = dev;
->   	wdt->layout = data->offset;
->   
-> -	if (readl(wdt_addr(wdt, WDT_STS)) & 1)
-> -		wdt->wdd.bootstatus = WDIOF_CARDRESET;
-> +	ret = qcom_wdt_get_bootstatus(dev, wdt, data->wdt_reason_val);
-> +	if (ret)
-> +		return ret;
->   
 
-Why is reporting the boot status so important that the failure to read it
-results in refusing to instantiate the driver ? That warrants a detailed
-explanation, even more so since it is not backward compatible.
+That is inappropriate as a bug fix. Ther bug fix should come first,
+in a form that can be backported, followed by an optional cleanup.
 
 Guenter
 
->   	/*
->   	 * If 'timeout-sec' unspecified in devicetree, assume a 30 second
+> Andrei Simion (2):
+>    watchdog: at91sam9_wdt.h: Cleanup the header file
+>    watchdog: sama5d4_wdt: Refactor the driver
+> 
+> Balakrishnan Sambath (1):
+>    watchdog: at91sam9_wdt: Rename AT91_WDT_WDDIS to AT91_WDT_WDDIS_LEGACY
+> 
+>   drivers/watchdog/at91sam9_wdt.c |   8 +-
+>   drivers/watchdog/at91sam9_wdt.h |  65 +++++++------
+>   drivers/watchdog/sama5d4_wdt.c  | 156 ++++++++++++++++----------------
+>   3 files changed, 113 insertions(+), 116 deletions(-)
 > 
 
 
