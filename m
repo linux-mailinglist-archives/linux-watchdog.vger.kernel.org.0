@@ -1,53 +1,53 @@
-Return-Path: <linux-watchdog+bounces-5009-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-5011-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ILtmJyg/ommq1AQAu9opvQ
-	(envelope-from <linux-watchdog+bounces-5009-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
-	for <lists+linux-watchdog@lfdr.de>; Sat, 28 Feb 2026 02:04:40 +0100
+	id SCwMNC8/ommq1AQAu9opvQ
+	(envelope-from <linux-watchdog+bounces-5011-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
+	for <lists+linux-watchdog@lfdr.de>; Sat, 28 Feb 2026 02:04:47 +0100
 X-Original-To: lists+linux-watchdog@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E3C41BF987
-	for <lists+linux-watchdog@lfdr.de>; Sat, 28 Feb 2026 02:04:40 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 638D01BF996
+	for <lists+linux-watchdog@lfdr.de>; Sat, 28 Feb 2026 02:04:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DC737305309E
-	for <lists+linux-watchdog@lfdr.de>; Sat, 28 Feb 2026 01:04:26 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 53287306680A
+	for <lists+linux-watchdog@lfdr.de>; Sat, 28 Feb 2026 01:04:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15A1E2DB79E;
-	Sat, 28 Feb 2026 01:04:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3504A2E5B19;
+	Sat, 28 Feb 2026 01:04:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="MC49xDum"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="R38aaFnB"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FE932D839B;
-	Sat, 28 Feb 2026 01:04:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5E3B2D73A6;
+	Sat, 28 Feb 2026 01:04:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772240649; cv=none; b=cnk0csbpdODQUUXb/TLKfCeoOfGnR6V+ctJdr8Ra2Yt8UGR2kA7nz2Uv8yA3gxckmufdRelS23dAW5IfHTs9L1v8WY4PSPzwQt0YGvY1lLI4CKu+1nHL9VurngDyj6J/hijM934Tcht+CWeHFOh25CcImSFl75kPYzPXqaC0DOg=
+	t=1772240651; cv=none; b=Q0Zp7xLN2Hq+FUTqRzsVjvbogrfPk+oQdkQP/e+wpeYCPeIfVOxxDAQhjI0Z0pQS7ERzcDMfR+Kt7DhX40zDV+qOlcDZyaaksLYb/DXj9dO8jN/VP2sQL6qBbHGsDSDprK6/neVlOu5w+ewtKFVble9LA7tf36fwtQU87yUvtr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772240649; c=relaxed/simple;
-	bh=rY4IlC/9+j7O1q//Be/27tic1bY/AHdhYFEJ2X/S5UI=;
+	s=arc-20240116; t=1772240651; c=relaxed/simple;
+	bh=tVLggoFebkAfNnxYS6zfQPUr+0g4pFS4bcnkv/JVsn4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CYTYxHW+j/2yovBVm+fT2QJAfBPRYtHZ797Kc4BBNm/79onwUtj/POPEaol2XE2TztFG4xMebVRsoeMyNHtA3dUz8lzgt7P2uAcUJtsTWHINLFgW7r7xgbypPipFNH23M/T9u/myzydA7vIdcyyPhmccqQGU3BcobwUqELYGre4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=MC49xDum; arc=none smtp.client-ip=198.137.202.133
+	 MIME-Version; b=gcRfMC4h50JDP9w6u5LaUAomfa91I6S+wkQZ+sqEdXSflhybQjYhC9A4A3nrBPn8s5WfaNhREGzBn4gN7RbHyAHoWfwYkxiaRcidmxMedp2BUd/nva2szI8k5t+2I9RP39MUlIMr8yJwnhqq1VDFv8Q8njB7Iil+m5HXiK2umAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=R38aaFnB; arc=none smtp.client-ip=198.137.202.133
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender
 	:Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=Ncg1Cg97cuYjXJjxmO2TWQjS13k8RVZHQbLYYSs/J+4=; b=MC49xDumiGwUs5ozIxAvQqHW9e
-	GzEnUa/w/LRwF2LVPvzF+KLStY3sCztMiNFAZxjMAV0IeUJ8JyibpNWfFe5OfoEwkWG+9f4sG7SLL
-	v10Q/LU2gzTyxbddBN8Y0mHjoIRcvoCT9cuDKHBJFPL+eqEA4ABh+vjQ4ZtMYM9EkwTd8Ibvjj3Wg
-	JIY/FhxwklxjsWN3eHnEZVZGZ9wmCNIqmE5JOte3q8ZYT+E5L4ACnkTbVnrzxUNTlrc6Jl/Vwc9E+
-	l4km+Ma71I5pxOV/8dXNkW8dVWWrCckeuG9R1fuJpLKzxtukxkk1JuZhmhwvZW5kldbKhbU6qIv58
-	wxxxLopA==;
+	bh=Zjq6BXTlTfUUfVB5XqyRQcickx/QeCRPF4dFlky672A=; b=R38aaFnB9f7PbJgiEqWP7vi4DV
+	BPfgAlanrCBvWLs18XiSHN8Sne11WYBBkGy6aYdXoCR9Py3Cd+lu6Y2G65qkE57v3JZMi+80NRvTh
+	NHcR+FmhPZ9ojhsOSeHDdOCJ95CQwlMJTj+o0i2RUHk60JAYcfSlnMAnX/AJZtJ+v4TKTYAB6eg7t
+	cAqTFfUvUEzFRUih4ZrvPiqZNBN/6E82hSDQ0uaG/Rrf6He6n31NES3RmnA8Ssb3FLEHyVF/ru5Do
+	n+tsU+NW7820ZFT3JEwhiNTSQSDOxrM0H2Yar96bxZgUmzLmTxHJ/rUuMHM3YZ//nq17ponvDigq5
+	Ig8Wd5ww==;
 Received: from [50.53.43.113] (helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vw8kX-00000009Mfc-2BMW;
-	Sat, 28 Feb 2026 01:04:05 +0000
+	id 1vw8kX-00000009Mfc-48TV;
+	Sat, 28 Feb 2026 01:04:06 +0000
 From: Randy Dunlap <rdunlap@infradead.org>
 To: linux-kernel@vger.kernel.org
 Cc: Randy Dunlap <rdunlap@infradead.org>,
@@ -57,9 +57,9 @@ Cc: Randy Dunlap <rdunlap@infradead.org>,
 	Guenter Roeck <linux@roeck-us.net>,
 	linux-watchdog@vger.kernel.org,
 	linux-doc@vger.kernel.org
-Subject: [PATCH 3/5] docs: watchdog-api: general cleaning
-Date: Fri, 27 Feb 2026 17:04:00 -0800
-Message-ID: <20260228010402.2389343-4-rdunlap@infradead.org>
+Subject: [PATCH 4/5] docs: watchdog-kernel-api: general cleanups
+Date: Fri, 27 Feb 2026 17:04:01 -0800
+Message-ID: <20260228010402.2389343-5-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260228010402.2389343-1-rdunlap@infradead.org>
 References: <20260228010402.2389343-1-rdunlap@infradead.org>
@@ -76,7 +76,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[infradead.org,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	R_DKIM_ALLOW(-0.20)[infradead.org:s=bombadil.20210309];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
@@ -84,10 +84,10 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-5009-lists,linux-watchdog=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-5011-lists,linux-watchdog=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	DKIM_TRACE(0.00)[infradead.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[rdunlap@infradead.org,linux-watchdog@vger.kernel.org];
@@ -97,12 +97,13 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	RCPT_COUNT_SEVEN(0.00)[8];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	FROM_HAS_DN(0.00)[]
-X-Rspamd-Queue-Id: 3E3C41BF987
+X-Rspamd-Queue-Id: 638D01BF996
 X-Rspamd-Action: no action
 
-Correct some grammar, punctuation, and capitalization mistakes.
-
-Drop extra words in printf() calls [likely a copy-paste error].
+Fix grammar and punctuation.
+Add a missing struct member (pm_nb) and its description.
+Add a subheading for Helper Functions between the struct descriptions
+and just pure helper functions.
 
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
 ---
@@ -113,156 +114,91 @@ Cc: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-watchdog@vger.kernel.org
 Cc: linux-doc@vger.kernel.org
 
- Documentation/watchdog/watchdog-api.rst |   38 +++++++++++-----------
- 1 file changed, 20 insertions(+), 18 deletions(-)
+ Documentation/watchdog/watchdog-kernel-api.rst |   20 +++++++++------
+ 1 file changed, 13 insertions(+), 7 deletions(-)
 
---- linux-next-20260226.orig/Documentation/watchdog/watchdog-api.rst
-+++ linux-next-20260226/Documentation/watchdog/watchdog-api.rst
-@@ -39,12 +39,12 @@ The simplest API
+--- linux-next-20260226.orig/Documentation/watchdog/watchdog-kernel-api.rst
++++ linux-next-20260226/Documentation/watchdog/watchdog-kernel-api.rst
+@@ -38,8 +38,8 @@ The watchdog_unregister_device routine d
+ device. The parameter of this routine is the pointer to the registered
+ watchdog_device structure.
  
- All drivers support the basic mode of operation, where the watchdog
- activates as soon as /dev/watchdog is opened and will reboot unless
--the watchdog is pinged within a certain time, this time is called the
-+the watchdog is pinged within a certain time; this time is called the
- timeout or margin.  The simplest way to ping the watchdog is to write
- some data to the device.  So a very simple watchdog daemon would look
- like this source file:  see samples/watchdog/watchdog-simple.c
+-The watchdog subsystem includes an registration deferral mechanism,
+-which allows you to register an watchdog as early as you wish during
++The watchdog subsystem includes a registration deferral mechanism,
++which allows you to register a watchdog as early as you wish during
+ the boot process.
  
--A more advanced driver could for example check that a HTTP server is
-+A more advanced driver could for example check that an HTTP server is
- still responding before doing the write call to ping the watchdog.
+ The watchdog device structure looks like this::
+@@ -60,13 +60,14 @@ The watchdog device structure looks like
+ 	unsigned int max_hw_heartbeat_ms;
+ 	struct notifier_block reboot_nb;
+ 	struct notifier_block restart_nb;
++	struct notifier_block pm_nb;
+ 	void *driver_data;
+ 	struct watchdog_core_data *wd_data;
+ 	unsigned long status;
+ 	struct list_head deferred;
+   };
  
- When the device is closed, the watchdog is disabled, unless the "Magic
-@@ -87,13 +87,13 @@ replaced with::
- 		sleep(10);
- 	}
+-It contains following fields:
++It contains the following fields:
  
--the argument to the ioctl is ignored.
-+The argument to the ioctl is ignored.
+ * id: set by watchdog_register_device, id 0 is special. It has both a
+   /dev/watchdog0 cdev (dynamic major, minor 0) as well as the old
+@@ -105,6 +106,8 @@ It contains following fields:
+   internal use only. If a watchdog is capable of restarting the machine, it
+   should define ops->restart. Priority can be changed through
+   watchdog_set_restart_priority.
++* pm_nb: coordinates watchdog_dev_suspend/resume to cancel a ping worker
++  during suspend and restore it during resume.
+ * bootstatus: status of the device after booting (reported with watchdog
+   WDIOF_* status bits).
+ * driver_data: a pointer to the drivers private data of a watchdog device.
+@@ -204,7 +207,7 @@ they are supported. These optional routi
+   If the watchdog driver does not have to perform any action but setting the
+   watchdog_device.timeout, this callback can be omitted.
  
- Setting and getting the timeout
- ===============================
+-  If set_timeout is not provided but, WDIOF_SETTIMEOUT is set, the watchdog
++  If set_timeout is not provided but WDIOF_SETTIMEOUT is set, the watchdog
+   infrastructure updates the timeout value of the watchdog_device internally
+   to the requested value.
  
- For some drivers it is possible to modify the watchdog timeout on the
--fly with the SETTIMEOUT ioctl, those drivers have the WDIOF_SETTIMEOUT
-+fly with the SETTIMEOUT ioctl; those drivers have the WDIOF_SETTIMEOUT
- flag set in their option field.  The argument is an integer
- representing the timeout in seconds.  The driver returns the real
- timeout used in the same variable, and this timeout might differ from
-@@ -110,7 +110,7 @@ Starting with the Linux 2.4.18 kernel, i
- current timeout using the GETTIMEOUT ioctl::
+@@ -220,7 +223,7 @@ they are supported. These optional routi
+   the watchdog". A value of 0 disables pretimeout notification.
  
-     ioctl(fd, WDIOC_GETTIMEOUT, &timeout);
--    printf("The timeout was is %d seconds\n", timeout);
-+    printf("The timeout is %d seconds\n", timeout);
+   (Note: the WDIOF_PRETIMEOUT needs to be set in the options field of the
+-  watchdog's info structure).
++  watchdog's info structure.)
  
- Pretimeouts
- ===========
-@@ -133,7 +133,7 @@ seconds.  Setting a pretimeout to zero d
- There is also a get function for getting the pretimeout::
+   If the watchdog driver does not have to perform any action but setting the
+   watchdog_device.pretimeout, this callback can be omitted. That means if
+@@ -239,7 +242,7 @@ they are supported. These optional routi
+ The status bits should (preferably) be set with the set_bit and clear_bit alike
+ bit-operations. The status bits that are defined are:
  
-     ioctl(fd, WDIOC_GETPRETIMEOUT, &timeout);
--    printf("The pretimeout was is %d seconds\n", timeout);
-+    printf("The pretimeout is %d seconds\n", timeout);
+-* WDOG_ACTIVE: this status bit indicates whether or not a watchdog timer device
++* WDOG_ACTIVE: this status bit indicates whether a watchdog timer device
+   is active or not from user perspective. User space is expected to send
+   heartbeat requests to the driver while this flag is set.
+ * WDOG_NO_WAY_OUT: this bit stores the nowayout setting for the watchdog.
+@@ -254,6 +257,9 @@ bit-operations. The status bits that are
+   then opening /dev/watchdog will skip the start operation but send a keepalive
+   request instead.
  
- Not all watchdog drivers will support a pretimeout.
- 
-@@ -145,13 +145,13 @@ before the system will reboot. The WDIOC
- that returns the number of seconds before reboot::
- 
-     ioctl(fd, WDIOC_GETTIMELEFT, &timeleft);
--    printf("The timeout was is %d seconds\n", timeleft);
-+    printf("The timeout is %d seconds\n", timeleft);
- 
- Environmental monitoring
- ========================
- 
--All watchdog drivers are required return more information about the system,
--some do temperature, fan and power level monitoring, some can tell you
-+All watchdog drivers are required to return more information about the system.
-+Some do temperature, fan and power level monitoring; some can tell you
- the reason for the last reboot of the system.  The GETSUPPORT ioctl is
- available to ask what the device can do::
- 
-@@ -166,7 +166,7 @@ the fields returned in the ident struct
- 	options			a flags describing what the device supports
- 	================	=============================================
- 
--the options field can have the following bits set, and describes what
-+The options field can have the following bits set, and describes what
- kind of information that the GET_STATUS and GET_BOOT_STATUS ioctls can
- return.
- 
-@@ -175,13 +175,13 @@ return.
- 	================	=========================
- 
- The machine was last rebooted by the watchdog because the thermal limit was
--exceeded:
-+exceeded.
- 
- 	==============		==========
- 	WDIOF_FANFAULT		Fan failed
- 	==============		==========
- 
--A system fan monitored by the watchdog card has failed
-+A system fan monitored by the watchdog card has failed.
- 
- 	=============		================
- 	WDIOF_EXTERN1		External relay 1
-@@ -195,26 +195,26 @@ a reset.
- 	WDIOF_EXTERN2		External relay 2
- 	=============		================
- 
--External monitoring relay/source 2 was triggered
-+External monitoring relay/source 2 was triggered.
- 
- 	================	=====================
- 	WDIOF_POWERUNDER	Power bad/power fault
- 	================	=====================
- 
--The machine is showing an undervoltage status
-+The machine is showing an undervoltage status.
- 
- 	===============		=============================
- 	WDIOF_CARDRESET		Card previously reset the CPU
- 	===============		=============================
- 
--The last reboot was caused by the watchdog card
-+The last reboot was caused by the watchdog card.
- 
- 	================	=====================
- 	WDIOF_POWEROVER		Power over voltage
- 	================	=====================
- 
- The machine is showing an overvoltage status. Note that if one level is
--under and one over both bits will be set - this may seem odd but makes
-+under and one over, both bits will be set - this may seem odd but makes
- sense.
- 
- 	===================	=====================
-@@ -227,12 +227,14 @@ The watchdog saw a keepalive ping since
- 	WDIOF_SETTIMEOUT	Can set/get the timeout
- 	================	=======================
- 
--The watchdog can do pretimeouts.
-+The watchdog can get/set the timeout.
- 
- 	================	================================
- 	WDIOF_PRETIMEOUT	Pretimeout (in seconds), get/set
- 	================	================================
- 
-+The watchdog can do pretimeouts.
++Helper Functions
++~~~~~~~~~~~~~~~~
 +
+   To set the WDOG_NO_WAY_OUT status bit (before registering your watchdog
+   timer device) you can either:
  
- For those drivers that return any bits set in the option field, the
- GETSTATUS and GETBOOTSTATUS ioctls can be used to ask for the current
-@@ -255,7 +257,7 @@ returned value is the temperature in deg
-     ioctl(fd, WDIOC_GETTEMP, &temperature);
+@@ -331,7 +337,7 @@ To raise a pretimeout notification, the
+   void watchdog_notify_pretimeout(struct watchdog_device *wdd)
  
- Finally the SETOPTIONS ioctl can be used to control some aspects of
--the cards operation::
-+the card's operation::
- 
-     int options = 0;
-     ioctl(fd, WDIOC_SETOPTIONS, &options);
+ The function can be called in the interrupt context. If watchdog pretimeout
+-governor framework (kbuild CONFIG_WATCHDOG_PRETIMEOUT_GOV symbol) is enabled,
++governor framework (kconfig CONFIG_WATCHDOG_PRETIMEOUT_GOV symbol) is enabled,
+ an action is taken by a preconfigured pretimeout governor preassigned to
+ the watchdog device. If watchdog pretimeout governor framework is not
+ enabled, watchdog_notify_pretimeout() prints a notification message to
 
