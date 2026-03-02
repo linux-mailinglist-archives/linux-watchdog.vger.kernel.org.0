@@ -1,153 +1,250 @@
-Return-Path: <linux-watchdog+bounces-5041-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-5042-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oPHgBYyopWngCwAAu9opvQ
-	(envelope-from <linux-watchdog+bounces-5041-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
-	for <lists+linux-watchdog@lfdr.de>; Mon, 02 Mar 2026 16:11:08 +0100
+	id WAXUAHzSpWk0HAAAu9opvQ
+	(envelope-from <linux-watchdog+bounces-5042-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
+	for <lists+linux-watchdog@lfdr.de>; Mon, 02 Mar 2026 19:10:04 +0100
 X-Original-To: lists+linux-watchdog@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DDF91DB846
-	for <lists+linux-watchdog@lfdr.de>; Mon, 02 Mar 2026 16:11:07 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71F341DE476
+	for <lists+linux-watchdog@lfdr.de>; Mon, 02 Mar 2026 19:10:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0EA8E305DAA0
-	for <lists+linux-watchdog@lfdr.de>; Mon,  2 Mar 2026 15:04:50 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 71395303B978
+	for <lists+linux-watchdog@lfdr.de>; Mon,  2 Mar 2026 18:09:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D13F3446B0;
-	Mon,  2 Mar 2026 15:04:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B4C831716B;
+	Mon,  2 Mar 2026 18:09:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WruRTr3d"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="XiC2oH6t"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011030.outbound.protection.outlook.com [52.101.62.30])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 192362AD03
-	for <linux-watchdog@vger.kernel.org>; Mon,  2 Mar 2026 15:04:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.179
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772463889; cv=none; b=ORX8akKN2rCmHunfc5/mZLtQQhOi31O8rvhvSEPAFOglctuYjLon4WtCDFerBbEultTG7oe6Um5WQffCss3Om1HrNlfd/9Y6rqJmQ1lnvKohpvJ9txkgujNcX9Qq3JN3x0JYsUFzQKWJ1bept5JQ9jvDe54w3GodKNk0l7VYYk4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772463889; c=relaxed/simple;
-	bh=Z3QuW44a1cqmJAISoawP8xM8uOw+Gue0DhunUahM9Dk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gKccWpKsvFpuFthJkZo05lckZWVIQ1dFIF597Gnmd9r+oRCRhgdLSizIEOJ+Z/8ZQa9hNyFp9QKBZwUAFKuoc23Os7+6ES5dr7X40LKa/n6A5jT7O2CULlH0B9Zglqu6LNeBOK/96csPjp/8e/mlGYBM8/Z8p0G6HS4CP0fsk4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WruRTr3d; arc=none smtp.client-ip=74.125.82.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-2be06c02f66so2976475eec.1
-        for <linux-watchdog@vger.kernel.org>; Mon, 02 Mar 2026 07:04:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772463887; x=1773068687; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PJQJNNM+4DO9CQxRQrJTKsiJbgSUIZ685yVxcgsm7ic=;
-        b=WruRTr3d7U8Z2pIdAmkls+egdPYBPfFo5wW3NFFWeXLLB0Im7vVRDV2PrNuz/yhSDR
-         gKnnwBCz5L2+ssq4RtN7eGYiar4EGGRUt9E53m/NBS7Nlxfs6VI7Lh96+7vbTiEqoqJa
-         TVFQjVM+SQAvjg4Ch01zaCmsaYptDT+dwtberO2qqmx5tReiPHRSnRfBzfCMccQ0Jqix
-         +ofOK2wGc+yCydQycFKQUAK/xrxibd1Mp4ZA24mVUaV7+eUC6JgZzXOTJKLNCbClgK/W
-         vC7YJna+FfI39W3pq+j+wDP1REc9Dkuv970+3OTsu8zYjLYcmoYX1aFWQ/h4f2sqhvzI
-         939Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772463887; x=1773068687;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=PJQJNNM+4DO9CQxRQrJTKsiJbgSUIZ685yVxcgsm7ic=;
-        b=HnwpG5AF3ty1/mL00xpDvGmAA1NXCHErQrx8pMeI1jT/99Z6ys/jWQrcMV59bmI/xt
-         A+GnAunEriPeDY4Y1KYZ7CtpJrxKQfHT5MfvgjU8K1gPA+kUItmXIoFI06k0hU281v4u
-         jcyM/KITep7h/fHVDFSfL+9PdzvQy2kOLbBR6akhendQyGolPWXsv0Kw/Ez3PDV4ZmT/
-         0TexfDmrWSMg7wpQV6H8P9owJDtigRfLTp/VhZtc3vUDHXx3u8YyYxEIKxwREWyd2J+C
-         VmZJKwNwj9SGiFMS57e2w6Uz+Chl5B8lReXOw66a9Sb1w/vyIlF6MTm1J0eoRhp1TQwM
-         qkgg==
-X-Forwarded-Encrypted: i=1; AJvYcCWaLy3I6OIKKIC1jcxsS3rSrAdWOJ30p5nO0t5V3QZeZrVrcN+0lTnGfyuQj4maAPUjyEL4K/gvdk+50krgiw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWJIm7Hi3jXcvNutpKiSVpZWbTdUVm3fOj+jAS6Sef30waCWsM
-	MjcsrQZpK+HLdh6gft8Bjfsm55bAEt0XVOjwD5mVNX0GX4Yht8vYd15N
-X-Gm-Gg: ATEYQzxZk/nt8eNMwSQj4xms6Wg7SA13rQEaxf1ZL1KOblWzzI0zHW66CSUfz9RJlc4
-	gM7hqlwHrTGzfcljSiK0x2a6AEGHnSbvBKkimdH4KovXpFB+QncPNgKt+Lv5QU+OAX8FC99OHHE
-	50jVfqmIvhKWxDU4BlfMSar+Nj6h1zPRNYmLXgfznhDgakH2L4x8DQRijRd45uUjh05nkYp6kXw
-	zkLgMe1JojBfFdc06SrGj9cDT72W3JGSJmQbbi3TdJp977spZqYeXDRKi2XJOkcpjvSue95NNKv
-	0v+ZEplk+dctpThOl+ya4X59goW3QQ3dgEgo9DTTeNFmnrdt02h1GNS9c9xTEJQeFYw+lNyA0Hz
-	gf/EMMnET0h8mhmmW58BeRczFh3ELyaQSu5AC9aZBUCZpZi6ZdRVH0dztKzJwsuVCYjan3RYnTC
-	US/+p4ci0FBA6Jdz+EXqPxwtYSywT425rgmday
-X-Received: by 2002:a05:7300:f194:b0:2be:142f:d48a with SMTP id 5a478bee46e88-2be142fd895mr1194048eec.27.1772463886899;
-        Mon, 02 Mar 2026 07:04:46 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2bdd1f23c01sm10987949eec.16.2026.03.02.07.04.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Mar 2026 07:04:46 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 2 Mar 2026 07:04:45 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Michael Walle <mwalle@kernel.org>
-Cc: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-	Tero Kristo <kristo@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Srinivas Kandagatla <srini@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-doc@vger.kernel.org,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH v2 7/7] dt-bindings: hwmon: sl28cpld: Drop sa67mcu
- compatible
-Message-ID: <917915df-3a4a-4cc0-b41f-106b5933db20@roeck-us.net>
-References: <20260302122540.1377444-1-mwalle@kernel.org>
- <20260302122540.1377444-8-mwalle@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8010B3126D7;
+	Mon,  2 Mar 2026 18:08:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.30
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772474941; cv=fail; b=djvBp21aySx+1b2KI0k/EjLBOKnZd6pPrIIzcttpwuRRaHwuMLY1LtnOX08yeMHUE+UpTxh6cPM0VFLFwzqsoEVxyGFw/hKJGK7L/hdB3Vz7nTIi5p4FuFQyivWWAb2ZZs7+XDeUwU3lYxI1Yj/H4YKDColjv8r3YiWo/AnMiqc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772474941; c=relaxed/simple;
+	bh=ugKFih3C2o7pYcjYY7yy48bvMTs5ys8pwex8NHOuN5g=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ew084aGRpaCjSQ3viGyYN5OfyKn5oDk1FrgHmB/52WTVGqSimTxqMq3ltVdTHdGLEvDL0iub48hnK5fLpoLhLRSo7zm6rHwL/0/dnHZQ6IAtzvv6s0UJm8iWDz51J+QwQFUhHWNzEnNzLb6jEUYcpCcBZeSu/05x6fbAnpQbrhw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=XiC2oH6t; arc=fail smtp.client-ip=52.101.62.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=rkLfG+HdQIokC3Wdnx2iQ7iUoSX3ilpx8LcHqJ+Fz8L8YqFr5cBr/VyRzY0iR3yHmhqN6YWlEhRJy0ngglcDp/23aVqKHyzIqdB7MZZgjXbrEhbvOBUf6qPD8pUouK1+RJ8YkbmwXqHqo4x5NUibWr6VWRmfulJmnu1ZQ+haUsK/a0uBk3H1EawiJZpOIQiw5/1IM/nCb26LCjwujEbueSsjMG0ck/rqPpjlZJgqQfJ0u6nhxTd4fAtiXN/YJ8G4gF4VyfuX33RV2QB0cIVYynSx0ddxCYO2M9ad9B0XHRlzI7g7H74EutNqyBpdh5Qqp2Fr+NWt8uDpOdeCCLv1/A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iVnT2YQYu3lgfxyCcAmKNLTFJvqdFe6+LJ4vDHPhHVc=;
+ b=ufXzoa7Y2BgLOelXLIVvA5kTjop5QQ9vUyQAtz5Hyo56Urmeq684//BVJRKfIaH9kLSX4yY8j2/xFe8pZkBeqpEvGT02sONpFwep/yN1zBKBpShO0DJqNqi+t5argYRK1xXe8TIzXuuiLz0HD40aC6y8u8qzuvEkjUNLT9IDhqe++RXuBXnHb47CvHrZFsu6iaUXvqkZBveMdmVuTjy4/9Hvz0ieiyW92zdaDDsmkacb1IChj4K164MtI6AeKgQuBdsAKo67kJWmBPSvHM4/qctjQS3GLCTjzOCxUFODcseluLecnTaVG/XqdhiqvZ6fODUbqdPphuAd7qal3Z8j5Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 198.47.23.195) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=ti.com;
+ dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=ti.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iVnT2YQYu3lgfxyCcAmKNLTFJvqdFe6+LJ4vDHPhHVc=;
+ b=XiC2oH6t9pFcd2SBx4R4GbQ041a23BJzBkQvzfJYryCvzuE0f07sB7zmUwxWtss64/E0i5Xs/SBxDvQoQhsTxAeWzftzqYE9piKqrV3+vGCTbkFiKHCN0g5r0HS1ut961N4fglKhe7hJlJokXaQwjqCplfuPiC0z89TBcA1cus4=
+Received: from BY5PR13CA0031.namprd13.prod.outlook.com (2603:10b6:a03:180::44)
+ by SA1PR10MB5885.namprd10.prod.outlook.com (2603:10b6:806:234::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.20; Mon, 2 Mar
+ 2026 18:08:57 +0000
+Received: from SJ5PEPF000001C8.namprd05.prod.outlook.com
+ (2603:10b6:a03:180:cafe::a0) by BY5PR13CA0031.outlook.office365.com
+ (2603:10b6:a03:180::44) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9654.19 via Frontend Transport; Mon,
+ 2 Mar 2026 18:08:55 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.23.195)
+ smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
+ action=none header.from=ti.com;
+Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
+ 198.47.23.195 as permitted sender) receiver=protection.outlook.com;
+ client-ip=198.47.23.195; helo=lewvzet201.ext.ti.com; pr=C
+Received: from lewvzet201.ext.ti.com (198.47.23.195) by
+ SJ5PEPF000001C8.mail.protection.outlook.com (10.167.242.36) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9654.16 via Frontend Transport; Mon, 2 Mar 2026 18:08:56 +0000
+Received: from DLEE208.ent.ti.com (157.170.170.97) by lewvzet201.ext.ti.com
+ (10.4.14.104) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 2 Mar
+ 2026 12:08:56 -0600
+Received: from DLEE200.ent.ti.com (157.170.170.75) by DLEE208.ent.ti.com
+ (157.170.170.97) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 2 Mar
+ 2026 12:08:55 -0600
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DLEE200.ent.ti.com
+ (157.170.170.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
+ Transport; Mon, 2 Mar 2026 12:08:55 -0600
+Received: from lelvem-mr06.itg.ti.com ([10.249.42.149])
+	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 622I8tvk729521;
+	Mon, 2 Mar 2026 12:08:55 -0600
+From: Andrew Davis <afd@ti.com>
+To: Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
+	<linux@roeck-us.net>, Florian Fainelli <florian.fainelli@broadcom.com>, "Ray
+ Jui" <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>
+CC: <linux-watchdog@vger.kernel.org>, <linux-rpi-kernel@lists.infradead.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	Andrew Davis <afd@ti.com>
+Subject: [PATCH] watchdog: bcm2835_wdt: Switch to new sys-off handler API
+Date: Mon, 2 Mar 2026 12:08:53 -0600
+Message-ID: <20260302180853.224112-1-afd@ti.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260302122540.1377444-8-mwalle@kernel.org>
-X-Rspamd-Queue-Id: 8DDF91DB846
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ5PEPF000001C8:EE_|SA1PR10MB5885:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1e9743c6-0a65-43f0-4733-08de7886c582
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|1800799024|376014|34020700016|36860700013;
+X-Microsoft-Antispam-Message-Info:
+	r/Tg9Ve2jTXWrJQeqN8+G0dvk7Fbdb6QTSTGW8RA5Y6TlIWFtTad9RZbFA5141A90DJGYbdwLFaSpmWUXqqfrpT1R2BUW1IKz+zE9jtfeEzHSZe/POdoN9UW+AAczRhvCwBYt3/ct/jxO0T+1f1l1bdWWX0c8kUorFZuT3W5bEPG+7nM0zBKCf6CZO2Dcxa9wwrIOapb6+5zm2tLCLwOfKMuqx3m0q9ySlQ4uWYKORYLh+gGqF250GrjAnlgybdBWO3FDty0fmEcCKzdkeO11JwdUyxd2FNuzOdUnV/ZQIZnC2Tr1HOA1Sz/VSHQCpt9wEdQjd1ki5irko5AHafN11Mx0HJ02ihEPAm7ApLxLEkFELQUcU+PrWha2YNhYrMvX2He3jpWShjIGTvw+chJ+mYKl07Zfa4VTxRJAVm3ldGpB/rXw4XyJPS1qDKiXf5WJn0aHojPsEwVMXsuLfboZoUO3VcuxuZoW8CHxEurkOuMxlYrlPNNZhiJiinayXU9sTcEEDnZZY1dHC7XRgtCkEnnt9ur3Us0gEixdKoa6I34+kJftaFsrql2AxIcGNPJc9HaJlpqaxc3dpxW5be9a3JpxR+YfkoauNY9DgpsblBJ20RpETBx5Pr0bAJbDzgctctCCDgQqS4SIN0OlkX2H4hK5putsBI6nWvgCfwd5d1kdv42l4PYDUyZPcVPZxI3IZtJN2ulcWarH0AIxETb29uVt2xOXD21rEwCrDFh8hdrYELFuKocwMkmCDW/I3DceVN5TpWW0xZWTewAibALLf//m1o8bFbAxI/VjFwHgNDuQmhhLEqORvwBzS70LA1a1le8gDiPdjOYoD6MJDYeHg==
+X-Forefront-Antispam-Report:
+	CIP:198.47.23.195;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:lewvzet201.ext.ti.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(376014)(34020700016)(36860700013);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	94zPDnfwRqqIHp+IhmuBeM4GCYjExOi8SPkfjjKvy2bmVJFUi9MFhiMIxQDbVimfhkRn5m1FR52Z7Y9BDx+T5yNrcmcL11MnvRaiRmGajdzOI81SHfk3J6QwjTBM53ThqrxzLuzQJO89Xk0s+fH0MbR0NDLU5Q8tZQjxbBwhLdLXpsX+3KkAAVxp1XEsmWx0fTy9FWFsgPz2lfvEv08XFlmKHgA+ZqRdN89mFzjka6CUSk7XOl9fRtz7pcUR6yqFhpU+nDYOBZ7MYEcVpJgd8spF2V1FbM0PKGEpeVh4KOMpJze2D8zMlAXwO3MXfNl7ZiBwTsJ/2iO8cQPYJ4WE4shw7M2QFkl0Re9z04quPRS9BpROZCV3zsnGZzSp8kbULO9dCWltCTAKlw8iUjE6oQT99SZJSeuW/OT4sXJFlIXTtMEEaVzf5hCpJohWgC0h
+X-OriginatorOrg: ti.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2026 18:08:56.6484
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1e9743c6-0a65-43f0-4733-08de7886c582
+X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.23.195];Helo=[lewvzet201.ext.ti.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ5PEPF000001C8.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB5885
+X-Rspamd-Queue-Id: 71F341DE476
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+X-Spamd-Result: default: False [1.34 / 15.00];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[ti.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[ti.com:s=selector1];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-5041-lists,linux-watchdog=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[roeck-us.net];
+	TAGGED_FROM(0.00)[bounces-5042-lists,linux-watchdog=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[ti.com:dkim,ti.com:email,ti.com:mid,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	RCPT_COUNT_TWELVE(0.00)[18];
+	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DKIM_TRACE(0.00)[ti.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	FROM_NEQ_ENVFROM(0.00)[afd@ti.com,linux-watchdog@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[linux@roeck-us.net,linux-watchdog@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[10];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-watchdog,dt];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[roeck-us.net:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,microchip.com:email]
+	TAGGED_RCPT(0.00)[linux-watchdog];
+	RCVD_COUNT_SEVEN(0.00)[10]
 X-Rspamd-Action: no action
 
-On Mon, Mar 02, 2026 at 01:24:52PM +0100, Michael Walle wrote:
-> I was just informed that this product is discontinued (without being
-> ever released to the market). Pull the plug and let's not waste any more
-> maintainers time and revert commit 0f6eae86e626 ("dt-bindings: hwmon:
-> sl28cpld: add sa67mcu compatible").
-> 
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> Signed-off-by: Michael Walle <mwalle@kernel.org>
+Kernel now supports chained power-off handlers. Use
+devm_register_sys_off_handler() that registers a power-off handler. Legacy
+pm_power_off() will be removed once all drivers and archs are converted to
+the new sys-off API.
 
-Applied.
+Signed-off-by: Andrew Davis <afd@ti.com>
+---
+ drivers/watchdog/bcm2835_wdt.c | 28 +++++++++-------------------
+ 1 file changed, 9 insertions(+), 19 deletions(-)
 
-Guenter
+diff --git a/drivers/watchdog/bcm2835_wdt.c b/drivers/watchdog/bcm2835_wdt.c
+index 9fcfee63905b9..6fd8b1b8e386a 100644
+--- a/drivers/watchdog/bcm2835_wdt.c
++++ b/drivers/watchdog/bcm2835_wdt.c
+@@ -19,6 +19,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/of_address.h>
+ #include <linux/of_platform.h>
++#include <linux/reboot.h>
+ 
+ #define PM_RSTC				0x1c
+ #define PM_RSTS				0x20
+@@ -49,8 +50,6 @@ struct bcm2835_wdt {
+ 	spinlock_t		lock;
+ };
+ 
+-static struct bcm2835_wdt *bcm2835_power_off_wdt;
+-
+ static unsigned int heartbeat;
+ static bool nowayout = WATCHDOG_NOWAYOUT;
+ 
+@@ -150,9 +149,9 @@ static struct watchdog_device bcm2835_wdt_wdd = {
+  * indicate to bootcode.bin not to reboot, then most of the chip will be
+  * powered off.
+  */
+-static void bcm2835_power_off(void)
++static int bcm2835_power_off(struct sys_off_data *data)
+ {
+-	struct bcm2835_wdt *wdt = bcm2835_power_off_wdt;
++	struct bcm2835_wdt *wdt = data->cb_data;
+ 	u32 val;
+ 
+ 	/*
+@@ -166,6 +165,8 @@ static void bcm2835_power_off(void)
+ 
+ 	/* Continue with normal reset mechanism */
+ 	__bcm2835_restart(wdt);
++
++	return NOTIFY_DONE;
+ }
+ 
+ static int bcm2835_wdt_probe(struct platform_device *pdev)
+@@ -206,28 +207,17 @@ static int bcm2835_wdt_probe(struct platform_device *pdev)
+ 	if (err)
+ 		return err;
+ 
+-	if (of_device_is_system_power_controller(pdev->dev.parent->of_node)) {
+-		if (!pm_power_off) {
+-			pm_power_off = bcm2835_power_off;
+-			bcm2835_power_off_wdt = wdt;
+-		} else {
+-			dev_info(dev, "Poweroff handler already present!\n");
+-		}
+-	}
++	if (of_device_is_system_power_controller(pdev->dev.parent->of_node))
++		devm_register_sys_off_handler(dev, SYS_OFF_MODE_POWER_OFF,
++					      SYS_OFF_PRIO_DEFAULT,
++					      bcm2835_power_off, wdt);
+ 
+ 	dev_info(dev, "Broadcom BCM2835 watchdog timer");
+ 	return 0;
+ }
+ 
+-static void bcm2835_wdt_remove(struct platform_device *pdev)
+-{
+-	if (pm_power_off == bcm2835_power_off)
+-		pm_power_off = NULL;
+-}
+-
+ static struct platform_driver bcm2835_wdt_driver = {
+ 	.probe		= bcm2835_wdt_probe,
+-	.remove		= bcm2835_wdt_remove,
+ 	.driver = {
+ 		.name =		"bcm2835-wdt",
+ 	},
+-- 
+2.39.2
+
 
