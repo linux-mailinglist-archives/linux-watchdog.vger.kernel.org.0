@@ -1,115 +1,115 @@
-Return-Path: <linux-watchdog+bounces-5046-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-5047-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +E5HCO3hpmlAYgAAu9opvQ
-	(envelope-from <linux-watchdog+bounces-5046-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
-	for <lists+linux-watchdog@lfdr.de>; Tue, 03 Mar 2026 14:28:13 +0100
+	id AMj6MqXipmnpYgAAu9opvQ
+	(envelope-from <linux-watchdog+bounces-5047-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
+	for <lists+linux-watchdog@lfdr.de>; Tue, 03 Mar 2026 14:31:17 +0100
 X-Original-To: lists+linux-watchdog@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 212381F0364
-	for <lists+linux-watchdog@lfdr.de>; Tue, 03 Mar 2026 14:28:12 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F6861F0466
+	for <lists+linux-watchdog@lfdr.de>; Tue, 03 Mar 2026 14:31:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 151C9300D0F5
-	for <lists+linux-watchdog@lfdr.de>; Tue,  3 Mar 2026 13:25:29 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id F33D3304611F
+	for <lists+linux-watchdog@lfdr.de>; Tue,  3 Mar 2026 13:29:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F4A2423A9A;
-	Tue,  3 Mar 2026 13:25:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 020FF48CFC;
+	Tue,  3 Mar 2026 13:28:45 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+Received: from mail-vk1-f173.google.com (mail-vk1-f173.google.com [209.85.221.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 412E5283FCF
-	for <linux-watchdog@vger.kernel.org>; Tue,  3 Mar 2026 13:25:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF09B1E230E
+	for <linux-watchdog@vger.kernel.org>; Tue,  3 Mar 2026 13:28:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772544326; cv=none; b=etBNcTy52k3zOgsvVM+ggKyUIzHYGFQthdTPYBMajX8W4gJMtncqXdwbVWA2KKEAd4lawcLq6OJZEB0ql2G9QRUJrew7Nq3ukupgPteph5E+nIHjdoQ8BEVQQUIKhx8o7HRlqzy+Mh8AhS3srHsGK60c9bco2Wzfmgj1HAtMoUA=
+	t=1772544524; cv=none; b=nfPS6I5j+k8jjQ+mkQ2qjnQ6rP+qFn4RtbeIghKaNOgx1O/2xMgRiEFJenzhM4AtLwALJrAnp+Js+WZtyxeYwt7JdI5yQ+mHU70tyVPMy9YqLag++senUT4vL93eyMmdb72gUl0Mt1nHUMmeerOCD19BCCBGtjVoOukM89372cg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772544326; c=relaxed/simple;
-	bh=n2OmAIMl/gywcCrUj4d8zXzLma6xKUNcSmZ27Kjdqpw=;
+	s=arc-20240116; t=1772544524; c=relaxed/simple;
+	bh=0Mx80CC1QWM3bvGMYo64nUaV/drH9YWwIQYt8dBOlnc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OI3yGC8cjGvByk9/lytyz7t19i+HDsRBTsO6vqrkaD1h5W5kIMrwSuvJbmQEVBqi5qcageA4KAzGCc0vSU5Lt4c7NHR2xvpjtdlyeYuo/BaRkgvAR3LOC70FN5SXwF60WtIP3Sub73ubysm2fQ7ehuPhaiQ4Q60n2HOxiANFKns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.42
+	 To:Cc:Content-Type; b=GBJYNAvQE5Kh+XImdTX4iSgZ1OocC42U7D2u6ooGVXg+iEBBLvlkzPLBY00k09c+AA39Ceve6jBhPC5Vkq4hh2W2oyA7K6iB2wxcXnNybxEYSCB2hZbkI5+2t30WKURcvwV7F6BxK4ipXaYJNS44inlU/g87UsJoCbh8k/03NmE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-7d556c1a79eso7574372a34.3
-        for <linux-watchdog@vger.kernel.org>; Tue, 03 Mar 2026 05:25:25 -0800 (PST)
+Received: by mail-vk1-f173.google.com with SMTP id 71dfb90a1353d-56a857578a8so1883687e0c.3
+        for <linux-watchdog@vger.kernel.org>; Tue, 03 Mar 2026 05:28:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772544324; x=1773149124;
+        d=1e100.net; s=20230601; t=1772544523; x=1773149323;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=muQepyaITr1dI13pFJp+536u1zM3z0pO9iYDkPNsg4s=;
-        b=AeCnKQ/WrQVfDoAVe7MffYZ2MSY/HZLBREUk6YUq2dMzE9jx2PXJMZhBH0lOdu3BoD
-         J2lvoQP/daa+SQn73MI2oW+bFjrgJIYVYRiatcLQBBirrD2jGeWtojsab6uPUnJaWNdB
-         z/Eulsuo6Wxd5EZpjnF2w4NSiLk7eKwrWY+eFUIsgFNFvfRV6OR1OxEcFNs1i7cUSSTr
-         y8rH9BTcme8l5N2aM/cQyKRZ0NRfph8ljnIHe8T8K9zCJ4GhldZ7UebKoWa6/Ij2pnm5
-         0Xxdo2QC92V2ouc5PXN2sIqe4LhlRja0L/GBKs6Nx1aO9nB9wgwljDbfpbPZKezG8HPT
-         39ow==
-X-Forwarded-Encrypted: i=1; AJvYcCUP9qJQuL0zyCj2gpv3CczMnK1yfP6L7WLvv6xtpxddem/3zi2V2uY6EdogR5jzDzthLkVmMWbwTYUT1xZBpQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzCgM4CcWHB8g9lRmWMPbAJ1YGqRzSfopgbONo2zj1PRNoLp80i
-	pHmuDpYLs4fQT/+x2tFijebjWwL0TDfBXpNNbSRX07BeFQ2mmUOcyXfZXsVRpW95
-X-Gm-Gg: ATEYQzza83pfdILs7I9qnsSzx3bF16SoZApaTP3RFcZKLbt83kTZP+tkIOs50dhr2jm
-	68FgYfOzErt9jRybf07ef1jhz3wmqaSp1vewBf1Q1/Ey7DM1D7JQl8OLvdfrkx+AjIww96cf9x4
-	auSvTUS5tU88nIED3zuSR162PiyeWvPhCbEfAk57B7NJXPUGtYSOnfHvB3lPmO949KXrIGkaKol
-	uq/EwcJeRsTc4f4yaSJH+s6GdkPfqPjyrX4DPfHIFgWufOFKRujNR9bn1SHgACKvqwWgBWsf3+J
-	lEg6sqKMP7T/xE+hOwbw1xb/i9Usx1ikcyiV8AFASOJcnZgPb7caJUqn3LwUwUlXvkR26rk8zHu
-	ZOUbejFpvKQvvzT0oOur4O5t24JcqbC4ehdgd/w/LzWwTBW4YT8z5dXd1BEgJ7vlPuZOtCXZzMC
-	7WsLYuVU0URXIdmmAGoW/aVmQzWbV9KWKKAHdULPSR0OPYXP8UESe0MEHif95H
-X-Received: by 2002:a05:6830:6586:b0:7bb:7a28:51ba with SMTP id 46e09a7af769-7d591bdc161mr9717830a34.26.1772544324146;
-        Tue, 03 Mar 2026 05:25:24 -0800 (PST)
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com. [209.85.160.45])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7d58644edf0sm13220876a34.2.2026.03.03.05.25.23
+        bh=yDxJiIrxQC92hbeNlNOe8Nj98YN/DDHhyxVEaLyss1E=;
+        b=knlxALBoyXmPM4I4asSQysZuU6o8Go3eFA2n1RuZEh5vSX7vLAhlmfav++yxDAHavc
+         LT6tQcww6ROTt3fXSgRtm8ZdbWjUx/HopxGGDoRqNWIsquMHu0enP9BMEd6Lj4KEC9eK
+         AMa3CQ6+qzGj/XUX12A4fnV2UtyvQb2nyNGFGKZQgMRfmFIrHEoVEBpBcPIaMjA3EcyS
+         i/I6gvdgVb3wk7IwAnzpUsLliRj8bgORS9wa2oCNXgrh9blOPPvhXVrVPVCLbHWbJHNq
+         zRh/UjgzetyBleCsLksWomk50dln2eHMaHD8tBXgGggQles1EujfZZ+8IE2O6cmn5gCm
+         JXlg==
+X-Forwarded-Encrypted: i=1; AJvYcCX6vU3BvrF9uzvVT0+oOYRCdCc0tpG1XDX/Bm08YToMhZ7Mjt6bYPv7kdHMnFJebllw0KhjLLw2mk9NO2sIGQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxiNRMWr2nBSTPs7brX/2bGbe8XtuBToUoYw9KS9cQD8lSRH7+I
+	Ho+qsADv/g5xHhi5kbrno8RbmLjv9jOnoiND6dq6DFFtuP0JEpKBjetgHBITh4ux
+X-Gm-Gg: ATEYQzxx0H6tnXeMDKPxB98Vc4kcutf7PsTRr6zaRVD2NlHPH6PnuRLHYYmEl1rwMgS
+	+V184vmrkCtK27adBnduoGlbaK+Uq7nVH4aLh7bpMA1/t975uNJIIKHk9cNouMsvNgSMgxs55z9
+	GW6nAB6Sdl49dGMtELEyYzul+/tohZm4cRYnblNM9MxhR1U+/JExfCpFS1mps40vwqcV6BGCf5s
+	avwJYtdb4kXJHTsU93A1GDVT41aI+MTZnfbYIIRRuH/Y6MvF2x6wv9OvJVAw13Q5p7eQkfkrgTf
+	4G4BW//c3eYYPoesxEjgPyT5lwUGz0nVziX5VIeh2sbrKqdm4dvwC+OFNbE275ULV5SGvpJb17g
+	5ipPKbUlECUcIXIBwELOXr9UNtOyup1WWZdworGbNAG/z43yR4tC576i8sx2JzAcvH3g5P4eoGX
+	+lOL+dS0wNMPLFXSIciysNkH7Ev6ec4SWT51+YdSEyWeCrJNbqe+Y+wEUJQP2q
+X-Received: by 2002:a05:6122:340d:b0:559:6723:628c with SMTP id 71dfb90a1353d-56aa0aa14c1mr6805602e0c.16.1772544522693;
+        Tue, 03 Mar 2026 05:28:42 -0800 (PST)
+Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com. [209.85.222.41])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-94df6417a98sm15504043241.4.2026.03.03.05.28.41
         for <linux-watchdog@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Mar 2026 05:25:23 -0800 (PST)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-414ffb4c0a0so698583fac.2
-        for <linux-watchdog@vger.kernel.org>; Tue, 03 Mar 2026 05:25:23 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCX1CNwlkvSQgJF1zyJvKzFl0edZ7MiYhhKKq6jB+nsjQW0gwFY46wOTY2JffIcNzI4o9z8lwBrTuCb2C06mHQ==@vger.kernel.org
-X-Received: by 2002:a05:6102:c47:b0:5f5:487c:83d2 with SMTP id
- ada2fe7eead31-5ff325d53c9mr7807558137.38.1772543823941; Tue, 03 Mar 2026
- 05:17:03 -0800 (PST)
+        Tue, 03 Mar 2026 05:28:41 -0800 (PST)
+Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-94dd01deb53so1276459241.0
+        for <linux-watchdog@vger.kernel.org>; Tue, 03 Mar 2026 05:28:41 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVokOoRZONbFzUtPxGNuTCjuwH+QZTPAqhC98yRWcQt5MPcfplRz1fLtR8M7+pgKwpQ1uk1ozUn4TfkM1unXg==@vger.kernel.org
+X-Received: by 2002:a05:6102:f0a:b0:5fd:f14d:4cd6 with SMTP id
+ ada2fe7eead31-5ff3254b2bdmr6188901137.27.1772544521227; Tue, 03 Mar 2026
+ 05:28:41 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260203124247.7320-1-fabrizio.castro.jz@renesas.com> <20260203124247.7320-2-fabrizio.castro.jz@renesas.com>
-In-Reply-To: <20260203124247.7320-2-fabrizio.castro.jz@renesas.com>
+References: <20260203124247.7320-1-fabrizio.castro.jz@renesas.com> <20260203124247.7320-3-fabrizio.castro.jz@renesas.com>
+In-Reply-To: <20260203124247.7320-3-fabrizio.castro.jz@renesas.com>
 From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 3 Mar 2026 14:16:52 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXtrAwAtqNPqwq5qKHo4SKQqFoGSE7qPnFRD4rbKkPfaA@mail.gmail.com>
-X-Gm-Features: AaiRm52a94My3QCqI-CCMK4Bc8JSeFzJGy0yOXJPSReec93Wzsgcz5hw25V0nt0
-Message-ID: <CAMuHMdXtrAwAtqNPqwq5qKHo4SKQqFoGSE7qPnFRD4rbKkPfaA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] dt-bindings: watchdog: renesas,r9a09g057-wdt:
- Rework example
+Date: Tue, 3 Mar 2026 14:28:30 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdW9F48wTrhJRM-w_+4deEzJxOkGR6WttLmTmMy9DT1Dtw@mail.gmail.com>
+X-Gm-Features: AaiRm53fCUjLUZ6px0BRfJJuPYdPSrAIEkOdRkY6q1dq85dF6GGqE9pEydHG_cc
+Message-ID: <CAMuHMdW9F48wTrhJRM-w_+4deEzJxOkGR6WttLmTmMy9DT1Dtw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] arm64: dts: renesas: r9a09g057: Remove wdt{0,2,3} nodes
 To: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
 Cc: Rob Herring <robh@kernel.org>, Guenter Roeck <linux@roeck-us.net>, 
 	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
 	Wim Van Sebroeck <wim@linux-watchdog.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Magnus Damm <magnus.damm@gmail.com>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Conor Dooley <conor+dt@kernel.org>, 
+	Magnus Damm <magnus.damm@gmail.com>, 
 	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, linux-watchdog@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
 	devicetree@vger.kernel.org, linux-clk@vger.kernel.org, 
 	Biju Das <biju.das.jz@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Rspamd-Queue-Id: 212381F0364
+X-Rspamd-Queue-Id: 6F6861F0466
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [0.04 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[kernel.org,roeck-us.net,baylibre.com,linux-watchdog.org,gmail.com,bp.renesas.com,vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-5046-lists,linux-watchdog=lfdr.de];
+	FREEMAIL_CC(0.00)[kernel.org,roeck-us.net,baylibre.com,linux-watchdog.org,glider.be,gmail.com,bp.renesas.com,vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-5047-lists,linux-watchdog=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	DMARC_NA(0.00)[linux-m68k.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[16];
+	RCPT_COUNT_TWELVE(0.00)[17];
 	MIME_TRACE(0.00)[0:+];
 	MISSING_XM_UA(0.00)[];
 	FROM_HAS_DN(0.00)[];
@@ -117,30 +117,46 @@ X-Spamd-Result: default: False [0.04 / 15.00];
 	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[geert@linux-m68k.org,linux-watchdog@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	NEURAL_HAM(-0.00)[-0.633];
-	TAGGED_RCPT(0.00)[linux-watchdog,dt];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	NEURAL_HAM(-0.00)[-0.662];
+	TAGGED_RCPT(0.00)[linux-watchdog,dt,renesas];
 	R_DKIM_NA(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[microchip.com:email,renesas.com:email,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,mail.gmail.com:mid,glider.be:email,linux-m68k.org:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,glider.be:email,linux-m68k.org:email,renesas.com:email]
 X-Rspamd-Action: no action
+
+Hi Fabrizio,
 
 On Tue, 3 Feb 2026 at 13:43, Fabrizio Castro
 <fabrizio.castro.jz@renesas.com> wrote:
-> When the bindings for the Renesas RZ/V2H(P) SoC were factored
-> out IP WDT0 was selected for the example, however the HW user
-> manual states that only IP WDT1 can be used by Linux.
+> The HW user manual for the Renesas RZ/V2H(P) SoC (a.k.a r9a09g057)
+> states that only WDT1 is supposed to be accessed by the CA55 cores.
+> WDT0 is supposed to be used by the CM33 core, WDT2 is supposed
+> to be used by the CR8 core 0, and WDT3 is supposed to be used
+> by the CR8 core 1.
 >
-> This commit is part of a series that removes WDT{0,2,3} support
-> from the kernel, therefore the example from the bindings has
-> lost its meaning.
+> Remove wdt{0,2,3} from the SoC specific device tree to make it
+> compliant with the specification from the HW manual.
 >
-> Update the example accordingly.
+> This change is harmless as there are currently no users of the
+> wdt{0,2,3} device tree nodes, only the wdt1 node is actually used.
 >
+> Fixes: 095105496e7d ("arm64: dts: renesas: r9a09g057: Add WDT0-WDT3 nodes")
 > Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+
+Thanks for your patch!
 
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-fixes for v7.0.
+
+Apparently the same applies to RZ/V2N.  Shall I just apply this patch
+to arch/arm64/boot/dts/renesas/r9a09g056.dtsi, too, with the SoC name
+and part numbers updated, and
+
+    Fixes: 7db958983c8dd14d ("arm64: dts: renesas: r9a09g056: Add
+WDT0-WDT3 nodes")
+
+?
 
 Gr{oetje,eeting}s,
 
