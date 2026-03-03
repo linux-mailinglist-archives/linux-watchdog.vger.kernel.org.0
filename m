@@ -1,238 +1,155 @@
-Return-Path: <linux-watchdog+bounces-5045-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-5046-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cGbXFWlwpml2PwAAu9opvQ
-	(envelope-from <linux-watchdog+bounces-5045-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
-	for <lists+linux-watchdog@lfdr.de>; Tue, 03 Mar 2026 06:23:53 +0100
+	id +E5HCO3hpmlAYgAAu9opvQ
+	(envelope-from <linux-watchdog+bounces-5046-lists+linux-watchdog=lfdr.de@vger.kernel.org>)
+	for <lists+linux-watchdog@lfdr.de>; Tue, 03 Mar 2026 14:28:13 +0100
 X-Original-To: lists+linux-watchdog@lfdr.de
 Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 438301E9355
-	for <lists+linux-watchdog@lfdr.de>; Tue, 03 Mar 2026 06:23:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 212381F0364
+	for <lists+linux-watchdog@lfdr.de>; Tue, 03 Mar 2026 14:28:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id D47173010837
-	for <lists+linux-watchdog@lfdr.de>; Tue,  3 Mar 2026 05:23:48 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 151C9300D0F5
+	for <lists+linux-watchdog@lfdr.de>; Tue,  3 Mar 2026 13:25:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D02D82F6900;
-	Tue,  3 Mar 2026 05:23:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Mcr1UJjM";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="YTkwQ7Bp"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F4A2423A9A;
+	Tue,  3 Mar 2026 13:25:26 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FEB926E6FA
-	for <linux-watchdog@vger.kernel.org>; Tue,  3 Mar 2026 05:23:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 412E5283FCF
+	for <linux-watchdog@vger.kernel.org>; Tue,  3 Mar 2026 13:25:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772515427; cv=none; b=Rno5tGkJfueD4jIWT+4wFm1JyGZdQx8t/toZmzzMKmf8M0lJ1NE5IlLe9y5uT8IjmMsBaB4PUJj6WA8v2fLM307O6Q1T/3kIvC/ohlHO3FkFrpJ3vcFGAYN14lJiPyqGRrgbGzVtTqy23Z7taQBY/G9W/5EHGzvALP/lEx4cO48=
+	t=1772544326; cv=none; b=etBNcTy52k3zOgsvVM+ggKyUIzHYGFQthdTPYBMajX8W4gJMtncqXdwbVWA2KKEAd4lawcLq6OJZEB0ql2G9QRUJrew7Nq3ukupgPteph5E+nIHjdoQ8BEVQQUIKhx8o7HRlqzy+Mh8AhS3srHsGK60c9bco2Wzfmgj1HAtMoUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772515427; c=relaxed/simple;
-	bh=iDgW2cfd7htMPhuh6EbpJMy7PjdyF+8N2b3YopKk7LM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CWzh6DHGH+Tm2CvFnQhuau2I+vQYdiaNuVl+kQ3hwZmbcwV7un+S1TCkdnZxTAtq7QxHOV25ocwGS5WPfL3pVmefgFK5Ka+NKey8iVARiF7lNpcGYFKBfaI1lMNyLkiqDBZ3xlGytu9fDcukhYrOAK6I+oBRyIt3F7VUL188cAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Mcr1UJjM; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=YTkwQ7Bp; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6233pCCe1187020
-	for <linux-watchdog@vger.kernel.org>; Tue, 3 Mar 2026 05:23:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=DhDvLQeyQlT/AZFrDXorArD2
-	6aYKZNcJKOOcuYji5lQ=; b=Mcr1UJjMpdCO9CuPEg9ZHTaf7y9K5m8l1DcNck/F
-	BY+uACGfIeNANcQ+Qug5A0j5dbgUKkIK7+wyEVp5oLRuaCwSdqWxvkTM2iF720cs
-	oHoOpvc/yMf5/taOtkB6XqL/zffBtP6Wkru3R0Sdf3HlTCS+VTAsVWX+DOiHd1Ca
-	x6r1VxPdOHUQllGbtEQvxeXeb0enS7Jc9O2+C1D0svqcoBY1eS3cKPzX/imqrShR
-	bPTyhYTFW0/YTxzx8jLcaoQQ+Jq4sW2SiHSvi2p9ugixafK9DTI0CDg3+NpoGQ1u
-	eBPfKg5hkmS0V7jfgbug9kZ4xIRQMKdz6Vd7MNb9N2KUyA==
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4cng96hr28-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-watchdog@vger.kernel.org>; Tue, 03 Mar 2026 05:23:45 +0000 (GMT)
-Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2ae4e20a414so89187405ad.3
-        for <linux-watchdog@vger.kernel.org>; Mon, 02 Mar 2026 21:23:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1772515424; x=1773120224; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DhDvLQeyQlT/AZFrDXorArD26aYKZNcJKOOcuYji5lQ=;
-        b=YTkwQ7BpQFRdG+0UIVhGIbrOsc3/2bJnD/MO0ZzVDIfO8hNnLzVeFR5k1eAzZnUeNy
-         ZnbFNQzg1ym6UgnsKTI0ddYjkYn4H7PNAu6MrErKkGXEJKK2dy0WxowmBU1O3beszcMn
-         ZgfFVb+NU/SuQS8Rc7pi2VKmtZ3rqygAzK4+TRTPr6QZFrMDUDYjJGgmE636MIjyEB3I
-         YPhGaufUbSWDOnmCEik56ylRylairEyr8l/av5uImouBC03NYDk94RIOv3/TaHYXWGNy
-         ujUuRNh9/84PJmBTyvsIr8a6dXzPAYnkLDrPl2MB2TZMLB+4SefogSx7A/LBWGza1yco
-         Ms5Q==
+	s=arc-20240116; t=1772544326; c=relaxed/simple;
+	bh=n2OmAIMl/gywcCrUj4d8zXzLma6xKUNcSmZ27Kjdqpw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OI3yGC8cjGvByk9/lytyz7t19i+HDsRBTsO6vqrkaD1h5W5kIMrwSuvJbmQEVBqi5qcageA4KAzGCc0vSU5Lt4c7NHR2xvpjtdlyeYuo/BaRkgvAR3LOC70FN5SXwF60WtIP3Sub73ubysm2fQ7ehuPhaiQ4Q60n2HOxiANFKns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-7d556c1a79eso7574372a34.3
+        for <linux-watchdog@vger.kernel.org>; Tue, 03 Mar 2026 05:25:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772515424; x=1773120224;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DhDvLQeyQlT/AZFrDXorArD26aYKZNcJKOOcuYji5lQ=;
-        b=ipx4y6IObObjeB308VGXCeVkvjUMNsNNELgACzYaNhUohyQSk3RedFkVBfOVKd9DWG
-         hsEuw+k9anINrWebFUzHtmATlf5DZdU+fX/uTJo9oZQazE3/066TUcno2MzNJcg4uZUz
-         jmwb72akxL+sMNfIXB/XeAu9B346PoGgat1ppPe1/EmbsEPBL6FyWES2euLBu/zTy8dN
-         O0qOy2RPwJj7ANqfE21V+f0kHyKMpVsfTOT7eXPWpyuAGXQyIrPlgYt5mw1bMMSWWKN/
-         5kZ9P773ht60miJ0SyR5vM5mpFLIZuNQh2pLpbazGvginK/IB8l2/Zh9ZvRTDcOppHe/
-         QzBw==
-X-Forwarded-Encrypted: i=1; AJvYcCX/qNOVedcePX2fmFV1frGUWtZJsCqm6YfxdW0WZDHCGYIqG4KBwlX44IhQJ0GH6GGcWilixFjqBm4xH3hkug==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/5DQsMTSk8khzgehppo2RZwgkvWPohHJnGSWT8MiqjW77CB0P
-	fcap6s10Y1GGWe+MFc3lSAwHu/eGzdoy1Hq5IchCBWqVK9npBa4ErDWtpmEquplK12x6fsHHUiw
-	Nn6LkjSS9OJNHhjrGRilD9f2F4QLReo9eLs5vRBHzZJ+uniwVxXmX0ZK1T3qF/mlp+ZAxyg==
-X-Gm-Gg: ATEYQzzVMvl+xL84pivy9+I/HqllrJj0++XYJJaOXqUF31XerdFpFmCIzx45VyWSeL3
-	AB5kjG16V86ys0OQOk6NRnNdVfx3tdKPAyPu9SJKXJZXyzP3crvNjkWW5YFwfFE+7nsTTW6gs8F
-	UOwF6VQ238RVzup75KFuAvKVhPZQzGt8DqiMjrwY51ROtav/Fj92uKNAkwX4KGov9jlu+nZVdxy
-	DFB32/2xRynLRT6iMPRi+7TDZDggf/a99XUUVwQPXt+VXFxAdTo4CZyxSqwIj4dP6OZtCbGGrYV
-	D2IEg/g0l5aBWdWwKRMyNhiHtwIiM8GbPyQicqX85x7A8a7nIbRQPfKkgrDyUtMHio5Meqm0CdZ
-	o+LzYQOIes5CHXug896Vz49pdlmo1yYrk1OR/LQmy4JBHjID/yBUgzFI=
-X-Received: by 2002:a17:903:1250:b0:2aa:daf9:6980 with SMTP id d9443c01a7336-2ae2e49855emr131504365ad.27.1772515424058;
-        Mon, 02 Mar 2026 21:23:44 -0800 (PST)
-X-Received: by 2002:a17:903:1250:b0:2aa:daf9:6980 with SMTP id d9443c01a7336-2ae2e49855emr131504035ad.27.1772515423606;
-        Mon, 02 Mar 2026 21:23:43 -0800 (PST)
-Received: from hu-pkondeti-hyd.qualcomm.com ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c70fa8302absm14767994a12.29.2026.03.02.21.23.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Mar 2026 21:23:43 -0800 (PST)
-Date: Tue, 3 Mar 2026 10:53:36 +0530
-From: Pavan Kondeti <pavan.kondeti@oss.qualcomm.com>
-To: Pavan Kondeti <pavan.kondeti@oss.qualcomm.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: Bjorn Andersson <andersson@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-        Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
-Subject: Re: [PATCH v8 0/2] Add support for Gunyah Watchdog
-Message-ID: <4427f335-bb50-44af-94a5-142d8355a705@quicinc.com>
-References: <20251118-gunyah_watchdog-v8-0-e5de12e2eef5@oss.qualcomm.com>
- <c5a57ab6-ad6c-4228-8ccb-7d7ef306b5b8@quicinc.com>
+        d=1e100.net; s=20230601; t=1772544324; x=1773149124;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=muQepyaITr1dI13pFJp+536u1zM3z0pO9iYDkPNsg4s=;
+        b=AeCnKQ/WrQVfDoAVe7MffYZ2MSY/HZLBREUk6YUq2dMzE9jx2PXJMZhBH0lOdu3BoD
+         J2lvoQP/daa+SQn73MI2oW+bFjrgJIYVYRiatcLQBBirrD2jGeWtojsab6uPUnJaWNdB
+         z/Eulsuo6Wxd5EZpjnF2w4NSiLk7eKwrWY+eFUIsgFNFvfRV6OR1OxEcFNs1i7cUSSTr
+         y8rH9BTcme8l5N2aM/cQyKRZ0NRfph8ljnIHe8T8K9zCJ4GhldZ7UebKoWa6/Ij2pnm5
+         0Xxdo2QC92V2ouc5PXN2sIqe4LhlRja0L/GBKs6Nx1aO9nB9wgwljDbfpbPZKezG8HPT
+         39ow==
+X-Forwarded-Encrypted: i=1; AJvYcCUP9qJQuL0zyCj2gpv3CczMnK1yfP6L7WLvv6xtpxddem/3zi2V2uY6EdogR5jzDzthLkVmMWbwTYUT1xZBpQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCgM4CcWHB8g9lRmWMPbAJ1YGqRzSfopgbONo2zj1PRNoLp80i
+	pHmuDpYLs4fQT/+x2tFijebjWwL0TDfBXpNNbSRX07BeFQ2mmUOcyXfZXsVRpW95
+X-Gm-Gg: ATEYQzza83pfdILs7I9qnsSzx3bF16SoZApaTP3RFcZKLbt83kTZP+tkIOs50dhr2jm
+	68FgYfOzErt9jRybf07ef1jhz3wmqaSp1vewBf1Q1/Ey7DM1D7JQl8OLvdfrkx+AjIww96cf9x4
+	auSvTUS5tU88nIED3zuSR162PiyeWvPhCbEfAk57B7NJXPUGtYSOnfHvB3lPmO949KXrIGkaKol
+	uq/EwcJeRsTc4f4yaSJH+s6GdkPfqPjyrX4DPfHIFgWufOFKRujNR9bn1SHgACKvqwWgBWsf3+J
+	lEg6sqKMP7T/xE+hOwbw1xb/i9Usx1ikcyiV8AFASOJcnZgPb7caJUqn3LwUwUlXvkR26rk8zHu
+	ZOUbejFpvKQvvzT0oOur4O5t24JcqbC4ehdgd/w/LzWwTBW4YT8z5dXd1BEgJ7vlPuZOtCXZzMC
+	7WsLYuVU0URXIdmmAGoW/aVmQzWbV9KWKKAHdULPSR0OPYXP8UESe0MEHif95H
+X-Received: by 2002:a05:6830:6586:b0:7bb:7a28:51ba with SMTP id 46e09a7af769-7d591bdc161mr9717830a34.26.1772544324146;
+        Tue, 03 Mar 2026 05:25:24 -0800 (PST)
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com. [209.85.160.45])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7d58644edf0sm13220876a34.2.2026.03.03.05.25.23
+        for <linux-watchdog@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Mar 2026 05:25:23 -0800 (PST)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-414ffb4c0a0so698583fac.2
+        for <linux-watchdog@vger.kernel.org>; Tue, 03 Mar 2026 05:25:23 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCX1CNwlkvSQgJF1zyJvKzFl0edZ7MiYhhKKq6jB+nsjQW0gwFY46wOTY2JffIcNzI4o9z8lwBrTuCb2C06mHQ==@vger.kernel.org
+X-Received: by 2002:a05:6102:c47:b0:5f5:487c:83d2 with SMTP id
+ ada2fe7eead31-5ff325d53c9mr7807558137.38.1772543823941; Tue, 03 Mar 2026
+ 05:17:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c5a57ab6-ad6c-4228-8ccb-7d7ef306b5b8@quicinc.com>
-X-Authority-Analysis: v=2.4 cv=Co6ys34D c=1 sm=1 tr=0 ts=69a67061 cx=c_pps
- a=cmESyDAEBpBGqyK7t0alAg==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=kj9zAlcOel0A:10 a=Yq5XynenixoA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=yx91gb_oNiZeI1HMLzn7:22
- a=VwQbUJbxAAAA:8 a=COk6AnOGAAAA:8 a=NEAV23lmAAAA:8 a=EUspDBNiAAAA:8
- a=spW7CxkbatQ-H6tlaUEA:9 a=CjuIK1q_8ugA:10 a=1OuFwYUASf3TG4hYMiVC:22
- a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-GUID: 3LGp_8iWSvPAvbIpteFdSuiiYH5kV9AV
-X-Proofpoint-ORIG-GUID: 3LGp_8iWSvPAvbIpteFdSuiiYH5kV9AV
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzAzMDAzMyBTYWx0ZWRfX49oS6sEVbB6w
- bQ/HbbZvg32PgsAEfv0oL16Zh95phQNyAkWonJFSdmrAttP8Addj+PQxoJBciZhidQoHj2E5cWv
- AWBdbxpGoW6lmuYsCPNl3exi0Vhq/8G828VlQHFAJiktpN5A8vVPBZhp7zB6TQop3mbUni5FgGj
- lnr6GYIq4wWFOQdRPUr2K8VUJuskOyLuBJxViirdA+SksLdn/lX5QQCBc3Rnmgy6ckN85ERZWSA
- WufUK/Gm9pHtS1WokImAleFxqFyxH0dALq41rQlN0TwPIJKfU5zedHjKYCLYFqyzp4pjjiCm4Vb
- PglPKeBCQpSUSVy7FmSfHENXNpP9JCoi5ka7rE09FMHEbsCogHPW0mfu1MoyLs45tDqOpnuiMjA
- xq5meewrNLxZFpEAK+Z7T9bA0eU/LsNSKW6t6L0I1nWbXwMJ9olMgVT7upcBfGWWTG7Du0Za+ie
- g0Qvab+MPdTJk1EnPIA==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-02_05,2026-03-03_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 suspectscore=0 clxscore=1011 priorityscore=1501
- lowpriorityscore=0 phishscore=0 adultscore=0 spamscore=0 bulkscore=0
- malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2602130000
- definitions=main-2603030033
-X-Rspamd-Queue-Id: 438301E9355
+References: <20260203124247.7320-1-fabrizio.castro.jz@renesas.com> <20260203124247.7320-2-fabrizio.castro.jz@renesas.com>
+In-Reply-To: <20260203124247.7320-2-fabrizio.castro.jz@renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 3 Mar 2026 14:16:52 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXtrAwAtqNPqwq5qKHo4SKQqFoGSE7qPnFRD4rbKkPfaA@mail.gmail.com>
+X-Gm-Features: AaiRm52a94My3QCqI-CCMK4Bc8JSeFzJGy0yOXJPSReec93Wzsgcz5hw25V0nt0
+Message-ID: <CAMuHMdXtrAwAtqNPqwq5qKHo4SKQqFoGSE7qPnFRD4rbKkPfaA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] dt-bindings: watchdog: renesas,r9a09g057-wdt:
+ Rework example
+To: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc: Rob Herring <robh@kernel.org>, Guenter Roeck <linux@roeck-us.net>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Wim Van Sebroeck <wim@linux-watchdog.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Magnus Damm <magnus.damm@gmail.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, linux-watchdog@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-clk@vger.kernel.org, 
+	Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Rspamd-Queue-Id: 212381F0364
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [0.04 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-5045-lists,linux-watchdog=lfdr.de];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:dkim,qualcomm.com:email,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,oss.qualcomm.com:dkim,quicinc.com:mid];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,roeck-us.net,baylibre.com,linux-watchdog.org,gmail.com,bp.renesas.com,vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-5046-lists,linux-watchdog=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[pavan.kondeti@oss.qualcomm.com,linux-watchdog@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	DMARC_NA(0.00)[linux-m68k.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-watchdog,dt];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	MIME_TRACE(0.00)[0:+];
+	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[geert@linux-m68k.org,linux-watchdog@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	NEURAL_HAM(-0.00)[-0.633];
+	TAGGED_RCPT(0.00)[linux-watchdog,dt];
+	R_DKIM_NA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[microchip.com:email,renesas.com:email,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,mail.gmail.com:mid,glider.be:email,linux-m68k.org:email]
 X-Rspamd-Action: no action
 
-Hi Bjorn / Wim,
+On Tue, 3 Feb 2026 at 13:43, Fabrizio Castro
+<fabrizio.castro.jz@renesas.com> wrote:
+> When the bindings for the Renesas RZ/V2H(P) SoC were factored
+> out IP WDT0 was selected for the example, however the HW user
+> manual states that only IP WDT1 can be used by Linux.
+>
+> This commit is part of a series that removes WDT{0,2,3} support
+> from the kernel, therefore the example from the bindings has
+> lost its meaning.
+>
+> Update the example accordingly.
+>
+> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-On Tue, Feb 24, 2026 at 02:58:05PM +0530, Pavan Kondeti wrote:
-> Hi Bjorn / Wim,
-> 
-> On Tue, Nov 18, 2025 at 10:40:55AM +0000, Hrishabh Rajput via B4 Relay wrote:
-> > Gunyah is a Type-I hypervisor which was introduced in the patch series
-> > [1]. It is an open source hypervisor. The source repo is available at
-> > [2].
-> > 
-> > The Gunyah Hypervisor doesn't allow its Virtual Machines to directly
-> > access the MMIO watchdog. It either provides the fully emulated MMIO
-> > based watchdog interface or the SMC-based watchdog interface depending
-> > on the hypervisor configuration.
-> > The SMC-based watchdog follows ARM's SMC Calling Convention (SMCCC)
-> > version 1.1 and uses Vendor Specific Hypervisor Service Calls space.
-> > 
-> > This patch series adds support for the SMC-based watchdog interface
-> > provided by the Gunyah Hypervisor.
-> > 
-> > This series is tested on SM8750 platform.
-> > 
-> > [1]
-> > https://lore.kernel.org/all/20240222-gunyah-v17-0-1e9da6763d38@quicinc.com/
-> > 
-> > [2]
-> > https://github.com/quic/gunyah-hypervisor
-> > 
-> > Signed-off-by: Hrishabh Rajput <hrishabh.rajput@oss.qualcomm.com>
-> > ---
-> > Changes in v8:
-> > - Fix error handling in gunyah_wdt_probe() to fail silently with -ENODEV
-> >   if WDT_STATUS call returns -EOPNOTSUPP, indicating support for Gunyah
-> >   watchdog is not present. Fail with logs for other errors.
-> > - Link to v7: https://lore.kernel.org/r/20251114-gunyah_watchdog-v7-0-f5c155b941d5@oss.qualcomm.com
-> > 
-> 
-> The series applies cleanly on v7.0-rc1. I have tested the watchdog
-> driver functionality and ramdumps collection on Kodiak RB3 Gen2
-> platform. Can you please pick this series for v7.1?
-> 
-> As Hrishabh mentioned earlier, both patches don't have any compile time
-> dependencies.
-> 
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Since Hrishabh has left Qualcomm, I am taking over the series. Hence
-sending request emails to include this series for v7.0 . I did verify
-this on v7.0-rc1 as mentioned above. Since the series applies cleanly, I
-have not re-sent the series. However, if you prefer to resend it since a
-new person taking over, I can re-send the series with my Signed-off-by.
+Gr{oetje,eeting}s,
 
-Please let me know your preference.
+                        Geert
 
-Thanks,
-Pavan
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
